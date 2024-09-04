@@ -1,0 +1,59 @@
+[gd_scene load_steps=16 format=3 uid="uid://drb5ql5du1mxl"]
+
+[ext_resource type="Script" path="res://scene/main/main_screen.gd" id="1_nhpgv"]
+[ext_resource type="Script" path="res://scene/main/sprite_root.gd" id="2_k71b2"]
+[ext_resource type="Script" path="res://scene/main/player_input.gd" id="3_d0ln7"]
+[ext_resource type="Script" path="res://scene/main/pc_action.gd" id="4_jjg8i"]
+[ext_resource type="Script" path="res://scene/main/init_world.gd" id="5_4wjyd"]
+[ext_resource type="Script" path="res://scene/main/pc_fov.gd" id="5_o66cl"]
+[ext_resource type="Script" path="res://scene/main/sprite_coord.gd" id="7_4ymu5"]
+[ext_resource type="Script" path="res://scene/main/schedule.gd" id="8_q6781"]
+[ext_resource type="Script" path="res://scene/main/sprite_tag.gd" id="8_x038l"]
+[ext_resource type="Script" path="res://scene/main/actor_action.gd" id="9_psynh"]
+[ext_resource type="PackedScene" uid="uid://dphslwd58ka2w" path="res://scene/sidebar/sidebar.tscn" id="10_do70e"]
+[ext_resource type="Script" path="res://scene/main/random_number.gd" id="12_ymw0w"]
+[ext_resource type="Script" path="res://scene/main/game_progress.gd" id="13_ptfnh"]
+[ext_resource type="PackedScene" uid="uid://dj58gs1r0ay2d" path="res://scene/help/help_screen.tscn" id="14_innsn"]
+[ext_resource type="PackedScene" uid="uid://dgblbv4xseynh" path="res://scene/debug/debug_screen.tscn" id="15_s6fxc"]
+
+[node name="MainScreen" type="Node2D"]
+script = ExtResource("1_nhpgv")
+
+[node name="SpriteRoot" type="Node2D" parent="."]
+script = ExtResource("2_k71b2")
+
+[node name="PlayerInput" type="Node2D" parent="."]
+script = ExtResource("3_d0ln7")
+
+[node name="PcAction" type="Node2D" parent="."]
+script = ExtResource("4_jjg8i")
+
+[node name="PcFov" type="Node2D" parent="PcAction"]
+script = ExtResource("5_o66cl")
+
+[node name="InitWorld" type="Node2D" parent="."]
+script = ExtResource("5_4wjyd")
+
+[node name="SpriteCoord" type="Node2D" parent="."]
+script = ExtResource("7_4ymu5")
+
+[node name="SpriteTag" type="Node2D" parent="."]
+script = ExtResource("8_x038l")
+
+[node name="Schedule" type="Node2D" parent="."]
+script = ExtResource("8_q6781")
+
+[node name="ActorAction" type="Node2D" parent="."]
+script = ExtResource("9_psynh")
+
+[node name="Sidebar" parent="." instance=ExtResource("10_do70e")]
+
+[node name="RandomNumber" type="Node2D" parent="."]
+script = ExtResource("12_ymw0w")
+
+[node name="GameProgress" type="Node2D" parent="."]
+script = ExtResource("13_ptfnh")
+
+[node name="HelpScreen" parent="." instance=ExtResource("14_innsn")]
+
+[node name="DebugScreen" parent="." instance=ExtResource("15_s6fxc")]

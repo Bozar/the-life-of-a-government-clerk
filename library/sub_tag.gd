@@ -8,11 +8,9 @@ const DUNGEON_FLOOR: StringName = &"dungeon_floor"
 const WALL: StringName = &"wall"
 
 # Trap
-const BULLET: StringName = &"bullet"
 
 # Actor
 const PC: StringName = &"pc"
-const HOUND: StringName = &"hound"
 
 
 # Indicator

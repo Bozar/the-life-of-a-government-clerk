@@ -13,9 +13,6 @@ const EDIT_TAGS: Array = [
 
 
 const WALL_CHAR: StringName = "#"
-const RANDOM_WALL_CHAR: StringName = "+"
-const BULLET_CHAR: StringName = "?"
-const HOUND_CHAR: StringName = "G"
 
 
 var _ref_RandomNumber: RandomNumber
@@ -111,33 +108,22 @@ func _create_from_file(path_to_file: String, occupied_grids: Dictionary,
 func _create_from_prefab(packed_prefab: PackedPrefab, shift_coord: Vector2i,
         occupied_grids: Dictionary, tagged_sprites: Array) -> void:
     var coord: Vector2i = Vector2i(0, 0)
-    var random_wall_coords: Array = []
 
     for y: int in range(0, packed_prefab.max_y):
         for x: int in range(0, packed_prefab.max_x):
             coord.x = x + shift_coord.x
             coord.y = y + shift_coord.y
             _create_from_character(packed_prefab.prefab[x][y], coord,
-                    occupied_grids, random_wall_coords, tagged_sprites)
-    _create_random_wall(random_wall_coords, occupied_grids, tagged_sprites)
+                    occupied_grids, tagged_sprites)
 
 
 func _create_from_character(character: String, coord: Vector2i,
-        occupied_grids: Dictionary, random_wall_coords: Array,
-        tagged_sprites: Array) -> void:
+        occupied_grids: Dictionary, tagged_sprites: Array) -> void:
     match character:
         WALL_CHAR:
             occupied_grids[coord.x][coord.y] = true
             tagged_sprites.push_back(SpriteFactory.create_building(
                     SubTag.WALL, coord, false))
-        HOUND_CHAR:
-            tagged_sprites.push_back(SpriteFactory.create_actor(
-                    SubTag.HOUND, coord, false))
-        BULLET_CHAR:
-            tagged_sprites.push_back(SpriteFactory.create_trap(
-                    SubTag.BULLET, coord, false))
-        RANDOM_WALL_CHAR:
-            random_wall_coords.push_back(coord)
 
 
 func _get_edit_tags(edit_tags: Array) -> Array:
@@ -147,15 +133,3 @@ func _get_edit_tags(edit_tags: Array) -> Array:
         if _ref_RandomNumber.get_percent_chance(50):
             tags.push_back(i)
     return tags
-
-
-func _create_random_wall(coords: Array, occupied_grids: Dictionary,
-        tagged_sprites: Array) -> void:
-    var max_walls: int = floor(coords.size() * 0.5)
-
-    ArrayHelper.shuffle(coords, _ref_RandomNumber)
-    coords.resize(max_walls)
-    for i: Vector2i in coords:
-        occupied_grids[i.x][i.y] = true
-        tagged_sprites.push_back(SpriteFactory.create_building(SubTag.WALL, i,
-                false))

@@ -9,41 +9,14 @@ var _ref_GameProgress: GameProgress
 
 var _pc: Sprite2D
 var _actor_states: Dictionary = {}
-var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
-
-
-func hit_actor(sprite: Sprite2D) -> void:
-    var actor_state: ActorState = _get_actor_state(sprite)
-
-    if actor_state == null:
-        return
-    actor_state.hit_damage = GameData.HIT_DAMAGE
-    VisualEffect.switch_sprite(sprite, VisualTag.PASSIVE)
+# var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     var actor_state: ActorState = _get_actor_state(sprite)
-    var actor_coord: Vector2i = ConvertCoord.get_coord(sprite)
-    var pc_coord: Vector2i = ConvertCoord.get_coord(_pc)
-    var distanct_to_pc: int
 
     if actor_state == null:
         return
-
-    if actor_state.hit_damage == 1:
-        VisualEffect.switch_sprite(sprite, VisualTag.DEFAULT)
-    actor_state.hit_damage -= 1
-    if actor_state.hit_damage > 0:
-        ScheduleHelper.start_next_turn()
-        return
-
-    distanct_to_pc = ConvertCoord.get_range(actor_coord, pc_coord)
-    if distanct_to_pc == 1:
-        _hit_pc()
-    elif distanct_to_pc <= GameData.NPC_SIGHT_RANGE:
-        _approach_pc(_map_2d, sprite, [pc_coord])
-    elif _ref_PcAction.alert_duration > 0:
-        _approach_pc(_map_2d, sprite, [_ref_PcAction.alert_coord])
 
     ScheduleHelper.start_next_turn()
 
@@ -70,10 +43,6 @@ func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
         id = i.get_instance_id()
         if not _actor_states.erase(id):
             push_error("Actor not found: %s." % [i.name])
-
-
-func _hit_pc() -> void:
-    _ref_GameProgress.game_over.emit(false)
 
 
 func _get_actor_state(sprite: Sprite2D) -> ActorState:

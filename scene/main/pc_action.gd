@@ -10,31 +10,6 @@ enum {
 }
 
 
-var ammo: int:
-    get:
-        return _ammo
-
-
-var alert_duration: int:
-    get:
-        return _alert_duration
-
-
-var alert_coord: Vector2i:
-    get:
-        return _alert_coord
-
-
-var enemy_count: int:
-    get:
-        return _enemy_count
-
-
-var progress_bar: int:
-    get:
-        return _progress_bar
-
-
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
@@ -42,12 +17,7 @@ var _ref_GameProgress: GameProgress
 
 
 var _pc: Sprite2D
-var _ammo: int = GameData.MAGAZINE
 var _game_mode: int = NORMAL_MODE
-var _alert_duration: int = 0
-var _alert_coord: Vector2i
-var _enemy_count: int = GameData.MIN_ENEMY_COUNT
-var _progress_bar: int = GameData.MIN_PROGRESS_BAR
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -63,10 +33,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
-    # _ref_GameProgress.try_spawn_npc(_pc)
     _ref_PcFov.render_fov(_pc)
-    _alert_duration = max(0, _alert_duration - 1)
-    # print("%d, %d" % [enemy_count, progress_bar])
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:

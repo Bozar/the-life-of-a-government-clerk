@@ -19,12 +19,10 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var ammo: String = "Ammo: %d" % [_ref_PcAction.ammo]
-    var enemy: String = "\nHit: %d-%d" % [_ref_PcAction.enemy_count,
-            _ref_PcAction.progress_bar]
+    var sample: String = "$99|$10|+10\nA: 33%"
     var end_game: String = ""
 
     if game_over:
         end_game = YOU_WIN if player_win else YOU_LOSE
 
-    text = "%s%s%s" % [ammo, enemy, end_game]
+    text = "%s%s" % [sample, end_game]

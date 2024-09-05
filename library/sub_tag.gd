@@ -11,6 +11,7 @@ const WALL: StringName = &"wall"
 
 # Actor
 const PC: StringName = &"pc"
+const CART: StringName = &"cart"
 
 
 # Indicator

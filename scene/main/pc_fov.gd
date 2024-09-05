@@ -32,21 +32,15 @@ func _ready() -> void:
     _shadow_cast_fov_data = ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
 
 
-func render_fov(pc: Sprite2D, game_mode: int) -> void:
+func render_fov(pc: Sprite2D) -> void:
     if NO_FOV or TransferData.show_full_map:
         return
 
     var pc_coord: Vector2i = ConvertCoord.get_coord(pc)
     var this_coord: Vector2i = Vector2i(0, 0)
 
-    if game_mode == PcAction.AIM_MODE:
-        CrossFov.get_fov_map(pc_coord, _fov_map, _set_fov_value,
-                _block_cross_fov_ray, [_cross_fov_data], _cross_fov_data)
-    else:
-        # DiamondFov.get_fov_map(pc_coord, _fov_map, _set_fov_value,
-        #         GameData.PC_SIGHT_RANGE)
-        ShadowCastFov.get_fov_map(pc_coord, _fov_map, _set_fov_value,
-                _block_shadow_cast_fov_ray, [], _shadow_cast_fov_data)
+    ShadowCastFov.get_fov_map(pc_coord, _fov_map, _set_fov_value,
+            _block_shadow_cast_fov_ray, [], _shadow_cast_fov_data)
 
     for x: int in range(0, DungeonSize.MAX_X):
         for y: int in range(DungeonSize.MAX_Y):

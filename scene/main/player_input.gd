@@ -18,6 +18,7 @@ var _previous_input_flags: int = _input_flags
 
 
 func _unhandled_input(event: InputEvent) -> void:
+    # Flags that cannot coexist are grouped in an `if` block.
     if _input_flags & FUNCTION_FLAG:
         if _is_quit_game(event):
             return
@@ -45,13 +46,8 @@ func _unhandled_input(event: InputEvent) -> void:
     if _input_flags & GAMEPLAY_FLAG:
         if _is_move_actions(event):
             return
-        elif _is_aim(event):
-            return
         elif TransferData.wizard_mode:
-            if _is_add_ammo(event):
-                return
-            elif _is_add_hit(event):
-                return
+            return
     elif _input_flags & GAME_OVER_FLAG:
         if _is_start_new_game(event):
             return
@@ -72,13 +68,6 @@ func _is_move_actions(event: InputEvent) -> bool:
         if event.is_action_pressed(i):
             action_pressed.emit(i)
             return true
-    return false
-
-
-func _is_aim(event: InputEvent) -> bool:
-    if event.is_action_pressed(InputTag.AIM):
-        action_pressed.emit(InputTag.AIM)
-        return true
     return false
 
 
@@ -116,20 +105,6 @@ func _is_quit_game(event: InputEvent) -> bool:
 func _is_copy_seed(event: InputEvent) -> bool:
     if event.is_action_pressed(InputTag.COPY_SEED):
         action_pressed.emit(InputTag.COPY_SEED)
-        return true
-    return false
-
-
-func _is_add_ammo(event: InputEvent) -> bool:
-    if event.is_action_pressed(InputTag.ADD_AMMO):
-        action_pressed.emit(InputTag.ADD_AMMO)
-        return true
-    return false
-
-
-func _is_add_hit(event: InputEvent) -> bool:
-    if event.is_action_pressed(InputTag.ADD_HIT):
-        action_pressed.emit(InputTag.ADD_HIT)
         return true
     return false
 

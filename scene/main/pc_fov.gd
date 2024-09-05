@@ -7,6 +7,7 @@ const MEMORY_TAGS: Array = [
     MainTag.GROUND,
     MainTag.BUILDING,
     MainTag.TRAP,
+    MainTag.ACTOR,
 ]
 
 # 0b00: MEMORY_FLAG | SIGHT_FLAG
@@ -16,19 +17,11 @@ const IS_IN_MEMORY_FLAG: int = 0b10
 
 
 var _fov_map: Dictionary
-var _cross_fov_data: CrossFov.FovData
 var _shadow_cast_fov_data: ShadowCastFov.FovData
 
 
 func _ready() -> void:
     _fov_map = Map2D.init_map(DEFAULT_FOV_FLAG)
-    _cross_fov_data = CrossFov.FovData.new(
-        GameData.CROSS_FOV_WIDTH,
-        GameData.PC_AIM_RANGE,
-        GameData.PC_AIM_RANGE,
-        GameData.PC_AIM_RANGE,
-        GameData.PC_AIM_RANGE,
-    )
     _shadow_cast_fov_data = ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
 
 
@@ -128,28 +121,6 @@ func _match_sprite_tag(sprite: Sprite2D, sprite_tags: Array) -> bool:
 
 func _sort_by_z_index(this: Sprite2D, that: Sprite2D) -> bool:
     return this.z_index < that.z_index
-
-
-func _block_cross_fov_ray(from_coord: Vector2i, to_coord: Vector2i,
-        args: Array) -> bool:
-    var fov_data: CrossFov.FovData = args[0]
-    var direction: Vector2i = ConvertCoord.get_direction(from_coord, to_coord)
-    var max_range: int
-
-    match direction:
-        Vector2i.UP:
-            max_range = fov_data.up
-        Vector2i.RIGHT:
-            max_range = fov_data.right
-        Vector2i.DOWN:
-            max_range = fov_data.down
-        Vector2i.LEFT:
-            max_range = fov_data.left
-        _:
-            return true
-    if ConvertCoord.get_range(from_coord, to_coord) > max_range:
-        return true
-    return _is_obstacle(to_coord)
 
 
 func _is_obstacle(coord: Vector2i) -> bool:

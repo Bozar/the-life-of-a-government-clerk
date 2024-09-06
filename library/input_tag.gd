@@ -8,6 +8,8 @@ const MOVE_RIGHT: StringName = &"move_right"
 const MOVE_UP: StringName = &"move_up"
 const MOVE_DOWN: StringName = &"move_down"
 
+const WIZARD_1: StringName = &"wizard_1"
+
 
 ### Game Over ###
 
@@ -37,19 +39,20 @@ const PAGE_BOTTOM: StringName = &"page_bottom"
 
 ### List of Inputs ###
 
-const MOVE_ACTIONS: Array[StringName] = [
+const GAME_PLAY_INPUTS: Array[StringName] = [
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,
     MOVE_DOWN,
 ]
 
-const SWITCH_SCREEN_INPUTS: Array[StringName] = [
-    NEXT_SCREEN,
-    PREVIOUS_SCREEN,
+const WIZARD_INPUTS: Array[StringName] = [
+    WIZARD_1,
 ]
 
-const SCROLL_PAGE_INPUTS: Array[StringName] = [
+const UI_INPUTS: Array[StringName] = [
+    NEXT_SCREEN,
+    PREVIOUS_SCREEN,
     PAGE_DOWN,
     PAGE_UP,
     LINE_DOWN,

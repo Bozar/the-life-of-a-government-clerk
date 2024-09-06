@@ -5,11 +5,6 @@ extends Node2D
 signal ui_force_updated()
 
 
-enum {
-    NORMAL_MODE,
-}
-
-
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
@@ -18,7 +13,6 @@ var _ref_GameProgress: GameProgress
 
 
 var _pc: Sprite2D
-var _game_mode: int = NORMAL_MODE
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -38,31 +32,20 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
-    var coord: Vector2i
-
     match input_tag:
         InputTag.MOVE_LEFT:
-            coord = Vector2i.LEFT
+            _move(_pc, Vector2i.LEFT)
         InputTag.MOVE_RIGHT:
-            coord = Vector2i.RIGHT
+            _move(_pc, Vector2i.RIGHT)
         InputTag.MOVE_UP:
-            coord = Vector2i.UP
+            _move(_pc, Vector2i.UP)
         InputTag.MOVE_DOWN:
-            coord = Vector2i.DOWN
+            _move(_pc, Vector2i.DOWN)
         InputTag.WIZARD_1:
             _ref_WizardMode.handle_input(input_tag)
+            _ref_PcFov.render_fov(_pc)
+            ui_force_updated.emit()
         _:
-            return
-
-    coord += ConvertCoord.get_coord(_pc)
-    match _game_mode:
-        NORMAL_MODE:
-            if not DungeonSize.is_in_dungeon(coord):
-                return
-            elif SpriteState.has_building_at_coord(coord):
-                return
-            _move(_pc, coord)
-            _end_turn()
             return
 
 
@@ -72,19 +55,14 @@ func _on_GameProgress_game_over(player_win: bool) -> void:
         VisualEffect.set_dark_color(_pc)
 
 
-func _move(pc: Sprite2D, coord: Vector2i) -> void:
-    SpriteState.move_sprite(pc, coord)
+func _move(pc: Sprite2D, direction: Vector2i) -> void:
+    var coord: Vector2i = ConvertCoord.get_coord(_pc) + direction
 
-
-func _is_impassable(coord: Vector2i) -> bool:
     if not DungeonSize.is_in_dungeon(coord):
-        return true
+        return
     elif SpriteState.has_building_at_coord(coord):
-        return true
+        return
     elif SpriteState.has_actor_at_coord(coord):
-        return true
-    return false
-
-
-func _end_turn() -> void:
+        return
+    SpriteState.move_sprite(pc, coord)
     ScheduleHelper.start_next_turn()

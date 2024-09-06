@@ -14,6 +14,7 @@ var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
 @onready var _ref_PcFov: PcFov = $PcFov
+@onready var _ref_WizardMode: WizardMode = $WizardMode
 
 
 var _pc: Sprite2D
@@ -48,6 +49,8 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             coord = Vector2i.UP
         InputTag.MOVE_DOWN:
             coord = Vector2i.DOWN
+        InputTag.WIZARD_1:
+            _ref_WizardMode.handle_input(input_tag)
         _:
             return
 

@@ -8,6 +8,7 @@ const PASSIVE: StringName = &"passive"
 const ACTIVE_1: StringName = &"active_1"
 const ACTIVE_2: StringName = &"active_2"
 const ACTIVE_3: StringName = &"active_3"
+const ACTIVE_4: StringName = &"active_4"
 
 const ZERO: StringName = &"zero"
 const ONE: StringName = &"one"

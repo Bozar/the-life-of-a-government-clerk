@@ -8,10 +8,18 @@ const DUNGEON_FLOOR: StringName = &"dungeon_floor"
 const WALL: StringName = &"wall"
 
 # Trap
+const ATLAS_ON_DESK: StringName = &"atlas_on_desk"
+const BOOK_ON_DESK: StringName = &"book_on_desk"
+const CUP_ON_DESK: StringName = &"cup_on_desk"
+const DOCUMENT_ON_DESK: StringName = &"document_on_desk"
 
 # Actor
 const PC: StringName = &"pc"
 const CART: StringName = &"cart"
+const ATLAS: StringName = &"atlas"
+const BOOK: StringName = &"book"
+const CUP: StringName = &"cup"
+const DOCUMENT: StringName = &"document"
 
 
 # Indicator

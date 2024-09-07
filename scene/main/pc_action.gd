@@ -10,6 +10,7 @@ var _ref_GameProgress: GameProgress
 
 @onready var _ref_PcFov: PcFov = $PcFov
 @onready var _ref_WizardMode: WizardMode = $WizardMode
+@onready var _ref_Cart: Cart = $Cart
 
 
 var _pc: Sprite2D
@@ -22,6 +23,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         if i.sub_tag == SubTag.PC:
             _pc = i.sprite
+            _ref_Cart.init_linked_carts(_pc)
             return
 
 
@@ -64,5 +66,5 @@ func _move(pc: Sprite2D, direction: Vector2i) -> void:
         return
     elif SpriteState.has_actor_at_coord(coord):
         return
-    SpriteState.move_sprite(pc, coord)
+    _ref_Cart.pull_cart(pc, coord)
     ScheduleHelper.start_next_turn()

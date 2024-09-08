@@ -47,6 +47,10 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             _ref_WizardMode.handle_input(input_tag)
             _ref_PcFov.render_fov(_pc)
             ui_force_updated.emit()
+        InputTag.WIZARD_2:
+            _ref_WizardMode.handle_input(input_tag)
+        InputTag.WIZARD_3:
+            _ref_WizardMode.handle_input(input_tag)
         _:
             return
 

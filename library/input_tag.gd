@@ -9,6 +9,8 @@ const MOVE_UP: StringName = &"move_up"
 const MOVE_DOWN: StringName = &"move_down"
 
 const WIZARD_1: StringName = &"wizard_1"
+const WIZARD_2: StringName = &"wizard_2"
+const WIZARD_3: StringName = &"wizard_3"
 
 
 ### Game Over ###
@@ -48,6 +50,8 @@ const GAME_PLAY_INPUTS: Array[StringName] = [
 
 const WIZARD_INPUTS: Array[StringName] = [
     WIZARD_1,
+    WIZARD_2,
+    WIZARD_3,
 ]
 
 const UI_INPUTS: Array[StringName] = [

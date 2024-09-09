@@ -6,6 +6,7 @@ var _linked_carts: Dictionary
 var _cart_states: Dictionary = {}
 
 var _add_cart_counter: int = 0
+var _save_pc_coord: Vector2i
 
 
 func init_linked_carts(head_cart: Sprite2D) -> void:
@@ -31,6 +32,26 @@ func pull_cart(first_cart: Sprite2D, first_target_coord: Vector2i) -> void:
 
     _move_cart(first_cart, first_cart, first_target_coord)
     _add_cart_deferred(first_cart, last_coord)
+
+
+func enter_examine_mode(pc: Sprite2D) -> bool:
+    # There should be at least two sprites (PC and cart) to enable examine mode.
+    if _linked_carts.size() < 2:
+        return false
+
+    var target_cart: Sprite2D = LinkedList.get_next_object(pc, _linked_carts)
+    var target_coord: Vector2i = ConvertCoord.get_coord(target_cart)
+
+    _save_pc_coord = ConvertCoord.get_coord(pc)
+    # By game design, PC can move over cart sprites.
+    SpriteState.move_sprite(pc, target_coord, pc.z_index + 1)
+    VisualEffect.switch_sprite(pc, VisualTag.PASSIVE)
+    return true
+
+
+func exit_examine_mode(pc: Sprite2D) -> void:
+    SpriteState.move_sprite(pc, _save_pc_coord, pc.z_index - 1)
+    VisualEffect.switch_sprite(pc, VisualTag.DEFAULT)
 
 
 # Move carts from the first one (inclusive) to the last one (exclusive).

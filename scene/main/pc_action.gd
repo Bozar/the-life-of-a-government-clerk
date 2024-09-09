@@ -5,6 +5,12 @@ extends Node2D
 signal ui_force_updated()
 
 
+enum {
+    NORMAL_MODE,
+    EXAMINE_MODE
+}
+
+
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
@@ -15,6 +21,7 @@ var _ref_GameProgress: GameProgress
 
 
 var _pc: Sprite2D
+var _game_mode: int = NORMAL_MODE
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -38,25 +45,34 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
-    match input_tag:
-        InputTag.MOVE_LEFT:
-            _move(_pc, Vector2i.LEFT)
-        InputTag.MOVE_RIGHT:
-            _move(_pc, Vector2i.RIGHT)
-        InputTag.MOVE_UP:
-            _move(_pc, Vector2i.UP)
-        InputTag.MOVE_DOWN:
-            _move(_pc, Vector2i.DOWN)
-        InputTag.WIZARD_1:
-            _ref_WizardMode.handle_input(input_tag)
-            _ref_PcFov.render_fov(_pc)
-            ui_force_updated.emit()
-        InputTag.WIZARD_2:
-            _ref_WizardMode.handle_input(input_tag)
-        InputTag.WIZARD_3:
-            _ref_WizardMode.handle_input(input_tag)
-        _:
-            return
+    match _game_mode:
+        NORMAL_MODE:
+            match input_tag:
+                InputTag.SWITCH_EXAMINE:
+                    if _ref_Cart.enter_examine_mode(_pc):
+                        _game_mode = EXAMINE_MODE
+                        _ref_PcFov.render_fov(_pc)
+                InputTag.MOVE_LEFT:
+                    _move(_pc, Vector2i.LEFT)
+                InputTag.MOVE_RIGHT:
+                    _move(_pc, Vector2i.RIGHT)
+                InputTag.MOVE_UP:
+                    _move(_pc, Vector2i.UP)
+                InputTag.MOVE_DOWN:
+                    _move(_pc, Vector2i.DOWN)
+                    return
+                InputTag.WIZARD_1, InputTag.WIZARD_2, InputTag.WIZARD_3:
+                    _ref_WizardMode.handle_input(input_tag)
+                _:
+                    return
+        EXAMINE_MODE:
+            match input_tag:
+                InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
+                    _game_mode = NORMAL_MODE
+                    _ref_Cart.exit_examine_mode(_pc)
+                    _ref_PcFov.render_fov(_pc)
+                _:
+                    return
 
 
 func _on_GameProgress_game_over(player_win: bool) -> void:

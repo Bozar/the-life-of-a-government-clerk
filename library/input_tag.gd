@@ -8,6 +8,9 @@ const MOVE_RIGHT: StringName = &"move_right"
 const MOVE_UP: StringName = &"move_up"
 const MOVE_DOWN: StringName = &"move_down"
 
+const SWITCH_EXAMINE: StringName = &"switch_examine"
+const EXIT_EXAMINE: StringName = &"exit_examine"
+
 const WIZARD_1: StringName = &"wizard_1"
 const WIZARD_2: StringName = &"wizard_2"
 const WIZARD_3: StringName = &"wizard_3"
@@ -46,6 +49,8 @@ const GAME_PLAY_INPUTS: Array[StringName] = [
     MOVE_RIGHT,
     MOVE_UP,
     MOVE_DOWN,
+    SWITCH_EXAMINE,
+    EXIT_EXAMINE,
 ]
 
 const WIZARD_INPUTS: Array[StringName] = [

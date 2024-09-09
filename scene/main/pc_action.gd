@@ -11,6 +11,21 @@ enum {
 }
 
 
+var state_text: String:
+    get:
+        match _game_mode:
+            NORMAL_MODE:
+                return _ref_Cart.get_extend_text()
+            EXAMINE_MODE:
+                return _ref_Cart.get_examine_text(_pc)
+        return ""
+
+
+var first_item_text: String:
+    get:
+        return _ref_Cart.get_first_item_text(_pc)
+
+
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
@@ -51,13 +66,17 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE:
                     if _ref_Cart.enter_examine_mode(_pc):
                         _game_mode = EXAMINE_MODE
-                        _ref_PcFov.render_fov(_pc)
+                    else:
+                        return
                 InputTag.MOVE_LEFT:
                     _move(_pc, Vector2i.LEFT)
+                    return
                 InputTag.MOVE_RIGHT:
                     _move(_pc, Vector2i.RIGHT)
+                    return
                 InputTag.MOVE_UP:
                     _move(_pc, Vector2i.UP)
+                    return
                 InputTag.MOVE_DOWN:
                     _move(_pc, Vector2i.DOWN)
                     return
@@ -70,9 +89,18 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
                     _ref_Cart.exit_examine_mode(_pc)
-                    _ref_PcFov.render_fov(_pc)
+                InputTag.MOVE_UP:
+                    _ref_Cart.examine_first_cart(_pc)
+                InputTag.MOVE_DOWN:
+                    _ref_Cart.examine_last_cart(_pc)
+                InputTag.MOVE_LEFT:
+                    _ref_Cart.examine_previous_cart(_pc)
+                InputTag.MOVE_RIGHT:
+                    _ref_Cart.examine_next_cart(_pc)
                 _:
                     return
+    _ref_PcFov.render_fov(_pc)
+    ui_force_updated.emit()
 
 
 func _on_GameProgress_game_over(player_win: bool) -> void:

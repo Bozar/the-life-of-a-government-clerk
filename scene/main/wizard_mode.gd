@@ -36,7 +36,7 @@ func _test(input_tag: StringName) -> void:
                         cart_state.item_tag = SubTag.DOCUMENT
                         VisualEffect.switch_sprite(cart, cart_state.visual_tag)
                     4:
-                        cart_state.is_discarded = true
+                        cart_state.is_dropped = true
                         VisualEffect.switch_sprite(cart, cart_state.visual_tag)
                     5:
                         cart_state.load_factor = 120

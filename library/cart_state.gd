@@ -30,14 +30,19 @@ var load_factor: int:
 
 var visual_tag: StringName:
     get:
-        if is_discarded:
+        if is_dropped:
             return VisualTag.PASSIVE_2
-        elif load_factor >= GameData.MAX_LOAD_FACTOR:
+        elif is_full:
             return VisualTag.PASSIVE_1
         return ITEM_TO_VISUAL.get(item_tag, VisualTag.DEFAULT)
 
 
-var is_discarded: bool = false
+var is_full: bool:
+    get:
+        return load_factor >= GameData.MAX_LOAD_FACTOR
+
+
+var is_dropped: bool = false
 
 
 var _item_tag: StringName = SubTag.CART

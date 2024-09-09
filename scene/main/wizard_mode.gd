@@ -8,24 +8,39 @@ func handle_input(input_tag: StringName) -> void:
 
 func _test(input_tag: StringName) -> void:
     var carts: Array
-    var visual_tags: Array = [
-        VisualTag.ACTIVE_1,
-        VisualTag.ACTIVE_2,
-        VisualTag.ACTIVE_3,
-        VisualTag.ACTIVE_4,
-        VisualTag.PASSIVE,
-    ]
     var head_cart: Sprite2D
+    var cart: Sprite2D
+    var cart_state: CartState
 
     match input_tag:
         InputTag.WIZARD_1:
-            get_node("../Cart").add_cart(3)
+            get_node("../Cart").add_cart(7)
         InputTag.WIZARD_2:
             carts = SpriteState.get_sprites_by_sub_tag(SubTag.CART)
-            if carts.size() > 5:
-                carts.resize(5)
+            if carts.size() > 6:
+                carts.resize(6)
             for i in range(0, carts.size()):
-                VisualEffect.switch_sprite(carts[i], visual_tags[i])
+                cart = carts[i]
+                cart_state = get_node("../Cart").get_state(cart)
+                match i:
+                    0:
+                        cart_state.item_tag = SubTag.ATLAS
+                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                    1:
+                        cart_state.item_tag = SubTag.BOOK
+                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                    2:
+                        cart_state.item_tag = SubTag.CUP
+                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                    3:
+                        cart_state.item_tag = SubTag.DOCUMENT
+                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                    4:
+                        cart_state.is_discarded = true
+                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                    5:
+                        cart_state.load_factor = 120
+                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
         InputTag.WIZARD_3:
             head_cart = SpriteState.get_sprites_by_sub_tag(SubTag.PC)[0]
             carts = SpriteState.get_sprites_by_sub_tag(SubTag.CART)

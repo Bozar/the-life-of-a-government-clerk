@@ -16,6 +16,14 @@ func add_cart(new_cart_count: int) -> void:
     _add_cart_counter += new_cart_count
 
 
+func get_state(cart: Sprite2D) -> CartState:
+    var cart_state: CartState = _cart_states.get(cart.get_instance_id(), null)
+
+    if cart_state == null:
+        push_error("Cart state not found: %s" % cart.name)
+    return cart_state
+
+
 func pull_cart(first_cart: Sprite2D, first_target_coord: Vector2i) -> void:
     var last_cart: Sprite2D = LinkedList.get_previous_object(first_cart,
             _linked_carts)

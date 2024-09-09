@@ -10,6 +10,9 @@ const ACTIVE_2: StringName = &"active_2"
 const ACTIVE_3: StringName = &"active_3"
 const ACTIVE_4: StringName = &"active_4"
 
+const PASSIVE_1: StringName = &"passive_1"
+const PASSIVE_2: StringName = &"passive_2"
+
 const ZERO: StringName = &"zero"
 const ONE: StringName = &"one"
 const TWO: StringName = &"two"

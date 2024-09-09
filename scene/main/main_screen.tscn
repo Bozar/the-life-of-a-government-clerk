@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://drb5ql5du1mxl"]
+[gd_scene load_steps=19 format=3 uid="uid://drb5ql5du1mxl"]
 
 [ext_resource type="Script" path="res://scene/main/main_screen.gd" id="1_nhpgv"]
 [ext_resource type="Script" path="res://scene/main/sprite_root.gd" id="2_k71b2"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scene/main/wizard_mode.gd" id="6_gh2sd"]
 [ext_resource type="Script" path="res://scene/main/sprite_coord.gd" id="7_4ymu5"]
 [ext_resource type="Script" path="res://scene/main/cart.gd" id="7_26upo"]
+[ext_resource type="Script" path="res://scene/main/checkmate.gd" id="8_cehcj"]
 [ext_resource type="Script" path="res://scene/main/schedule.gd" id="8_q6781"]
 [ext_resource type="Script" path="res://scene/main/sprite_tag.gd" id="8_x038l"]
 [ext_resource type="Script" path="res://scene/main/actor_action.gd" id="9_psynh"]
@@ -38,6 +39,9 @@ script = ExtResource("6_gh2sd")
 
 [node name="Cart" type="Node2D" parent="PcAction"]
 script = ExtResource("7_26upo")
+
+[node name="Checkmate" type="Node2D" parent="PcAction"]
+script = ExtResource("8_cehcj")
 
 [node name="InitWorld" type="Node2D" parent="."]
 script = ExtResource("5_4wjyd")

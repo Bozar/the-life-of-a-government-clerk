@@ -6,6 +6,7 @@ const DUNGEON_FLOOR: StringName = &"dungeon_floor"
 
 # Building
 const WALL: StringName = &"wall"
+const DOOR: StringName = &"door"
 
 # Trap
 const ATLAS_ON_DESK: StringName = &"atlas_on_desk"

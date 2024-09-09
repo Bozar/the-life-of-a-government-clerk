@@ -47,6 +47,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
         if i.sub_tag == SubTag.PC:
             _pc = i.sprite
             _ref_Cart.init_linked_carts(_pc)
+            _ref_Cart.add_cart(GameData.MIN_CART_COUNT)
             return
 
 

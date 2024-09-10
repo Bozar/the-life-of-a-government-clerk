@@ -15,6 +15,12 @@ const WIZARD_1: StringName = &"wizard_1"
 const WIZARD_2: StringName = &"wizard_2"
 const WIZARD_3: StringName = &"wizard_3"
 const WIZARD_4: StringName = &"wizard_4"
+const WIZARD_5: StringName = &"wizard_5"
+const WIZARD_6: StringName = &"wizard_6"
+const WIZARD_7: StringName = &"wizard_7"
+const WIZARD_8: StringName = &"wizard_8"
+const WIZARD_9: StringName = &"wizard_9"
+const WIZARD_0: StringName = &"wizard_0"
 
 
 ### Game Over ###
@@ -59,6 +65,12 @@ const WIZARD_INPUTS: Array[StringName] = [
     WIZARD_2,
     WIZARD_3,
     WIZARD_4,
+    WIZARD_5,
+    WIZARD_6,
+    WIZARD_7,
+    WIZARD_8,
+    WIZARD_9,
+    WIZARD_0,
 ]
 
 const UI_INPUTS: Array[StringName] = [

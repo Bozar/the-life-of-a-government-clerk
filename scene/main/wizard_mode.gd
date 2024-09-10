@@ -40,7 +40,6 @@ func _test(input_tag: StringName) -> void:
                         cart_state.load_factor = i * 20
                     5:
                         cart_state.load_factor = 120
-                VisualEffect.switch_sprite(cart, cart_state.visual_tag)
         InputTag.WIZARD_3:
             carts = SpriteState.get_sprites_by_sub_tag(SubTag.CART)
             get_node("../Cart")._remove_cart(pc, carts[0])
@@ -49,4 +48,3 @@ func _test(input_tag: StringName) -> void:
             if cart != null:
                 cart_state = get_node("../Cart").get_state(cart)
                 cart_state.item_tag = SubTag.CUP
-                VisualEffect.switch_sprite(cart, cart_state.visual_tag)

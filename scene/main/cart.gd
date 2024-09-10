@@ -223,7 +223,7 @@ func _add_cart_deferred(first_cart: Sprite2D, new_coord: Vector2i) -> void:
             true).sprite
 
     LinkedList.insert_object(new_cart, first_cart, _linked_carts)
-    _cart_states[new_cart.get_instance_id()] = CartState.new()
+    _cart_states[new_cart.get_instance_id()] = CartState.new(new_cart)
     _add_cart_counter -= 1
 
 

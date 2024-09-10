@@ -65,21 +65,11 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             _switch_screen(input_tag)
         InputTag.CLOSE_MENU:
             visible = false
-        InputTag.NEXT_SCREEN:
+        InputTag.PREVIOUS_SCREEN, InputTag.NEXT_SCREEN:
             _switch_screen(input_tag)
-        InputTag.PREVIOUS_SCREEN:
-            _switch_screen(input_tag)
-        InputTag.PAGE_DOWN:
-            _scroll_screen(input_tag)
-        InputTag.PAGE_UP:
-            _scroll_screen(input_tag)
-        InputTag.LINE_DOWN:
-            _scroll_screen(input_tag)
-        InputTag.LINE_UP:
-            _scroll_screen(input_tag)
-        InputTag.PAGE_TOP:
-            _scroll_screen(input_tag)
-        InputTag.PAGE_BOTTOM:
+        InputTag.PAGE_DOWN, InputTag.PAGE_UP, \
+                InputTag.LINE_DOWN, InputTag.LINE_UP, \
+                InputTag.PAGE_TOP, InputTag.PAGE_BOTTOM:
             _scroll_screen(input_tag)
 
 

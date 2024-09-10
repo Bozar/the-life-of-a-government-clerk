@@ -41,7 +41,5 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
     match input_tag:
         InputTag.CLOSE_MENU:
             visible = true
-        InputTag.OPEN_DEBUG_MENU:
-            visible = false
-        InputTag.OPEN_HELP_MENU:
+        InputTag.OPEN_DEBUG_MENU, InputTag.OPEN_HELP_MENU:
             visible = false

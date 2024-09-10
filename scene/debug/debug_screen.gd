@@ -55,11 +55,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
         InputTag.OPEN_DEBUG_MENU:
             _ref_SeedLineEdit.grab_focus()
             visible = true
-        InputTag.REPLAY_GAME:
-            _set_transfer_data(input_tag)
-        InputTag.RESTART_GAME:
-            _set_transfer_data(input_tag)
-        InputTag.START_NEW_GAME:
+        InputTag.REPLAY_GAME, InputTag.RESTART_GAME, InputTag.START_NEW_GAME:
             _set_transfer_data(input_tag)
 
 

@@ -17,6 +17,7 @@ var _input_flag: int = 0b000_11
 var _previous_input_flag: int = _input_flag
 
 
+# Convert `InputEvent` to `InputTag`, and then broadcast the result.
 func _unhandled_input(event: InputEvent) -> void:
     # Flags that cannot coexist are grouped in an `if` block.
     if _input_flag & FUNCTION_FLAG:

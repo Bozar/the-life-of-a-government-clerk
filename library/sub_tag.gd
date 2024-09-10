@@ -26,7 +26,7 @@ const DOCUMENT: StringName = &"document"
 
 const CART: StringName = &"cart"
 const FULL: StringName = &"full"
-const DROPPED: StringName = &"dropped"
+const DETACHED: StringName = &"detached"
 
 
 # Indicator

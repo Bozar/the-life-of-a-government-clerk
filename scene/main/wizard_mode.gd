@@ -36,9 +36,11 @@ func _test(input_tag: StringName) -> void:
                         cart_state.item_tag = SubTag.DOCUMENT
                         cart_state.load_factor = i * 20
                     4:
-                        cart_state.is_dropped = true
+                        cart_state.item_tag = SubTag.ATLAS
+                        cart_state.is_detached = true
                         cart_state.load_factor = i * 20
                     5:
+                        cart_state.item_tag = SubTag.BOOK
                         cart_state.load_factor = 120
         InputTag.WIZARD_3:
             carts = SpriteState.get_sprites_by_sub_tag(SubTag.CART)
@@ -47,4 +49,10 @@ func _test(input_tag: StringName) -> void:
             cart = get_node("../Cart").get_last_slot(pc)
             if cart != null:
                 cart_state = get_node("../Cart").get_state(cart)
+                cart_state.load_factor = 120
+            cart = get_node("../Cart").get_last_slot(pc)
+            if cart != null:
+                cart_state = get_node("../Cart").get_state(cart)
                 cart_state.item_tag = SubTag.CUP
+        InputTag.WIZARD_5:
+            print(get_node("../Cart").clean_cart(pc))

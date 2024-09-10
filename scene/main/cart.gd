@@ -14,8 +14,8 @@ const ITEM_TO_STRING: Dictionary = {
     SubTag.DOCUMENT: "D",
 }
 
-# By game design, `DROPPED` and `FULL` only appears in Examine Mode.
-const DROPPED: String = "?> DROPPED"
+# By game design, `DETACHED` and `FULL` only appears in Examine Mode.
+const DETACHED: String = "?> DETACHED"
 const FULL: String = "?> FULL"
 
 
@@ -24,6 +24,7 @@ var _cart_states: Dictionary = {}
 
 var _add_cart_counter: int = 0
 var _save_pc_coord: Vector2i
+var _save_remove_carts: Array = []
 
 
 func init_linked_carts(head_cart: Sprite2D) -> void:
@@ -43,10 +44,21 @@ func get_state(cart: Sprite2D) -> CartState:
 
 
 func pull_cart(first_cart: Sprite2D, first_target_coord: Vector2i) -> void:
-    var last_cart: Sprite2D = LinkedList.get_previous_object(first_cart,
-            _linked_carts)
-    var last_coord: Vector2i = ConvertCoord.get_coord(last_cart)
+    var last_cart: Sprite2D
+    var last_coord: Vector2i
+    var remove: Sprite2D
 
+    # Remove carts first, in order to pull fewer carts if possible.
+    while _save_remove_carts.size() > 0:
+        remove = _save_remove_carts.pop_back()
+        _remove_cart(first_cart, remove)
+
+    # Before moving the newer (perhaps shorter) cart line, record the position
+    # of the last cart.
+    last_cart = LinkedList.get_previous_object(first_cart, _linked_carts)
+    last_coord = ConvertCoord.get_coord(last_cart)
+
+    # Move the cart line. Add a new cart to the recorded position if requried.
     _move_cart(first_cart, first_cart, first_target_coord)
     _add_cart_deferred(first_cart, last_coord)
 
@@ -64,9 +76,9 @@ func get_first_item(pc: Sprite2D) -> Sprite2D:
         state = get_state(cart)
         if state == null:
             continue
-        elif state.is_full:
+        elif state.is_detached:
             continue
-        elif state.is_dropped:
+        elif state.is_full:
             continue
         elif state.item_tag == SubTag.CART:
             continue
@@ -87,14 +99,51 @@ func get_last_slot(pc: Sprite2D) -> Sprite2D:
         state = get_state(cart)
         if state == null:
             continue
-        elif state.is_full:
+        elif state.is_detached:
             continue
-        elif state.is_dropped:
+        elif state.is_full:
             continue
         elif state.item_tag != SubTag.CART:
             continue
         break
     return cart
+
+
+# By game design, return true if at least one cart is cleaned or detached, and
+# therefore charge a small fee.
+func clean_cart(pc: Sprite2D) -> bool:
+    var is_cleaned: bool = false
+    var cart: Sprite2D = pc
+    var state: CartState
+
+    # Note that the first cart is 0.
+    for i in range(0, _linked_carts.size()):
+        cart = LinkedList.get_next_object(cart, _linked_carts)
+        # All carts have been examined.
+        if cart == pc:
+            break
+        state = get_state(cart)
+        # This should not happen.
+        if state == null:
+            continue
+        # By game design, the first few carts can be cleaned, but not detached.
+        elif i < GameData.MIN_CART:
+            # This should not happen.
+            if state.is_detached:
+                continue
+            elif state.load_factor > GameData.MIN_LOAD_FACTOR:
+                state.load_factor = GameData.MIN_LOAD_FACTOR
+                is_cleaned = true
+        # By game design, trailing carts can be detached, but not cleaned.
+        else:
+            # This could happen.
+            if state.is_detached:
+                continue
+            elif state.is_full:
+                state.is_detached = true
+                is_cleaned = true
+                _save_remove_carts.push_back(cart)
+    return is_cleaned
 
 
 func enter_examine_mode(pc: Sprite2D) -> bool:
@@ -185,8 +234,8 @@ func _get_cart_state_text(coord: Vector2i, text_template: String) -> String:
 
     if state == null:
         return ""
-    elif state.is_dropped:
-        return DROPPED
+    elif state.is_detached:
+        return DETACHED
     elif state.is_full:
         return FULL
     return text_template % [

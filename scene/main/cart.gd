@@ -51,6 +51,52 @@ func pull_cart(first_cart: Sprite2D, first_target_coord: Vector2i) -> void:
     _add_cart_deferred(first_cart, last_coord)
 
 
+func get_first_item(pc: Sprite2D) -> Sprite2D:
+    var cart: Sprite2D = pc
+    var state: CartState
+
+    while true:
+        # All carts have been examined.
+        cart = LinkedList.get_next_object(cart, _linked_carts)
+        if cart == pc:
+            return null
+        # Find the first cart (starting from PC) that carries an item.
+        state = get_state(cart)
+        if state == null:
+            continue
+        elif state.is_full:
+            continue
+        elif state.is_dropped:
+            continue
+        elif state.item_tag == SubTag.CART:
+            continue
+        break
+    return cart
+
+
+func get_last_slot(pc: Sprite2D) -> Sprite2D:
+    var cart: Sprite2D = pc
+    var state: CartState
+
+    while true:
+        # All carts have been examined.
+        cart = LinkedList.get_previous_object(cart, _linked_carts)
+        if cart == pc:
+            return null
+        # Find the last cart (starting from PC) that is empty.
+        state = get_state(cart)
+        if state == null:
+            continue
+        elif state.is_full:
+            continue
+        elif state.is_dropped:
+            continue
+        elif state.item_tag != SubTag.CART:
+            continue
+        break
+    return cart
+
+
 func enter_examine_mode(pc: Sprite2D) -> bool:
     # There should be at least two sprites (PC and cart) to enable examine mode.
     if _linked_carts.size() < 2:
@@ -124,26 +170,11 @@ func get_examine_text(pc: Sprite2D) -> String:
 
 
 func get_first_item_text(pc: Sprite2D) -> String:
-    var cart: Sprite2D = pc
-    var state: CartState
+    var cart: Sprite2D = get_first_item(pc)
     var coord: Vector2i
 
-    while true:
-        # All carts have been examined.
-        cart = LinkedList.get_next_object(cart, _linked_carts)
-        if cart == pc:
-            return ""
-        # Find the first cart (starting from PC) that carries an item.
-        state = get_state(cart)
-        if state == null:
-            continue
-        elif state.item_tag == SubTag.CART:
-            continue
-        elif state.is_full:
-            continue
-        elif state.is_dropped:
-            continue
-        break
+    if cart == null:
+        return ""
     coord = ConvertCoord.get_coord(cart)
     return _get_cart_state_text(coord, FIRST_ITEM_TEMPLATE)
 

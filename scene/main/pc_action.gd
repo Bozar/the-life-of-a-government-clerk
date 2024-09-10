@@ -81,7 +81,8 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 InputTag.MOVE_DOWN:
                     _move(_pc, Vector2i.DOWN)
                     return
-                InputTag.WIZARD_1, InputTag.WIZARD_2, InputTag.WIZARD_3:
+                InputTag.WIZARD_1, InputTag.WIZARD_2, InputTag.WIZARD_3, \
+                        InputTag.WIZARD_4:
                     _ref_WizardMode.handle_input(input_tag)
                 _:
                     return

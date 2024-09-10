@@ -14,6 +14,7 @@ const EXIT_EXAMINE: StringName = &"exit_examine"
 const WIZARD_1: StringName = &"wizard_1"
 const WIZARD_2: StringName = &"wizard_2"
 const WIZARD_3: StringName = &"wizard_3"
+const WIZARD_4: StringName = &"wizard_4"
 
 
 ### Game Over ###
@@ -57,6 +58,7 @@ const WIZARD_INPUTS: Array[StringName] = [
     WIZARD_1,
     WIZARD_2,
     WIZARD_3,
+    WIZARD_4,
 ]
 
 const UI_INPUTS: Array[StringName] = [

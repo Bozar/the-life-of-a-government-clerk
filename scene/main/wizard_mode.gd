@@ -7,8 +7,8 @@ func handle_input(input_tag: StringName) -> void:
 
 
 func _test(input_tag: StringName) -> void:
+    var pc: Sprite2D = SpriteState.get_sprites_by_sub_tag(SubTag.PC)[0]
     var carts: Array
-    var head_cart: Sprite2D
     var cart: Sprite2D
     var cart_state: CartState
 
@@ -25,23 +25,28 @@ func _test(input_tag: StringName) -> void:
                 match i:
                     0:
                         cart_state.item_tag = SubTag.ATLAS
-                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                        cart_state.load_factor = i * 20
                     1:
                         cart_state.item_tag = SubTag.BOOK
-                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                        cart_state.load_factor = i * 20
                     2:
                         cart_state.item_tag = SubTag.CUP
-                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                        cart_state.load_factor = i * 20
                     3:
                         cart_state.item_tag = SubTag.DOCUMENT
-                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                        cart_state.load_factor = i * 20
                     4:
                         cart_state.is_dropped = true
-                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                        cart_state.load_factor = i * 20
                     5:
                         cart_state.load_factor = 120
-                        VisualEffect.switch_sprite(cart, cart_state.visual_tag)
+                VisualEffect.switch_sprite(cart, cart_state.visual_tag)
         InputTag.WIZARD_3:
-            head_cart = SpriteState.get_sprites_by_sub_tag(SubTag.PC)[0]
             carts = SpriteState.get_sprites_by_sub_tag(SubTag.CART)
-            get_node("../Cart")._remove_cart(head_cart, carts[0])
+            get_node("../Cart")._remove_cart(pc, carts[0])
+        InputTag.WIZARD_4:
+            cart = get_node("../Cart").get_last_slot(pc)
+            if cart != null:
+                cart_state = get_node("../Cart").get_state(cart)
+                cart_state.item_tag = SubTag.CUP
+                VisualEffect.switch_sprite(cart, cart_state.visual_tag)

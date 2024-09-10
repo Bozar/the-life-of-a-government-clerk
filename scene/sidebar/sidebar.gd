@@ -5,6 +5,7 @@ extends CustomMarginContainer
 var _ref_PcAction: PcAction
 var _ref_RandomNumber: RandomNumber
 
+
 @onready var _ref_FootnoteLabel: FootnoteLabel = $SidebarVBox/FootnoteLabel
 @onready var _ref_StateLabel: StateLabel = $SidebarVBox/StateLabel
 
@@ -24,6 +25,7 @@ func update_gui() -> void:
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
+    _ref_StateLabel.add_turn_counter()
     update_gui()
 
 
@@ -34,7 +36,7 @@ func _on_GameProgress_game_over(player_win: bool) -> void:
 
 
 func _on_PcAction_ui_force_updated() -> void:
-    _ref_StateLabel.update_gui()
+    update_gui()
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:

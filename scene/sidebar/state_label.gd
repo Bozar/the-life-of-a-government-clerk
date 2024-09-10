@@ -2,6 +2,8 @@ class_name StateLabel
 extends CustomLabel
 
 
+const TURN: String = "Turn: %s"
+
 const YOU_WIN: String = "You win.\n[Space]"
 const YOU_LOSE: String = "You lose.\n[Space]"
 
@@ -13,6 +15,9 @@ var player_win: bool = false
 var _ref_PcAction: PcAction
 
 
+var _turn_counter: int = GameData.MIN_TURN_COUNTER - 1
+
+
 func init_gui() -> void:
     _set_font(true)
     update_gui()
@@ -20,10 +25,21 @@ func init_gui() -> void:
 
 func update_gui() -> void:
     var progress: String = "$99|$10|+10"
+    var turn: String = TURN % _turn_counter
     var first_item: String = _ref_PcAction.first_item_text
     var state: String = _ref_PcAction.state_text
     var end_game: String = ""
 
     if game_over:
         end_game = YOU_WIN if player_win else YOU_LOSE
-    text = "%s\n%s\n%s\n\n%s" % [progress, first_item, state, end_game]
+    text = "%s\n\n%s\n%s\n%s\n\n%s" % [
+        turn, progress, first_item, state, end_game
+    ]
+
+
+func add_turn_counter() -> void:
+    _turn_counter += 1
+    if _turn_counter > GameData.MAX_TURN_COUNTER:
+        _turn_counter = GameData.MIN_TURN_COUNTER
+    else:
+        _turn_counter = max(_turn_counter, GameData.MIN_TURN_COUNTER)

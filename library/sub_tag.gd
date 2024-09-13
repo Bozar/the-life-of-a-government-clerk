@@ -23,6 +23,7 @@ const ATLAS: StringName = &"atlas"
 const BOOK: StringName = &"book"
 const CUP: StringName = &"cup"
 const DOCUMENT: StringName = &"document"
+const ENCYCLOPEDIA: StringName = &"encyclopedia"
 
 const CART: StringName = &"cart"
 const FULL: StringName = &"full"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://lj2ql1vl01su"]
+[gd_scene load_steps=10 format=3 uid="uid://lj2ql1vl01su"]
 
 [ext_resource type="Texture2D" uid="uid://cynswmw160utj" path="res://resource/curses_vector_24x36.png" id="1_y257l"]
 
@@ -30,6 +30,10 @@ region = Rect2(72, 216, 24, 36)
 atlas = ExtResource("1_y257l")
 region = Rect2(96, 216, 24, 36)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6jca"]
+atlas = ExtResource("1_y257l")
+region = Rect2(120, 216, 24, 36)
+
 [node name="Cart" type="Sprite2D"]
 
 [node name="default" type="Sprite2D" parent="."]
@@ -58,3 +62,7 @@ texture = SubResource("AtlasTexture_0w2ne")
 [node name="active_4" type="Sprite2D" parent="."]
 visible = false
 texture = SubResource("AtlasTexture_1s683")
+
+[node name="active_5" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_v6jca")

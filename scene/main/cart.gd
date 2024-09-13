@@ -12,6 +12,7 @@ const ITEM_TO_STRING: Dictionary = {
     SubTag.BOOK: "B",
     SubTag.CUP: "C",
     SubTag.DOCUMENT: "D",
+    SubTag.ENCYCLOPEDIA: "E",
 }
 
 # By game design, `DETACHED` and `FULL` only appears in Examine Mode.

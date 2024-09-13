@@ -17,7 +17,7 @@ func _test(input_tag: StringName) -> void:
 
     match input_tag:
         InputTag.WIZARD_1:
-            ref_cart.add_cart(GameData.MIN_CART)
+            ref_cart.add_cart(GameData.ADD_CART)
         InputTag.WIZARD_2:
             cart = ref_cart.get_last_slot(pc)
             if cart == null:
@@ -35,7 +35,7 @@ func _test(input_tag: StringName) -> void:
                 4:
                     state.item_tag = SubTag.DOCUMENT
                 5:
-                    state.item_tag = SubTag.ATLAS
+                    state.item_tag = SubTag.ENCYCLOPEDIA
                 6, _:
                     _counter = 0
                     return

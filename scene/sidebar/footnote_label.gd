@@ -14,7 +14,7 @@ func init_gui() -> void:
 
 func _get_version() -> String:
     var wizard: String = "+" if TransferData.wizard_mode else ""
-    var version: String = "1.0.0"
+    var version: String = "0.0.2"
 
     return "%s%s" % [wizard, version]
 

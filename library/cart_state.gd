@@ -8,6 +8,7 @@ const ITEM_TO_VISUAL: Dictionary = {
     SubTag.BOOK: VisualTag.ACTIVE_2,
     SubTag.CUP: VisualTag.ACTIVE_3,
     SubTag.DOCUMENT: VisualTag.ACTIVE_4,
+    SubTag.ENCYCLOPEDIA: VisualTag.ACTIVE_5,
 
     SubTag.FULL: VisualTag.PASSIVE_1,
     SubTag.DETACHED: VisualTag.PASSIVE_2,

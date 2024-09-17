@@ -13,6 +13,39 @@ const EDIT_TAGS: Array = [
 
 
 const WALL_CHAR: StringName = "#"
+const DOOR_CHAR: StringName = "+"
+const DESK_CHAR: StringName = "="
+const SPECIAL_FLOOR_CHAR: StringName = "-"
+
+const CLERK_CHAR: StringName = "K"
+const OFFICER_CHAR: StringName = "O"
+
+const ATLAS_CHAR: StringName = "A"
+const BOOK_CHAR: StringName = "B"
+const CUP_CHAR: StringName = "C"
+const ENCYCLPEDIA_CHAR: StringName = "E"
+
+const SERVANT_CHAR: StringName = "S"
+const SERVICE_CHAR: StringName = "?"
+const SALARY_CHAR: StringName = "$"
+const STATION_CHAR: StringName = "Z"
+
+const CHAR_TO_TAG: Dictionary = {
+    WALL_CHAR: SubTag.WALL,
+    DOOR_CHAR: SubTag.DOOR,
+    SPECIAL_FLOOR_CHAR: SubTag.INTERNAL_FLOOR,
+    CLERK_CHAR: SubTag.CLERK,
+    OFFICER_CHAR: SubTag.OFFICER,
+    DESK_CHAR: SubTag.DESK,
+    ATLAS_CHAR: SubTag.ATLAS,
+    BOOK_CHAR: SubTag.BOOK,
+    CUP_CHAR: SubTag.CUP,
+    ENCYCLPEDIA_CHAR: SubTag.ENCYCLOPEDIA,
+    SERVANT_CHAR: SubTag.SERVANT,
+    SERVICE_CHAR: SubTag.SERVICE,
+    SALARY_CHAR: SubTag.SALARY,
+    STATION_CHAR: SubTag.STATION,
+}
 
 
 var _ref_RandomNumber: RandomNumber
@@ -24,6 +57,7 @@ func create_world() -> void:
     var pc_coord: Vector2i
 
     _create_floor(tagged_sprites)
+    _test(occupied_grids, tagged_sprites)
     # _create_from_file(PATH_TO_PREFAB, occupied_grids, tagged_sprites)
     pc_coord = _create_pc(occupied_grids, tagged_sprites)
     _create_indicator(pc_coord, tagged_sprites)
@@ -119,11 +153,25 @@ func _create_from_prefab(packed_prefab: PackedPrefab, shift_coord: Vector2i,
 
 func _create_from_character(character: String, coord: Vector2i,
         occupied_grids: Dictionary, tagged_sprites: Array) -> void:
+    var save_tagged_sprite: TaggedSprite
+
+    occupied_grids[coord.x][coord.y] = true
     match character:
-        WALL_CHAR:
-            occupied_grids[coord.x][coord.y] = true
+        WALL_CHAR, DOOR_CHAR, DESK_CHAR:
             tagged_sprites.push_back(SpriteFactory.create_building(
-                    SubTag.WALL, coord, false))
+                    CHAR_TO_TAG[character], coord, false))
+        SPECIAL_FLOOR_CHAR:
+            save_tagged_sprite = SpriteFactory.create_building(
+                    CHAR_TO_TAG[character], coord, false)
+            save_tagged_sprite.sprite.z_index += 1
+            tagged_sprites.push_back(save_tagged_sprite)
+        CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
+                ENCYCLPEDIA_CHAR, SERVANT_CHAR, SERVICE_CHAR, SALARY_CHAR, \
+                STATION_CHAR:
+            tagged_sprites.push_back(SpriteFactory.create_actor(
+                    CHAR_TO_TAG[character], coord, false))
+        _:
+            occupied_grids[coord.x][coord.y] = false
 
 
 func _get_edit_tags(edit_tags: Array) -> Array:
@@ -133,3 +181,18 @@ func _get_edit_tags(edit_tags: Array) -> Array:
         if _ref_RandomNumber.get_percent_chance(50):
             tags.push_back(i)
     return tags
+
+
+func _test(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
+    var parsed_file: ParsedFile = FileIo.read_as_line(
+            "res://resource/dungeon_prefab/test.txt")
+    var packed_prefab: PackedPrefab = DungeonPrefab.get_prefab(
+            parsed_file.output_line, [])
+    var coord: Vector2i = Vector2i(0, 0)
+
+    for x: int in range(0, packed_prefab.max_x):
+        for y: int in range(0, packed_prefab.max_y):
+            coord.x = x
+            coord.y = y
+            _create_from_character(packed_prefab.prefab[x][y], coord,
+                    occupied_grids, tagged_sprites)

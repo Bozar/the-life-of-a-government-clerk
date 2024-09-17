@@ -3,11 +3,13 @@ class_name SubTag
 
 # Ground
 const DUNGEON_FLOOR: StringName = &"dungeon_floor"
+const INTERNAL_FLOOR: StringName = &"internal_floor"
 
 
 # Building
 const WALL: StringName = &"wall"
 const DOOR: StringName = &"door"
+const DESK: StringName = &"desk"
 
 
 # Trap
@@ -19,6 +21,9 @@ const DOCUMENT_ON_DESK: StringName = &"document_on_desk"
 
 # Actor
 const PC: StringName = &"pc"
+const CLERK: StringName = &"clerk"
+const OFFICER: StringName = &"officer"
+
 const ATLAS: StringName = &"atlas"
 const BOOK: StringName = &"book"
 const CUP: StringName = &"cup"
@@ -28,6 +33,11 @@ const ENCYCLOPEDIA: StringName = &"encyclopedia"
 const CART: StringName = &"cart"
 const FULL: StringName = &"full"
 const DETACHED: StringName = &"detached"
+
+const SALARY: StringName = &"salary"
+const SERVANT: StringName = &"servant"
+const SERVICE: StringName = &"service"
+const STATION: StringName = &"station"
 
 
 # Indicator

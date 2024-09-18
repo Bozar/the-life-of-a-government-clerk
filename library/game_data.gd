@@ -11,3 +11,5 @@ const ADD_CART: int = 3
 
 const MIN_TURN_COUNTER: int = 0
 const MAX_TURN_COUNTER: int = 99999
+
+const MAX_DELIVERY: int = 10

@@ -3,6 +3,7 @@ extends CustomLabel
 
 
 const TURN: String = "Turn: %s"
+const PROGRESS: String = "$%s|$%s|+%s"
 
 const YOU_WIN: String = "You win.\n[Space]"
 const YOU_LOSE: String = "You lose.\n[Space]"
@@ -24,8 +25,10 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var progress: String = "$99|$10|+10"
     var turn: String = TURN % _turn_counter
+    var progress: String = PROGRESS % [
+        _ref_PcAction.cash, _ref_PcAction.account, _ref_PcAction.delivery
+    ]
     var first_item: String = _ref_PcAction.first_item_text
     var state: String = _ref_PcAction.state_text
     var end_game: String = ""

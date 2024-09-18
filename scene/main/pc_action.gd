@@ -11,32 +11,65 @@ enum {
 }
 
 
+const VALID_ACTOR_TAGS: Array = [
+    SubTag.CLERK,
+    SubTag.OFFICER,
+
+    SubTag.ATLAS,
+    SubTag.BOOK,
+    SubTag.CUP,
+    SubTag.ENCYCLOPEDIA,
+
+    SubTag.SALARY,
+    SubTag.SERVANT,
+    SubTag.SERVICE,
+    SubTag.STATION,
+]
+
+
 var state_text: String:
     get:
         match _game_mode:
             NORMAL_MODE:
-                return _ref_Cart.get_extend_text()
+                return $Cart.get_extend_text()
             EXAMINE_MODE:
-                return _ref_Cart.get_examine_text(_pc)
+                return $Cart.get_examine_text(_pc)
         return ""
 
 
 var first_item_text: String:
     get:
-        return _ref_Cart.get_first_item_text(_pc)
+        return $Cart.get_first_item_text(_pc)
+
+
+var cash: int:
+    get:
+        return _pc_state.cash
+    set(value):
+        _pc_state.cash = value
+
+
+var account: int:
+    get:
+        return _pc_state.account
+    set(value):
+        _pc_state.account = value
+
+
+var delivery: int:
+    get:
+        return _pc_state.delivery
+    set(value):
+        _pc_state.delivery = value
 
 
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
-@onready var _ref_PcFov: PcFov = $PcFov
-@onready var _ref_WizardMode: WizardMode = $WizardMode
-@onready var _ref_Cart: Cart = $Cart
-@onready var _ref_Checkmate: Checkmate = $Checkmate
-
 
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
+var _pc_state: PcState = PcState.new()
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -46,18 +79,18 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         if i.sub_tag == SubTag.PC:
             _pc = i.sprite
-            _ref_Cart.init_linked_carts(_pc)
-            _ref_Cart.add_cart(GameData.MIN_CART)
+            $Cart.init_linked_carts(_pc)
+            $Cart.add_cart(GameData.MIN_CART)
             return
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
-    elif _ref_Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
+    elif $Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
         _ref_GameProgress.game_over.emit(false)
         return
-    _ref_PcFov.render_fov(_pc)
+    $PcFov.render_fov(_pc)
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
@@ -65,7 +98,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
         NORMAL_MODE:
             match input_tag:
                 InputTag.SWITCH_EXAMINE:
-                    if _ref_Cart.enter_examine_mode(_pc):
+                    if $Cart.enter_examine_mode(_pc):
                         _game_mode = EXAMINE_MODE
                     else:
                         return
@@ -86,30 +119,30 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                         InputTag.WIZARD_5, InputTag.WIZARD_6, \
                         InputTag.WIZARD_7, InputTag.WIZARD_8, \
                         InputTag.WIZARD_9, InputTag.WIZARD_0:
-                    _ref_WizardMode.handle_input(input_tag)
+                    $WizardMode.handle_input(input_tag)
                 _:
                     return
         EXAMINE_MODE:
             match input_tag:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
-                    _ref_Cart.exit_examine_mode(_pc)
+                    $Cart.exit_examine_mode(_pc)
                 InputTag.MOVE_UP:
-                    _ref_Cart.examine_first_cart(_pc)
+                    $Cart.examine_first_cart(_pc)
                 InputTag.MOVE_DOWN:
-                    _ref_Cart.examine_last_cart(_pc)
+                    $Cart.examine_last_cart(_pc)
                 InputTag.MOVE_LEFT:
-                    _ref_Cart.examine_previous_cart(_pc)
+                    $Cart.examine_previous_cart(_pc)
                 InputTag.MOVE_RIGHT:
-                    _ref_Cart.examine_next_cart(_pc)
+                    $Cart.examine_next_cart(_pc)
                 _:
                     return
-    _ref_PcFov.render_fov(_pc)
+    $PcFov.render_fov(_pc)
     ui_force_updated.emit()
 
 
 func _on_GameProgress_game_over(player_win: bool) -> void:
-    _ref_PcFov.render_fov(_pc)
+    $PcFov.render_fov(_pc)
     if not player_win:
         VisualEffect.set_dark_color(_pc)
 
@@ -117,16 +150,23 @@ func _on_GameProgress_game_over(player_win: bool) -> void:
 func _move(pc: Sprite2D, direction: Vector2i) -> void:
     var coord: Vector2i = ConvertCoord.get_coord(_pc) + direction
     var sprite: Sprite2D
+    var sub_tag: StringName
 
     if not DungeonSize.is_in_dungeon(coord):
         return
     # Order matters in `The Life of a Government Clerk`. An actor may appear
     # above a building and therefore has a higher priority.
     elif SpriteState.has_actor_at_coord(coord):
+        sprite = SpriteState.get_actor_by_coord(coord)
+        sub_tag = SpriteState.get_sub_tag(sprite)
+        if sub_tag in VALID_ACTOR_TAGS:
+            ActorInteraction.handle_input(pc, sprite, self)
+        else:
+            push_warning("Unknown actor: %s" % sub_tag)
         return
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)
         if not sprite.is_in_group(SubTag.DOOR):
             return
-    _ref_Cart.pull_cart(pc, coord)
+    $Cart.pull_cart(pc, coord)
     ScheduleHelper.start_next_turn()

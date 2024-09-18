@@ -2,6 +2,13 @@ class_name Checkmate
 extends Node2D
 
 
+const PASSABLE_TAGS: Array = [
+    SubTag.DUNGEON_FLOOR,
+    SubTag.INTERNAL_FLOOR,
+    SubTag.DOOR,
+]
+
+
 func is_game_over(check_coord: Vector2i) -> bool:
     if _is_trapped(check_coord):
         return true
@@ -21,16 +28,15 @@ func _is_trapped(check_coord: Vector2i) -> bool:
         elif not DungeonSize.is_in_dungeon(coord):
             continue
         # Get sprites in the specific grid. The grid is passable if the top
-        # sprite is `DUNGEON_FLOOR` or `DOOR`.
+        # sprite is `DUNGEON_FLOOR`, `INTERNAL_FLOOR` or `DOOR`.
         sprites = SpriteState.get_sprites_by_coord(coord)
         if sprites.is_empty():
             continue
         sprites.sort_custom(_sort_by_index)
         top_sprite = sprites.pop_back()
-        if top_sprite.is_in_group(SubTag.DUNGEON_FLOOR):
-            return false
-        elif top_sprite.is_in_group(SubTag.DOOR):
-            return false
+        for sub_tag in PASSABLE_TAGS:
+            if top_sprite.is_in_group(sub_tag):
+                return false
     return true
 
 

@@ -116,12 +116,17 @@ func _on_GameProgress_game_over(player_win: bool) -> void:
 
 func _move(pc: Sprite2D, direction: Vector2i) -> void:
     var coord: Vector2i = ConvertCoord.get_coord(_pc) + direction
+    var sprite: Sprite2D
 
     if not DungeonSize.is_in_dungeon(coord):
         return
-    elif SpriteState.has_building_at_coord(coord):
-        return
+    # Order matters in `The Life of a Government Clerk`. An actor may appear
+    # above a building and therefore has a higher priority.
     elif SpriteState.has_actor_at_coord(coord):
         return
+    elif SpriteState.has_building_at_coord(coord):
+        sprite = SpriteState.get_building_by_coord(coord)
+        if not sprite.is_in_group(SubTag.DOOR):
+            return
     _ref_Cart.pull_cart(pc, coord)
     ScheduleHelper.start_next_turn()

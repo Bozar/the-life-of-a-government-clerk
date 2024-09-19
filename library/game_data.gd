@@ -13,3 +13,9 @@ const MIN_TURN_COUNTER: int = 0
 const MAX_TURN_COUNTER: int = 99999
 
 const MAX_DELIVERY: int = 10
+const MAX_SERVICE: int = 2
+
+const PAYMENT_SERVICE: int = 1
+const PAYMENT_CLEAN: int = 1
+
+const INCOME_ORDER: int = 1

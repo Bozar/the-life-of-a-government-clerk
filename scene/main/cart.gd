@@ -162,9 +162,12 @@ func enter_examine_mode(pc: Sprite2D) -> bool:
     return true
 
 
-func exit_examine_mode(pc: Sprite2D) -> void:
+func exit_examine_mode(pc: Sprite2D, has_stick: bool) -> void:
+    var new_tag: StringName = VisualTag.ACTIVE if has_stick else \
+            VisualTag.DEFAULT
+
     SpriteState.move_sprite(pc, _save_pc_coord, pc.z_index - 1)
-    VisualEffect.switch_sprite(pc, VisualTag.DEFAULT)
+    VisualEffect.switch_sprite(pc, new_tag)
 
 
 func examine_first_cart(pc: Sprite2D) -> void:

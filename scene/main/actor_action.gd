@@ -12,6 +12,24 @@ var _actor_states: Dictionary = {}
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
 
+func get_service_type(service_sprite: Sprite2D) -> int:
+    var state: ServiceState = _get_actor_state(service_sprite)
+    return state.service_type
+
+
+func use_service(service_sprite: Sprite2D) -> void:
+    var state: ServiceState = _get_actor_state(service_sprite)
+    ServiceAction.use_service(state)
+
+
+# TODO: Call this function when:
+#   Unload D: `reset_type` = true
+#   Unload A/B/C/E and `service_counter` < 2: `reset_type` = false
+func _set_service_type(service_sprite: Sprite2D, reset_type: bool) -> void:
+    var state: ServiceState = _get_actor_state(service_sprite)
+    ServiceAction.set_service_type(state, reset_type, _ref_RandomNumber)
+
+
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     var actor_state: ActorState = _get_actor_state(sprite)
 
@@ -31,7 +49,11 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             _pc = i.sprite
         else:
             id = i.sprite.get_instance_id()
-            _actor_states[id] = ActorState.new()
+            match i.sub_tag:
+                SubTag.SERVICE:
+                    _actor_states[id] = ServiceState.new(i.sprite)
+                _:
+                    _actor_states[id] = ActorState.new(i.sprite)
 
 
 func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:

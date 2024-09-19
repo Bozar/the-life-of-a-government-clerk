@@ -63,13 +63,24 @@ var delivery: int:
         _pc_state.delivery = value
 
 
+var has_stick: bool:
+    get:
+        return _pc_state.has_stick
+    set(value):
+        _pc_state.has_stick = value
+
+
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
 
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
-var _pc_state: PcState = PcState.new()
+var _pc_state: PcState
+
+
+func add_cart(new_cart_count: int) -> void:
+    $Cart.add_cart(new_cart_count)
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -79,6 +90,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         if i.sub_tag == SubTag.PC:
             _pc = i.sprite
+            _pc_state = PcState.new(_pc)
             $Cart.init_linked_carts(_pc)
             $Cart.add_cart(GameData.MIN_CART)
             return
@@ -126,7 +138,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             match input_tag:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
-                    $Cart.exit_examine_mode(_pc)
+                    $Cart.exit_examine_mode(_pc, _pc_state.has_stick)
                 InputTag.MOVE_UP:
                     $Cart.examine_first_cart(_pc)
                 InputTag.MOVE_DOWN:
@@ -160,7 +172,7 @@ func _move(pc: Sprite2D, direction: Vector2i) -> void:
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
         if sub_tag in VALID_ACTOR_TAGS:
-            ActorInteraction.handle_input(pc, sprite, self)
+            ActorInteraction.handle_input(sprite, self, _ref_ActorAction)
         else:
             push_warning("Unknown actor: %s" % sub_tag)
         return

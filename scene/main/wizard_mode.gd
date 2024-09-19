@@ -13,13 +13,18 @@ func _test(input_tag: StringName) -> void:
     var ref_pc_action: PcAction = get_node("..")
     var ref_cart: Cart = get_node("../Cart")
     var pc: Sprite2D = SpriteState.get_sprites_by_sub_tag(SubTag.PC)[0]
+    var actor_action: ActorAction = get_node("../../ActorAction")
     var cart: Sprite2D
     var state: CartState
+    var sprite: Sprite2D
 
     match input_tag:
         InputTag.WIZARD_1:
-            ref_pc_action.account += 1
+            # ref_pc_action.account += 1
             # ref_cart.add_cart(GameData.ADD_CART)
+            sprite = SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE)[0]
+            actor_action._set_service_type(sprite, false)
+            # actor_action._get_actor_state(sprite).service_type = ServiceState.STICK
         InputTag.WIZARD_2:
             cart = ref_cart.get_last_slot(pc)
             if cart == null:

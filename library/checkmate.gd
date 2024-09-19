@@ -1,5 +1,4 @@
 class_name Checkmate
-extends Node2D
 
 
 const PASSABLE_TAGS: Array = [
@@ -9,14 +8,14 @@ const PASSABLE_TAGS: Array = [
 ]
 
 
-func is_game_over(check_coord: Vector2i) -> bool:
+static func is_game_over(check_coord: Vector2i) -> bool:
     if _is_trapped(check_coord):
         return true
     return false
 
 
 # Return true if PC cannot move in any direction.
-func _is_trapped(check_coord: Vector2i) -> bool:
+static func _is_trapped(check_coord: Vector2i) -> bool:
     var neighbor: Array = ConvertCoord.get_diamond_coords(check_coord, 1)
     var sprites: Array
     var top_sprite: Sprite2D
@@ -40,5 +39,5 @@ func _is_trapped(check_coord: Vector2i) -> bool:
     return true
 
 
-func _sort_by_index(lower: Sprite2D, higher: Sprite2D) -> bool:
+static func _sort_by_index(lower: Sprite2D, higher: Sprite2D) -> bool:
     return lower.z_index <= higher.z_index

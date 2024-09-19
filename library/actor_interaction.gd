@@ -19,6 +19,8 @@ static func handle_input(actor: Sprite2D, pc_action: PcAction,
         SubTag.STATION:
             if not _clean_cart(pc_action):
                 return
+        SubTag.SERVANT:
+            _hit_servant(actor, pc_action)
         _:
             return
     ScheduleHelper.start_next_turn()
@@ -64,3 +66,18 @@ static func _clean_cart(pc_action: PcAction) -> bool:
         return false
     pc_action.cash -= GameData.PAYMENT_CLEAN
     return true
+
+
+static func _hit_servant(actor: Sprite2D, pc_action: PcAction) -> void:
+    var coord: Vector2i = ConvertCoord.get_coord(actor)
+
+    if pc_action.count_cart() < GameData.CART_LENGTH_SHORT:
+        pc_action.delay = 0
+    elif pc_action.has_stick:
+        pc_action.delay = 0
+    # TODO: Make it more punishing. Take load factor into account.
+    else:
+        pc_action.delay = GameData.BASE_DELAY
+
+    SpriteFactory.remove_sprite(actor)
+    pc_action.pull_cart(coord)

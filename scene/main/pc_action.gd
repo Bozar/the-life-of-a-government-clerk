@@ -70,6 +70,13 @@ var has_stick: bool:
         _pc_state.has_stick = value
 
 
+var delay: int:
+    get:
+        return _pc_state.delay
+    set(value):
+        _pc_state.delay = value
+
+
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 
@@ -85,6 +92,14 @@ func add_cart(new_cart_count: int) -> void:
 
 func clean_cart() -> bool:
     return $Cart.clean_cart(_pc)
+
+
+func pull_cart(coord: Vector2i) -> void:
+    $Cart.pull_cart(_pc, coord)
+
+
+func count_cart() -> int:
+    return $Cart.count_cart()
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -105,6 +120,10 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
         return
     elif $Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
         _ref_GameProgress.game_over.emit(false)
+        return
+    elif delay > 0:
+        delay -= 1
+        ScheduleHelper.start_next_turn()
         return
     $PcFov.render_fov(_pc)
 

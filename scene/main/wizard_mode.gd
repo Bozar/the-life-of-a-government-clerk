@@ -22,9 +22,8 @@ func _test(input_tag: StringName) -> void:
         InputTag.WIZARD_1:
             ref_pc_action.account += 1
             ref_cart.add_cart(GameData.ADD_CART)
+            # ref_pc_action.has_stick = true
             # sprite = SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE)[0]
-            # actor_action._set_service_type(sprite, false)
-            # actor_action._get_actor_state(sprite).service_type = ServiceState.STICK
         InputTag.WIZARD_2:
             cart = ref_cart.get_last_slot(pc)
             if cart == null:

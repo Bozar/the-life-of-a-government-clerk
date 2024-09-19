@@ -36,6 +36,11 @@ func add_cart(new_cart_count: int) -> void:
     _add_cart_counter += new_cart_count
 
 
+func count_cart() -> int:
+    # There is exactly 1 PC and 0+ carts in `_linked_carts`.
+    return _linked_carts.size() - 1
+
+
 func get_state(cart: Sprite2D) -> CartState:
     var cart_state: CartState = _cart_states.get(cart.get_instance_id(), null)
 

@@ -16,6 +16,9 @@ static func handle_input(actor: Sprite2D, pc_action: PcAction,
                 actor_action.use_service(actor)
             else:
                 return
+        SubTag.STATION:
+            if not _clean_cart(pc_action):
+                return
         _:
             return
     ScheduleHelper.start_next_turn()
@@ -51,4 +54,13 @@ static func _use_service(pc_action: PcAction, service_type: int) -> bool:
                 return false
             pc_action.has_stick = true
             pc_action.cash -= GameData.PAYMENT_SERVICE
+    return true
+
+
+static func _clean_cart(pc_action: PcAction) -> bool:
+    if pc_action.cash < 1:
+        return false
+    elif not pc_action.clean_cart():
+        return false
+    pc_action.cash -= GameData.PAYMENT_CLEAN
     return true

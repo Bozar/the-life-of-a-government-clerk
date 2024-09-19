@@ -83,6 +83,10 @@ func add_cart(new_cart_count: int) -> void:
     $Cart.add_cart(new_cart_count)
 
 
+func clean_cart() -> bool:
+    return $Cart.clean_cart(_pc)
+
+
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     if _pc != null:
         return

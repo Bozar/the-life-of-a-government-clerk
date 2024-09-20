@@ -147,6 +147,22 @@ static func clean_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     return is_cleaned
 
 
+static func has_full_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
+    var cart: Sprite2D = pc
+    var cart_state: CartState
+
+    for i in range(0, state.linked_carts.size()):
+        cart = LinkedList.get_next_object(cart, state.linked_carts)
+        if cart == pc:
+            break
+        cart_state = get_state(cart, state)
+        if cart_state.load_factor < GameData.MAX_LOAD_FACTOR:
+            continue
+        else:
+            return true
+    return false
+
+
 static func enter_examine_mode(pc: Sprite2D, state: LinkedCartState) -> bool:
     # There should be at least two sprites (PC and cart) to enable examine mode.
     if state.linked_carts.size() < 2:

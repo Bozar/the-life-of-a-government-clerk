@@ -5,10 +5,14 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         ref_ActorAction: ActorAction, ref_GameProgress: GameProgress) -> void:
     var sub_tag: StringName = SpriteState.get_sub_tag(actor)
     var service_type: int
+    var player_win: bool = false
 
     match sub_tag:
         SubTag.SALARY:
-            if not _get_cash(ref_PcAction):
+            player_win = _player_win(ref_PcAction)
+            if _get_cash(ref_PcAction) or player_win:
+                pass
+            else:
                 return
         SubTag.SERVICE:
             service_type = ref_ActorAction.get_service_type(actor)
@@ -31,7 +35,10 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         _:
             return
 
-    ScheduleHelper.start_next_turn()
+    if player_win:
+        ref_GameProgress.game_over.emit(true)
+    else:
+        ScheduleHelper.start_next_turn()
 
 
 static func _get_cash(ref_PcAction: PcAction) -> bool:
@@ -102,7 +109,14 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
     if cart_state.item_tag != SubTag.DOCUMENT:
         return false
 
+    # PC can still unload document after reaching the final goal (deliver 10
+    # documents), but has no profit in return.
     cart_state.item_tag = SubTag.CART
-    ref_PcAction.account += GameData.INCOME_DOCUMENT
-    ref_PcAction.delivery -= 1
+    if ref_PcAction.delivery > 0:
+        ref_PcAction.account += GameData.INCOME_DOCUMENT
+        ref_PcAction.delivery -= 1
     return true
+
+
+static func _player_win(ref_PcAction: PcAction) -> bool:
+    return (ref_PcAction.delivery < 1) and (not ref_PcAction.has_full_cart())

@@ -112,6 +112,14 @@ func count_cart() -> int:
     return Cart.count_cart(_linked_cart_state)
 
 
+func get_first_item() -> Sprite2D:
+    return Cart.get_first_item(_pc, _linked_cart_state)
+
+
+func get_state(cart: Sprite2D) -> CartState:
+    return Cart.get_state(cart, _linked_cart_state)
+
+
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     if _pc != null:
         return
@@ -206,7 +214,8 @@ func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
         if sub_tag in VALID_ACTOR_TAGS:
-            ActorInteraction.handle_input(sprite, self, _ref_ActorAction)
+            PcHitActor.handle_input(sprite, self, _ref_ActorAction,
+                    _ref_GameProgress)
         else:
             push_warning("Unknown actor: %s" % sub_tag)
         return

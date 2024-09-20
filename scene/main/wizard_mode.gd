@@ -54,4 +54,9 @@ func _test(input_tag: StringName) -> void:
             cart_state = Cart.get_state(cart, linked_state)
             cart_state.item_tag = SubTag.CART
         InputTag.WIZARD_4:
-            print(Cart.clean_cart(pc, linked_state))
+            # print(Cart.clean_cart(pc, linked_state))
+            cart = Cart.get_last_slot(pc, linked_state)
+            if cart == null:
+                return
+            cart_state = Cart.get_state(cart, linked_state)
+            cart_state.item_tag = SubTag.DOCUMENT

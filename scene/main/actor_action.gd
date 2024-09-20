@@ -19,15 +19,23 @@ func get_service_type(service_sprite: Sprite2D) -> int:
 
 func use_service(service_sprite: Sprite2D) -> void:
     var state: ServiceState = _get_actor_state(service_sprite)
-    ServiceAction.use_service(state)
+    HandleService.use_service(state)
+
+
+# TODO: Reset resource node production.
+func receive_document() -> void:
+    _set_service_type(true)
 
 
 # TODO: Call this function when:
 #   Unload D: `reset_type` = true
 #   Unload A/B/C/E and `service_counter` < 2: `reset_type` = false
-func _set_service_type(service_sprite: Sprite2D, reset_type: bool) -> void:
-    var state: ServiceState = _get_actor_state(service_sprite)
-    ServiceAction.set_service_type(state, reset_type, _ref_RandomNumber)
+func _set_service_type(reset_type: bool) -> void:
+    var state: ServiceState
+
+    for i in SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE):
+        state = _get_actor_state(i)
+        HandleService.set_service_type(state, reset_type, _ref_RandomNumber)
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:

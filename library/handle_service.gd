@@ -1,4 +1,4 @@
-class_name ServiceAction
+class_name HandleService
 
 
 static func set_service_type(service_state: ServiceState, reset_type: bool,

@@ -31,15 +31,15 @@ var state_text: String:
     get:
         match _game_mode:
             NORMAL_MODE:
-                return $Cart.get_extend_text()
+                return Cart.get_extend_text(_linked_cart_state)
             EXAMINE_MODE:
-                return $Cart.get_examine_text(_pc)
+                return Cart.get_examine_text(_pc, _linked_cart_state)
         return ""
 
 
 var first_item_text: String:
     get:
-        return $Cart.get_first_item_text(_pc)
+        return Cart.get_first_item_text(_pc, _linked_cart_state)
 
 
 var cash: int:
@@ -88,6 +88,8 @@ var _pc_state: PcState
 var _fov_map: Dictionary
 var _shadow_cast_fov_data: ShadowCastFov.FovData
 
+var _linked_cart_state := LinkedCartState.new()
+
 
 func _ready() -> void:
     _fov_map = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
@@ -95,19 +97,19 @@ func _ready() -> void:
 
 
 func add_cart(new_cart_count: int) -> void:
-    $Cart.add_cart(new_cart_count)
+    Cart.add_cart(new_cart_count, _linked_cart_state)
 
 
 func clean_cart() -> bool:
-    return $Cart.clean_cart(_pc)
+    return Cart.clean_cart(_pc, _linked_cart_state)
 
 
 func pull_cart(coord: Vector2i) -> void:
-    $Cart.pull_cart(_pc, coord)
+    Cart.pull_cart(_pc, coord, _linked_cart_state)
 
 
 func count_cart() -> int:
-    return $Cart.count_cart()
+    return Cart.count_cart(_linked_cart_state)
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
@@ -118,8 +120,8 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
         if i.sub_tag == SubTag.PC:
             _pc = i.sprite
             _pc_state = PcState.new(_pc)
-            $Cart.init_linked_carts(_pc)
-            $Cart.add_cart(GameData.MIN_CART)
+            Cart.init_linked_carts(_pc, _linked_cart_state)
+            Cart.add_cart(GameData.MIN_CART, _linked_cart_state)
             return
 
 
@@ -141,21 +143,21 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
         NORMAL_MODE:
             match input_tag:
                 InputTag.SWITCH_EXAMINE:
-                    if $Cart.enter_examine_mode(_pc):
+                    if Cart.enter_examine_mode(_pc, _linked_cart_state):
                         _game_mode = EXAMINE_MODE
                     else:
                         return
                 InputTag.MOVE_LEFT:
-                    _move(_pc, Vector2i.LEFT)
+                    _move(_pc, Vector2i.LEFT, _linked_cart_state)
                     return
                 InputTag.MOVE_RIGHT:
-                    _move(_pc, Vector2i.RIGHT)
+                    _move(_pc, Vector2i.RIGHT, _linked_cart_state)
                     return
                 InputTag.MOVE_UP:
-                    _move(_pc, Vector2i.UP)
+                    _move(_pc, Vector2i.UP, _linked_cart_state)
                     return
                 InputTag.MOVE_DOWN:
-                    _move(_pc, Vector2i.DOWN)
+                    _move(_pc, Vector2i.DOWN, _linked_cart_state)
                     return
                 InputTag.WIZARD_1, InputTag.WIZARD_2, \
                         InputTag.WIZARD_3, InputTag.WIZARD_4, \
@@ -169,15 +171,16 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             match input_tag:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
-                    $Cart.exit_examine_mode(_pc, _pc_state.has_stick)
+                    Cart.exit_examine_mode(_pc, _pc_state.has_stick,
+                            _linked_cart_state)
                 InputTag.MOVE_UP:
-                    $Cart.examine_first_cart(_pc)
+                    Cart.examine_first_cart(_pc, _linked_cart_state)
                 InputTag.MOVE_DOWN:
-                    $Cart.examine_last_cart(_pc)
+                    Cart.examine_last_cart(_pc, _linked_cart_state)
                 InputTag.MOVE_LEFT:
-                    $Cart.examine_previous_cart(_pc)
+                    Cart.examine_previous_cart(_pc, _linked_cart_state)
                 InputTag.MOVE_RIGHT:
-                    $Cart.examine_next_cart(_pc)
+                    Cart.examine_next_cart(_pc, _linked_cart_state)
                 _:
                     return
     PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
@@ -190,7 +193,7 @@ func _on_GameProgress_game_over(player_win: bool) -> void:
         VisualEffect.set_dark_color(_pc)
 
 
-func _move(pc: Sprite2D, direction: Vector2i) -> void:
+func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
     var coord: Vector2i = ConvertCoord.get_coord(_pc) + direction
     var sprite: Sprite2D
     var sub_tag: StringName
@@ -211,5 +214,5 @@ func _move(pc: Sprite2D, direction: Vector2i) -> void:
         sprite = SpriteState.get_building_by_coord(coord)
         if not sprite.is_in_group(SubTag.DOOR):
             return
-    $Cart.pull_cart(pc, coord)
+    Cart.pull_cart(pc, coord, state)
     ScheduleHelper.start_next_turn()

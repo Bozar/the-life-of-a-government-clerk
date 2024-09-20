@@ -11,47 +11,47 @@ func handle_input(input_tag: StringName) -> void:
 
 func _test(input_tag: StringName) -> void:
     var ref_pc_action: PcAction = get_node("..")
-    var ref_cart: Cart = get_node("../Cart")
     var pc: Sprite2D = SpriteState.get_sprites_by_sub_tag(SubTag.PC)[0]
     var actor_action: ActorAction = get_node("../../ActorAction")
     var cart: Sprite2D
-    var state: CartState
+    var linked_state: LinkedCartState = ref_pc_action._linked_cart_state
+    var cart_state: CartState
     var sprite: Sprite2D
 
     match input_tag:
         InputTag.WIZARD_1:
             ref_pc_action.account += 1
-            ref_cart.add_cart(GameData.ADD_CART)
+            Cart.add_cart(GameData.ADD_CART, linked_state)
             # ref_pc_action.has_stick = true
             # sprite = SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE)[0]
         InputTag.WIZARD_2:
-            cart = ref_cart.get_last_slot(pc)
+            cart = Cart.get_last_slot(pc, linked_state)
             if cart == null:
                 return
-            state = ref_cart.get_state(cart)
+            cart_state = Cart.get_state(cart, linked_state)
             match _counter:
                 0:
-                    state.item_tag = SubTag.ATLAS
+                    cart_state.item_tag = SubTag.ATLAS
                 1:
-                    state.item_tag = SubTag.ATLAS
+                    cart_state.item_tag = SubTag.ATLAS
                 2:
-                    state.item_tag = SubTag.BOOK
+                    cart_state.item_tag = SubTag.BOOK
                 3:
-                    state.item_tag = SubTag.CUP
+                    cart_state.item_tag = SubTag.CUP
                 4:
-                    state.item_tag = SubTag.DOCUMENT
+                    cart_state.item_tag = SubTag.DOCUMENT
                 5:
-                    state.item_tag = SubTag.ENCYCLOPEDIA
+                    cart_state.item_tag = SubTag.ENCYCLOPEDIA
                 6, _:
                     _counter = 0
                     return
-            state.load_factor = 100 - _counter * 20
+            cart_state.load_factor = 100 - _counter * 20
             _counter += 1
         InputTag.WIZARD_3:
-            cart = ref_cart.get_first_item(pc)
+            cart = Cart.get_first_item(pc, linked_state)
             if cart == null:
                 return
-            state = ref_cart.get_state(cart)
-            state.item_tag = SubTag.CART
+            cart_state = Cart.get_state(cart, linked_state)
+            cart_state.item_tag = SubTag.CART
         InputTag.WIZARD_4:
-            print(ref_cart.clean_cart(pc))
+            print(Cart.clean_cart(pc, linked_state))

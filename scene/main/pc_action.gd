@@ -85,6 +85,14 @@ var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
 var _pc_state: PcState
 
+var _fov_map: Dictionary
+var _shadow_cast_fov_data: ShadowCastFov.FovData
+
+
+func _ready() -> void:
+    _fov_map = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
+    _shadow_cast_fov_data = ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
+
 
 func add_cart(new_cart_count: int) -> void:
     $Cart.add_cart(new_cart_count)
@@ -125,7 +133,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
         delay -= 1
         ScheduleHelper.start_next_turn()
         return
-    $PcFov.render_fov(_pc)
+    PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
@@ -172,12 +180,12 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                     $Cart.examine_next_cart(_pc)
                 _:
                     return
-    $PcFov.render_fov(_pc)
+    PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
     ui_force_updated.emit()
 
 
 func _on_GameProgress_game_over(player_win: bool) -> void:
-    $PcFov.render_fov(_pc)
+    PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
     if not player_win:
         VisualEffect.set_dark_color(_pc)
 

@@ -2,6 +2,14 @@ class_name ActorAction
 extends Node2D
 
 
+const RAW_FILE_TAGS: Array = [
+    SubTag.ATLAS,
+    SubTag.BOOK,
+    SubTag.CUP,
+    SubTag.ENCYCLOPEDIA,
+]
+
+
 var _ref_RandomNumber: RandomNumber
 var _ref_PcAction: PcAction
 var _ref_GameProgress: GameProgress
@@ -12,19 +20,29 @@ var _actor_states: Dictionary = {}
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
 
-func get_service_type(service_sprite: Sprite2D) -> int:
-    var state: ServiceState = _get_actor_state(service_sprite)
+func get_service_type(sprite: Sprite2D) -> int:
+    var state: ServiceState = _get_actor_state(sprite)
     return state.service_type
 
 
-func use_service(service_sprite: Sprite2D) -> void:
-    var state: ServiceState = _get_actor_state(service_sprite)
+func use_service(sprite: Sprite2D) -> void:
+    var state: ServiceState = _get_actor_state(sprite)
     HandleService.use_service(state)
 
 
-# TODO: Reset resource node production.
 func receive_document() -> void:
     _set_service_type(true)
+    _set_raw_file_cooldown()
+
+
+func raw_file_is_available(sprite: Sprite2D) -> bool:
+    var state: RawFileState = _get_actor_state(sprite)
+    return state.cooldown < 1
+
+
+func send_raw_file(sprite: Sprite2D) -> void:
+    var state: RawFileState = _get_actor_state(sprite)
+    HandleRawFile.send_raw_file(state)
 
 
 # TODO: Call this function when:
@@ -36,6 +54,15 @@ func _set_service_type(reset_type: bool) -> void:
     for i in SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE):
         state = _get_actor_state(i)
         HandleService.set_service_type(state, reset_type, _ref_RandomNumber)
+
+
+func _set_raw_file_cooldown() -> void:
+    var state: RawFileState
+
+    for sub_tag in RAW_FILE_TAGS:
+        for i in SpriteState.get_sprites_by_sub_tag(sub_tag):
+            state = _get_actor_state(i)
+            state.cooldown = 0
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
@@ -60,6 +87,8 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             match i.sub_tag:
                 SubTag.SERVICE:
                     _actor_states[id] = ServiceState.new(i.sprite)
+                SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
+                    _actor_states[id] = RawFileState.new(i.sprite)
                 _:
                     _actor_states[id] = ActorState.new(i.sprite)
 

@@ -127,9 +127,11 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
     if cart_state.item_tag != SubTag.DOCUMENT:
         return false
 
+    cart_state.item_tag = SubTag.CART
+    # PC loses a stick (if he has one) after unloading a document.
+    ref_PcAction.has_stick = false
     # PC can still unload document after reaching the final goal (deliver 10
     # documents), but has no profit in return.
-    cart_state.item_tag = SubTag.CART
     if ref_PcAction.delivery > 0:
         ref_PcAction.account += GameData.INCOME_DOCUMENT
         ref_PcAction.delivery -= 1

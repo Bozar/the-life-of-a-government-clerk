@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://dsayqjqvmcn4o"]
+[gd_scene load_steps=4 format=3 uid="uid://dsayqjqvmcn4o"]
 
 [ext_resource type="Texture2D" uid="uid://cynswmw160utj" path="res://resource/curses_vector_24x36.png" id="1_c05b7"]
 
@@ -6,7 +6,15 @@
 atlas = ExtResource("1_c05b7")
 region = Rect2(264, 144, 24, 36)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_t43iy"]
+atlas = ExtResource("1_c05b7")
+region = Rect2(96, 144, 24, 36)
+
 [node name="Clerk" type="Sprite2D"]
 
 [node name="default" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_qcks3")
+
+[node name="active" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_t43iy")

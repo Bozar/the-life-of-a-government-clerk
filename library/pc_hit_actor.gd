@@ -6,6 +6,7 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
     var sub_tag: StringName = SpriteState.get_sub_tag(actor)
     var service_type: int
     var player_win: bool = false
+    var first_item_tag: StringName
 
     match sub_tag:
         SubTag.SALARY:
@@ -35,6 +36,16 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
             if _load_raw_file(actor, ref_PcAction, ref_ActorAction):
                 ref_ActorAction.send_raw_file(actor)
+            else:
+                return
+        SubTag.CLERK:
+            first_item_tag = _get_first_item_tag(ref_PcAction)
+            if _can_load_document(ref_PcAction) and \
+                    ref_ActorAction.send_document(actor):
+                _load_document(ref_PcAction)
+            elif _can_unload_raw_file(ref_PcAction) and \
+                    ref_ActorAction.receive_raw_file(actor, first_item_tag):
+                _unload_raw_file(ref_PcAction)
             else:
                 return
         _:
@@ -161,3 +172,42 @@ static func _load_raw_file(actor: Sprite2D, ref_PcAction: PcAction,
     sub_tag = SpriteState.get_sub_tag(actor)
     state.item_tag = sub_tag
     return true
+
+
+static func _can_load_document(ref_PcAction: PcAction) -> bool:
+    return ref_PcAction.get_last_slot() != null
+
+
+static func _load_document(ref_PcAction: PcAction) -> void:
+    var sprite: Sprite2D =  ref_PcAction.get_last_slot()
+    var state: CartState = ref_PcAction.get_state(sprite)
+
+    state.item_tag = SubTag.DOCUMENT
+
+
+static func _can_unload_raw_file(ref_PcAction: PcAction) -> bool:
+    var sprite: Sprite2D =  ref_PcAction.get_first_item()
+    var state: CartState
+
+    if sprite == null:
+        return false
+
+    state = ref_PcAction.get_state(sprite)
+    return state.item_tag != SubTag.DOCUMENT
+
+
+static func _unload_raw_file(ref_PcAction: PcAction) -> void:
+    var sprite: Sprite2D =  ref_PcAction.get_first_item()
+    var state: CartState = ref_PcAction.get_state(sprite)
+
+    state.item_tag = SubTag.CART
+
+
+static func _get_first_item_tag(ref_PcAction: PcAction) -> StringName:
+    var sprite: Sprite2D =  ref_PcAction.get_first_item()
+    var state: CartState
+
+    if sprite == null:
+        return SubTag.CART
+    state = ref_PcAction.get_state(sprite)
+    return state.item_tag

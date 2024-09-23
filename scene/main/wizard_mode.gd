@@ -17,6 +17,7 @@ func _test(input_tag: StringName) -> void:
     var linked_state: LinkedCartState = ref_pc_action._linked_cart_state
     var cart_state: CartState
     var sprite: Sprite2D
+    var clerk_state: ClerkState
 
     match input_tag:
         InputTag.WIZARD_1:
@@ -55,8 +56,13 @@ func _test(input_tag: StringName) -> void:
             cart_state.item_tag = SubTag.CART
         InputTag.WIZARD_4:
             # print(Cart.clean_cart(pc, linked_state))
-            cart = Cart.get_last_slot(pc, linked_state)
-            if cart == null:
-                return
-            cart_state = Cart.get_state(cart, linked_state)
-            cart_state.item_tag = SubTag.DOCUMENT
+
+            # cart = Cart.get_last_slot(pc, linked_state)
+            # if cart == null:
+            #     return
+            # cart_state = Cart.get_state(cart, linked_state)
+            # cart_state.item_tag = SubTag.DOCUMENT
+
+            sprite = SpriteState.get_sprites_by_sub_tag(SubTag.CLERK)[0]
+            clerk_state = actor_action._get_actor_state(sprite)
+            clerk_state.progress = 999

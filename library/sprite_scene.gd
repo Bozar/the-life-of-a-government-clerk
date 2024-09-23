@@ -8,6 +8,10 @@ const SPRITE_SCENES: Dictionary = {
 
 
     # Trap
+    SubTag.ATLAS_ON_DESK: preload("res://sprite/atlas.tscn"),
+    SubTag.BOOK_ON_DESK: preload("res://sprite/book.tscn"),
+    SubTag.CUP_ON_DESK: preload("res://sprite/cup.tscn"),
+    SubTag.ENCYCLOPEDIA_ON_DESK: preload("res://sprite/encyclopedia.tscn"),
 
 
     # Building

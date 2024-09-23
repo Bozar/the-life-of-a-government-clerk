@@ -16,7 +16,7 @@ const DESK: StringName = &"desk"
 const ATLAS_ON_DESK: StringName = &"atlas_on_desk"
 const BOOK_ON_DESK: StringName = &"book_on_desk"
 const CUP_ON_DESK: StringName = &"cup_on_desk"
-const DOCUMENT_ON_DESK: StringName = &"document_on_desk"
+const ENCYCLOPEDIA_ON_DESK: StringName = &"encyclopedia_on_desk"
 
 
 # Actor

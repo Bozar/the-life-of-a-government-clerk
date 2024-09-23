@@ -45,6 +45,16 @@ func send_raw_file(sprite: Sprite2D) -> void:
     HandleRawFile.send_raw_file(state)
 
 
+func send_document(sprite: Sprite2D) -> bool:
+    var state: ClerkState = _get_actor_state(sprite)
+    return HandleClerkDesk.send_document(state)
+
+
+func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
+    var state: ClerkState = _get_actor_state(sprite)
+    return HandleClerkDesk.receive_raw_file(state, item_tag)
+
+
 # TODO: Call this function when:
 #   Unload D: `reset_type` = true
 #   Unload A/B/C/E and `service_counter` < 2: `reset_type` = false
@@ -89,6 +99,8 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                     _actor_states[id] = ServiceState.new(i.sprite)
                 SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
                     _actor_states[id] = RawFileState.new(i.sprite)
+                SubTag.CLERK:
+                    _actor_states[id] = ClerkState.new(i.sprite)
                 _:
                     _actor_states[id] = ActorState.new(i.sprite)
 

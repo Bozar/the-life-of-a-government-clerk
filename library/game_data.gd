@@ -24,3 +24,6 @@ const PAYMENT_CLEAN: int = 1
 
 const INCOME_ORDER: int = 1
 const INCOME_DOCUMENT: int = 3
+
+# TODO: Set it to 1000?
+const MAX_CLERK_PROGRESS: int = 100

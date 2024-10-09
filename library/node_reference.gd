@@ -81,7 +81,8 @@ const NODE_CONNECTIONS: Dictionary = {
         SCHEDULE_HELPER,
     ],
     PC_ACTION: [
-        SIDEBAR, ACTOR_ACTION,
+        SIDEBAR,
+        # ACTOR_ACTION,
     ],
     ACTOR_ACTION: [
         PC_ACTION,
@@ -90,6 +91,7 @@ const NODE_CONNECTIONS: Dictionary = {
         ACTOR_ACTION, SIDEBAR, GAME_PROGRESS, INIT_WORLD,
     ],
     GAME_PROGRESS: [
-        ACTOR_ACTION, PC_ACTION,
+        PC_ACTION,
+        # ACTOR_ACTION,
     ],
 }

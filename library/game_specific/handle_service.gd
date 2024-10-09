@@ -5,7 +5,7 @@ static func set_service_type(service_state: ServiceState, reset_type: bool,
         ref_RandomNumber: RandomNumber) -> void:
 
     var service_types: Array = []
-    var new_service: int
+    var new_index: int
 
     if reset_type:
         service_state.service_type = ServiceState.NO_SERVICE
@@ -21,9 +21,8 @@ static func set_service_type(service_state: ServiceState, reset_type: bool,
         service_state.service_type = ServiceState.NO_SERVICE
         return
 
-    ArrayHelper.shuffle(service_types, ref_RandomNumber)
-    new_service = service_types[0]
-    service_state.service_type = new_service
+    new_index = ref_RandomNumber.get_int(0, service_types.size())
+    service_state.service_type = service_types[new_index]
 
 
 static func use_service(service_state: ServiceState) -> void:

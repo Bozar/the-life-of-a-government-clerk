@@ -11,8 +11,8 @@ const RAW_FILE_TAGS: Array = [
 
 
 var _ref_RandomNumber: RandomNumber
-var _ref_PcAction: PcAction
-var _ref_GameProgress: GameProgress
+# var _ref_PcAction: PcAction
+# var _ref_GameProgress: GameProgress
 
 
 var _pc: Sprite2D
@@ -52,18 +52,23 @@ func send_document(sprite: Sprite2D) -> bool:
 
 func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     var state: ClerkState = _get_actor_state(sprite)
-    return HandleClerkDesk.receive_raw_file(state, item_tag)
+
+    if HandleClerkDesk.receive_raw_file(state, item_tag):
+        _set_service_type(false)
+        return true
+    return false
 
 
-# TODO: Call this function when:
-#   Unload D: `reset_type` = true
-#   Unload A/B/C/E and `service_counter` < 2: `reset_type` = false
 func _set_service_type(reset_type: bool) -> void:
     var state: ServiceState
 
     for i in SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE):
         state = _get_actor_state(i)
-        HandleService.set_service_type(state, reset_type, _ref_RandomNumber)
+        # Reset Service state when:
+        #   PC has unloaded a Document.
+        #   PC has unloaded a raw file and has used at most 1 Service.
+        if reset_type or (state.service_counter < GameData.MAX_SERVICE):
+            HandleService.set_service_type(state, reset_type, _ref_RandomNumber)
 
 
 func _set_raw_file_cooldown() -> void:

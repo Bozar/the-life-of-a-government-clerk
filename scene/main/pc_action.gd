@@ -146,6 +146,8 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
         return
 
     PcHitActor.switch_encyclopedia_sprite(self, _ref_ActorAction)
+    _ref_GameProgress.update_world(delivery)
+
     if Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
         _ref_GameProgress.game_over.emit(false)
         return

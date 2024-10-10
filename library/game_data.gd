@@ -27,3 +27,6 @@ const INCOME_DOCUMENT: int = 3
 
 # TODO: Set it to 1000?
 const MAX_CLERK_PROGRESS: int = 100
+
+const BASE_SERVANT: int = 10
+const ADD_SERVANT: int = 2

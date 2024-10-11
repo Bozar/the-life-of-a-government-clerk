@@ -30,3 +30,8 @@ const MAX_CLERK_PROGRESS: int = 100
 
 const BASE_SERVANT: int = 10
 const ADD_SERVANT: int = 2
+
+const RAW_FILE_MIN_BASE_COOLDOWN: int = 20
+const RAW_FILE_MAX_BASE_COOLDOWN: int = 25
+const RAW_FILE_ADD_COOLDOWN: int = 5
+const RAW_FILE_SEND_COUNTER: int = 1

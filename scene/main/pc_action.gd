@@ -228,8 +228,6 @@ func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
         if sub_tag in VALID_ACTOR_TAGS:
             PcHitActor.handle_input(sprite, self, _ref_ActorAction,
                     _ref_GameProgress)
-        else:
-            push_warning("Unknown actor: %s" % sub_tag)
         return
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)

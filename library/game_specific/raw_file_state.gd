@@ -9,3 +9,8 @@ var cooldown: int = 0:
             VisualEffect.switch_sprite(_sprite, VisualTag.PASSIVE)
         else:
             VisualEffect.switch_sprite(_sprite, VisualTag.DEFAULT)
+
+
+var send_counter: int = 0:
+    set(value):
+        send_counter = max(0, value)

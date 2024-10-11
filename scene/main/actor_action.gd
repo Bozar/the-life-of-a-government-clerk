@@ -32,7 +32,7 @@ func use_service(sprite: Sprite2D) -> void:
 
 func receive_document() -> void:
     _set_service_type(true)
-    _set_raw_file_cooldown()
+    _reset_raw_file_cooldown()
 
 
 func raw_file_is_available(sprite: Sprite2D) -> bool:
@@ -42,7 +42,7 @@ func raw_file_is_available(sprite: Sprite2D) -> bool:
 
 func send_raw_file(sprite: Sprite2D) -> void:
     var state: RawFileState = _get_actor_state(sprite)
-    HandleRawFile.send_raw_file(state)
+    HandleRawFile.send_raw_file(state, _ref_RandomNumber)
 
 
 func send_document(sprite: Sprite2D) -> bool:
@@ -71,21 +71,25 @@ func _set_service_type(reset_type: bool) -> void:
             HandleService.set_service_type(state, reset_type, _ref_RandomNumber)
 
 
-func _set_raw_file_cooldown() -> void:
+func _reset_raw_file_cooldown() -> void:
     var state: RawFileState
 
     for sub_tag in RAW_FILE_TAGS:
         for i in SpriteState.get_sprites_by_sub_tag(sub_tag):
             state = _get_actor_state(i)
-            state.cooldown = 0
+            HandleRawFile.reset_cooldown(state)
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     var actor_state: ActorState = _get_actor_state(sprite)
+    var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
 
     if actor_state == null:
         return
 
+    match sub_tag:
+        SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
+            HandleRawFile.update_cooldown(actor_state, false)
     ScheduleHelper.start_next_turn()
 
 

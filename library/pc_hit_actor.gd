@@ -30,7 +30,8 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
             _hit_servant(actor, ref_PcAction)
             ref_ActorAction.hit_servant()
         SubTag.OFFICER:
-            if _unload_document(ref_PcAction):
+            if ref_ActorAction.can_receive_document(actor) and \
+                    _unload_document(ref_PcAction):
                 ref_ActorAction.receive_document()
             else:
                 return

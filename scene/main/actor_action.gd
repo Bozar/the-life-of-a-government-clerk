@@ -11,6 +11,7 @@ var _pc: Sprite2D
 var _actor_states: Dictionary = {}
 var _service_states: Array
 var _raw_file_states: Array
+var _officer_states: Array
 
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
@@ -25,9 +26,15 @@ func use_service(sprite: Sprite2D) -> void:
     HandleService.use_service(state)
 
 
+func can_receive_document(sprite: Sprite2D) -> bool:
+    var state: OfficerState = _get_actor_state(sprite)
+    return HandleOfficer.can_receive_document(state)
+
+
 func receive_document() -> void:
     HandleService.set_service_type(_service_states, true, _ref_RandomNumber)
     HandleRawFile.reset_cooldown(_raw_file_states)
+    HandleOfficer.set_active(_officer_states, _ref_RandomNumber)
 
 
 func raw_file_is_available(sprite: Sprite2D) -> bool:
@@ -94,6 +101,10 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                     _raw_file_states.push_back(new_state)
                 SubTag.CLERK:
                     _actor_states[id] = ClerkState.new(i.sprite)
+                SubTag.OFFICER:
+                    new_state = OfficerState.new(i.sprite)
+                    _actor_states[id] = new_state
+                    _officer_states.push_back(new_state)
                 _:
                     _actor_states[id] = ActorState.new(i.sprite)
 

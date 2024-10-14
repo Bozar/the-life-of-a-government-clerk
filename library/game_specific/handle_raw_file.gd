@@ -15,9 +15,13 @@ static func send_raw_file(state: RawFileState, ref_RandomNumber: RandomNumber) \
     # print("CD: %s, Counter: %s" % [state.cooldown, state.send_counter])
 
 
-static func reset_cooldown(state: RawFileState) -> void:
-    state.cooldown = 0
-    state.send_counter -= GameData.RAW_FILE_SEND_COUNTER
+static func reset_cooldown(states: Array) -> void:
+    var state: RawFileState
+
+    for i in states:
+        state = i
+        state.cooldown = 0
+        state.send_counter -= GameData.RAW_FILE_SEND_COUNTER
 
 
 static func update_cooldown(state: RawFileState, hit_servant: bool) -> void:

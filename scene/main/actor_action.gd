@@ -2,14 +2,6 @@ class_name ActorAction
 extends Node2D
 
 
-const RAW_FILE_TAGS: Array = [
-    SubTag.ATLAS,
-    SubTag.BOOK,
-    SubTag.CUP,
-    SubTag.ENCYCLOPEDIA,
-]
-
-
 var _ref_RandomNumber: RandomNumber
 # var _ref_PcAction: PcAction
 # var _ref_GameProgress: GameProgress
@@ -17,6 +9,9 @@ var _ref_RandomNumber: RandomNumber
 
 var _pc: Sprite2D
 var _actor_states: Dictionary = {}
+var _service_states: Array
+var _raw_file_states: Array
+
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
 
@@ -31,8 +26,8 @@ func use_service(sprite: Sprite2D) -> void:
 
 
 func receive_document() -> void:
-    _set_service_type(true)
-    _reset_raw_file_cooldown()
+    HandleService.set_service_type(_service_states, true, _ref_RandomNumber)
+    HandleRawFile.reset_cooldown(_raw_file_states)
 
 
 func raw_file_is_available(sprite: Sprite2D) -> bool:
@@ -54,30 +49,10 @@ func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     var state: ClerkState = _get_actor_state(sprite)
 
     if HandleClerkDesk.receive_raw_file(state, item_tag):
-        _set_service_type(false)
+        HandleService.set_service_type(_service_states, false,
+                _ref_RandomNumber)
         return true
     return false
-
-
-func _set_service_type(reset_type: bool) -> void:
-    var state: ServiceState
-
-    for i in SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE):
-        state = _get_actor_state(i)
-        # Reset Service state when:
-        #   PC has unloaded a Document.
-        #   PC has unloaded a raw file and has used at most 1 Service.
-        if reset_type or (state.service_counter < GameData.MAX_SERVICE):
-            HandleService.set_service_type(state, reset_type, _ref_RandomNumber)
-
-
-func _reset_raw_file_cooldown() -> void:
-    var state: RawFileState
-
-    for sub_tag in RAW_FILE_TAGS:
-        for i in SpriteState.get_sprites_by_sub_tag(sub_tag):
-            state = _get_actor_state(i)
-            HandleRawFile.reset_cooldown(state)
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
@@ -95,6 +70,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     var id: int
+    var new_state: ActorState
 
     for i: TaggedSprite in tagged_sprites:
         if not i.main_tag == MainTag.ACTOR:
@@ -105,9 +81,13 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             id = i.sprite.get_instance_id()
             match i.sub_tag:
                 SubTag.SERVICE:
-                    _actor_states[id] = ServiceState.new(i.sprite)
+                    new_state = ServiceState.new(i.sprite)
+                    _actor_states[id] = new_state
+                    _service_states.push_back(new_state)
                 SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
-                    _actor_states[id] = RawFileState.new(i.sprite)
+                    new_state = RawFileState.new(i.sprite)
+                    _actor_states[id] = new_state
+                    _raw_file_states.push_back(new_state)
                 SubTag.CLERK:
                     _actor_states[id] = ClerkState.new(i.sprite)
                 _:

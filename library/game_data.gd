@@ -17,7 +17,9 @@ const MAX_TURN_COUNTER: int = 99999
 
 const MAX_DELIVERY: int = 10
 const MAX_SERVICE: int = 2
+
 const BASE_DELAY: int = 1
+const LOAD_FACTOR_MULTIPLER: float = 0.01
 
 const PAYMENT_SERVICE: int = 1
 const PAYMENT_CLEAN: int = 1

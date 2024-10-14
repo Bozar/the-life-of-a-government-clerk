@@ -116,14 +116,16 @@ static func _clean_cart(ref_PcAction: PcAction) -> bool:
 
 static func _hit_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
     var coord: Vector2i = ConvertCoord.get_coord(actor)
+    var add_delay: int
 
     if ref_PcAction.count_cart() < GameData.CART_LENGTH_SHORT:
         ref_PcAction.delay = 0
     elif ref_PcAction.has_stick:
         ref_PcAction.delay = 0
-    # TODO: Make it more punishing. Take load factor into account.
     else:
-        ref_PcAction.delay = GameData.BASE_DELAY
+        add_delay = floor(GameData.LOAD_FACTOR_MULTIPLER *
+                ref_PcAction.get_full_load_factor())
+        ref_PcAction.delay = GameData.BASE_DELAY + add_delay
 
     SpriteFactory.remove_sprite(actor)
     ref_PcAction.pull_cart(coord)

@@ -128,6 +128,10 @@ func get_last_slot() -> Sprite2D:
     return Cart.get_last_slot(_pc, _linked_cart_state)
 
 
+func get_full_load_factor() -> int:
+    return Cart.get_full_load_factor(_pc, _linked_cart_state)
+
+
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     if _pc != null:
         return

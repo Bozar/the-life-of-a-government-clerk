@@ -147,6 +147,22 @@ static func clean_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     return is_cleaned
 
 
+static func get_full_load_factor(pc: Sprite2D, state: LinkedCartState) -> int:
+    var cart: Sprite2D = pc
+    var cart_state: CartState
+    var load_factor: int = 0
+
+    for i in range(0, state.linked_carts.size()):
+        cart = LinkedList.get_next_object(cart, state.linked_carts)
+        if cart == pc:
+            break
+
+        cart_state = get_state(cart, state)
+        load_factor += cart_state.load_factor
+
+    return load_factor
+
+
 static func has_full_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     var cart: Sprite2D = pc
     var cart_state: CartState

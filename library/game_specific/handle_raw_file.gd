@@ -24,8 +24,21 @@ static func reset_cooldown(states: Array) -> void:
         state.send_counter -= GameData.RAW_FILE_SEND_COUNTER
 
 
-static func update_cooldown(state: RawFileState, hit_servant: bool) -> void:
-    if hit_servant:
-        state.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
-    else:
-        state.cooldown -= 1
+static func update_cooldown(state: RawFileState) -> void:
+    state.cooldown -= 1
+
+
+static func reduce_cooldown(states: Array, ref_RandomNumber: RandomNumber) \
+        -> void:
+
+    var dup_states: Array
+    var state: RawFileState
+
+    dup_states = states.duplicate()
+    ArrayHelper.shuffle(dup_states, ref_RandomNumber)
+
+    for i in dup_states:
+        state = i
+        if state.cooldown > 0:
+            state.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
+            break

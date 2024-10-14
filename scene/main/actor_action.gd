@@ -55,6 +55,10 @@ func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     return false
 
 
+func hit_servant() -> void:
+    HandleRawFile.reduce_cooldown(_raw_file_states, _ref_RandomNumber)
+
+
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     var actor_state: ActorState = _get_actor_state(sprite)
     var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
@@ -64,7 +68,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
 
     match sub_tag:
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
-            HandleRawFile.update_cooldown(actor_state, false)
+            HandleRawFile.update_cooldown(actor_state)
     ScheduleHelper.start_next_turn()
 
 

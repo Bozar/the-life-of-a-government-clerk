@@ -8,6 +8,7 @@ var coord: Vector2i:
 
 var sprite: Sprite2D
 var remaining_page: int
+var max_page: int
 
 
 var _coord: Vector2i

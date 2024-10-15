@@ -27,8 +27,22 @@ const PAYMENT_CLEAN: int = 1
 const INCOME_ORDER: int = 1
 const INCOME_DOCUMENT: int = 3
 
-# TODO: Set it to 1000?
-const MAX_CLERK_PROGRESS: int = 100
+const PAGE_CUP: int = 30
+const PAGE_BOOK: int = PAGE_CUP * 2
+const PAGE_ATLAS: int = PAGE_CUP * 4
+const PAGE_ENCYCLOPEDIA: int = PAGE_CUP * 4
+
+# 3/2 = 1.5 | 3/8 = 0.375 | 7/8 = 0.875
+const PROGRESS_BOOK: int = 1000
+# Overall effect: 3/4 BOOK
+const PROGRESS_CUP: int = int(PROGRESS_BOOK * 1.5)
+# Overall effect: 3/4 BOOK
+const PROGRESS_ATLAS: int = int(PROGRESS_BOOK * 0.375)
+# Overall effect: 7/4 BOOK
+const PROGRESS_ENCYCLOPEDIA: int = int(PROGRESS_BOOK * 0.875)
+
+const MAX_CLERK_PROGRESS: int = PROGRESS_BOOK * (PAGE_BOOK * 3)
+const OVERFLOW_PROGRESS: float = 0.25
 
 const BASE_SERVANT: int = 10
 const ADD_SERVANT: int = 2

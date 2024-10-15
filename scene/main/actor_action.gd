@@ -49,13 +49,13 @@ func send_raw_file(sprite: Sprite2D) -> void:
 
 func send_document(sprite: Sprite2D) -> bool:
     var state: ClerkState = _get_actor_state(sprite)
-    return HandleClerkDesk.send_document(state)
+    return HandleClerk.send_document(state)
 
 
 func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     var state: ClerkState = _get_actor_state(sprite)
 
-    if HandleClerkDesk.receive_raw_file(state, item_tag):
+    if HandleClerk.receive_raw_file(state, item_tag):
         HandleService.set_service_type(_service_states, false,
                 _ref_RandomNumber)
         return true
@@ -76,6 +76,8 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     match sub_tag:
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
             HandleRawFile.update_cooldown(actor_state)
+        SubTag.CLERK:
+            HandleClerk.update_progress(actor_state)
     ScheduleHelper.start_next_turn()
 
 

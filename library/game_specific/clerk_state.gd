@@ -20,9 +20,23 @@ var progress: int = 0:
         VisualEffect.switch_sprite(_sprite, visual_tag)
 
 
+var has_empty_desk: bool:
+    get:
+        var state: DeskState
+
+        for i in range(0, desk_states.size()):
+            state = desk_states[i]
+            if state == null:
+                push_warning("desk_states[%s] is null." % i)
+                return false
+            elif state.sprite == null:
+                return true
+        return false
+
+
 var has_document: bool:
     get:
-        return (progress >= GameData.MAX_CLERK_PROGRESS) and _has_empty_desk()
+        return (progress >= GameData.MAX_CLERK_PROGRESS) and has_empty_desk
 
 
 var _desk_states: Array
@@ -43,16 +57,3 @@ func _init_desk_states() -> void:
         match distance:
             1, 2:
                 _desk_states[distance - 1] = DeskState.new(desk_coord)
-
-
-func _has_empty_desk() -> bool:
-    var state: DeskState
-
-    for i in range(0, desk_states.size()):
-        state = desk_states[i]
-        if state == null:
-            push_warning("desk_states[%s] is null." % i)
-            return false
-        elif state.sprite == null:
-            return true
-    return false

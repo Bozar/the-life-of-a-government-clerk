@@ -21,7 +21,7 @@ var service_type: int = NO_SERVICE:
     set(value):
         if SERVICE_TYPE_TO_TAG.has(value):
             service_type = value
-            VisualEffect.switch_sprite(_sprite, SERVICE_TYPE_TO_TAG[value])
+            VisualEffect.switch_sprite(sprite, SERVICE_TYPE_TO_TAG[value])
         else:
             push_error("Invalid service type: %s" % value)
 

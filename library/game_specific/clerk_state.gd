@@ -17,7 +17,7 @@ var progress: int = 0:
 
         if has_document:
             visual_tag = VisualTag.ACTIVE
-        VisualEffect.switch_sprite(_sprite, visual_tag)
+        VisualEffect.switch_sprite(sprite, visual_tag)
 
 
 var has_empty_desk: bool:
@@ -43,7 +43,7 @@ var _desk_states: Array
 
 
 func _init_desk_states() -> void:
-    var self_coord: Vector2i = ConvertCoord.get_coord(_sprite)
+    var self_coord: Vector2i = ConvertCoord.get_coord(sprite)
     var desk_coord: Vector2i
     var distance: int
 

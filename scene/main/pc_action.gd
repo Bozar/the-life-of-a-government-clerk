@@ -169,6 +169,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE:
                     if Cart.enter_examine_mode(_pc, _linked_cart_state):
                         _game_mode = EXAMINE_MODE
+                        _ref_ActorAction.switch_examine_mode(true)
                     else:
                         return
                 InputTag.MOVE_LEFT:
@@ -197,6 +198,9 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                     _game_mode = NORMAL_MODE
                     Cart.exit_examine_mode(_pc, _pc_state.has_stick,
                             _linked_cart_state)
+                    _ref_ActorAction.switch_examine_mode(false)
+                    HandleRawFile.switch_encyclopedia_sprite(self,
+                            _ref_ActorAction)
                 InputTag.MOVE_UP:
                     Cart.examine_first_cart(_pc, _linked_cart_state)
                 InputTag.MOVE_DOWN:

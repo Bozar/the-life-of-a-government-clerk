@@ -12,6 +12,7 @@ var _actor_states: Dictionary = {}
 var _service_states: Array
 var _raw_file_states: Array
 var _officer_states: Array
+var _clerk_states: Array
 
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
@@ -66,6 +67,11 @@ func hit_servant() -> void:
     HandleRawFile.reduce_cooldown(_raw_file_states, _ref_RandomNumber)
 
 
+func switch_examine_mode(is_examine: bool) -> void:
+    HandleClerk.switch_examine_mode(is_examine, _clerk_states)
+    HandleRawFile.switch_examine_mode(is_examine, _raw_file_states)
+
+
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     var actor_state: ActorState = _get_actor_state(sprite)
     var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
@@ -102,7 +108,9 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                     _actor_states[id] = new_state
                     _raw_file_states.push_back(new_state)
                 SubTag.CLERK:
-                    _actor_states[id] = ClerkState.new(i.sprite)
+                    new_state = ClerkState.new(i.sprite)
+                    _actor_states[id] = new_state
+                    _clerk_states.push_back(new_state)
                 SubTag.OFFICER:
                     new_state = OfficerState.new(i.sprite)
                     _actor_states[id] = new_state

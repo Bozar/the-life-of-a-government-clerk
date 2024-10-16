@@ -28,3 +28,24 @@ const SIX: StringName = &"six"
 const SEVEN: StringName = &"seven"
 const EIGHT: StringName = &"eight"
 const NINE: StringName = &"nine"
+const PERCENT: StringName = &"percent"
+
+const DIGIT_TO_TAG: Dictionary = {
+    0: ZERO,
+    1: ONE,
+    2: TWO,
+    3: THREE,
+    4: FOUR,
+    5: FIVE,
+    6: SIX,
+    7: SEVEN,
+    8: EIGHT,
+    9: NINE,
+}
+
+
+# Get the percent value of `current_value / max_value`. Keep the tens digit and
+# return its visual tag.
+static func get_percent_tag(current_value: int, max_value: int) -> StringName:
+    var tens_digit: int = int(abs(current_value / (max_value * 1.0) * 10.0))
+    return DIGIT_TO_TAG.get(tens_digit, PERCENT)

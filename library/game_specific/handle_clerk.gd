@@ -91,3 +91,44 @@ static func update_progress(state: ClerkState) -> void:
             remove_sprite = desk_state.sprite
             desk_state.sprite = null
             SpriteFactory.remove_sprite(remove_sprite)
+
+
+static func switch_examine_mode(is_examine: bool, states: Array) -> void:
+    var clerk_state: ClerkState
+    var desk_state: DeskState
+
+    for i in states:
+        clerk_state = i
+        _switch_clerk_sprite(is_examine, clerk_state)
+        for j in clerk_state.desk_states:
+            desk_state = j
+            if desk_state.sprite == null:
+                continue
+            _switch_desk_sprite(is_examine, desk_state)
+
+
+static func _switch_clerk_sprite(is_examine: bool, state: ClerkState) -> void:
+    var visual_tag: StringName
+
+    if is_examine:
+        visual_tag = VisualTag.get_percent_tag(state.progress,
+                GameData.MAX_CLERK_PROGRESS)
+        VisualEffect.switch_sprite(state.sprite, visual_tag)
+    else:
+        if state.has_document:
+            visual_tag = VisualTag.ACTIVE
+        else:
+            visual_tag = VisualTag.DEFAULT
+        VisualEffect.switch_sprite(state.sprite, visual_tag)
+
+
+static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
+    var visual_tag: StringName
+
+    if is_examine:
+        visual_tag = VisualTag.get_percent_tag(state.remaining_page,
+                state.max_page)
+        VisualEffect.switch_sprite(state.sprite, visual_tag)
+    else:
+        visual_tag = VisualTag.DEFAULT
+        VisualEffect.switch_sprite(state.sprite, visual_tag)

@@ -59,19 +59,6 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         ScheduleHelper.start_next_turn()
 
 
-static func switch_encyclopedia_sprite(ref_PcAction: PcAction,
-        ref_ActorAction: ActorAction) -> void:
-    var visual_tag: StringName
-
-    for i in SpriteState.get_sprites_by_sub_tag(SubTag.ENCYCLOPEDIA):
-        if (ref_PcAction.count_cart() < GameData.CART_LENGTH_LONG) or \
-                (not ref_ActorAction.raw_file_is_available(i)):
-            visual_tag = VisualTag.PASSIVE
-        else:
-            visual_tag = VisualTag.DEFAULT
-        VisualEffect.switch_sprite(i, visual_tag)
-
-
 static func _get_cash(ref_PcAction: PcAction) -> bool:
     if ref_PcAction.account > 0:
         ref_PcAction.cash += ref_PcAction.account

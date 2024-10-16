@@ -33,20 +33,22 @@ const PAGE_BOOK: int = PAGE_CUP * 2
 const PAGE_ATLAS: int = PAGE_CUP * 4
 const PAGE_ENCYCLOPEDIA: int = PAGE_CUP * 4
 
-# 3/2 = 1.5 | 3/8 = 0.375 | 7/8 = 0.875
-const PROGRESS_BOOK: int = 1000
-# Overall effect: 3/4 BOOK
-const PROGRESS_CUP: int = int(PROGRESS_BOOK * 1.5)
-# Overall effect: 3/4 BOOK
-const PROGRESS_ATLAS: int = int(PROGRESS_BOOK * 0.375)
-# Overall effect: 7/4 BOOK
-const PROGRESS_ENCYCLOPEDIA: int = int(PROGRESS_BOOK * 0.875)
+const MIN_FILE_PROGRESS: int = 125
+const PROGRESS_BOOK: int = MIN_FILE_PROGRESS * 8
+# One page: 3/2 Book | Overall effect: 3/4 BOOK
+const PROGRESS_CUP: int = MIN_FILE_PROGRESS * 12
+# One page: 3/8 Book | Overall effect: 3/4 BOOK
+const PROGRESS_ATLAS: int = MIN_FILE_PROGRESS * 3
+# One page: 7/8 Book | Overall effect: 7/4 BOOK
+const PROGRESS_ENCYCLOPEDIA: int = MIN_FILE_PROGRESS * 7
 
 const MAX_CLERK_PROGRESS: int = PROGRESS_BOOK * (PAGE_BOOK * 3)
 const OVERFLOW_PROGRESS: float = 0.25
 
 const BASE_SERVANT: int = 10
 const ADD_SERVANT: int = 2
+const MIN_IDLE_DURATION: int = 60
+const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 2
 
 const RAW_FILE_MIN_BASE_COOLDOWN: int = 20
 const RAW_FILE_MAX_BASE_COOLDOWN: int = 25

@@ -45,7 +45,10 @@ func raw_file_is_available(sprite: Sprite2D) -> bool:
 
 func send_raw_file(sprite: Sprite2D) -> void:
     var state: RawFileState = _get_actor_state(sprite)
-    HandleRawFile.send_raw_file(state, _ref_RandomNumber)
+    var servant_cooldown: int = HandleServant.get_servant_cooldown(
+            _get_actor_states(SubTag.SERVANT))
+
+    HandleRawFile.send_raw_file(state, _ref_RandomNumber, servant_cooldown)
 
 
 func send_document(sprite: Sprite2D) -> bool:
@@ -65,11 +68,14 @@ func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
 
 func hit_servant() -> void:
     HandleRawFile.reduce_cooldown(_raw_file_states, _ref_RandomNumber)
+    HandleClerk.reduce_progress(_clerk_states, _ref_RandomNumber)
 
 
 func switch_examine_mode(is_examine: bool) -> void:
     HandleClerk.switch_examine_mode(is_examine, _clerk_states)
     HandleRawFile.switch_examine_mode(is_examine, _raw_file_states)
+    HandleServant.switch_examine_mode(is_examine,
+            _get_actor_states(SubTag.SERVANT))
 
 
 func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
@@ -84,6 +90,8 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
             HandleRawFile.update_cooldown(actor_state)
         SubTag.CLERK:
             HandleClerk.update_progress(actor_state)
+        SubTag.SERVANT:
+            HandleServant.update_idle_duration(actor_state)
     ScheduleHelper.start_next_turn()
 
 
@@ -115,6 +123,12 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                     new_state = OfficerState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
                     _officer_states.push_back(new_state)
+                SubTag.SERVANT:
+                    new_state = ServantState.new(i.sprite, i.sub_tag)
+                    _actor_states[id] = new_state
+                    new_state.max_idle_duration = _ref_RandomNumber.get_int(
+                            GameData.MIN_IDLE_DURATION,
+                            GameData.MAX_IDLE_DURATION + 1)
                 _:
                     _actor_states[id] = ActorState.new(i.sprite, i.sub_tag)
 
@@ -132,7 +146,7 @@ func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
 
 func _get_actor_state(sprite: Sprite2D) -> ActorState:
     if not _is_npc(sprite):
-        return
+        return null
 
     var id: int = sprite.get_instance_id()
 
@@ -145,6 +159,17 @@ func _get_actor_state(sprite: Sprite2D) -> ActorState:
 func _is_npc(sprite: Sprite2D) -> bool:
     return sprite.is_in_group(MainTag.ACTOR) and \
             (not sprite.is_in_group(SubTag.PC))
+
+
+func _get_actor_states(sub_tag: StringName) -> Array:
+    var state: ActorState
+    var states: Array
+
+    for i in SpriteState.get_sprites_by_sub_tag(sub_tag):
+        state = _get_actor_state(i)
+        if state != null:
+            states.push_back(state)
+    return states
 
 
 func _approach_pc(map_2d: Dictionary, sprite: Sprite2D, end_point: Array) \

@@ -93,6 +93,23 @@ static func update_progress(state: ClerkState) -> void:
             SpriteFactory.remove_sprite(remove_sprite)
 
 
+static func reduce_progress(states: Array, ref_RandomNumber: RandomNumber) \
+        -> void:
+    var state: ClerkState
+    var dup_states: Array
+
+    dup_states = states.duplicate()
+    ArrayHelper.shuffle(dup_states, ref_RandomNumber)
+
+    for i in dup_states:
+        state = i
+        if not _is_valid_progress(state.progress):
+            continue
+        state.progress -= ref_RandomNumber.get_int(GameData.PROGRESS_BOOK,
+                GameData.PROGRESS_CUP + 1)
+        break
+
+
 static func switch_examine_mode(is_examine: bool, states: Array) -> void:
     var clerk_state: ClerkState
     var desk_state: DeskState
@@ -132,3 +149,8 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
     else:
         visual_tag = VisualTag.DEFAULT
         VisualEffect.switch_sprite(state.sprite, visual_tag)
+
+
+static func _is_valid_progress(progress: int) -> bool:
+    return (progress > GameData.PROGRESS_CUP) and \
+            (progress < GameData.MAX_CLERK_PROGRESS )

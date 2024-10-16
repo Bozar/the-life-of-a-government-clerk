@@ -1,16 +1,16 @@
 class_name HandleRawFile
 
 
-static func send_raw_file(state: RawFileState, ref_RandomNumber: RandomNumber) \
-        -> void:
+static func send_raw_file(state: RawFileState, ref_RandomNumber: RandomNumber,
+        servant_cooldown: int) -> void:
     var base_cooldown: int = ref_RandomNumber.get_int(
             GameData.RAW_FILE_MIN_BASE_COOLDOWN,
             GameData.RAW_FILE_MAX_BASE_COOLDOWN + 1)
-    var add_cooldown: int = state.send_counter * GameData.RAW_FILE_ADD_COOLDOWN
+    var send_cooldown: int = state.send_counter * GameData.RAW_FILE_ADD_COOLDOWN
 
     # Cooldown is set in PC's turn and is decreased by 1 at the start of an
     # NPC's turn.
-    state.max_cooldown = base_cooldown + add_cooldown
+    state.max_cooldown = base_cooldown + send_cooldown + servant_cooldown
     state.cooldown = 1 + state.max_cooldown
     state.send_counter += 1
     # print("CD: %s, Counter: %s" % [state.cooldown, state.send_counter])

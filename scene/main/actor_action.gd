@@ -100,23 +100,23 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             id = i.sprite.get_instance_id()
             match i.sub_tag:
                 SubTag.SERVICE:
-                    new_state = ServiceState.new(i.sprite)
+                    new_state = ServiceState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
                     _service_states.push_back(new_state)
                 SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
-                    new_state = RawFileState.new(i.sprite)
+                    new_state = RawFileState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
                     _raw_file_states.push_back(new_state)
                 SubTag.CLERK:
-                    new_state = ClerkState.new(i.sprite)
+                    new_state = ClerkState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
                     _clerk_states.push_back(new_state)
                 SubTag.OFFICER:
-                    new_state = OfficerState.new(i.sprite)
+                    new_state = OfficerState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
                     _officer_states.push_back(new_state)
                 _:
-                    _actor_states[id] = ActorState.new(i.sprite)
+                    _actor_states[id] = ActorState.new(i.sprite, i.sub_tag)
 
 
 func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:

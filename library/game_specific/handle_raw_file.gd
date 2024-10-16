@@ -16,19 +16,6 @@ static func send_raw_file(state: RawFileState, ref_RandomNumber: RandomNumber) \
     # print("CD: %s, Counter: %s" % [state.cooldown, state.send_counter])
 
 
-static func switch_encyclopedia_sprite(ref_PcAction: PcAction,
-        ref_ActorAction: ActorAction) -> void:
-    var visual_tag: StringName
-
-    for i in SpriteState.get_sprites_by_sub_tag(SubTag.ENCYCLOPEDIA):
-        if (ref_PcAction.count_cart() < GameData.CART_LENGTH_LONG) or \
-                (not ref_ActorAction.raw_file_is_available(i)):
-            visual_tag = VisualTag.PASSIVE
-        else:
-            visual_tag = VisualTag.DEFAULT
-        VisualEffect.switch_sprite(i, visual_tag)
-
-
 static func reset_cooldown(states: Array) -> void:
     var state: RawFileState
 

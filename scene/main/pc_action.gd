@@ -149,7 +149,6 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    HandleRawFile.switch_encyclopedia_sprite(self, _ref_ActorAction)
     _ref_GameProgress.update_world(delivery)
 
     if Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
@@ -199,8 +198,6 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                     Cart.exit_examine_mode(_pc, _pc_state.has_stick,
                             _linked_cart_state)
                     _ref_ActorAction.switch_examine_mode(false)
-                    HandleRawFile.switch_encyclopedia_sprite(self,
-                            _ref_ActorAction)
                 InputTag.MOVE_UP:
                     Cart.examine_first_cart(_pc, _linked_cart_state)
                 InputTag.MOVE_DOWN:

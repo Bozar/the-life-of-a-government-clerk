@@ -12,8 +12,8 @@ const ADD_CART: int = 3
 const CART_LENGTH_SHORT: int = 4
 const CART_LENGTH_LONG: int = 7
 
-const MIN_TURN_COUNTER: int = 0
-const MAX_TURN_COUNTER: int = 99999
+const MIN_TURN_COUNTER: int = 1
+const MAX_TURN_COUNTER: int = 99
 
 const MAX_DELIVERY: int = 10
 const MAX_SERVICE: int = 2

@@ -2,8 +2,7 @@ class_name StateLabel
 extends CustomLabel
 
 
-const TURN: String = "Turn: %s"
-const PROGRESS: String = "$%s|$%s|+%s"
+const PROGRESS: String = "+%s.%s|$%s.%s"
 
 const YOU_WIN: String = "You win.\n[Space]"
 const YOU_LOSE: String = "You lose.\n[Space]"
@@ -25,9 +24,9 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var turn: String = TURN % _turn_counter
     var progress: String = PROGRESS % [
-        _ref_PcAction.cash, _ref_PcAction.account, _ref_PcAction.delivery
+        _turn_counter, _ref_PcAction.delivery,
+        _ref_PcAction.cash, _ref_PcAction.account,
     ]
     var first_item: String = _ref_PcAction.first_item_text
     var state: String = _ref_PcAction.state_text
@@ -35,8 +34,8 @@ func update_gui() -> void:
 
     if game_over:
         end_game = YOU_WIN if player_win else YOU_LOSE
-    text = "%s\n\n%s\n%s\n%s\n\n%s" % [
-        turn, progress, first_item, state, end_game
+    text = "%s\n\n%s\n%s\n%s" % [
+        progress, first_item, state, end_game
     ]
 
 

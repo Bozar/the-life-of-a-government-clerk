@@ -103,6 +103,7 @@ static func reduce_progress(states: Array, ref_RandomNumber: RandomNumber) \
 
     dup_states = states.duplicate()
     ArrayHelper.shuffle(dup_states, ref_RandomNumber)
+    dup_states.sort_custom(_sort_progress)
 
     for i in dup_states:
         state = i
@@ -157,3 +158,7 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
 static func _is_valid_progress(progress: int) -> bool:
     return (progress > GameData.PROGRESS_CUP) and \
             (progress < GameData.MAX_CLERK_PROGRESS )
+
+
+static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:
+    return left.progress < right.progress

@@ -37,6 +37,7 @@ static func reduce_cooldown(states: Array, ref_RandomNumber: RandomNumber) \
 
     dup_states = states.duplicate()
     ArrayHelper.shuffle(dup_states, ref_RandomNumber)
+    dup_states.sort_custom(_sort_cooldown)
 
     for i in dup_states:
         state = i
@@ -60,3 +61,7 @@ static func switch_examine_mode(is_examine: bool, states: Array) -> void:
         else:
             # Switch sprite implicitly.
             state.cooldown = state.cooldown
+
+
+static func _sort_cooldown(left: RawFileState, right: RawFileState) -> bool:
+    return left.cooldown < right.cooldown

@@ -7,6 +7,10 @@ static func update_idle_duration(state: ServantState) -> void:
     state.idle_duration += 1
 
 
+static func reset_idle_duration(state: ServantState) -> void:
+    state.idle_duration = 0
+
+
 static func switch_examine_mode(is_examine: bool, states: Array) -> void:
     var state: ServantState
     var visual_tag: StringName

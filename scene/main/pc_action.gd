@@ -77,6 +77,11 @@ var delay: int:
         _pc_state.delay = value
 
 
+var pc_coord: Vector2i:
+    get:
+        return ConvertCoord.get_coord(_pc)
+
+
 var _ref_ActorAction: ActorAction
 var _ref_GameProgress: GameProgress
 

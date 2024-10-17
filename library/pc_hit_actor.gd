@@ -27,8 +27,9 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
             if not _clean_cart(ref_PcAction):
                 return
         SubTag.SERVANT:
-            _hit_servant(actor, ref_PcAction)
-            ref_ActorAction.hit_servant()
+            # Order matters. The Servant may be removed by _push_servant().
+            ref_ActorAction.push_servant(actor)
+            _push_servant(actor, ref_PcAction)
         SubTag.OFFICER:
             if ref_ActorAction.can_receive_document(actor) and \
                     _unload_document(ref_PcAction):
@@ -101,8 +102,10 @@ static func _clean_cart(ref_PcAction: PcAction) -> bool:
     return true
 
 
-static func _hit_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
-    var coord: Vector2i = ConvertCoord.get_coord(actor)
+static func _push_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
+    var actor_coord: Vector2i = ConvertCoord.get_coord(actor)
+    var pc_coord: Vector2i = ref_PcAction.pc_coord
+    var new_actor_coord: Vector2i
     var add_delay: int
 
     if ref_PcAction.count_cart() < GameData.CART_LENGTH_SHORT:
@@ -114,8 +117,18 @@ static func _hit_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
                 ref_PcAction.get_full_load_factor())
         ref_PcAction.delay = GameData.BASE_DELAY + add_delay
 
-    SpriteFactory.remove_sprite(actor)
-    ref_PcAction.pull_cart(coord)
+    new_actor_coord = ConvertCoord.get_mirror_coord(pc_coord, actor_coord)
+    if _is_valid_coord(new_actor_coord):
+        SpriteState.move_sprite(actor, new_actor_coord)
+    else:
+        SpriteFactory.remove_sprite(actor)
+    ref_PcAction.pull_cart(actor_coord)
+
+
+static func _is_valid_coord(coord: Vector2i) -> bool:
+    return DungeonSize.is_in_dungeon(coord) and \
+            (not SpriteState.has_building_at_coord(coord)) and \
+            (not SpriteState.has_actor_at_coord(coord))
 
 
 static func _unload_document(ref_PcAction: PcAction) -> bool:

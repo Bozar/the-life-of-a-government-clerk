@@ -159,9 +159,9 @@ func _create_from_character(character: String, coord: Vector2i,
             tagged_sprites.push_back(SpriteFactory.create_building(
                     CHAR_TO_TAG[character], coord, false))
         SPECIAL_FLOOR_CHAR:
-            save_tagged_sprite = SpriteFactory.create_building(
+            save_tagged_sprite = SpriteFactory.create_ground(
                     CHAR_TO_TAG[character], coord, false)
-            save_tagged_sprite.sprite.z_index += 1
+            save_tagged_sprite.sprite.z_index = GameData.INTERNAL_FLOOR_Z_LAYER
             tagged_sprites.push_back(save_tagged_sprite)
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
                 ENCYCLPEDIA_CHAR, SERVICE_CHAR, SALARY_CHAR, STATION_CHAR:

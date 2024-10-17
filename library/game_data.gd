@@ -6,6 +6,10 @@ const MIN_TURN_COUNTER: int = 1
 const MAX_TURN_COUNTER: int = 99
 
 
+# Sprite
+const INTERNAL_FLOOR_Z_LAYER: int = ZLayer.GROUND + 1
+
+
 # PC and Cart
 const PC_SIGHT_RANGE: int = 5
 

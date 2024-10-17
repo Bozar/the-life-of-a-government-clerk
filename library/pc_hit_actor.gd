@@ -70,6 +70,8 @@ static func _get_cash(ref_PcAction: PcAction) -> bool:
 static func _use_service(ref_PcAction: PcAction, service_type: int) -> bool:
     if service_type == ServiceState.NO_SERVICE:
         return false
+    elif ref_PcAction.delivery < 1:
+        return false
 
     match service_type:
         ServiceState.CART:
@@ -78,8 +80,6 @@ static func _use_service(ref_PcAction: PcAction, service_type: int) -> bool:
             ref_PcAction.add_cart(GameData.ADD_CART)
             ref_PcAction.cash -= GameData.PAYMENT_SERVICE
         ServiceState.ORDER:
-            if ref_PcAction.delivery < 1:
-                return false
             ref_PcAction.delivery -= 1
             ref_PcAction.cash += GameData.INCOME_ORDER
         ServiceState.STICK:

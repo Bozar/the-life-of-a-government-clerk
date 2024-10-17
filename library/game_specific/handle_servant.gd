@@ -29,5 +29,5 @@ static func get_servant_cooldown(states: Array) -> int:
     for i in states:
         state = i
         if state.is_active:
-            cooldown += 1
+            cooldown += GameData.SERVANT_ADD_COOLDOWN
     return cooldown

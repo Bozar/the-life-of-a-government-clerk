@@ -105,8 +105,8 @@ static func reduce_progress(states: Array, ref_RandomNumber: RandomNumber) \
         state = i
         if not _is_valid_progress(state.progress):
             continue
-        state.progress -= ref_RandomNumber.get_int(GameData.PROGRESS_BOOK,
-                GameData.PROGRESS_CUP + 1)
+        state.progress -= ref_RandomNumber.get_int(GameData.MIN_REDUCE_PROGRESS,
+                GameData.MAX_REDUCE_PROGRESS + 1)
         break
 
 

@@ -30,7 +30,7 @@ func _test(input_tag: StringName) -> void:
                 return
             cart_state = Cart.get_state(cart, linked_state)
             cart_state.item_tag = SubTag.ATLAS
-            cart_state.load_factor = 20
+            cart_state.load_amount = 20
         InputTag.WIZARD_3:
             cart = Cart.get_first_item(pc, linked_state)
             if cart == null:

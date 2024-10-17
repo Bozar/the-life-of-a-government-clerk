@@ -132,8 +132,8 @@ static func clean_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
             # This should not happen.
             if cart_state.is_detached:
                 continue
-            elif cart_state.load_factor > GameData.MIN_LOAD_FACTOR:
-                cart_state.load_factor = GameData.MIN_LOAD_FACTOR
+            elif cart_state.load_amount > GameData.MIN_LOAD:
+                cart_state.load_amount = GameData.MIN_LOAD
                 is_cleaned = true
         # By game design, trailing carts can be detached, but not cleaned.
         else:
@@ -147,10 +147,10 @@ static func clean_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     return is_cleaned
 
 
-static func get_full_load_factor(pc: Sprite2D, state: LinkedCartState) -> int:
+static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
     var cart: Sprite2D = pc
     var cart_state: CartState
-    var load_factor: int = 0
+    var load_amount: int = 0
 
     for i in range(0, state.linked_carts.size()):
         cart = LinkedList.get_next_object(cart, state.linked_carts)
@@ -158,9 +158,9 @@ static func get_full_load_factor(pc: Sprite2D, state: LinkedCartState) -> int:
             break
 
         cart_state = get_state(cart, state)
-        load_factor += cart_state.load_factor
+        load_amount += cart_state.load_amount
 
-    return load_factor
+    return load_amount
 
 
 static func has_full_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
@@ -172,7 +172,7 @@ static func has_full_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
         if cart == pc:
             break
         cart_state = get_state(cart, state)
-        if cart_state.load_factor < GameData.MAX_LOAD_FACTOR:
+        if cart_state.load_amount < GameData.MAX_LOAD_PER_CART:
             continue
         else:
             return true
@@ -281,7 +281,7 @@ static func _get_cart_state_text(coord: Vector2i, text_template: String,
         return FULL
     return text_template % [
         ITEM_TO_STRING.get(cart_state.item_tag, "-"),
-        cart_state.load_factor,
+        cart_state.load_amount,
     ]
 
 

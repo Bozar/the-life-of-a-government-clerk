@@ -29,27 +29,27 @@ var item_tag: StringName:
         VisualEffect.switch_sprite(_sprite, ITEM_TO_VISUAL[_item_tag])
 
 
-var load_factor: int:
+var load_amount: int:
     get:
-        return _load_factor
+        return _load_amount
     set(value):
         # A DETACHED cart cannot be changed further.
         if _is_detached:
             return
-        _load_factor = min(max(value, GameData.MIN_LOAD_FACTOR),
-                GameData.MAX_LOAD_FACTOR)
+        _load_amount = min(max(value, GameData.MIN_LOAD),
+                GameData.MAX_LOAD_PER_CART)
         # Change cart sprite when the cart is fully loaded.
-        if _load_factor == GameData.MAX_LOAD_FACTOR:
+        if _load_amount == GameData.MAX_LOAD_PER_CART:
             item_tag = SubTag.FULL
         # Change cart sprite when a fully loaded cart is cleaned.
-        elif _load_factor == GameData.MIN_LOAD_FACTOR:
+        elif _load_amount == GameData.MIN_LOAD:
             if _item_tag == SubTag.FULL:
                 item_tag = SubTag.CART
 
 
 var is_full: bool:
     get:
-        return load_factor >= GameData.MAX_LOAD_FACTOR
+        return load_amount >= GameData.MAX_LOAD_PER_CART
 
 
 var is_detached: bool:
@@ -63,7 +63,7 @@ var is_detached: bool:
 
 
 var _item_tag: StringName = SubTag.CART
-var _load_factor: int = GameData.MIN_LOAD_FACTOR
+var _load_amount: int = GameData.MIN_LOAD
 var _is_detached: bool = false
 var _sprite: Sprite2D
 

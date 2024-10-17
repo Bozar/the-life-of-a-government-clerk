@@ -13,8 +13,12 @@ const INTERNAL_FLOOR_Z_LAYER: int = ZLayer.GROUND + 1
 # PC and Cart
 const PC_SIGHT_RANGE: int = 5
 
-const MIN_LOAD_FACTOR: int = 0
-const MAX_LOAD_FACTOR: int = 100
+const MIN_LOAD: int = 0
+const MAX_LOAD_PER_TURN: int = 10
+const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_BOOK
+
+const MIN_ADD_LOAD: int = 1
+const MAX_ADD_LOAD: int = 5
 
 const MIN_CART: int = 3
 const ADD_CART: int = 3
@@ -48,7 +52,7 @@ const BASE_SERVANT: int = 10
 const ADD_SERVANT: int = 2
 
 const BASE_DELAY: int = 1
-const LOAD_FACTOR_MULTIPLER: float = 0.01
+const LOAD_AMOUNT_MULTIPLER: float = 0.01
 
 const MIN_IDLE_DURATION: int = PAGE_BOOK
 const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 2

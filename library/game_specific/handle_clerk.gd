@@ -84,13 +84,16 @@ static func update_progress(state: ClerkState) -> void:
 
     for i in state.desk_states:
         desk_state = i
-        desk_state.remaining_page -= 1
-        state.progress += DESK_ITEM_PROGRESS[desk_state.sub_tag]
 
+        # Clean desk before updating progress. Otherwise Clerk sprite may not
+        # be switched when progress is full.
+        desk_state.remaining_page -= 1
         if desk_state.remaining_page < 1:
             remove_sprite = desk_state.sprite
             desk_state.sprite = null
             SpriteFactory.remove_sprite(remove_sprite)
+
+        state.progress += DESK_ITEM_PROGRESS[desk_state.sub_tag]
 
 
 static func reduce_progress(states: Array, ref_RandomNumber: RandomNumber) \

@@ -6,6 +6,8 @@ const EXTEND_TEMPLATE: String = "EXTEND: %s"
 const EXAMINE_TEMPLATE: String = "?> %s: %s%%"
 const FIRST_ITEM_TEMPLATE: String = "1> %s: %s%%"
 
+const PERCENT: float = 100.0
+
 const ITEM_TO_STRING: Dictionary = {
     SubTag.CART: "-",
     SubTag.ATLAS: "A",
@@ -179,6 +181,35 @@ static func has_full_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     return false
 
 
+static func add_draft(pc: Sprite2D, state: LinkedCartState,
+        ref_RandomNumber: RandomNumber) -> void:
+
+    var cart: Sprite2D = pc
+    var cart_state: CartState
+    var load_amount: int
+    var full_load_amount: int = 0
+
+    for i in range(0, state.linked_carts.size()):
+        cart = LinkedList.get_next_object(cart, state.linked_carts)
+        if cart == pc:
+            break
+        cart_state = get_state(cart, state)
+
+        if SpriteState.get_ground_by_coord(ConvertCoord.get_coord(cart),
+                GameData.INTERNAL_FLOOR_Z_LAYER) != null:
+            continue
+        elif full_load_amount > GameData.MAX_LOAD_PER_TURN:
+            break
+
+        load_amount = ref_RandomNumber.get_int(GameData.MIN_ADD_LOAD,
+                GameData.MAX_ADD_LOAD + 1)
+        load_amount = min(load_amount,
+                GameData.MAX_LOAD_PER_CART - cart_state.load_amount)
+
+        cart_state.load_amount += load_amount
+        full_load_amount += load_amount
+
+
 static func enter_examine_mode(pc: Sprite2D, state: LinkedCartState) -> bool:
     # There should be at least two sprites (PC and cart) to enable examine mode.
     if state.linked_carts.size() < 2:
@@ -281,7 +312,7 @@ static func _get_cart_state_text(coord: Vector2i, text_template: String,
         return FULL
     return text_template % [
         ITEM_TO_STRING.get(cart_state.item_tag, "-"),
-        cart_state.load_amount,
+        int(cart_state.load_amount * PERCENT / GameData.MAX_LOAD_PER_CART),
     ]
 
 

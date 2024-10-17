@@ -15,7 +15,7 @@ const PC_SIGHT_RANGE: int = 5
 
 const MIN_LOAD: int = 0
 const MAX_LOAD_PER_TURN: int = 10
-const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_BOOK
+const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 
 const MIN_ADD_LOAD: int = 1
 const MAX_ADD_LOAD: int = 5
@@ -33,6 +33,7 @@ const MAX_SERVICE: int = 2
 
 
 # Reward
+const INCOME_INITIAL: int = 1
 const INCOME_ORDER: int = 1
 const INCOME_DOCUMENT: int = 3
 

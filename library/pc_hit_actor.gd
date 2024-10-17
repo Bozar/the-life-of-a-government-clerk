@@ -28,7 +28,7 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
                 return
         SubTag.SERVANT:
             # Order matters. The Servant may be removed by _push_servant().
-            ref_ActorAction.push_servant(actor)
+            ref_ActorAction.push_servant(actor, ref_PcAction.has_stick)
             _push_servant(actor, ref_PcAction)
         SubTag.OFFICER:
             if ref_ActorAction.can_receive_document(actor) and \
@@ -109,8 +109,6 @@ static func _push_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
     var add_delay: int
 
     if ref_PcAction.count_cart() < GameData.CART_LENGTH_SHORT:
-        ref_PcAction.delay = 0
-    elif ref_PcAction.has_stick:
         ref_PcAction.delay = 0
     else:
         add_delay = floor(GameData.LOAD_AMOUNT_MULTIPLER *

@@ -66,11 +66,11 @@ func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     return false
 
 
-func push_servant(actor: Sprite2D) -> void:
+func push_servant(actor: Sprite2D, has_stick: bool) -> void:
     var state: ActorState = _get_actor_state(actor)
 
     HandleRawFile.reduce_cooldown(_raw_file_states, _ref_RandomNumber)
-    HandleClerk.reduce_progress(_clerk_states, _ref_RandomNumber)
+    HandleClerk.reduce_progress(_clerk_states, _ref_RandomNumber, has_stick)
     HandleServant.reset_idle_duration(state)
 
 

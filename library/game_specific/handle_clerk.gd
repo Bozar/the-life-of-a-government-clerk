@@ -96,8 +96,12 @@ static func update_progress(state: ClerkState) -> void:
         state.progress += DESK_ITEM_PROGRESS[desk_state.sub_tag]
 
 
-static func reduce_progress(states: Array, ref_RandomNumber: RandomNumber) \
-        -> void:
+static func reduce_progress(states: Array, ref_RandomNumber: RandomNumber,
+        has_stick: bool) -> void:
+
+    if has_stick:
+        return
+
     var state: ClerkState
     var dup_states: Array
 

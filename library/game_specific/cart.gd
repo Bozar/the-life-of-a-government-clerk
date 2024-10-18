@@ -154,7 +154,7 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
     var cart_state: CartState
     var load_amount: int = 0
 
-    for i in range(0, state.linked_carts.size()):
+    while true:
         cart = LinkedList.get_next_object(cart, state.linked_carts)
         if cart == pc:
             break
@@ -173,7 +173,7 @@ static func add_draft(pc: Sprite2D, state: LinkedCartState,
     var load_amount: int
     var full_load_amount: int = 0
 
-    for i in range(0, state.linked_carts.size()):
+    while true:
         cart = LinkedList.get_next_object(cart, state.linked_carts)
         if cart == pc:
             break

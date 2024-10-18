@@ -53,7 +53,7 @@ const BASE_SERVANT: int = 10
 const ADD_SERVANT: int = 2
 
 const BASE_DELAY: int = 1
-const LOAD_AMOUNT_MULTIPLER: float = 0.01
+const LOAD_AMOUNT_MULTIPLER: float = 1.0
 
 const MIN_IDLE_DURATION: int = PAGE_BOOK
 const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 2

@@ -111,8 +111,8 @@ static func _push_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
     if ref_PcAction.count_cart() < GameData.CART_LENGTH_SHORT:
         ref_PcAction.delay = 0
     else:
-        add_delay = floor(GameData.LOAD_AMOUNT_MULTIPLER *
-                ref_PcAction.get_full_load_amount())
+        add_delay = floor(ref_PcAction.get_full_load_amount() *
+                GameData.LOAD_AMOUNT_MULTIPLER  / GameData.MAX_LOAD_PER_CART)
         ref_PcAction.delay = GameData.BASE_DELAY + add_delay
 
     new_actor_coord = ConvertCoord.get_mirror_coord(pc_coord, actor_coord)

@@ -151,7 +151,6 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    Cart.add_draft(_pc, _linked_cart_state, _ref_RandomNumber)
     _ref_GameProgress.update_world(delivery)
 
     if Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
@@ -159,7 +158,18 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
         return
     elif delay > 0:
         delay -= 1
-        ScheduleHelper.start_next_turn()
+        Cart.add_draft(_pc, _linked_cart_state, _ref_RandomNumber)
+
+        # The game loops without player's input. If call start_next_turn()
+        # directly, there might be a stack overflow error when too many turns
+        # are delayed (more than 10?).
+        ScheduleHelper.call_deferred("start_next_turn")
+
+        # Another way is to wait until the next frame.
+        # https://godotforums.org/d/35537-looking-for-a-way-to-signal-a-funtion-to-be-called-on-the-next-frame/7
+        #
+        # await get_tree().create_timer(0).timeout
+
         return
     PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
 
@@ -222,7 +232,7 @@ func _on_GameProgress_game_over(player_win: bool) -> void:
 
 
 func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
-    var coord: Vector2i = ConvertCoord.get_coord(_pc) + direction
+    var coord: Vector2i = ConvertCoord.get_coord(pc) + direction
     var sprite: Sprite2D
     var sub_tag: StringName
 
@@ -242,4 +252,5 @@ func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
         if not sprite.is_in_group(SubTag.DOOR):
             return
     Cart.pull_cart(pc, coord, state)
+    Cart.add_draft(pc, state, _ref_RandomNumber)
     ScheduleHelper.start_next_turn()

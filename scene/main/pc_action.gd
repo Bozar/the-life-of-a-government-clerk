@@ -126,10 +126,6 @@ func get_state(cart: Sprite2D) -> CartState:
     return Cart.get_state(cart, _linked_cart_state)
 
 
-func has_full_cart() -> bool:
-    return Cart.has_full_cart(_pc, _linked_cart_state)
-
-
 func get_last_slot() -> Sprite2D:
     return Cart.get_last_slot(_pc, _linked_cart_state)
 

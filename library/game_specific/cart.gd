@@ -165,22 +165,6 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
     return load_amount
 
 
-static func has_full_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
-    var cart: Sprite2D = pc
-    var cart_state: CartState
-
-    for i in range(0, state.linked_carts.size()):
-        cart = LinkedList.get_next_object(cart, state.linked_carts)
-        if cart == pc:
-            break
-        cart_state = get_state(cart, state)
-        if cart_state.load_amount < GameData.MAX_LOAD_PER_CART:
-            continue
-        else:
-            return true
-    return false
-
-
 static func add_draft(pc: Sprite2D, state: LinkedCartState,
         ref_RandomNumber: RandomNumber) -> void:
 

@@ -10,7 +10,7 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
 
     match sub_tag:
         SubTag.SALARY:
-            player_win = _player_win(ref_PcAction)
+            player_win = ref_PcAction.delivery < 1
             if _get_cash(ref_PcAction) or player_win:
                 pass
             else:
@@ -149,10 +149,6 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
         ref_PcAction.account += GameData.INCOME_DOCUMENT
         ref_PcAction.delivery -= 1
     return true
-
-
-static func _player_win(ref_PcAction: PcAction) -> bool:
-    return (ref_PcAction.delivery < 1) and (not ref_PcAction.has_full_cart())
 
 
 static func _load_raw_file(actor: Sprite2D, ref_PcAction: PcAction,

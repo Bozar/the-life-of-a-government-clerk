@@ -170,8 +170,9 @@ static func add_draft(pc: Sprite2D, state: LinkedCartState,
 
     var cart: Sprite2D = pc
     var cart_state: CartState
-    var load_amount: int
-    var full_load_amount: int = 0
+    var load_index: int = ref_RandomNumber.get_int(0, GameData.ADD_LOADS.size())
+    var add_loads: Array = GameData.ADD_LOADS[load_index]
+    var add_counter: int = 0
 
     while true:
         cart = LinkedList.get_next_object(cart, state.linked_carts)
@@ -182,16 +183,13 @@ static func add_draft(pc: Sprite2D, state: LinkedCartState,
         if SpriteState.get_ground_by_coord(ConvertCoord.get_coord(cart),
                 GameData.INTERNAL_FLOOR_Z_LAYER) != null:
             continue
-        elif full_load_amount > GameData.MAX_LOAD_PER_TURN:
+        elif cart_state.is_full:
+            continue
+        elif add_counter > add_loads.size() - 1:
             break
 
-        load_amount = ref_RandomNumber.get_int(GameData.MIN_ADD_LOAD,
-                GameData.MAX_ADD_LOAD + 1)
-        load_amount = min(load_amount,
-                GameData.MAX_LOAD_PER_CART - cart_state.load_amount)
-
-        cart_state.load_amount += load_amount
-        full_load_amount += load_amount
+        cart_state.load_amount += add_loads[add_counter]
+        add_counter += 1
 
 
 static func enter_examine_mode(pc: Sprite2D, state: LinkedCartState) -> bool:

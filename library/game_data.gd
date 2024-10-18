@@ -17,8 +17,13 @@ const MIN_LOAD: int = 0
 const MAX_LOAD_PER_TURN: int = 10
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 
-const MIN_ADD_LOAD: int = 1
-const MAX_ADD_LOAD: int = 5
+const ADD_LOADS: Array = [
+    [4, 3, 2, 1, 1,],
+    [4, 2, 2, 2, 1,],
+    [3, 3, 2, 2, 1,],
+    [3, 3, 3, 1, 1,],
+    [3, 2, 2, 2, 2,],
+]
 
 const MIN_CART: int = 3
 const ADD_CART: int = 3

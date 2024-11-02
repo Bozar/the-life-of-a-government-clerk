@@ -151,9 +151,9 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    _ref_GameProgress.update_world(delivery)
+    _ref_GameProgress.update_world(delivery, pc_coord)
 
-    if Checkmate.is_game_over(ConvertCoord.get_coord(_pc)):
+    if Checkmate.is_game_over(pc_coord):
         _ref_GameProgress.game_over.emit(false)
         return
     elif delay > 0:

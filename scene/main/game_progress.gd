@@ -14,9 +14,9 @@ var _ref_RandomNumber: RandomNumber
 var _progress_state := ProgressState.new()
 
 
-func update_world(delivery: int) -> void:
+func update_world(delivery: int, pc_coord: Vector2i) -> void:
     _init_ground_coords(_progress_state)
-    _create_servant(_progress_state, delivery, MAX_RETRY)
+    _create_servant(_progress_state, delivery, pc_coord, MAX_RETRY)
 
 
 func _init_ground_coords(state: ProgressState) -> void:
@@ -44,19 +44,23 @@ func _init_ground_coords(state: ProgressState) -> void:
     ArrayHelper.shuffle(state.ground_coords, _ref_RandomNumber)
 
 
-func _create_servant(state: ProgressState, delivery: int, retry: int) -> void:
+func _create_servant(state: ProgressState, delivery: int, pc_coord: Vector2i,
+        retry: int) -> void:
     if retry < 0:
         return
     elif (retry == MAX_RETRY) and _has_max_servant(delivery):
         return
 
     var coord: Vector2i = state.ground_coords[state.ground_index]
-    var is_created: bool = true
+    var is_created: bool = false
 
     if SpriteState.has_actor_at_coord(coord):
-        is_created = false
+        pass
+    elif ConvertCoord.is_in_range(coord, pc_coord, GameData.MIN_DISTANCE_TO_PC):
+        pass
     else:
         SpriteFactory.create_actor(SubTag.SERVANT, coord, true)
+        is_created = true
 
     state.ground_index += 1
     if state.ground_index > state.ground_coords.size():
@@ -64,7 +68,7 @@ func _create_servant(state: ProgressState, delivery: int, retry: int) -> void:
         ArrayHelper.shuffle(state.ground_coords, _ref_RandomNumber)
 
     if not is_created:
-        _create_servant(state, delivery, retry - 1)
+        _create_servant(state, delivery, pc_coord, retry - 1)
 
 
 func _has_max_servant(delivery: int) -> bool:

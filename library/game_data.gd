@@ -34,7 +34,6 @@ const CART_LENGTH_LONG: int = 7
 
 # Progress
 const MAX_DELIVERY: int = 10
-const MAX_SERVICE: int = 2
 
 
 # Reward
@@ -43,8 +42,8 @@ const INCOME_ORDER: int = 1
 const INCOME_DOCUMENT: int = 3
 
 
-# Service, Clerk and Officer
-const PAYMENT_SERVICE: int = 1
+# Clerk and Officer
+const PAYMENT_GARAGE: int = 1
 const PAYMENT_CLEAN: int = 1
 
 const MAX_CLERK_PROGRESS: int = PROGRESS_BOOK * (PAGE_BOOK * 3)

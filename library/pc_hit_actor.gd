@@ -4,7 +4,6 @@ class_name PcHitActor
 static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         ref_ActorAction: ActorAction, ref_GameProgress: GameProgress) -> void:
     var sub_tag: StringName = SpriteState.get_sub_tag(actor)
-    var service_type: int
     var player_win: bool = false
     var first_item_tag: StringName
 
@@ -15,20 +14,15 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
                 pass
             else:
                 return
-        SubTag.SERVICE:
-            service_type = ref_ActorAction.get_service_type(actor)
-            # Change PC state.
-            if _use_service(ref_PcAction, service_type):
-                # Change actor state.
-                ref_ActorAction.use_service(actor)
-            else:
+        SubTag.GARAGE:
+            if not _use_garage(ref_PcAction):
                 return
         SubTag.STATION:
             if not _clean_cart(ref_PcAction):
                 return
         SubTag.SERVANT:
             # Order matters. The Servant may be removed by _push_servant().
-            ref_ActorAction.push_servant(actor, ref_PcAction.has_stick)
+            ref_ActorAction.push_servant(actor)
             _push_servant(actor, ref_PcAction)
         SubTag.OFFICER:
             if ref_ActorAction.can_receive_document(actor) and \
@@ -68,28 +62,14 @@ static func _get_cash(ref_PcAction: PcAction) -> bool:
     return false
 
 
-static func _use_service(ref_PcAction: PcAction, service_type: int) -> bool:
-    if service_type == ServiceState.NO_SERVICE:
+static func _use_garage(ref_PcAction: PcAction) -> bool:
+    if ref_PcAction.delivery < 1:
         return false
-    elif ref_PcAction.delivery < 1:
+    elif ref_PcAction.cash < 1:
         return false
 
-    match service_type:
-        ServiceState.CART:
-            if ref_PcAction.cash < 1:
-                return false
-            ref_PcAction.add_cart(GameData.ADD_CART)
-            ref_PcAction.cash -= GameData.PAYMENT_SERVICE
-        ServiceState.ORDER:
-            ref_PcAction.delivery -= 1
-            ref_PcAction.cash += GameData.INCOME_ORDER
-        ServiceState.STICK:
-            if ref_PcAction.cash < 1:
-                return false
-            elif ref_PcAction.has_stick:
-                return false
-            ref_PcAction.has_stick = true
-            ref_PcAction.cash -= GameData.PAYMENT_SERVICE
+    ref_PcAction.add_cart(GameData.ADD_CART)
+    ref_PcAction.cash -= GameData.PAYMENT_GARAGE
     return true
 
 
@@ -141,8 +121,6 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
         return false
 
     cart_state.item_tag = SubTag.CART
-    # PC loses a stick (if he has one) after unloading a document.
-    ref_PcAction.has_stick = false
     # PC can still unload document after reaching the final goal (deliver 10
     # documents), but has no profit in return.
     if ref_PcAction.delivery > 0:

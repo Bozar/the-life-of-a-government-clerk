@@ -2,9 +2,6 @@ class_name WizardMode
 extends Node2D
 
 
-var _counter: int
-
-
 func handle_input(input_tag: StringName) -> void:
     _test(input_tag)
 
@@ -18,7 +15,6 @@ func _test(input_tag: StringName) -> void:
     var cart_state: CartState
     var sprite: Sprite2D
     var clerk_state: ClerkState
-    var service_state: ServiceState
 
     match input_tag:
         InputTag.WIZARD_1:
@@ -41,16 +37,3 @@ func _test(input_tag: StringName) -> void:
             sprite = SpriteState.get_sprites_by_sub_tag(SubTag.CLERK)[0]
             clerk_state = actor_action._get_actor_state(sprite)
             clerk_state.progress = 999
-        InputTag.WIZARD_5:
-            sprite = SpriteState.get_sprites_by_sub_tag(SubTag.SERVICE)[0]
-            service_state = actor_action._get_actor_state(sprite)
-            match _counter:
-                0:
-                    service_state.service_type = ServiceState.CART
-                    _counter += 1
-                1:
-                    service_state.service_type = ServiceState.ORDER
-                    _counter += 1
-                _:
-                    service_state.service_type = ServiceState.STICK
-                    _counter = 0

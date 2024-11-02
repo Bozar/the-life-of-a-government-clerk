@@ -25,7 +25,7 @@ const BOOK_CHAR: StringName = "B"
 const CUP_CHAR: StringName = "C"
 const ENCYCLPEDIA_CHAR: StringName = "E"
 
-const SERVICE_CHAR: StringName = "?"
+const GARAGE_CHAR: StringName = "?"
 const SALARY_CHAR: StringName = "$"
 const STATION_CHAR: StringName = "Z"
 
@@ -40,7 +40,7 @@ const CHAR_TO_TAG: Dictionary = {
     BOOK_CHAR: SubTag.BOOK,
     CUP_CHAR: SubTag.CUP,
     ENCYCLPEDIA_CHAR: SubTag.ENCYCLOPEDIA,
-    SERVICE_CHAR: SubTag.SERVICE,
+    GARAGE_CHAR: SubTag.GARAGE,
     SALARY_CHAR: SubTag.SALARY,
     STATION_CHAR: SubTag.STATION,
 }
@@ -164,7 +164,7 @@ func _create_from_character(character: String, coord: Vector2i,
             save_tagged_sprite.sprite.z_index = GameData.INTERNAL_FLOOR_Z_LAYER
             tagged_sprites.push_back(save_tagged_sprite)
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
-                ENCYCLPEDIA_CHAR, SERVICE_CHAR, SALARY_CHAR, STATION_CHAR:
+                ENCYCLPEDIA_CHAR, GARAGE_CHAR, SALARY_CHAR, STATION_CHAR:
             tagged_sprites.push_back(SpriteFactory.create_actor(
                     CHAR_TO_TAG[character], coord, false))
         _:

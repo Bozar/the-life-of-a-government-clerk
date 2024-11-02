@@ -22,8 +22,8 @@ const VALID_ACTOR_TAGS: Array = [
 
     SubTag.SALARY,
     SubTag.SERVANT,
-    SubTag.SERVICE,
     SubTag.STATION,
+    SubTag.GARAGE,
 ]
 
 
@@ -61,13 +61,6 @@ var delivery: int:
         return _pc_state.delivery
     set(value):
         _pc_state.delivery = value
-
-
-var has_stick: bool:
-    get:
-        return _pc_state.has_stick
-    set(value):
-        _pc_state.has_stick = value
 
 
 var delay: int:
@@ -208,8 +201,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             match input_tag:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
-                    Cart.exit_examine_mode(_pc, _pc_state.has_stick,
-                            _linked_cart_state)
+                    Cart.exit_examine_mode(_pc, _linked_cart_state)
                     _ref_ActorAction.switch_examine_mode(false)
                 InputTag.MOVE_UP:
                     Cart.examine_first_cart(_pc, _linked_cart_state)

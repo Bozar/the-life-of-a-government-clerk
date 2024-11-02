@@ -32,7 +32,7 @@ const SPRITE_SCENES: Dictionary = {
     SubTag.ENCYCLOPEDIA: preload("res://sprite/encyclopedia.tscn"),
 
     SubTag.SALARY: preload("res://sprite/salary.tscn"),
-    SubTag.SERVICE: preload("res://sprite/service.tscn"),
+    SubTag.GARAGE: preload("res://sprite/garage.tscn"),
     SubTag.SERVANT: preload("res://sprite/servant.tscn"),
     SubTag.STATION: preload("res://sprite/station.tscn"),
 

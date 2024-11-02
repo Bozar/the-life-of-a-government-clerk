@@ -9,22 +9,11 @@ var _ref_RandomNumber: RandomNumber
 
 var _pc: Sprite2D
 var _actor_states: Dictionary = {}
-var _service_states: Array
 var _raw_file_states: Array
 var _officer_states: Array
 var _clerk_states: Array
 
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
-
-
-func get_service_type(sprite: Sprite2D) -> int:
-    var state: ServiceState = _get_actor_state(sprite)
-    return state.service_type
-
-
-func use_service(sprite: Sprite2D) -> void:
-    var state: ServiceState = _get_actor_state(sprite)
-    HandleService.use_service(state)
 
 
 func can_receive_document(sprite: Sprite2D) -> bool:
@@ -33,7 +22,6 @@ func can_receive_document(sprite: Sprite2D) -> bool:
 
 
 func receive_document() -> void:
-    HandleService.set_service_type(_service_states, true, _ref_RandomNumber)
     HandleRawFile.reset_cooldown(_raw_file_states)
     HandleOfficer.set_active(_officer_states, _ref_RandomNumber)
 
@@ -60,17 +48,15 @@ func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     var state: ClerkState = _get_actor_state(sprite)
 
     if HandleClerk.receive_raw_file(state, item_tag):
-        HandleService.set_service_type(_service_states, false,
-                _ref_RandomNumber)
         return true
     return false
 
 
-func push_servant(actor: Sprite2D, has_stick: bool) -> void:
+func push_servant(actor: Sprite2D) -> void:
     var state: ActorState = _get_actor_state(actor)
 
     HandleRawFile.reduce_cooldown(_raw_file_states, _ref_RandomNumber)
-    HandleClerk.reduce_progress(_clerk_states, _ref_RandomNumber, has_stick)
+    HandleClerk.reduce_progress(_clerk_states, _ref_RandomNumber)
     HandleServant.reset_idle_duration(state)
 
 
@@ -110,10 +96,6 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
         else:
             id = i.sprite.get_instance_id()
             match i.sub_tag:
-                SubTag.SERVICE:
-                    new_state = ServiceState.new(i.sprite, i.sub_tag)
-                    _actor_states[id] = new_state
-                    _service_states.push_back(new_state)
                 SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
                     new_state = RawFileState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state

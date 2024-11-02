@@ -36,7 +36,7 @@ const DETACHED: StringName = &"detached"
 
 const SALARY: StringName = &"salary"
 const SERVANT: StringName = &"servant"
-const SERVICE: StringName = &"service"
+const GARAGE: StringName = &"garage"
 const STATION: StringName = &"station"
 
 

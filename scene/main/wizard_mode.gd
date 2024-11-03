@@ -8,32 +8,12 @@ func handle_input(input_tag: StringName) -> void:
 
 func _test(input_tag: StringName) -> void:
     var ref_pc_action: PcAction = get_node("..")
-    var pc: Sprite2D = SpriteState.get_sprites_by_sub_tag(SubTag.PC)[0]
-    var actor_action: ActorAction = get_node("../../ActorAction")
-    var cart: Sprite2D
     var linked_state: LinkedCartState = ref_pc_action._linked_cart_state
-    var cart_state: CartState
-    var sprite: Sprite2D
-    var clerk_state: ClerkState
 
     match input_tag:
         InputTag.WIZARD_1:
-            # ref_pc_action.account += 1
             Cart.add_cart(GameData.ADD_CART, linked_state)
         InputTag.WIZARD_2:
-            cart = Cart.get_last_slot(pc, linked_state)
-            if cart == null:
-                return
-            cart_state = Cart.get_state(cart, linked_state)
-            cart_state.item_tag = SubTag.ATLAS
-            cart_state.load_amount = 20
+            ref_pc_action.cash += 1
         InputTag.WIZARD_3:
-            cart = Cart.get_first_item(pc, linked_state)
-            if cart == null:
-                return
-            cart_state = Cart.get_state(cart, linked_state)
-            cart_state.item_tag = SubTag.CART
-        InputTag.WIZARD_4:
-            sprite = SpriteState.get_sprites_by_sub_tag(SubTag.CLERK)[0]
-            clerk_state = actor_action._get_actor_state(sprite)
-            clerk_state.progress = 999
+            ref_pc_action.clean_cart()

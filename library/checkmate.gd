@@ -9,8 +9,10 @@ const PASSABLE_TAGS: Array = [
 ]
 
 
-static func is_game_over(check_coord: Vector2i) -> bool:
-    if _is_trapped(check_coord):
+static func is_game_over(ref_PcAction: PcAction) -> bool:
+    if _is_trapped(ref_PcAction.pc_coord):
+        return true
+    elif _is_fully_loaded(ref_PcAction):
         return true
     return false
 
@@ -42,3 +44,12 @@ static func _is_trapped(check_coord: Vector2i) -> bool:
 
 static func _sort_by_index(lower: Sprite2D, higher: Sprite2D) -> bool:
     return lower.z_index <= higher.z_index
+
+
+static func _is_fully_loaded(ref_PcAction: PcAction) -> bool:
+    var current_cart: int = ref_PcAction.count_cart()
+    var current_load: int = ref_PcAction.get_full_load_amount()
+
+    if current_cart < 1:
+        return false
+    return current_load >= current_cart * GameData.MAX_LOAD_PER_CART

@@ -146,7 +146,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
 
     _ref_GameProgress.update_world(delivery, pc_coord)
 
-    if Checkmate.is_game_over(pc_coord):
+    if Checkmate.is_game_over(self):
         _ref_GameProgress.game_over.emit(false)
         return
     elif delay > 0:

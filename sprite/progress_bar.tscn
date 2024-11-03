@@ -1,0 +1,100 @@
+[gd_scene load_steps=14 format=3 uid="uid://bcn3kosad8ww0"]
+
+[ext_resource type="Texture2D" uid="uid://cynswmw160utj" path="res://resource/curses_vector_24x36.png" id="1_o08y0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vsxwf"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(336, 540, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h7t72"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(0, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujgfe"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(24, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fn7ww"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(48, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0o2o"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(72, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ob6jk"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(96, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1bxx2"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(120, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5w1y"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(144, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tekp2"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(168, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hg1as"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(192, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7k2x5"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(216, 108, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jbhw"]
+atlas = ExtResource("1_o08y0")
+region = Rect2(120, 72, 24, 36)
+
+[node name="ProgressBar" type="Sprite2D"]
+
+[node name="default" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_vsxwf")
+
+[node name="zero" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_h7t72")
+
+[node name="one" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_ujgfe")
+
+[node name="two" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_fn7ww")
+
+[node name="three" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_c0o2o")
+
+[node name="four" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_ob6jk")
+
+[node name="five" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_1bxx2")
+
+[node name="six" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_h5w1y")
+
+[node name="seven" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_tekp2")
+
+[node name="eight" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_hg1as")
+
+[node name="nine" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_7k2x5")
+
+[node name="percent" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_8jbhw")

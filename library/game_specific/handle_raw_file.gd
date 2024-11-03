@@ -48,19 +48,21 @@ static func reduce_cooldown(states: Array, ref_RandomNumber: RandomNumber) \
 
 static func switch_examine_mode(is_examine: bool, states: Array) -> void:
     var state: RawFileState
+    var progress_bar: Sprite2D
     var remaining_cooldown: int
-    var visual_tag: StringName
+    var visual_tag: StringName = VisualTag.DEFAULT
 
     for i in states:
         state = i
+        progress_bar = SpriteState.get_trap_by_coord(state.progress_bar_coord)
+        if progress_bar == null:
+            continue
+
         if is_examine:
             remaining_cooldown = state.max_cooldown - state.cooldown
             visual_tag = VisualTag.get_percent_tag(remaining_cooldown,
                     state.max_cooldown)
-            VisualEffect.switch_sprite(state.sprite, visual_tag)
-        else:
-            # Switch sprite implicitly.
-            state.cooldown = state.cooldown
+        VisualEffect.switch_sprite(progress_bar, visual_tag)
 
 
 static func _sort_cooldown(left: RawFileState, right: RawFileState) -> bool:

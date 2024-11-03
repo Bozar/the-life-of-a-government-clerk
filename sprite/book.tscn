@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c7vcm1yl047k6"]
+[gd_scene load_steps=14 format=3 uid="uid://c7vcm1yl047k6"]
 
 [ext_resource type="Texture2D" uid="uid://cynswmw160utj" path="res://resource/curses_vector_24x36.png" id="1_p215e"]
 
@@ -6,51 +6,47 @@
 atlas = ExtResource("1_p215e")
 region = Rect2(48, 144, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_snf3h"]
-atlas = ExtResource("1_p215e")
-region = Rect2(336, 540, 24, 36)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sgq4u"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cqj8f"]
 atlas = ExtResource("1_p215e")
 region = Rect2(0, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fl8bw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_iaehw"]
 atlas = ExtResource("1_p215e")
 region = Rect2(24, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_pkw4f"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3mho"]
 atlas = ExtResource("1_p215e")
 region = Rect2(48, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8jvau"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_83fc6"]
 atlas = ExtResource("1_p215e")
 region = Rect2(72, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fpjiu"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7shf1"]
 atlas = ExtResource("1_p215e")
 region = Rect2(96, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5h2oq"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwa25"]
 atlas = ExtResource("1_p215e")
 region = Rect2(120, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sl8ck"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_i2n7j"]
 atlas = ExtResource("1_p215e")
 region = Rect2(144, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7evj2"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3snh"]
 atlas = ExtResource("1_p215e")
 region = Rect2(168, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dybaw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_say60"]
 atlas = ExtResource("1_p215e")
 region = Rect2(192, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2whci"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5rgsp"]
 atlas = ExtResource("1_p215e")
 region = Rect2(216, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dqc10"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5l2w5"]
 atlas = ExtResource("1_p215e")
 region = Rect2(120, 72, 24, 36)
 
@@ -59,50 +55,46 @@ region = Rect2(120, 72, 24, 36)
 [node name="default" type="Sprite2D" parent="."]
 texture = SubResource("AtlasTexture_qcks3")
 
-[node name="passive" type="Sprite2D" parent="."]
-visible = false
-texture = SubResource("AtlasTexture_snf3h")
-
 [node name="zero" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_sgq4u")
+texture = SubResource("AtlasTexture_cqj8f")
 
 [node name="one" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_fl8bw")
+texture = SubResource("AtlasTexture_iaehw")
 
 [node name="two" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_pkw4f")
+texture = SubResource("AtlasTexture_x3mho")
 
 [node name="three" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_8jvau")
+texture = SubResource("AtlasTexture_83fc6")
 
 [node name="four" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_fpjiu")
+texture = SubResource("AtlasTexture_7shf1")
 
 [node name="five" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_5h2oq")
+texture = SubResource("AtlasTexture_xwa25")
 
 [node name="six" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_sl8ck")
+texture = SubResource("AtlasTexture_i2n7j")
 
 [node name="seven" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_7evj2")
+texture = SubResource("AtlasTexture_y3snh")
 
 [node name="eight" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_dybaw")
+texture = SubResource("AtlasTexture_say60")
 
 [node name="nine" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_2whci")
+texture = SubResource("AtlasTexture_5rgsp")
 
 [node name="percent" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_dqc10")
+texture = SubResource("AtlasTexture_5l2w5")

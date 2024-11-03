@@ -2,16 +2,19 @@ class_name RawFileState
 extends ActorState
 
 
+const INVALID_COORD: Vector2i = Vector2i(-1, -1)
+
+
 var cooldown: int = 0:
     set(value):
         cooldown = max(0, value)
         if cooldown > 0:
-            VisualEffect.switch_sprite(sprite, VisualTag.PASSIVE)
+            _create_progress_bar()
         else:
             if sub_tag == SubTag.ENCYCLOPEDIA:
-                _switch_encyclopedia_sprite()
+                _set_encyclopedia_cooldown()
             else:
-                VisualEffect.switch_sprite(sprite, VisualTag.DEFAULT)
+                _remove_progress_bar()
 
 
 var max_cooldown: int = 1:
@@ -24,10 +27,52 @@ var send_counter: int = 0:
         send_counter = max(0, value)
 
 
-func _switch_encyclopedia_sprite() -> void:
-    var visual_tag: StringName = VisualTag.DEFAULT
+var progress_bar_coord: Vector2i = _progress_bar_coord:
+    get:
+        _set_progress_bar_coord()
+        return _progress_bar_coord
+
+
+var _progress_bar_coord: Vector2i = INVALID_COORD
+
+
+func _set_encyclopedia_cooldown() -> void:
     var count_cart: int = SpriteState.get_sprites_by_sub_tag(SubTag.CART).size()
 
+    # Lock cooldown to 1 turn.
     if count_cart < GameData.CART_LENGTH_LONG:
-        visual_tag = VisualTag.PASSIVE
-    VisualEffect.switch_sprite(sprite, visual_tag)
+        max_cooldown = GameData.LOCK_COOLDOWN
+        cooldown = max_cooldown
+        _create_progress_bar()
+    else:
+        _remove_progress_bar()
+
+
+func _set_progress_bar_coord() -> void:
+    if _progress_bar_coord != INVALID_COORD:
+        return
+
+    var sprite_coord: Vector2i = ConvertCoord.get_coord(sprite)
+
+    # It is guaranteed by game design that there is exactly one building to the
+    # left or right of a raw file sprite.
+    for i in [sprite_coord + Vector2i.LEFT, sprite_coord + Vector2i.RIGHT]:
+        if SpriteState.has_building_at_coord(i):
+            _progress_bar_coord = i
+            return
+    push_error("%s at [%s, %s] has no progress bar." % [sprite.name,
+            sprite_coord.x, sprite_coord.y])
+
+
+func _create_progress_bar() -> void:
+    if SpriteState.has_trap_at_coord(progress_bar_coord):
+        return
+    SpriteFactory.create_trap(SubTag.PROGRESS_BAR, progress_bar_coord, true)
+
+
+func _remove_progress_bar() -> void:
+    var trap: Sprite2D = SpriteState.get_trap_by_coord(progress_bar_coord)
+
+    if trap == null:
+        return
+    SpriteFactory.remove_sprite(trap)

@@ -18,6 +18,8 @@ const BOOK_ON_DESK: StringName = &"book_on_desk"
 const CUP_ON_DESK: StringName = &"cup_on_desk"
 const ENCYCLOPEDIA_ON_DESK: StringName = &"encyclopedia_on_desk"
 
+const PROGRESS_BAR: StringName = &"progress_bar"
+
 
 # Actor
 const PC: StringName = &"pc"

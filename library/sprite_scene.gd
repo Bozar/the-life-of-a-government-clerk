@@ -13,6 +13,8 @@ const SPRITE_SCENES: Dictionary = {
     SubTag.CUP_ON_DESK: preload("res://sprite/cup.tscn"),
     SubTag.ENCYCLOPEDIA_ON_DESK: preload("res://sprite/encyclopedia.tscn"),
 
+    SubTag.PROGRESS_BAR: preload("res://sprite/progress_bar.tscn"),
+
 
     # Building
     SubTag.WALL: preload("res://sprite/wall.tscn"),

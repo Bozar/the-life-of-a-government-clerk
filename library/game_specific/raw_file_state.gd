@@ -6,9 +6,12 @@ const INVALID_COORD: Vector2i = Vector2i(-1, -1)
 
 
 var cooldown: int = 0:
+    get:
+        return _cooldown
     set(value):
-        cooldown = max(0, value)
-        if cooldown > 0:
+        _cooldown = min(max(0, value), max_cooldown)
+
+        if _cooldown > 0:
             _create_progress_bar()
         else:
             if sub_tag == SubTag.ENCYCLOPEDIA:
@@ -33,16 +36,14 @@ var progress_bar_coord: Vector2i = _progress_bar_coord:
         return _progress_bar_coord
 
 
+var _cooldown: int = 0
 var _progress_bar_coord: Vector2i = INVALID_COORD
 
 
 func _set_encyclopedia_cooldown() -> void:
     var count_cart: int = SpriteState.get_sprites_by_sub_tag(SubTag.CART).size()
 
-    # Lock cooldown to 1 turn.
     if count_cart < GameData.CART_LENGTH_LONG:
-        max_cooldown = GameData.LOCK_COOLDOWN
-        cooldown = max_cooldown
         _create_progress_bar()
     else:
         _remove_progress_bar()

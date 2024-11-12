@@ -21,9 +21,12 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
             if not _clean_cart(ref_PcAction):
                 return
         SubTag.SERVANT:
-            # Order matters. The Servant may be removed by _push_servant().
-            ref_ActorAction.push_servant(actor)
-            _push_servant(actor, ref_PcAction)
+            if _load_servant(actor, ref_PcAction):
+                pass
+            else:
+                # Order matters. The Servant may be removed by _push_servant().
+                ref_ActorAction.push_servant(actor)
+                _push_servant(actor, ref_PcAction)
         SubTag.OFFICER:
             if ref_ActorAction.can_receive_document(actor) and \
                     _unload_document(ref_PcAction):
@@ -187,3 +190,21 @@ static func _get_first_item_tag(ref_PcAction: PcAction) -> StringName:
         return SubTag.CART
     state = ref_PcAction.get_state(sprite)
     return state.item_tag
+
+
+static func _load_servant(actor: Sprite2D, ref_PcAction: PcAction) -> bool:
+    if ref_PcAction.count_cart() < GameData.CART_LENGTH_SHORT:
+        return false
+
+    var sprite: Sprite2D = ref_PcAction.get_last_slot()
+    var state: CartState
+
+    if sprite == null:
+        return false
+
+    state = ref_PcAction.get_state(sprite)
+    state.item_tag = SubTag.SERVANT
+
+    SpriteFactory.remove_sprite(actor)
+    ref_PcAction.pull_cart(ConvertCoord.get_coord(actor))
+    return true

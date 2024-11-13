@@ -38,6 +38,10 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
             if _load_raw_file(actor, ref_PcAction, ref_ActorAction):
                 ref_ActorAction.send_raw_file(actor)
+            elif _can_unload_servant(actor, ref_PcAction) and \
+                    ref_ActorAction.can_receive_servant(actor):
+                _unload_servant(ref_PcAction)
+                ref_ActorAction.receive_servant(actor)
             else:
                 return
         SubTag.CLERK:
@@ -139,10 +143,11 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
 
 static func _load_raw_file(actor: Sprite2D, ref_PcAction: PcAction,
         ref_ActorAction: ActorAction) -> bool:
+
     if not ref_ActorAction.raw_file_is_available(actor):
         return false
-    elif actor.is_in_group(SubTag.ENCYCLOPEDIA) and \
-            (ref_PcAction.count_cart() < GameData.CART_LENGTH_LONG):
+    elif actor.is_in_group(SubTag.ENCYCLOPEDIA) and not _is_long_cart(
+            ref_PcAction):
         return false
 
     var cart: Sprite2D = ref_PcAction.get_last_slot()
@@ -217,3 +222,32 @@ static func _load_servant(actor: Sprite2D, ref_PcAction: PcAction) -> bool:
 
 static func _remove_all_servant(ref_PcAction: PcAction) -> bool:
     return ref_PcAction.remove_all_item(SubTag.SERVANT)
+
+
+static func _can_unload_servant(actor: Sprite2D, ref_PcAction: PcAction) \
+        -> bool:
+
+    var cart_sprite: Sprite2D = ref_PcAction.get_first_item()
+    var cart_state: CartState
+
+    if cart_sprite == null:
+        return false
+
+    cart_state = ref_PcAction.get_state(cart_sprite)
+    if cart_state.item_tag != SubTag.SERVANT:
+        return false
+
+    if actor.is_in_group(SubTag.ENCYCLOPEDIA):
+        return _is_long_cart(ref_PcAction)
+    return true
+
+
+static func _unload_servant(ref_PcAction: PcAction) -> void:
+        var cart_sprite: Sprite2D = ref_PcAction.get_first_item()
+        var cart_state: CartState = ref_PcAction.get_state(cart_sprite)
+
+        cart_state.item_tag = SubTag.CART
+
+
+static func _is_long_cart(ref_PcAction: PcAction) -> bool:
+    return ref_PcAction.count_cart() >= GameData.CART_LENGTH_LONG

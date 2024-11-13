@@ -52,6 +52,16 @@ func receive_raw_file(sprite: Sprite2D, item_tag: StringName) -> bool:
     return false
 
 
+func can_receive_servant(sprite: Sprite2D) -> bool:
+    var state: RawFileState = _get_actor_state(sprite)
+    return HandleRawFile.can_receive_servant(state)
+
+
+func receive_servant(sprite: Sprite2D) -> void:
+    var state: RawFileState = _get_actor_state(sprite)
+    HandleRawFile.receive_servant(state)
+
+
 func push_servant(actor: Sprite2D) -> void:
     var state: ActorState = _get_actor_state(actor)
 

@@ -46,6 +46,14 @@ static func reduce_cooldown(states: Array, ref_RandomNumber: RandomNumber) \
             break
 
 
+static func can_receive_servant(state: RawFileState) -> bool:
+    return state.cooldown > 0
+
+
+static func receive_servant(state: RawFileState) -> void:
+    state.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
+
+
 static func switch_examine_mode(is_examine: bool, states: Array) -> void:
     var state: RawFileState
     var progress_bar: Sprite2D

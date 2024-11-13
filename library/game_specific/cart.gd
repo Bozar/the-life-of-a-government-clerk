@@ -166,6 +166,25 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
     return load_amount
 
 
+static func count_item(item_tag: StringName, pc: Sprite2D,
+        state: LinkedCartState) -> int:
+
+    var cart: Sprite2D = pc
+    var cart_state: CartState
+    var count: int = 0
+
+    while true:
+        cart = LinkedList.get_next_object(cart, state.linked_carts)
+        if cart == pc:
+            break
+
+        cart_state = get_state(cart, state)
+        if cart_state.item_tag == item_tag:
+            count += 1
+
+    return count
+
+
 static func add_draft(pc: Sprite2D, state: LinkedCartState,
         ref_RandomNumber: RandomNumber) -> void:
 

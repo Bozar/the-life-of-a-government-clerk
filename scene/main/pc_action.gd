@@ -127,6 +127,10 @@ func get_full_load_amount() -> int:
     return Cart.get_full_load_amount(_pc, _linked_cart_state)
 
 
+func count_item(item_tag: StringName) -> int:
+    return Cart.count_item(item_tag, _pc, _linked_cart_state)
+
+
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     if _pc != null:
         return
@@ -144,7 +148,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    _ref_GameProgress.update_world(delivery, pc_coord)
+    _ref_GameProgress.update_world(self)
 
     if Checkmate.is_game_over(self):
         _ref_GameProgress.game_over.emit(false)

@@ -4,7 +4,7 @@ class_name PcHitActor
 static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
         ref_ActorAction: ActorAction, ref_GameProgress: GameProgress) -> void:
     var sub_tag: StringName = SpriteState.get_sub_tag(actor)
-    var player_win: bool = false
+    var player_win: bool
     var first_item_tag: StringName
 
     match sub_tag:
@@ -28,7 +28,9 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
                 ref_ActorAction.push_servant(actor)
                 _push_servant(actor, ref_PcAction)
         SubTag.OFFICER:
-            if ref_ActorAction.can_receive_document(actor) and \
+            if _remove_all_servant(ref_PcAction):
+                pass
+            elif ref_ActorAction.can_receive_document(actor) and \
                     _unload_document(ref_PcAction):
                 ref_ActorAction.receive_document()
             else:
@@ -39,15 +41,18 @@ static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
             else:
                 return
         SubTag.CLERK:
-            first_item_tag = _get_first_item_tag(ref_PcAction)
-            if _can_load_document(ref_PcAction) and \
-                    ref_ActorAction.send_document(actor):
-                _load_document(ref_PcAction)
-            elif _can_unload_raw_file(ref_PcAction) and \
-                    ref_ActorAction.receive_raw_file(actor, first_item_tag):
-                _unload_raw_file(ref_PcAction)
+            if _remove_all_servant(ref_PcAction):
+                pass
             else:
-                return
+                first_item_tag = _get_first_item_tag(ref_PcAction)
+                if _can_load_document(ref_PcAction) and \
+                        ref_ActorAction.send_document(actor):
+                    _load_document(ref_PcAction)
+                elif _can_unload_raw_file(ref_PcAction) and \
+                        ref_ActorAction.receive_raw_file(actor, first_item_tag):
+                    _unload_raw_file(ref_PcAction)
+                else:
+                    return
         _:
             return
 
@@ -208,3 +213,7 @@ static func _load_servant(actor: Sprite2D, ref_PcAction: PcAction) -> bool:
     SpriteFactory.remove_sprite(actor)
     ref_PcAction.pull_cart(ConvertCoord.get_coord(actor))
     return true
+
+
+static func _remove_all_servant(ref_PcAction: PcAction) -> bool:
+    return ref_PcAction.remove_all_item(SubTag.SERVANT)

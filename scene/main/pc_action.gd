@@ -131,6 +131,10 @@ func count_item(item_tag: StringName) -> int:
     return Cart.count_item(item_tag, _pc, _linked_cart_state)
 
 
+func remove_all_item(item_tag: StringName) -> bool:
+    return Cart.remove_all_item(item_tag, _pc, _linked_cart_state)
+
+
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
     if _pc != null:
         return

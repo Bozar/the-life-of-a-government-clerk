@@ -185,6 +185,26 @@ static func count_item(item_tag: StringName, pc: Sprite2D,
     return count
 
 
+static func remove_all_item(item_tag: StringName, pc: Sprite2D,
+        state: LinkedCartState) -> bool:
+
+    var cart: Sprite2D = pc
+    var cart_state: CartState
+    var is_removed: bool = false
+
+    while true:
+        cart = LinkedList.get_next_object(cart, state.linked_carts)
+        if cart == pc:
+            break
+
+        cart_state = get_state(cart, state)
+        if cart_state.item_tag == item_tag:
+            cart_state.item_tag = SubTag.CART
+            is_removed = true
+
+    return is_removed
+
+
 static func add_draft(pc: Sprite2D, state: LinkedCartState,
         ref_RandomNumber: RandomNumber) -> void:
 
@@ -208,7 +228,10 @@ static func add_draft(pc: Sprite2D, state: LinkedCartState,
         elif add_counter > add_loads.size() - 1:
             break
 
-        cart_state.load_amount += add_loads[add_counter]
+        if cart_state.item_tag == SubTag.SERVANT:
+            cart_state.load_amount += GameData.MIN_LOAD_PER_TURN
+        else:
+            cart_state.load_amount += add_loads[add_counter]
         add_counter += 1
 
 

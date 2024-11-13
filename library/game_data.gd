@@ -14,6 +14,7 @@ const INTERNAL_FLOOR_Z_LAYER: int = ZLayer.GROUND + 1
 const PC_SIGHT_RANGE: int = 5
 
 const MIN_LOAD: int = 0
+const MIN_LOAD_PER_TURN: int = 1
 const MAX_LOAD_PER_TURN: int = 10
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 

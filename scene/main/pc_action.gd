@@ -159,7 +159,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
         # The game loops without player's input. If call start_next_turn()
         # directly, there might be a stack overflow error when too many turns
         # are delayed (more than 10?).
-        ScheduleHelper.call_deferred("start_next_turn")
+        NodeHub.ref_Schedule.call_deferred("start_next_turn")
 
         # Another way is to wait until the next frame.
         # https://godotforums.org/d/35537-looking-for-a-way-to-signal-a-funtion-to-be-called-on-the-next-frame/7
@@ -240,7 +240,7 @@ func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
         sub_tag = SpriteState.get_sub_tag(sprite)
         if sub_tag in VALID_ACTOR_TAGS:
             PcHitActor.handle_input(sprite, self, NodeHub.ref_ActorAction,
-                    NodeHub.ref_GameProgress)
+                    NodeHub.ref_GameProgress, NodeHub.ref_Schedule)
         return
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)
@@ -248,4 +248,4 @@ func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
             return
     Cart.pull_cart(pc, coord, state)
     Cart.add_draft(pc, state, NodeHub.ref_RandomNumber)
-    ScheduleHelper.start_next_turn()
+    NodeHub.ref_Schedule.start_next_turn()

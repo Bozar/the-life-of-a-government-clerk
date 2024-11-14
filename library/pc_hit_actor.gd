@@ -3,7 +3,7 @@ class_name PcHitActor
 
 static func handle_input(
         actor: Sprite2D, ref_PcAction: PcAction, ref_ActorAction: ActorAction,
-        ref_GameProgress: GameProgress
+        ref_GameProgress: GameProgress, ref_Schedule: Schedule
         ) -> void:
     var sub_tag: StringName = SpriteState.get_sub_tag(actor)
     var player_win: bool
@@ -65,7 +65,7 @@ static func handle_input(
     if player_win:
         ref_GameProgress.game_over.emit(true)
     else:
-        ScheduleHelper.start_next_turn()
+        ref_Schedule.start_next_turn()
 
 
 static func _get_cash(ref_PcAction: PcAction) -> bool:

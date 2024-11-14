@@ -87,7 +87,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
             HandleClerk.update_progress(actor_state)
         SubTag.SERVANT:
             HandleServant.update_idle_duration(actor_state)
-    ScheduleHelper.start_next_turn()
+    NodeHub.ref_Schedule.start_next_turn()
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:

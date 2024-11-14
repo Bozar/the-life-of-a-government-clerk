@@ -19,7 +19,6 @@ const DEBUG_SCREEN: String = "DebugScreen"
 
 const SPRITE_FACTORY: String = "/root/SpriteFactory"
 const SPRITE_STATE: String = "/root/SpriteState"
-const SCHEDULE_HELPER: String = "/root/ScheduleHelper"
 
 
 const SIGNAL_SPRITE_CREATED: String = "sprite_created"
@@ -76,9 +75,6 @@ const NODE_CONNECTIONS: Dictionary = {
     ],
     SPRITE_TAG: [
         SPRITE_STATE,
-    ],
-    SCHEDULE: [
-        SCHEDULE_HELPER,
     ],
     PC_ACTION: [
         SIDEBAR,

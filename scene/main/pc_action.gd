@@ -33,51 +33,33 @@ var state_text: String:
             NORMAL_MODE:
                 return Cart.get_extend_text(_linked_cart_state)
             EXAMINE_MODE:
-                return Cart.get_examine_text(_pc, _linked_cart_state)
+                return Cart.get_examine_text(pc, _linked_cart_state)
         return ""
 
 
 var first_item_text: String:
     get:
-        return Cart.get_first_item_text(_pc, _linked_cart_state)
+        return Cart.get_first_item_text(pc, _linked_cart_state)
 
 
-var cash: int:
+var cash: int = GameData.INCOME_INITIAL
+var account: int = 0
+var delivery: int = GameData.MAX_DELIVERY
+var delay: int = 0
+
+
+var pc: Sprite2D:
     get:
-        return _pc_state.cash
-    set(value):
-        _pc_state.cash = value
-
-
-var account: int:
-    get:
-        return _pc_state.account
-    set(value):
-        _pc_state.account = value
-
-
-var delivery: int:
-    get:
-        return _pc_state.delivery
-    set(value):
-        _pc_state.delivery = value
-
-
-var delay: int:
-    get:
-        return _pc_state.delay
-    set(value):
-        _pc_state.delay = value
+        return _pc
 
 
 var pc_coord: Vector2i:
     get:
-        return ConvertCoord.get_coord(_pc)
+        return ConvertCoord.get_coord(pc)
 
 
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
-var _pc_state: PcState
 
 var _fov_map: Dictionary
 var _shadow_cast_fov_data: ShadowCastFov.FovData
@@ -95,11 +77,11 @@ func add_cart(new_cart_count: int) -> void:
 
 
 func clean_cart() -> bool:
-    return Cart.clean_cart(_pc, _linked_cart_state)
+    return Cart.clean_cart(pc, _linked_cart_state)
 
 
 func pull_cart(coord: Vector2i) -> void:
-    Cart.pull_cart(_pc, coord, _linked_cart_state)
+    Cart.pull_cart(pc, coord, _linked_cart_state)
 
 
 func count_cart() -> int:
@@ -107,7 +89,7 @@ func count_cart() -> int:
 
 
 func get_first_item() -> Sprite2D:
-    return Cart.get_first_item(_pc, _linked_cart_state)
+    return Cart.get_first_item(pc, _linked_cart_state)
 
 
 func get_state(cart: Sprite2D) -> CartState:
@@ -115,30 +97,29 @@ func get_state(cart: Sprite2D) -> CartState:
 
 
 func get_last_slot() -> Sprite2D:
-    return Cart.get_last_slot(_pc, _linked_cart_state)
+    return Cart.get_last_slot(pc, _linked_cart_state)
 
 
 func get_full_load_amount() -> int:
-    return Cart.get_full_load_amount(_pc, _linked_cart_state)
+    return Cart.get_full_load_amount(pc, _linked_cart_state)
 
 
 func count_item(item_tag: StringName) -> int:
-    return Cart.count_item(item_tag, _pc, _linked_cart_state)
+    return Cart.count_item(item_tag, pc, _linked_cart_state)
 
 
 func remove_all_item(item_tag: StringName) -> bool:
-    return Cart.remove_all_item(item_tag, _pc, _linked_cart_state)
+    return Cart.remove_all_item(item_tag, pc, _linked_cart_state)
 
 
 func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
-    if _pc != null:
+    if pc != null:
         return
 
     for i: TaggedSprite in tagged_sprites:
         if i.sub_tag == SubTag.PC:
             _pc = i.sprite
-            _pc_state = PcState.new(_pc)
-            Cart.init_linked_carts(_pc, _linked_cart_state)
+            Cart.init_linked_carts(pc, _linked_cart_state)
             Cart.add_cart(GameData.MIN_CART, _linked_cart_state)
             return
 
@@ -167,7 +148,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
         # await get_tree().create_timer(0).timeout
 
         return
-    PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
+    PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
 
 
 func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
@@ -175,22 +156,22 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
         NORMAL_MODE:
             match input_tag:
                 InputTag.SWITCH_EXAMINE:
-                    if Cart.enter_examine_mode(_pc, _linked_cart_state):
+                    if Cart.enter_examine_mode(pc, _linked_cart_state):
                         _game_mode = EXAMINE_MODE
                         NodeHub.ref_ActorAction.switch_examine_mode(true)
                     else:
                         return
                 InputTag.MOVE_LEFT:
-                    _move(_pc, Vector2i.LEFT, _linked_cart_state)
+                    _move(Vector2i.LEFT, _linked_cart_state)
                     return
                 InputTag.MOVE_RIGHT:
-                    _move(_pc, Vector2i.RIGHT, _linked_cart_state)
+                    _move(Vector2i.RIGHT, _linked_cart_state)
                     return
                 InputTag.MOVE_UP:
-                    _move(_pc, Vector2i.UP, _linked_cart_state)
+                    _move(Vector2i.UP, _linked_cart_state)
                     return
                 InputTag.MOVE_DOWN:
-                    _move(_pc, Vector2i.DOWN, _linked_cart_state)
+                    _move(Vector2i.DOWN, _linked_cart_state)
                     return
                 InputTag.WIZARD_1, InputTag.WIZARD_2, \
                         InputTag.WIZARD_3, InputTag.WIZARD_4, \
@@ -204,29 +185,29 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
             match input_tag:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
-                    Cart.exit_examine_mode(_pc, _linked_cart_state)
+                    Cart.exit_examine_mode(pc, _linked_cart_state)
                     NodeHub.ref_ActorAction.switch_examine_mode(false)
                 InputTag.MOVE_UP:
-                    Cart.examine_first_cart(_pc, _linked_cart_state)
+                    Cart.examine_first_cart(pc, _linked_cart_state)
                 InputTag.MOVE_DOWN:
-                    Cart.examine_last_cart(_pc, _linked_cart_state)
+                    Cart.examine_last_cart(pc, _linked_cart_state)
                 InputTag.MOVE_LEFT:
-                    Cart.examine_previous_cart(_pc, _linked_cart_state)
+                    Cart.examine_previous_cart(pc, _linked_cart_state)
                 InputTag.MOVE_RIGHT:
-                    Cart.examine_next_cart(_pc, _linked_cart_state)
+                    Cart.examine_next_cart(pc, _linked_cart_state)
                 _:
                     return
-    PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
+    PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
     ui_force_updated.emit()
 
 
 func _on_GameProgress_game_over(player_win: bool) -> void:
-    PcFov.render_fov(_pc, _fov_map, _shadow_cast_fov_data)
+    PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
     if not player_win:
-        VisualEffect.set_dark_color(_pc)
+        VisualEffect.set_dark_color(pc)
 
 
-func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
+func _move(direction: Vector2i, state: LinkedCartState) -> void:
     var coord: Vector2i = ConvertCoord.get_coord(pc) + direction
     var sprite: Sprite2D
     var sub_tag: StringName

@@ -8,9 +8,6 @@ const MAX_RETRY: int = 10
 signal game_over(player_win: bool)
 
 
-var _ref_RandomNumber: RandomNumber
-
-
 var _progress_state := ProgressState.new()
 
 
@@ -41,12 +38,12 @@ func _init_ground_coords(state: ProgressState) -> void:
             if save_coord:
                 state.ground_coords.push_back(coord)
 
-    ArrayHelper.shuffle(state.ground_coords, _ref_RandomNumber)
+    ArrayHelper.shuffle(state.ground_coords, NodeHub.ref_RandomNumber)
 
 
-func _create_servant(state: ProgressState, ref_PcAction: PcAction, retry: int) \
-        -> void:
-
+func _create_servant(
+        state: ProgressState, ref_PcAction: PcAction, retry: int
+        ) -> void:
     if retry < 0:
         return
     elif (retry == MAX_RETRY) and _has_max_servant(ref_PcAction):
@@ -67,7 +64,7 @@ func _create_servant(state: ProgressState, ref_PcAction: PcAction, retry: int) \
     state.ground_index += 1
     if state.ground_index > state.ground_coords.size():
         state.ground_index = 0
-        ArrayHelper.shuffle(state.ground_coords, _ref_RandomNumber)
+        ArrayHelper.shuffle(state.ground_coords, NodeHub.ref_RandomNumber)
 
     if not is_created:
         _create_servant(state, ref_PcAction, retry - 1)

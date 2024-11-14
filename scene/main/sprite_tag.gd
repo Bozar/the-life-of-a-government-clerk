@@ -54,8 +54,9 @@ func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
         _remove_sprite(i)
 
 
-func _add_sprite(sprite: Sprite2D, main_tag: StringName, sub_tag: StringName) \
-        -> void:
+func _add_sprite(
+        sprite: Sprite2D, main_tag: StringName, sub_tag: StringName
+        ) -> void:
     var id: int = sprite.get_instance_id()
 
     _main_tags[id] = main_tag

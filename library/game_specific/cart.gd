@@ -23,8 +23,9 @@ const DETACHED: String = "?> DETACHED"
 const FULL: String = "?> FULL"
 
 
-static func init_linked_carts(head_cart: Sprite2D, state: LinkedCartState) \
-        -> void:
+static func init_linked_carts(
+        head_cart: Sprite2D, state: LinkedCartState
+        ) -> void:
     state.linked_carts = LinkedList.init_list(head_cart)
 
 
@@ -46,8 +47,10 @@ static func get_state(cart: Sprite2D, state: LinkedCartState) -> CartState:
     return cart_state
 
 
-static func pull_cart(first_cart: Sprite2D, first_target_coord: Vector2i,
-        state: LinkedCartState) -> void:
+static func pull_cart(
+        first_cart: Sprite2D, first_target_coord: Vector2i,
+        state: LinkedCartState
+        ) -> void:
     var last_cart: Sprite2D
     var last_coord: Vector2i
     var remove: Sprite2D
@@ -166,9 +169,9 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
     return load_amount
 
 
-static func count_item(item_tag: StringName, pc: Sprite2D,
-        state: LinkedCartState) -> int:
-
+static func count_item(
+        item_tag: StringName, pc: Sprite2D, state: LinkedCartState
+        ) -> int:
     var cart: Sprite2D = pc
     var cart_state: CartState
     var count: int = 0
@@ -185,9 +188,9 @@ static func count_item(item_tag: StringName, pc: Sprite2D,
     return count
 
 
-static func remove_all_item(item_tag: StringName, pc: Sprite2D,
-        state: LinkedCartState) -> bool:
-
+static func remove_all_item(
+        item_tag: StringName, pc: Sprite2D, state: LinkedCartState
+        ) -> bool:
     var cart: Sprite2D = pc
     var cart_state: CartState
     var is_removed: bool = false
@@ -205,9 +208,9 @@ static func remove_all_item(item_tag: StringName, pc: Sprite2D,
     return is_removed
 
 
-static func add_draft(pc: Sprite2D, state: LinkedCartState,
-        ref_RandomNumber: RandomNumber) -> void:
-
+static func add_draft(
+        pc: Sprite2D, state: LinkedCartState, ref_RandomNumber: RandomNumber
+        ) -> void:
     var cart: Sprite2D = pc
     var cart_state: CartState
     var load_index: int = ref_RandomNumber.get_int(0, GameData.ADD_LOADS.size())
@@ -320,8 +323,9 @@ static func get_first_item_text(pc: Sprite2D, state: LinkedCartState) -> String:
     return _get_cart_state_text(coord, FIRST_ITEM_TEMPLATE, state)
 
 
-static func _get_cart_state_text(coord: Vector2i, text_template: String,
-        state: LinkedCartState) -> String:
+static func _get_cart_state_text(
+        coord: Vector2i, text_template: String, state: LinkedCartState
+        ) -> String:
     var cart: Sprite2D = SpriteState.get_actor_by_coord(coord)
     var cart_state: CartState = get_state(cart, state)
 
@@ -338,8 +342,10 @@ static func _get_cart_state_text(coord: Vector2i, text_template: String,
 
 
 # Move carts from the first one (inclusive) to the last one (exclusive).
-static func _move_cart(first_cart: Sprite2D, last_cart: Sprite2D,
-        first_coord: Vector2i, state: LinkedCartState) -> void:
+static func _move_cart(
+        first_cart: Sprite2D, last_cart: Sprite2D, first_coord: Vector2i,
+        state: LinkedCartState
+        ) -> void:
     var next_cart: Sprite2D = first_cart
     var target_coord: Vector2i = first_coord
     var save_coord: Vector2i
@@ -358,8 +364,9 @@ static func _move_cart(first_cart: Sprite2D, last_cart: Sprite2D,
                 break
 
 
-static func _add_cart_deferred(first_cart: Sprite2D, new_coord: Vector2i,
-        state: LinkedCartState) -> void:
+static func _add_cart_deferred(
+        first_cart: Sprite2D, new_coord: Vector2i, state: LinkedCartState
+        ) -> void:
     if state.add_cart_counter < 1:
         return
 
@@ -371,8 +378,9 @@ static func _add_cart_deferred(first_cart: Sprite2D, new_coord: Vector2i,
     state.add_cart_counter -= 1
 
 
-static func _remove_cart(first_cart: Sprite2D, remove_cart: Sprite2D,
-        state: LinkedCartState) -> void:
+static func _remove_cart(
+        first_cart: Sprite2D, remove_cart: Sprite2D, state: LinkedCartState
+        ) -> void:
     var remove_id: int = remove_cart.get_instance_id()
     var remove_coord: Vector2i = ConvertCoord.get_coord(remove_cart)
     var next_cart: Sprite2D = LinkedList.get_next_object(remove_cart,

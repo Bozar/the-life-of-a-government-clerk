@@ -1,8 +1,10 @@
 class_name CreateSprite
 
 
-static func create(main_tag: StringName, sub_tag: StringName, coord: Vector2i,
-        offset: Vector2i = Vector2i(0, 0)) -> TaggedSprite:
+static func create(
+        main_tag: StringName, sub_tag: StringName, coord: Vector2i,
+        offset: Vector2i = Vector2i(0, 0)
+        ) -> TaggedSprite:
     var packed_sprite: PackedScene = SpriteScene.get_sprite_scene(sub_tag)
     var new_sprite: Sprite2D
     var palette: Dictionary = TransferData.palette

@@ -4,7 +4,8 @@ extends Node2D
 
 func _ready() -> void:
     _connect_signals(NodeReference.SIGNAL_CONNECTIONS)
-    _connect_nodes(NodeReference.NODE_CONNECTIONS)
+    # _connect_nodes(NodeReference.NODE_CONNECTIONS)
+    _set_node_hub(NodeReference.NODE_NAMES)
 
     if TransferData.load_setting_file:
         SettingFile.load()
@@ -52,3 +53,11 @@ func _connect_nodes(node_connections: Dictionary) -> void:
         target_nodes = node_connections[source_node]
         for target_node: String in target_nodes:
             get_node(target_node)[source_reference] = get_node(source_node)
+
+
+func _set_node_hub(node_names: Array) -> void:
+    var ref_node: String
+
+    for i: String in node_names:
+        ref_node = "ref_" + Array(i.split("/")).pop_back()
+        NodeHub.set(ref_node, get_node(i))

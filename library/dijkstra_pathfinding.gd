@@ -6,8 +6,9 @@ const OBSTACLE: int = 9999
 const UNKNOWN: int = -9999
 
 
-static func get_coords(map_2d: Dictionary, start_coord: Vector2i,
-        step_length: int) -> Array:
+static func get_coords(
+        map_2d: Dictionary, start_coord: Vector2i, step_length: int
+        ) -> Array:
     var neighbor: Array = ConvertCoord.get_diamond_coords(start_coord,
             step_length)
     var coord: Vector2i
@@ -31,8 +32,9 @@ static func get_coords(map_2d: Dictionary, start_coord: Vector2i,
 
 
 # is_obstacle(coord: Vector2i, is_obstacle_args: Array) -> bool
-static func set_obstacle_map(map_2d: Dictionary, is_obstacle: Callable,
-        is_obstacle_args: Array) -> void:
+static func set_obstacle_map(
+        map_2d: Dictionary, is_obstacle: Callable, is_obstacle_args: Array
+        ) -> void:
     var coord: Vector2i = Vector2i(0, 0)
     var column: Array
 
@@ -79,8 +81,9 @@ static func _get_distance(map_2d: Dictionary, center_coord: Vector2i) -> int:
     return min_distance
 
 
-static func _is_valid_distance(map_2d: Dictionary, coord: Vector2i,
-        max_distance: int) -> bool:
+static func _is_valid_distance(
+        map_2d: Dictionary, coord: Vector2i, max_distance: int
+        ) -> bool:
     return Map2D.is_in_map(coord, map_2d) and \
             (map_2d[coord.x][coord.y] < max_distance) and \
             (map_2d[coord.x][coord.y] > UNKNOWN)

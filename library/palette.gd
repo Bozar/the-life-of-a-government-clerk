@@ -36,8 +36,9 @@ static var _color_regex: RegEx = RegEx.new()
 static var _color_regex_compiled: bool = false
 
 
-static func get_color(palette: Dictionary, main_tag: StringName,
-        is_light_color: bool) -> String:
+static func get_color(
+        palette: Dictionary, main_tag: StringName, is_light_color: bool
+        ) -> String:
     var colors: Array = palette.get(main_tag, DEFAULT_PALETTE[main_tag])
     if is_light_color:
         return colors[0]

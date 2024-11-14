@@ -12,9 +12,6 @@ var game_over: bool = false
 var player_win: bool = false
 
 
-var _ref_PcAction: PcAction
-
-
 var _turn_counter: int = GameData.MIN_TURN_COUNTER - 1
 
 
@@ -25,11 +22,11 @@ func init_gui() -> void:
 
 func update_gui() -> void:
     var progress: String = PROGRESS % [
-        _turn_counter, _ref_PcAction.delivery,
-        _ref_PcAction.cash, _ref_PcAction.account,
+        _turn_counter, NodeHub.ref_PcAction.delivery,
+        NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
     ]
-    var first_item: String = _ref_PcAction.first_item_text
-    var state: String = _ref_PcAction.state_text
+    var first_item: String = NodeHub.ref_PcAction.first_item_text
+    var state: String = NodeHub.ref_PcAction.state_text
     var end_game: String = ""
 
     if game_over:

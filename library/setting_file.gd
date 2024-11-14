@@ -66,8 +66,9 @@ static func _set_palette(setting: Dictionary) -> void:
         TransferData.set_palette(palette)
 
 
-static func _parse_setting(setting: Dictionary, key: String, value_type: int) \
-        -> SettingValue:
+static func _parse_setting(
+        setting: Dictionary, key: String, value_type: int
+        ) -> SettingValue:
     var float_value: float
     var bool_value: bool
     var string_value: String

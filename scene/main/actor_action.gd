@@ -2,11 +2,6 @@ class_name ActorAction
 extends Node2D
 
 
-var _ref_RandomNumber: RandomNumber
-# var _ref_PcAction: PcAction
-# var _ref_GameProgress: GameProgress
-
-
 var _pc: Sprite2D
 var _actor_states: Dictionary = {}
 var _raw_file_states: Array
@@ -23,7 +18,7 @@ func can_receive_document(sprite: Sprite2D) -> bool:
 
 func receive_document() -> void:
     HandleRawFile.reset_cooldown(_raw_file_states)
-    HandleOfficer.set_active(_officer_states, _ref_RandomNumber)
+    HandleOfficer.set_active(_officer_states, NodeHub.ref_RandomNumber)
 
 
 func raw_file_is_available(sprite: Sprite2D) -> bool:
@@ -36,7 +31,8 @@ func send_raw_file(sprite: Sprite2D) -> void:
     var servant_cooldown: int = HandleServant.get_servant_cooldown(
             _get_actor_states(SubTag.SERVANT))
 
-    HandleRawFile.send_raw_file(state, _ref_RandomNumber, servant_cooldown)
+    HandleRawFile.send_raw_file(state, NodeHub.ref_RandomNumber,
+            servant_cooldown)
 
 
 func send_document(sprite: Sprite2D) -> bool:
@@ -65,8 +61,8 @@ func receive_servant(sprite: Sprite2D) -> void:
 func push_servant(actor: Sprite2D) -> void:
     var state: ActorState = _get_actor_state(actor)
 
-    HandleRawFile.reduce_cooldown(_raw_file_states, _ref_RandomNumber)
-    HandleClerk.reduce_progress(_clerk_states, _ref_RandomNumber)
+    HandleRawFile.reduce_cooldown(_raw_file_states, NodeHub.ref_RandomNumber)
+    HandleClerk.reduce_progress(_clerk_states, NodeHub.ref_RandomNumber)
     HandleServant.reset_idle_duration(state)
 
 
@@ -121,7 +117,8 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                 SubTag.SERVANT:
                     new_state = ServantState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
-                    new_state.max_idle_duration = _ref_RandomNumber.get_int(
+                    new_state.max_idle_duration = \
+                            NodeHub.ref_RandomNumber.get_int(
                             GameData.MIN_IDLE_DURATION,
                             GameData.MAX_IDLE_DURATION + 1)
                 _:
@@ -167,8 +164,9 @@ func _get_actor_states(sub_tag: StringName) -> Array:
     return states
 
 
-func _approach_pc(map_2d: Dictionary, sprite: Sprite2D, end_point: Array) \
-        -> void:
+func _approach_pc(
+        map_2d: Dictionary, sprite: Sprite2D, end_point: Array
+        ) -> void:
     var npc_coord: Vector2i = ConvertCoord.get_coord(sprite)
     var target_coords: Array
     var move_to: Vector2i
@@ -183,7 +181,7 @@ func _approach_pc(map_2d: Dictionary, sprite: Sprite2D, end_point: Array) \
         return
 
     if target_coords.size() > 1:
-        ArrayHelper.shuffle(target_coords, _ref_RandomNumber)
+        ArrayHelper.shuffle(target_coords, NodeHub.ref_RandomNumber)
     move_to = target_coords[0]
     SpriteState.move_sprite(sprite, move_to)
 

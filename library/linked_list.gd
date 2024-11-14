@@ -13,8 +13,9 @@ static func init_list(object: Object) -> Dictionary:
     return linked_list
 
 
-static func insert_object(new_object: Object, next_object: Object,
-        linked_list: Dictionary) -> bool:
+static func insert_object(
+        new_object: Object, next_object: Object, linked_list: Dictionary
+        ) -> bool:
     var new_id: int = new_object.get_instance_id()
     var next_id: int = next_object.get_instance_id()
 
@@ -37,8 +38,9 @@ static func insert_object(new_object: Object, next_object: Object,
     return true
 
 
-static func append_object(new_object: Object, previous_object: Object,
-        linked_list: Dictionary) -> bool:
+static func append_object(
+        new_object: Object, previous_object: Object, linked_list: Dictionary
+        ) -> bool:
     var previous_id: int = previous_object.get_instance_id()
     var previous_linked: LinkedObject
     var next_linked: LinkedObject
@@ -66,10 +68,12 @@ static func remove_object(remove_this: Object, linked_list: Dictionary) -> bool:
 
 
 # handler(object: Object, args: Array) -> void
-static func iterate_list(start_object: Object, linked_list: Dictionary,
+static func iterate_list(
+        start_object: Object, linked_list: Dictionary,
         is_forward_iteration: bool = true,
         handler: Callable = LinkedList._default_handler,
-        handler_args: Array = []) -> void:
+        handler_args: Array = []
+        ) -> void:
     var start_id: int = start_object.get_instance_id()
     var linked_object: LinkedObject
 
@@ -104,8 +108,9 @@ static func get_next_object(object: Object, linked_list: Dictionary) -> Object:
     return linked_list[this_linked.next_id].object
 
 
-static func get_previous_object(object: Object, linked_list: Dictionary) \
-        -> Object:
+static func get_previous_object(
+        object: Object, linked_list: Dictionary
+        ) -> Object:
     if _warn_no_object(object, linked_list):
         return null
 

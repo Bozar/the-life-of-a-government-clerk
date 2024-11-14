@@ -2,18 +2,11 @@ class_name Sidebar
 extends CustomMarginContainer
 
 
-var _ref_PcAction: PcAction
-var _ref_RandomNumber: RandomNumber
-
-
 @onready var _ref_FootnoteLabel: FootnoteLabel = $SidebarVBox/FootnoteLabel
 @onready var _ref_StateLabel: StateLabel = $SidebarVBox/StateLabel
 
 
 func init_gui() -> void:
-    _ref_StateLabel._ref_PcAction = _ref_PcAction
-    _ref_FootnoteLabel._ref_RandomNumber = _ref_RandomNumber
-
     _ref_FootnoteLabel.init_gui()
     _ref_StateLabel.init_gui()
 

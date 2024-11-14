@@ -3,8 +3,10 @@ class_name CastRay
 
 # is_obstacle(source_coord: Vector2i, target_coord: Vector2i,
 # is_obstacle_args: Array) -> bool
-static func get_coords(source_coord: Vector2i, target_coord: Vector2i,
-        is_obstacle: Callable, is_obstacle_args: Array) -> Array:
+static func get_coords(
+        source_coord: Vector2i, target_coord: Vector2i,
+        is_obstacle: Callable, is_obstacle_args: Array
+        ) -> Array:
     var direction: Vector2i = ConvertCoord.get_direction(source_coord,
             target_coord)
     var ray_coords: Array = []
@@ -25,8 +27,9 @@ static func get_coords(source_coord: Vector2i, target_coord: Vector2i,
 
 
 # Remove starting point and/or the last coord if it is outside dungeon.
-static func trim_coords(coords: Array, trim_head: bool, trim_tail: bool) \
-        -> Array:
+static func trim_coords(
+        coords: Array, trim_head: bool, trim_tail: bool
+        ) -> Array:
     var tail_coord: Vector2i
 
     if trim_head and (coords.size() > 1):

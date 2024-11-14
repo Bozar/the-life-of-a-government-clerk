@@ -5,8 +5,7 @@ static func can_receive_document(state: OfficerState) -> bool:
     return state.is_active
 
 
-static func set_active(states: Array, ref_RandomNumber: RandomNumber) \
-        -> void:
+static func set_active(states: Array, ref_RandomNumber: RandomNumber) -> void:
     var dup_states: Array
     var state: OfficerState
     var has_active_officer: bool = false

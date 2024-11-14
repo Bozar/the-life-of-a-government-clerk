@@ -95,3 +95,14 @@ const NODE_CONNECTIONS: Dictionary = {
         # ACTOR_ACTION,
     ],
 }
+
+
+const NODE_NAMES: Array = [
+    SPRITE_COORD,
+    SPRITE_TAG,
+    SCHEDULE,
+    PC_ACTION,
+    ACTOR_ACTION,
+    RANDOM_NUMBER,
+    GAME_PROGRESS,
+]

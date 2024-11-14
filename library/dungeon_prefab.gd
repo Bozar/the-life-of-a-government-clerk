@@ -12,8 +12,9 @@ enum {
 
 # output_line: {int line_number: String line_text}
 # transforms: FLIP_HORIZONTALLY | FLIP_VERTICALLY | ROTATE_RIGHT | ROTATE_LEFT
-static func get_prefab(output_line: Dictionary, transforms: Array) \
-        -> PackedPrefab:
+static func get_prefab(
+        output_line: Dictionary, transforms: Array
+        ) -> PackedPrefab:
     var prefab: Dictionary = {}
     var max_x: int = output_line[0].length()
     var max_y: int = output_line.size()
@@ -64,8 +65,9 @@ static func get_prefab(output_line: Dictionary, transforms: Array) \
     return PackedPrefab.new(prefab)
 
 
-static func _flip_horizontally(prefab: Dictionary, max_x: int, max_y: int) \
-        -> Dictionary:
+static func _flip_horizontally(
+        prefab: Dictionary, max_x: int, max_y: int
+        ) -> Dictionary:
     var mirror: int
 
     for y: int in range(0, max_y):
@@ -77,8 +79,9 @@ static func _flip_horizontally(prefab: Dictionary, max_x: int, max_y: int) \
     return prefab
 
 
-static func _flip_vertically(prefab: Dictionary, max_x: int, max_y: int) \
-        -> Dictionary:
+static func _flip_vertically(
+        prefab: Dictionary, max_x: int, max_y: int
+        ) -> Dictionary:
     var mirror: int
 
     for x: int in range(0, max_x):
@@ -90,8 +93,9 @@ static func _flip_vertically(prefab: Dictionary, max_x: int, max_y: int) \
     return prefab
 
 
-static func _rotate_right(prefab: Dictionary, max_x: int, max_y: int) \
-        -> Dictionary:
+static func _rotate_right(
+        prefab: Dictionary, max_x: int, max_y: int
+        ) -> Dictionary:
     var new_prefab: Dictionary = _get_new_matrix(max_x, max_y)
     var new_x: int
     var new_y: int
@@ -104,8 +108,9 @@ static func _rotate_right(prefab: Dictionary, max_x: int, max_y: int) \
     return new_prefab
 
 
-static func _rotate_left(prefab: Dictionary, max_x: int, max_y: int) \
-        -> Dictionary:
+static func _rotate_left(
+        prefab: Dictionary, max_x: int, max_y: int
+        ) -> Dictionary:
     var new_prefab: Dictionary = _get_new_matrix(max_x, max_y)
     var new_x: int
     var new_y: int
@@ -118,8 +123,9 @@ static func _rotate_left(prefab: Dictionary, max_x: int, max_y: int) \
     return new_prefab
 
 
-static func _swap_matrix_value(matrix: Dictionary, this_coord: Vector2i,
-        that_coord: Vector2i) -> void:
+static func _swap_matrix_value(
+        matrix: Dictionary, this_coord: Vector2i, that_coord: Vector2i
+        ) -> void:
     var save_char: String = matrix[this_coord.x][this_coord.y]
 
     matrix[this_coord.x][this_coord.y] = matrix[that_coord.x][that_coord.y]

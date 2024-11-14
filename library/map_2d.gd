@@ -1,8 +1,10 @@
 class_name Map2D
 
 
-static func init_map(value: Variant = null, max_x: int = DungeonSize.MAX_X,
-        max_y: int = DungeonSize.MAX_Y) -> Dictionary:
+static func init_map(
+        value: Variant = null, max_x: int = DungeonSize.MAX_X,
+        max_y: int = DungeonSize.MAX_Y
+        ) -> Dictionary:
     var map_2d: Dictionary = {}
     var column: Array
 

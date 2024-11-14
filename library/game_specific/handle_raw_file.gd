@@ -1,8 +1,10 @@
 class_name HandleRawFile
 
 
-static func send_raw_file(state: RawFileState, ref_RandomNumber: RandomNumber,
-        servant_cooldown: int) -> void:
+static func send_raw_file(
+        state: RawFileState, ref_RandomNumber: RandomNumber,
+        servant_cooldown: int
+        ) -> void:
     var base_cooldown: int = ref_RandomNumber.get_int(
             GameData.RAW_FILE_MIN_BASE_COOLDOWN,
             GameData.RAW_FILE_MAX_BASE_COOLDOWN + 1)
@@ -29,9 +31,9 @@ static func update_cooldown(state: RawFileState) -> void:
     state.cooldown -= 1
 
 
-static func reduce_cooldown(states: Array, ref_RandomNumber: RandomNumber) \
-        -> void:
-
+static func reduce_cooldown(
+        states: Array, ref_RandomNumber: RandomNumber
+        ) -> void:
     var dup_states: Array
     var state: RawFileState
 

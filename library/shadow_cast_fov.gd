@@ -45,9 +45,11 @@ const OCTANT_FLAGS: Array = [
 # _set_fov_value(coord: Vector2i, fov_map: Dictionary, fov_flag: int,
 #       is_truthy: bool) -> void
 # is_obstacle(from_coord: Vector2i, to_coord: Vector2i, opt_args: Array) -> bool
-static func get_fov_map(source: Vector2i, out_fov_map: Dictionary,
+static func get_fov_map(
+        source: Vector2i, out_fov_map: Dictionary,
         set_fov_value: Callable, is_obstacle: Callable, is_obstacle_args: Array,
-        fov_data: FovData) -> void:
+        fov_data: FovData
+        ) -> void:
     var coord: Vector2i = Vector2i(0, 0)
 
     for x: int in range(0, DungeonSize.MAX_X):
@@ -65,10 +67,12 @@ static func get_fov_map(source: Vector2i, out_fov_map: Dictionary,
                     MIN_X, MIN_SLOPE, MAX_SLOPE, i)
 
 
-static func _set_octant_map(source: Vector2i, sight_range: int,
+static func _set_octant_map(
+        source: Vector2i, sight_range: int,
         set_fov_value: Callable, is_obstacle: Callable, is_obstacle_args: Array,
         out_fov_map: Dictionary, min_x: int, min_slope: float, max_slope: float,
-        octant_flag: int) -> void:
+        octant_flag: int
+        ) -> void:
     var break_loop: bool
     var hit_obstacle: bool
     var new_min_slope: float = min_slope
@@ -128,8 +132,9 @@ static func _get_slope(delta_x: int, delta_y: int) -> float:
     return delta_y * 1.0 / delta_x
 
 
-static func _convert_coord(source: Vector2i, x_shift: int, y_shift: int,
-        octant_flag: int) -> Vector2i:
+static func _convert_coord(
+        source: Vector2i, x_shift: int, y_shift: int, octant_flag: int
+        ) -> Vector2i:
     var coord: Vector2i = source
 
     match octant_flag:

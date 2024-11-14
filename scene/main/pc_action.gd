@@ -75,11 +75,6 @@ var pc_coord: Vector2i:
         return ConvertCoord.get_coord(_pc)
 
 
-var _ref_ActorAction: ActorAction
-var _ref_GameProgress: GameProgress
-var _ref_RandomNumber: RandomNumber
-
-
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
 var _pc_state: PcState
@@ -152,14 +147,14 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    _ref_GameProgress.update_world(self)
+    NodeHub.ref_GameProgress.update_world(self)
 
     if Checkmate.is_game_over(self):
-        _ref_GameProgress.game_over.emit(false)
+        NodeHub.ref_GameProgress.game_over.emit(false)
         return
     elif delay > 0:
         delay -= 1
-        Cart.add_draft(_pc, _linked_cart_state, _ref_RandomNumber)
+        Cart.add_draft(_pc, _linked_cart_state, NodeHub.ref_RandomNumber)
 
         # The game loops without player's input. If call start_next_turn()
         # directly, there might be a stack overflow error when too many turns
@@ -182,7 +177,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE:
                     if Cart.enter_examine_mode(_pc, _linked_cart_state):
                         _game_mode = EXAMINE_MODE
-                        _ref_ActorAction.switch_examine_mode(true)
+                        NodeHub.ref_ActorAction.switch_examine_mode(true)
                     else:
                         return
                 InputTag.MOVE_LEFT:
@@ -210,7 +205,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
                     Cart.exit_examine_mode(_pc, _linked_cart_state)
-                    _ref_ActorAction.switch_examine_mode(false)
+                    NodeHub.ref_ActorAction.switch_examine_mode(false)
                 InputTag.MOVE_UP:
                     Cart.examine_first_cart(_pc, _linked_cart_state)
                 InputTag.MOVE_DOWN:
@@ -244,13 +239,13 @@ func _move(pc: Sprite2D, direction: Vector2i, state: LinkedCartState) -> void:
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
         if sub_tag in VALID_ACTOR_TAGS:
-            PcHitActor.handle_input(sprite, self, _ref_ActorAction,
-                    _ref_GameProgress)
+            PcHitActor.handle_input(sprite, self, NodeHub.ref_ActorAction,
+                    NodeHub.ref_GameProgress)
         return
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)
         if not sprite.is_in_group(SubTag.DOOR):
             return
     Cart.pull_cart(pc, coord, state)
-    Cart.add_draft(pc, state, _ref_RandomNumber)
+    Cart.add_draft(pc, state, NodeHub.ref_RandomNumber)
     ScheduleHelper.start_next_turn()

@@ -4,10 +4,10 @@ class_name CrossFov
 # _set_fov_value(coord: Vector2i, fov_map: Dictionary, fov_flag: int,
 #       is_truthy: bool) -> void
 # is_obstacle(from_coord: Vector2i, to_coord: Vector2i, opt_args: Array) -> bool
-static func get_fov_map(source: Vector2i, out_fov_map: Dictionary,
-        set_fov_value: Callable, is_obstacle: Callable, is_obstacle_args: Array,
-        fov_data: FovData) -> void:
-
+static func get_fov_map(
+        source: Vector2i, out_fov_map: Dictionary, set_fov_value: Callable,
+        is_obstacle: Callable, is_obstacle_args: Array, fov_data: FovData
+        ) -> void:
     fov_data.min_y = _get_end_point(source, Vector2i.UP,
             is_obstacle, is_obstacle_args).y
     fov_data.min_x = _get_end_point(source, Vector2i.LEFT,
@@ -21,8 +21,10 @@ static func get_fov_map(source: Vector2i, out_fov_map: Dictionary,
     _set_fov_map(source, out_fov_map, set_fov_value, fov_data)
 
 
-static func _get_end_point(source: Vector2i, direction: Vector2i,
-        is_obstacle: Callable, is_obstacle_args: Array) -> Vector2i:
+static func _get_end_point(
+        source: Vector2i, direction: Vector2i,
+        is_obstacle: Callable, is_obstacle_args: Array
+        ) -> Vector2i:
     var coords: Array
 
     coords = CastRay.get_coords(source, source + direction, is_obstacle,
@@ -33,8 +35,10 @@ static func _get_end_point(source: Vector2i, direction: Vector2i,
     return coords.pop_back()
 
 
-static func _set_fov_map(source: Vector2i, out_fov_map: Dictionary,
-        set_fov_value: Callable, fov_data: FovData) -> void:
+static func _set_fov_map(
+        source: Vector2i, out_fov_map: Dictionary, set_fov_value: Callable,
+        fov_data: FovData
+        ) -> void:
     var coord: Vector2i = Vector2i(0, 0)
 
     for x: int in range(0, DungeonSize.MAX_X):
@@ -86,8 +90,9 @@ class FovData:
     var _right: int
 
 
-    func _init(half_width_: int, up_: int, right_: int, down_: int,
-            left_: int) -> void:
+    func _init(
+            half_width_: int, up_: int, right_: int, down_: int, left_: int
+            ) -> void:
         _half_width = half_width_
         _up = up_
         _right = right_

@@ -15,8 +15,10 @@ const IS_IN_SIGHT_FLAG: int = 0b01
 const IS_IN_MEMORY_FLAG: int = 0b10
 
 
-static func render_fov(pc: Sprite2D, fov_map: Dictionary,
-        shadow_cast_fov_data: ShadowCastFov.FovData) -> void:
+static func render_fov(
+        pc: Sprite2D, fov_map: Dictionary,
+        shadow_cast_fov_data: ShadowCastFov.FovData
+        ) -> void:
     if NO_FOV or TransferData.show_full_map:
         return
 
@@ -43,8 +45,9 @@ static func _set_sprite_color(coord: Vector2i, fov_map: Dictionary) -> void:
             VisualEffect.set_dark_color(i)
 
 
-static func _set_sprite_visibility(coord: Vector2i, fov_map: Dictionary,
-        memory_tags: Array) -> void:
+static func _set_sprite_visibility(
+        coord: Vector2i, fov_map: Dictionary, memory_tags: Array
+        ) -> void:
     var sprites: Array = SpriteState.get_sprites_by_coord(coord)
     var sprite: Sprite2D
 
@@ -76,8 +79,9 @@ static func _set_sprite_visibility(coord: Vector2i, fov_map: Dictionary,
                 VisualEffect.set_visibility(sprite, true)
 
 
-static func _is_fov_flag(coord: Vector2i, fov_map: Dictionary, fov_flag: int) \
-        -> bool:
+static func _is_fov_flag(
+        coord: Vector2i, fov_map: Dictionary, fov_flag: int
+        ) -> bool:
     if Map2D.is_in_map(coord, fov_map):
         # There is only one `1` in fov_flag. Return 0 (false) if the
         # correspoinding bit in fov_map[coord.x][coord.y] is 0, or a non-zero
@@ -86,8 +90,9 @@ static func _is_fov_flag(coord: Vector2i, fov_map: Dictionary, fov_flag: int) \
     return false
 
 
-static func _set_fov_value(coord: Vector2i, fov_map: Dictionary, fov_flag: int,
-        is_truthy: bool) -> void:
+static func _set_fov_value(
+        coord: Vector2i, fov_map: Dictionary, fov_flag: int, is_truthy: bool
+        ) -> void:
     if not Map2D.is_in_map(coord, fov_map):
         return
 
@@ -122,6 +127,7 @@ static func _is_obstacle(coord: Vector2i) -> bool:
     return true
 
 
-static func _block_shadow_cast_fov_ray(_from_coord: Vector2i,
-        to_coord: Vector2i, _args: Array) -> bool:
+static func _block_shadow_cast_fov_ray(
+        _from_coord: Vector2i, to_coord: Vector2i, _args: Array
+        ) -> bool:
     return _is_obstacle(to_coord)

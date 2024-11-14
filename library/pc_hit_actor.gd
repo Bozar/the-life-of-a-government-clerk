@@ -1,8 +1,10 @@
 class_name PcHitActor
 
 
-static func handle_input(actor: Sprite2D, ref_PcAction: PcAction,
-        ref_ActorAction: ActorAction, ref_GameProgress: GameProgress) -> void:
+static func handle_input(
+        actor: Sprite2D, ref_PcAction: PcAction, ref_ActorAction: ActorAction,
+        ref_GameProgress: GameProgress
+        ) -> void:
     var sub_tag: StringName = SpriteState.get_sub_tag(actor)
     var player_win: bool
     var first_item_tag: StringName
@@ -224,9 +226,9 @@ static func _remove_all_servant(ref_PcAction: PcAction) -> bool:
     return ref_PcAction.remove_all_item(SubTag.SERVANT)
 
 
-static func _can_unload_servant(actor: Sprite2D, ref_PcAction: PcAction) \
-        -> bool:
-
+static func _can_unload_servant(
+        actor: Sprite2D, ref_PcAction: PcAction
+        ) -> bool:
     var cart_sprite: Sprite2D = ref_PcAction.get_first_item()
     var cart_state: CartState
 

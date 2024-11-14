@@ -3,8 +3,10 @@ class_name DiamondFov
 
 # _set_fov_value(coord: Vector2i, fov_map: Dictionary, fov_flag: int,
 #       is_truthy: bool) -> void
-static func get_fov_map(source: Vector2i, out_fov_map: Dictionary,
-        set_fov_value: Callable, sight_range: int) -> void:
+static func get_fov_map(
+        source: Vector2i, out_fov_map: Dictionary,
+        set_fov_value: Callable, sight_range: int
+        ) -> void:
     var column: Array
     var coord: Vector2i = Vector2i(0, 0)
 

@@ -46,9 +46,6 @@ const CHAR_TO_TAG: Dictionary = {
 }
 
 
-var _ref_RandomNumber: RandomNumber
-
-
 func create_world() -> void:
     var tagged_sprites: Array = []
     var occupied_grids: Dictionary = Map2D.init_map(false)
@@ -67,8 +64,8 @@ func _create_pc(occupied_grids: Dictionary, tagged_sprites: Array) -> Vector2i:
     var coord: Vector2i = Vector2i.ZERO
 
     while true:
-        coord.x = _ref_RandomNumber.get_int(0, DungeonSize.MAX_X)
-        coord.y = _ref_RandomNumber.get_int(0, DungeonSize.MAX_Y)
+        coord.x = NodeHub.ref_RandomNumber.get_int(0, DungeonSize.MAX_X)
+        coord.y = NodeHub.ref_RandomNumber.get_int(0, DungeonSize.MAX_Y)
         if not occupied_grids[coord.x][coord.y]:
             break
 
@@ -116,7 +113,7 @@ func _create_from_file(path_to_file: String, occupied_grids: Dictionary,
     var shift_coord: Vector2i = Vector2i(0, 0)
     var row: int = 0
 
-    ArrayHelper.shuffle(prefabs, _ref_RandomNumber)
+    ArrayHelper.shuffle(prefabs, NodeHub.ref_RandomNumber)
     prefabs.resize(MAX_PREFABS)
     for i: int in range(0, prefabs.size()):
         file_name = prefabs[i]
@@ -175,7 +172,7 @@ func _get_edit_tags(edit_tags: Array) -> Array:
     var tags: Array = []
 
     for i: int in edit_tags:
-        if _ref_RandomNumber.get_percent_chance(50):
+        if NodeHub.ref_RandomNumber.get_percent_chance(50):
             tags.push_back(i)
     return tags
 

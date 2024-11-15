@@ -39,8 +39,9 @@ static func count_cart(state: LinkedCartState) -> int:
 
 
 static func get_state(cart: Sprite2D, state: LinkedCartState) -> CartState:
-    var cart_state: CartState = state.cart_states.get(cart.get_instance_id(),
-            null)
+    var cart_state: CartState = state.cart_states.get(
+            cart.get_instance_id(), null
+            )
 
     if cart_state == null:
         push_error("Cart state not found: %s" % cart.name)
@@ -294,8 +295,9 @@ static func examine_previous_cart(pc: Sprite2D, state: LinkedCartState) -> void:
 
     find_cart = LinkedList.get_previous_object(current_cart, state.linked_carts)
     if find_cart == pc:
-        find_cart = LinkedList.get_previous_object(find_cart,
-                state.linked_carts)
+        find_cart = LinkedList.get_previous_object(
+                find_cart, state.linked_carts
+                )
     find_coord = ConvertCoord.get_coord(find_cart)
     SpriteState.move_sprite(pc, find_coord)
 
@@ -356,8 +358,9 @@ static func _move_cart(
             # Move current cart.
             SpriteState.move_sprite(next_cart, target_coord)
             # 2/2: Update coord for the next cart.
-            next_cart = LinkedList.get_next_object(next_cart,
-                    state.linked_carts)
+            next_cart = LinkedList.get_next_object(
+                    next_cart, state.linked_carts
+                    )
             target_coord = save_coord
             # End loop when reaching the last cart.
             if next_cart == last_cart:
@@ -383,8 +386,9 @@ static func _remove_cart(
         ) -> void:
     var remove_id: int = remove_cart.get_instance_id()
     var remove_coord: Vector2i = ConvertCoord.get_coord(remove_cart)
-    var next_cart: Sprite2D = LinkedList.get_next_object(remove_cart,
-            state.linked_carts)
+    var next_cart: Sprite2D = LinkedList.get_next_object(
+            remove_cart, state.linked_carts
+            )
 
     LinkedList.remove_object(remove_cart, state.linked_carts)
     state.cart_states.erase(remove_id)

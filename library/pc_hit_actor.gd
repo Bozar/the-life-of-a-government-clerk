@@ -3,13 +3,13 @@ class_name PcHitActor
 
 static func handle_input(
         actor: Sprite2D, ref_PcAction: PcAction, ref_ActorAction: ActorAction,
-        ref_GameProgress: GameProgress, ref_Schedule: Schedule
+        ref_GameProgress: GameProgress, ref_RandomNumber: RandomNumber,
+        ref_Schedule: Schedule
         ) -> void:
-    var sub_tag: StringName = SpriteState.get_sub_tag(actor)
+    var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
     var player_win: bool
-    var first_item_tag: StringName
 
-    match sub_tag:
+    match SpriteState.get_sub_tag(actor):
         SubTag.SALARY:
             player_win = ref_PcAction.delivery < 1
             if _get_cash(ref_PcAction) or player_win:
@@ -27,36 +27,36 @@ static func handle_input(
                 pass
             else:
                 # Order matters. The Servant may be removed by _push_servant().
-                ref_ActorAction.push_servant(actor)
+                _servant_pushed_by_pc(actor, ref_ActorAction, ref_RandomNumber)
                 _push_servant(actor, ref_PcAction)
         SubTag.OFFICER:
             if _remove_all_servant(ref_PcAction):
                 pass
-            elif ref_ActorAction.can_receive_document(actor) \
+            elif HandleOfficer.can_receive_document(actor_state) \
                     and _unload_document(ref_PcAction):
-                ref_ActorAction.receive_document()
+                _document_unloaded_by_pc(ref_ActorAction, ref_RandomNumber)
             else:
                 return
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
             if _load_raw_file(actor, ref_PcAction, ref_ActorAction):
-                ref_ActorAction.send_raw_file(actor)
+                _raw_file_loaded_by_pc(actor, ref_ActorAction, ref_RandomNumber)
             elif _can_unload_servant(actor, ref_PcAction) \
-                    and ref_ActorAction.can_receive_servant(actor):
+                    and HandleRawFile.can_receive_servant(actor_state):
                 _unload_servant(ref_PcAction)
-                ref_ActorAction.receive_servant(actor)
+                HandleRawFile.receive_servant(actor_state)
             else:
                 return
         SubTag.CLERK:
             if _remove_all_servant(ref_PcAction):
                 pass
             else:
-                first_item_tag = _get_first_item_tag(ref_PcAction)
                 if _can_load_document(ref_PcAction) \
-                        and ref_ActorAction.send_document(actor):
+                        and HandleClerk.send_document(actor_state):
                     _load_document(ref_PcAction)
                 elif _can_unload_raw_file(ref_PcAction) \
-                        and ref_ActorAction.receive_raw_file(actor,
-                        first_item_tag):
+                        and HandleClerk.receive_raw_file(
+                        actor_state, _get_first_item_tag(ref_PcAction)
+                        ):
                     _unload_raw_file(ref_PcAction)
                 else:
                     return
@@ -107,10 +107,13 @@ static func _push_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
             < GameData.CART_LENGTH_SHORT:
         ref_PcAction.delay = 0
     else:
-        add_delay = floor(Cart.get_full_load_amount(ref_PcAction.pc,
-                ref_PcAction.linked_cart_state)
+        add_delay = floor(
+                Cart.get_full_load_amount(
+                ref_PcAction.pc, ref_PcAction.linked_cart_state
+                )
                 * GameData.LOAD_AMOUNT_MULTIPLER
-                / GameData.MAX_LOAD_PER_CART)
+                / GameData.MAX_LOAD_PER_CART
+                )
         ref_PcAction.delay = GameData.BASE_DELAY + add_delay
 
     new_actor_coord = ConvertCoord.get_mirror_coord(pc_coord, actor_coord)
@@ -128,8 +131,9 @@ static func _is_valid_coord(coord: Vector2i) -> bool:
 
 
 static func _unload_document(ref_PcAction: PcAction) -> bool:
-    var cart_sprite: Sprite2D = Cart.get_first_item(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+    var cart_sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
     var cart_state: CartState
 
     if cart_sprite == null:
@@ -148,17 +152,18 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
     return true
 
 
-static func _load_raw_file(actor: Sprite2D, ref_PcAction: PcAction,
-        ref_ActorAction: ActorAction) -> bool:
-
-    if not ref_ActorAction.raw_file_is_available(actor):
+static func _load_raw_file(
+        actor: Sprite2D, ref_PcAction: PcAction, ref_ActorAction: ActorAction
+        ) -> bool:
+    if not HandleRawFile.can_send_file(ref_ActorAction.get_actor_state(actor)):
         return false
     elif actor.is_in_group(SubTag.ENCYCLOPEDIA) \
             and (not _is_long_cart(ref_PcAction)):
         return false
 
-    var cart: Sprite2D = Cart.get_last_slot(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+    var cart: Sprite2D = Cart.get_last_slot(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
     var state: CartState
     var sub_tag: StringName
 
@@ -172,22 +177,26 @@ static func _load_raw_file(actor: Sprite2D, ref_PcAction: PcAction,
 
 
 static func _can_load_document(ref_PcAction: PcAction) -> bool:
-    return Cart.get_last_slot(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state) != null
+    return Cart.get_last_slot(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            ) != null
 
 
 static func _load_document(ref_PcAction: PcAction) -> void:
-    var sprite: Sprite2D =  Cart.get_last_slot(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
-    var state: CartState = Cart.get_state(sprite,
-            ref_PcAction.linked_cart_state)
+    var sprite: Sprite2D =  Cart.get_last_slot(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var state: CartState = Cart.get_state(
+            sprite, ref_PcAction.linked_cart_state
+            )
 
     state.item_tag = SubTag.DOCUMENT
 
 
 static func _can_unload_raw_file(ref_PcAction: PcAction) -> bool:
-    var sprite: Sprite2D = Cart.get_first_item(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+    var sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
     var state: CartState
 
     if sprite == null:
@@ -198,17 +207,20 @@ static func _can_unload_raw_file(ref_PcAction: PcAction) -> bool:
 
 
 static func _unload_raw_file(ref_PcAction: PcAction) -> void:
-    var sprite: Sprite2D = Cart.get_first_item(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
-    var state: CartState = Cart.get_state(sprite,
-            ref_PcAction.linked_cart_state)
+    var sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var state: CartState = Cart.get_state(
+            sprite, ref_PcAction.linked_cart_state
+            )
 
     state.item_tag = SubTag.CART
 
 
 static func _get_first_item_tag(ref_PcAction: PcAction) -> StringName:
-    var sprite: Sprite2D = Cart.get_first_item(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+    var sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
     var state: CartState
 
     if sprite == null:
@@ -233,21 +245,25 @@ static func _load_servant(actor: Sprite2D, ref_PcAction: PcAction) -> bool:
     state.item_tag = SubTag.SERVANT
 
     SpriteFactory.remove_sprite(actor)
-    Cart.pull_cart(ref_PcAction.pc, ConvertCoord.get_coord(actor),
-            ref_PcAction.linked_cart_state)
+    Cart.pull_cart(
+            ref_PcAction.pc, ConvertCoord.get_coord(actor),
+            ref_PcAction.linked_cart_state
+            )
     return true
 
 
 static func _remove_all_servant(ref_PcAction: PcAction) -> bool:
-    return Cart.remove_all_item(SubTag.SERVANT, ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+    return Cart.remove_all_item(
+            SubTag.SERVANT, ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
 
 
 static func _can_unload_servant(
         actor: Sprite2D, ref_PcAction: PcAction
         ) -> bool:
-    var cart_sprite: Sprite2D = Cart.get_first_item(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+    var cart_sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
     var cart_state: CartState
 
     if cart_sprite == null:
@@ -263,10 +279,12 @@ static func _can_unload_servant(
 
 
 static func _unload_servant(ref_PcAction: PcAction) -> void:
-        var cart_sprite: Sprite2D = Cart.get_first_item(ref_PcAction.pc,
-                ref_PcAction.linked_cart_state)
-        var cart_state: CartState = Cart.get_state(cart_sprite,
-                ref_PcAction.linked_cart_state)
+        var cart_sprite: Sprite2D = Cart.get_first_item(
+                ref_PcAction.pc, ref_PcAction.linked_cart_state
+                )
+        var cart_state: CartState = Cart.get_state(
+                cart_sprite, ref_PcAction.linked_cart_state
+                )
 
         cart_state.item_tag = SubTag.CART
 
@@ -274,3 +292,36 @@ static func _unload_servant(ref_PcAction: PcAction) -> void:
 static func _is_long_cart(ref_PcAction: PcAction) -> bool:
     return Cart.count_cart(ref_PcAction.linked_cart_state) \
             >= GameData.CART_LENGTH_LONG
+
+
+static func _servant_pushed_by_pc(
+        actor: Sprite2D, ref_ActorAction: ActorAction,
+        ref_RandomNumber: RandomNumber
+        ) -> void:
+    var state: ActorState = ref_ActorAction.get_actor_state(actor)
+
+    HandleRawFile.reduce_cooldown(
+            ref_ActorAction.raw_file_states, ref_RandomNumber
+            )
+    HandleClerk.reduce_progress(ref_ActorAction.clerk_states, ref_RandomNumber)
+    HandleServant.reset_idle_duration(state)
+
+
+static func _document_unloaded_by_pc(
+        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ) -> void:
+    HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
+    HandleOfficer.set_active(ref_ActorAction.officer_states, ref_RandomNumber)
+
+
+static func _raw_file_loaded_by_pc(
+        actor: Sprite2D, ref_ActorAction: ActorAction,
+        ref_RandomNumber: RandomNumber
+        ) -> void:
+    var servant_cooldown: int = HandleServant.get_servant_cooldown(
+            ref_ActorAction.get_actor_states(SubTag.SERVANT)
+            )
+    HandleRawFile.send_raw_file(
+            ref_ActorAction.get_actor_state(actor),
+            ref_RandomNumber, servant_cooldown
+            )

@@ -110,31 +110,33 @@ static func reduce_progress(
         state = i
         if not _is_valid_progress(state.progress):
             continue
-        state.progress -= ref_RandomNumber.get_int(GameData.MIN_REDUCE_PROGRESS,
-                GameData.MAX_REDUCE_PROGRESS + 1)
+        state.progress -= ref_RandomNumber.get_int(
+                GameData.MIN_REDUCE_PROGRESS, GameData.MAX_REDUCE_PROGRESS + 1
+                )
         break
 
 
-static func switch_examine_mode(is_examine: bool, states: Array) -> void:
+static func switch_examine_mode(is_enter: bool, states: Array) -> void:
     var clerk_state: ClerkState
     var desk_state: DeskState
 
     for i in states:
         clerk_state = i
-        _switch_clerk_sprite(is_examine, clerk_state)
+        _switch_clerk_sprite(is_enter, clerk_state)
         for j in clerk_state.desk_states:
             desk_state = j
             if desk_state.sprite == null:
                 continue
-            _switch_desk_sprite(is_examine, desk_state)
+            _switch_desk_sprite(is_enter, desk_state)
 
 
 static func _switch_clerk_sprite(is_examine: bool, state: ClerkState) -> void:
     var visual_tag: StringName
 
     if is_examine:
-        visual_tag = VisualTag.get_percent_tag(state.progress,
-                GameData.MAX_CLERK_PROGRESS)
+        visual_tag = VisualTag.get_percent_tag(
+                state.progress, GameData.MAX_CLERK_PROGRESS
+                )
         VisualEffect.switch_sprite(state.sprite, visual_tag)
     else:
         if state.has_document:
@@ -148,8 +150,9 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
     var visual_tag: StringName
 
     if is_examine:
-        visual_tag = VisualTag.get_percent_tag(state.remaining_page,
-                state.max_page)
+        visual_tag = VisualTag.get_percent_tag(
+                state.remaining_page, state.max_page
+                )
         VisualEffect.switch_sprite(state.sprite, visual_tag)
     else:
         visual_tag = VisualTag.DEFAULT

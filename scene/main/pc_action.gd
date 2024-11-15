@@ -172,8 +172,11 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
         if sub_tag in VALID_ACTOR_TAGS:
-            PcHitActor.handle_input(sprite, self, NodeHub.ref_ActorAction,
-                    NodeHub.ref_GameProgress, NodeHub.ref_Schedule)
+            PcHitActor.handle_input(
+                    sprite, self, NodeHub.ref_ActorAction,
+                    NodeHub.ref_GameProgress, NodeHub.ref_RandomNumber,
+                    NodeHub.ref_Schedule
+                    )
         return
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)

@@ -11,15 +11,16 @@ static func reset_idle_duration(state: ServantState) -> void:
     state.idle_duration = 0
 
 
-static func switch_examine_mode(is_examine: bool, states: Array) -> void:
+static func switch_examine_mode(is_enter: bool, states: Array) -> void:
     var state: ServantState
     var visual_tag: StringName
 
     for i in states:
         state = i
-        if is_examine:
-            visual_tag = VisualTag.get_percent_tag(state.idle_duration,
-                    state.max_idle_duration)
+        if is_enter:
+            visual_tag = VisualTag.get_percent_tag(
+                    state.idle_duration, state.max_idle_duration
+                    )
             VisualEffect.switch_sprite(state.sprite, visual_tag)
         else:
             # Switch sprite implicitly.

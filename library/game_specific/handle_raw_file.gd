@@ -1,6 +1,10 @@
 class_name HandleRawFile
 
 
+static func can_send_file(state: RawFileState) -> bool:
+    return state.cooldown < 1
+
+
 static func send_raw_file(
         state: RawFileState, ref_RandomNumber: RandomNumber,
         servant_cooldown: int
@@ -56,7 +60,7 @@ static func receive_servant(state: RawFileState) -> void:
     state.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
 
 
-static func switch_examine_mode(is_examine: bool, states: Array) -> void:
+static func switch_examine_mode(is_enter: bool, states: Array) -> void:
     var state: RawFileState
     var progress_bar: Sprite2D
     var remaining_cooldown: int
@@ -68,10 +72,11 @@ static func switch_examine_mode(is_examine: bool, states: Array) -> void:
         if progress_bar == null:
             continue
 
-        if is_examine:
+        if is_enter:
             remaining_cooldown = state.max_cooldown - state.cooldown
-            visual_tag = VisualTag.get_percent_tag(remaining_cooldown,
-                    state.max_cooldown)
+            visual_tag = VisualTag.get_percent_tag(
+                    remaining_cooldown, state.max_cooldown
+                    )
         VisualEffect.switch_sprite(progress_bar, visual_tag)
 
 

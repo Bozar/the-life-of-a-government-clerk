@@ -1,41 +1,45 @@
-# class_name SpriteFactory
+class_name SpriteFactory
 extends Node2D
+# A library script should not be aware of tree nodes directly, unless it is a
+# decorator of one or more nodes, such as SpriteFactory or SpriteState.
 
 
-func create_sprite(
+static func create_sprite(
         main_tag: StringName, sub_tag: StringName, coord: Vector2i,
         send_signal: bool
         ) -> TaggedSprite:
-    var tagged_sprite: TaggedSprite = CreateSprite.create(main_tag, sub_tag,
-            coord)
+    var tagged_sprite: TaggedSprite = CreateSprite.create(
+            main_tag, sub_tag, coord
+            )
+
     if send_signal:
         NodeHub.ref_SignalHub.sprite_created.emit([tagged_sprite])
     return tagged_sprite
 
 
-func create_ground(
+static func create_ground(
         sub_tag: StringName, coord: Vector2i, send_signal: bool
         ) -> TaggedSprite:
     return create_sprite(MainTag.GROUND, sub_tag, coord, send_signal)
 
 
-func create_trap(
+static func create_trap(
         sub_tag: StringName, coord: Vector2i, send_signal: bool
         ) -> TaggedSprite:
     return create_sprite(MainTag.TRAP, sub_tag, coord, send_signal)
 
 
-func create_building(
+static func create_building(
         sub_tag: StringName, coord: Vector2i, send_signal: bool
         ) -> TaggedSprite:
     return create_sprite(MainTag.BUILDING, sub_tag, coord, send_signal)
 
 
-func create_actor(
+static func create_actor(
         sub_tag: StringName, coord: Vector2i, send_signal: bool
         ) -> TaggedSprite:
     return create_sprite(MainTag.ACTOR, sub_tag, coord, send_signal)
 
 
-func remove_sprite(sprite: Sprite2D) -> void:
+static func remove_sprite(sprite: Sprite2D) -> void:
     NodeHub.ref_SignalHub.sprite_removed.emit([sprite])

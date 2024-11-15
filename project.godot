@@ -18,8 +18,6 @@ config/icon="res://resource/letter-c.png"
 
 [autoload]
 
-SpriteFactory="*res://autoload/sprite_factory.gd"
-SpriteState="*res://autoload/sprite_state.gd"
 EndGame="*res://autoload/end_game.gd"
 TransferData="*res://autoload/transfer_data.gd"
 NodeHub="*res://autoload/node_hub.gd"

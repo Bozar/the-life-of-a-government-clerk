@@ -50,7 +50,7 @@ func get_actor_states(sub_tag: StringName) -> Array:
     return states
 
 
-func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
+func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
     var actor_state: ActorState = get_actor_state(sprite)
     var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
 
@@ -67,7 +67,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     NodeHub.ref_Schedule.start_next_turn()
 
 
-func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
+func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     var id: int
     var new_state: ActorState
 
@@ -102,7 +102,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                 _actor_states[id] = ActorState.new(i.sprite, i.sub_tag)
 
 
-func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
+func _on_SignalHub_sprite_removed(sprites: Array) -> void:
     var id: int
 
     for i: Sprite2D in sprites:

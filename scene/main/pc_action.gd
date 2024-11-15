@@ -2,9 +2,6 @@ class_name PcAction
 extends Node2D
 
 
-signal ui_force_updated()
-
-
 enum {
     NORMAL_MODE,
     EXAMINE_MODE
@@ -65,7 +62,7 @@ var _shadow_cast_fov_data: ShadowCastFov.FovData = ShadowCastFov.FovData.new(
         GameData.PC_SIGHT_RANGE)
 
 
-func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
+func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     if pc != null:
         return
 
@@ -77,7 +74,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             return
 
 
-func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
+func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
@@ -104,7 +101,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
 
 
-func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
+func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
     match game_mode:
         NORMAL_MODE:
             match input_tag:
@@ -151,7 +148,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
                 _:
                     return
     PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
-    ui_force_updated.emit()
+    NodeHub.ref_SignalHub.ui_force_updated.emit()
 
 
 func _on_SignalHub_game_over(player_win: bool) -> void:

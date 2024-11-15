@@ -9,8 +9,6 @@ func reload() -> void:
     var new_scene: Node2D = preload(PATH_TO_ROOT).instantiate()
     var old_scene: Node2D = get_tree().current_scene
 
-    SpriteFactory.clear_data()
-
     get_tree().root.add_child(new_scene)
     get_tree().current_scene = new_scene
 

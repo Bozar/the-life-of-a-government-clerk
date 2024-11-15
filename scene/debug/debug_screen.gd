@@ -48,7 +48,7 @@ func init_gui() -> void:
 
 
 # NOTE: Delete `ui_cancel` key in `Input Map`.
-func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
+func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
     match input_tag:
         InputTag.CLOSE_MENU:
             visible = false

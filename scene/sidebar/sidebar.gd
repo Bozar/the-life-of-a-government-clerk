@@ -15,7 +15,7 @@ func update_gui() -> void:
     _ref_StateLabel.update_gui()
 
 
-func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
+func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
     _ref_StateLabel.add_turn_counter()
@@ -28,11 +28,11 @@ func _on_SignalHub_game_over(player_win: bool) -> void:
     _ref_StateLabel.update_gui()
 
 
-func _on_PcAction_ui_force_updated() -> void:
+func _on_SignalHub_ui_force_updated() -> void:
     update_gui()
 
 
-func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
+func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
     match input_tag:
         InputTag.CLOSE_MENU:
             visible = true

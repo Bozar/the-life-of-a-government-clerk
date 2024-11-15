@@ -44,12 +44,12 @@ func get_sprites_by_tag(main_tag: StringName, sub_tag: StringName) -> Array:
     return sprites
 
 
-func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
+func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         _add_sprite(i.sprite, i.main_tag, i.sub_tag)
 
 
-func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
+func _on_SignalHub_sprite_removed(sprites: Array) -> void:
     for i: Sprite2D in sprites:
         _remove_sprite(i)
 

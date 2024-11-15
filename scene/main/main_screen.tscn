@@ -46,13 +46,13 @@ script = ExtResource("8_q6781")
 [node name="ActorAction" type="Node2D" parent="."]
 script = ExtResource("9_psynh")
 
-[node name="Sidebar" parent="." instance=ExtResource("10_do70e")]
-
 [node name="RandomNumber" type="Node2D" parent="."]
 script = ExtResource("12_ymw0w")
 
 [node name="SignalHub" type="Node2D" parent="."]
 script = ExtResource("14_p40ip")
+
+[node name="Sidebar" parent="." instance=ExtResource("10_do70e")]
 
 [node name="HelpScreen" parent="." instance=ExtResource("14_innsn")]
 

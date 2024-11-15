@@ -2,9 +2,6 @@ class_name Schedule
 extends Node2D
 
 
-signal turn_started(sprite: Sprite2D)
-
-
 var _game_over: bool = false
 var _is_first_turn: bool = true
 var _schedule: Dictionary
@@ -15,10 +12,10 @@ var _pc: Sprite2D
 func start_next_turn() -> void:
     if _game_over:
         return
-    turn_started.emit(_point_to_next_sprite())
+    NodeHub.ref_SignalHub.turn_started.emit(_point_to_next_sprite())
 
 
-func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
+func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     var sprite: Sprite2D
 
     for i: TaggedSprite in tagged_sprites:
@@ -36,7 +33,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             _pc = sprite
 
 
-func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
+func _on_SignalHub_sprite_removed(sprites: Array) -> void:
     for i: Sprite2D in sprites:
         if not i.is_in_group(MainTag.ACTOR):
             continue

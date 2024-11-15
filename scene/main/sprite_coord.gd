@@ -65,7 +65,7 @@ func get_sprite_by_coord(
     return null
 
 
-func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
+func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         if i.main_tag == MainTag.INDICATOR:
             _indicators[i.sub_tag] = i.sprite
@@ -73,7 +73,7 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
             _add_sprite(i.sprite, i.main_tag)
 
 
-func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
+func _on_SignalHub_sprite_removed(sprites: Array) -> void:
     for i: Sprite2D in sprites:
         _remove_sprite(i, SpriteState.get_main_tag(i))
 

@@ -58,7 +58,7 @@ func init_gui() -> void:
         scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
-func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
+func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
     match input_tag:
         InputTag.OPEN_HELP_MENU:
             visible = true

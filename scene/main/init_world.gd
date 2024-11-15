@@ -57,7 +57,7 @@ func create_world() -> void:
     pc_coord = _create_pc(occupied_grids, tagged_sprites)
     _create_indicator(pc_coord, tagged_sprites)
 
-    SpriteFactory.sprite_created.emit(tagged_sprites)
+    NodeHub.ref_SignalHub.sprite_created.emit(tagged_sprites)
 
 
 func _create_pc(occupied_grids: Dictionary, tagged_sprites: Array) -> Vector2i:

@@ -24,18 +24,19 @@ const SPRITE_STATE: String = "/root/SpriteState"
 const SIGNAL_SPRITE_CREATED: String = "sprite_created"
 const SIGNAL_SPRITE_REMOVED: String = "sprite_removed"
 
-const SIGNAL_ACTION_PRESSED: String = "action_pressed"
-
 const SIGNAL_TURN_STARTED: String = "turn_started"
-
 const SIGNAL_GAME_OVER: String = "game_over"
 
+const SIGNAL_ACTION_PRESSED: String = "action_pressed"
 const SIGNAL_UI_FORCE_UPDATED: String = "ui_force_updated"
 
 
 # {source_node: {signal_name: [target_node_1, ...]}, ...}
 const SIGNAL_CONNECTIONS: Dictionary = {
-    SPRITE_FACTORY: {
+    SIGNAL_HUB: {
+        SIGNAL_GAME_OVER: [
+            SCHEDULE, PC_ACTION, PLAYER_INPUT, SIDEBAR,
+        ],
         SIGNAL_SPRITE_CREATED: [
             SPRITE_ROOT, PC_ACTION, SPRITE_COORD, SPRITE_TAG, SCHEDULE,
             ACTOR_ACTION,
@@ -43,26 +44,15 @@ const SIGNAL_CONNECTIONS: Dictionary = {
         SIGNAL_SPRITE_REMOVED: [
             SPRITE_ROOT, SPRITE_COORD, SPRITE_TAG, SCHEDULE, ACTOR_ACTION,
         ],
-    },
-    PLAYER_INPUT: {
+        SIGNAL_UI_FORCE_UPDATED: [
+            SIDEBAR,
+        ],
         SIGNAL_ACTION_PRESSED: [
             PC_ACTION, RANDOM_NUMBER, SIDEBAR, SPRITE_ROOT, HELP_SCREEN,
             DEBUG_SCREEN,
         ],
-    },
-    SCHEDULE: {
         SIGNAL_TURN_STARTED: [
             PLAYER_INPUT, PC_ACTION, ACTOR_ACTION, SIDEBAR,
-        ],
-    },
-    SIGNAL_HUB: {
-        SIGNAL_GAME_OVER: [
-            SCHEDULE, PC_ACTION, PLAYER_INPUT, SIDEBAR,
-        ],
-    },
-    PC_ACTION: {
-        SIGNAL_UI_FORCE_UPDATED: [
-        SIDEBAR,
         ],
     },
 }

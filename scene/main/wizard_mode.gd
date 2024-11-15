@@ -8,7 +8,7 @@ func handle_input(input_tag: StringName) -> void:
 
 func _test(input_tag: StringName) -> void:
     var ref_pc_action: PcAction = get_node("..")
-    var linked_state: LinkedCartState = ref_pc_action._linked_cart_state
+    var linked_state: LinkedCartState = ref_pc_action.linked_cart_state
 
     match input_tag:
         InputTag.WIZARD_1:
@@ -16,4 +16,5 @@ func _test(input_tag: StringName) -> void:
         InputTag.WIZARD_2:
             ref_pc_action.cash += 1
         InputTag.WIZARD_3:
-            ref_pc_action.clean_cart()
+            Cart.clean_cart(NodeHub.ref_PcAction.pc,
+                    NodeHub.ref_PcAction.linked_cart_state)

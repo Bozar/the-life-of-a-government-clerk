@@ -117,8 +117,8 @@ func _on_SpriteFactory_sprite_created(tagged_sprites: Array) -> void:
                 SubTag.SERVANT:
                     new_state = ServantState.new(i.sprite, i.sub_tag)
                     _actor_states[id] = new_state
-                    new_state.max_idle_duration = \
-                            NodeHub.ref_RandomNumber.get_int(
+                    new_state.max_idle_duration \
+                            = NodeHub.ref_RandomNumber.get_int(
                             GameData.MIN_IDLE_DURATION,
                             GameData.MAX_IDLE_DURATION + 1)
                 _:
@@ -149,8 +149,8 @@ func _get_actor_state(sprite: Sprite2D) -> ActorState:
 
 
 func _is_npc(sprite: Sprite2D) -> bool:
-    return sprite.is_in_group(MainTag.ACTOR) and \
-            (not sprite.is_in_group(SubTag.PC))
+    return sprite.is_in_group(MainTag.ACTOR) \
+            and (not sprite.is_in_group(SubTag.PC))
 
 
 func _get_actor_states(sub_tag: StringName) -> Array:
@@ -191,5 +191,5 @@ func _approach_pc(
 
 
 func _is_obstacle(coord: Vector2i, _opt_args: Array) -> bool:
-    return SpriteState.has_building_at_coord(coord) or \
-            SpriteState.has_actor_at_coord(coord)
+    return SpriteState.has_building_at_coord(coord) \
+            or SpriteState.has_actor_at_coord(coord)

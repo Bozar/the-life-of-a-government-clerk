@@ -157,8 +157,8 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
 
 
 static func _is_valid_progress(progress: int) -> bool:
-    return (progress > GameData.PROGRESS_CUP) and \
-            (progress < GameData.MAX_CLERK_PROGRESS )
+    return (progress > GameData.PROGRESS_CUP) \
+            and (progress < GameData.MAX_CLERK_PROGRESS )
 
 
 static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:

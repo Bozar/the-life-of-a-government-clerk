@@ -109,8 +109,8 @@ func _scroll_screen(input_tag: StringName) -> void:
         InputTag.PAGE_TOP:
             scroll.scroll_vertical = 0
         InputTag.PAGE_BOTTOM:
-            scroll.scroll_vertical = \
-                    scroll.get_v_scroll_bar().max_value as int
+            scroll.scroll_vertical \
+                    = scroll.get_v_scroll_bar().max_value as int
         _:
             scroll.scroll_vertical += _get_scroll_distance(input_tag)
 

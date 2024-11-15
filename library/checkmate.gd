@@ -47,8 +47,9 @@ static func _sort_by_index(lower: Sprite2D, higher: Sprite2D) -> bool:
 
 
 static func _is_fully_loaded(ref_PcAction: PcAction) -> bool:
-    var current_cart: int = ref_PcAction.count_cart()
-    var current_load: int = ref_PcAction.get_full_load_amount()
+    var current_cart: int = Cart.count_cart(ref_PcAction.linked_cart_state)
+    var current_load: int = Cart.get_full_load_amount(ref_PcAction.pc,
+            ref_PcAction.linked_cart_state)
 
     if current_cart < 1:
         return false

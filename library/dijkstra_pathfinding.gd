@@ -17,8 +17,8 @@ static func get_coords(
 
     for i: int in range(0, neighbor.size()):
         coord = neighbor[i]
-        if Map2D.is_in_map(coord, map_2d) and \
-                _is_valid_distance(map_2d, coord, OBSTACLE):
+        if Map2D.is_in_map(coord, map_2d) \
+                and _is_valid_distance(map_2d, coord, OBSTACLE):
             if map_2d[coord.x][coord.y] < min_distance:
                 min_distance = map_2d[coord.x][coord.y]
                 ArrayHelper.swap_element(neighbor, 0, i)
@@ -84,6 +84,6 @@ static func _get_distance(map_2d: Dictionary, center_coord: Vector2i) -> int:
 static func _is_valid_distance(
         map_2d: Dictionary, coord: Vector2i, max_distance: int
         ) -> bool:
-    return Map2D.is_in_map(coord, map_2d) and \
-            (map_2d[coord.x][coord.y] < max_distance) and \
-            (map_2d[coord.x][coord.y] > UNKNOWN)
+    return Map2D.is_in_map(coord, map_2d) \
+            and (map_2d[coord.x][coord.y] < max_distance) \
+            and (map_2d[coord.x][coord.y] > UNKNOWN)

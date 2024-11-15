@@ -17,12 +17,12 @@ const FALSE: String = "false"
 const MAX_INT: int = 2 ** 32 - 1
 
 
-@onready var _ref_SeedLineEdit: CustomLineEdit = \
-        $DebugVBox/SettingGrid/SeedLineEdit
-@onready var _ref_WizardLineEdit: CustomLineEdit = \
-        $DebugVBox/SettingGrid/WizardLineEdit
-@onready var _ref_MapLineEdit: CustomLineEdit = \
-        $DebugVBox/SettingGrid/MapLineEdit
+@onready var _ref_SeedLineEdit: CustomLineEdit \
+        = $DebugVBox/SettingGrid/SeedLineEdit
+@onready var _ref_WizardLineEdit: CustomLineEdit \
+        = $DebugVBox/SettingGrid/WizardLineEdit
+@onready var _ref_MapLineEdit: CustomLineEdit \
+        = $DebugVBox/SettingGrid/MapLineEdit
 
 
 func _ready() -> void:

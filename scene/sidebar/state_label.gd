@@ -25,8 +25,9 @@ func update_gui() -> void:
         _turn_counter, NodeHub.ref_PcAction.delivery,
         NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
     ]
-    var first_item: String = NodeHub.ref_PcAction.first_item_text
-    var state: String = NodeHub.ref_PcAction.state_text
+    var first_item: String = Cart.get_first_item_text(NodeHub.ref_PcAction.pc,
+            NodeHub.ref_PcAction.linked_cart_state)
+    var state: String = _get_state_text()
     var end_game: String = ""
 
     if game_over:
@@ -42,3 +43,13 @@ func add_turn_counter() -> void:
         _turn_counter = GameData.MIN_TURN_COUNTER
     else:
         _turn_counter = max(_turn_counter, GameData.MIN_TURN_COUNTER)
+
+
+func _get_state_text() -> String:
+    match NodeHub.ref_PcAction.game_mode:
+        NodeHub.ref_PcAction.NORMAL_MODE:
+            return Cart.get_extend_text(NodeHub.ref_PcAction.linked_cart_state)
+        NodeHub.ref_PcAction.EXAMINE_MODE:
+            return Cart.get_examine_text(NodeHub.ref_PcAction.pc,
+                    NodeHub.ref_PcAction.linked_cart_state)
+    return ""

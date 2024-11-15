@@ -72,17 +72,18 @@ func _create_servant(
 
 func _has_max_servant(ref_PcAction: PcAction) -> bool:
     var remaining_delivery: int = GameData.MAX_DELIVERY - ref_PcAction.delivery
-    var max_servant: int = GameData.BASE_SERVANT + \
-            GameData.ADD_SERVANT * remaining_delivery
+    var max_servant: int = GameData.BASE_SERVANT \
+            + GameData.ADD_SERVANT * remaining_delivery
     var current_servant: int = SpriteState.get_sprites_by_sub_tag(
             SubTag.SERVANT).size()
-    var carry_servant: int = ref_PcAction.count_item(SubTag.SERVANT)
+    var carry_servant: int = Cart.count_item(SubTag.SERVANT, ref_PcAction.pc,
+            ref_PcAction.linked_cart_state)
 
     return current_servant + carry_servant >= max_servant
 
 
 func _is_invalid_sprite(sprite: Sprite2D) -> bool:
-    return sprite.is_in_group(SubTag.INTERNAL_FLOOR) or \
-            sprite.is_in_group(MainTag.BUILDING) or \
-            (sprite.is_in_group(MainTag.ACTOR) and \
-            not sprite.is_in_group(SubTag.PC))
+    return sprite.is_in_group(SubTag.INTERNAL_FLOOR) \
+            or sprite.is_in_group(MainTag.BUILDING) \
+            or (sprite.is_in_group(MainTag.ACTOR)
+            and (not sprite.is_in_group(SubTag.PC)))

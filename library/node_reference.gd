@@ -9,8 +9,8 @@ const SPRITE_TAG: String = "SpriteTag"
 const SCHEDULE: String = "Schedule"
 const ACTOR_ACTION: String = "ActorAction"
 const RANDOM_NUMBER: String = "RandomNumber"
-const GAME_PROGRESS: String = "GameProgress"
 const INIT_WORLD: String = "InitWorld"
+const SIGNAL_HUB: String = "SignalHub"
 
 const SIDEBAR: String = "Sidebar"
 
@@ -55,7 +55,7 @@ const SIGNAL_CONNECTIONS: Dictionary = {
             PLAYER_INPUT, PC_ACTION, ACTOR_ACTION, SIDEBAR,
         ],
     },
-    GAME_PROGRESS: {
+    SIGNAL_HUB: {
         SIGNAL_GAME_OVER: [
             SCHEDULE, PC_ACTION, PLAYER_INPUT, SIDEBAR,
         ],
@@ -84,11 +84,7 @@ const NODE_CONNECTIONS: Dictionary = {
         PC_ACTION,
     ],
     RANDOM_NUMBER: [
-        ACTOR_ACTION, SIDEBAR, GAME_PROGRESS, INIT_WORLD, PC_ACTION,
-    ],
-    GAME_PROGRESS: [
-        PC_ACTION,
-        # ACTOR_ACTION,
+        ACTOR_ACTION, SIDEBAR, INIT_WORLD, PC_ACTION,
     ],
 }
 
@@ -100,5 +96,5 @@ const NODE_NAMES: Array = [
     PC_ACTION,
     ACTOR_ACTION,
     RANDOM_NUMBER,
-    GAME_PROGRESS,
+    SIGNAL_HUB,
 ]

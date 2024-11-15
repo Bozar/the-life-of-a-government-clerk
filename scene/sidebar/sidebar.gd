@@ -22,7 +22,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     update_gui()
 
 
-func _on_GameProgress_game_over(player_win: bool) -> void:
+func _on_SignalHub_game_over(player_win: bool) -> void:
     _ref_StateLabel.game_over = true
     _ref_StateLabel.player_win = player_win
     _ref_StateLabel.update_gui()

@@ -3,7 +3,7 @@ class_name PcHitActor
 
 static func handle_input(
         actor: Sprite2D, ref_PcAction: PcAction, ref_ActorAction: ActorAction,
-        ref_GameProgress: GameProgress, ref_RandomNumber: RandomNumber,
+        ref_RandomNumber: RandomNumber, ref_SignalHub: SignalHub,
         ref_Schedule: Schedule
         ) -> void:
     var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
@@ -64,7 +64,7 @@ static func handle_input(
             return
 
     if player_win:
-        ref_GameProgress.game_over.emit(true)
+        ref_SignalHub.game_over.emit(true)
     else:
         ref_Schedule.start_next_turn()
 

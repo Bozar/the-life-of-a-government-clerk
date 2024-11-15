@@ -12,8 +12,8 @@
 [ext_resource type="Script" path="res://scene/main/actor_action.gd" id="9_psynh"]
 [ext_resource type="PackedScene" uid="uid://dphslwd58ka2w" path="res://scene/sidebar/sidebar.tscn" id="10_do70e"]
 [ext_resource type="Script" path="res://scene/main/random_number.gd" id="12_ymw0w"]
-[ext_resource type="Script" path="res://scene/main/game_progress.gd" id="13_ptfnh"]
 [ext_resource type="PackedScene" uid="uid://dj58gs1r0ay2d" path="res://scene/help/help_screen.tscn" id="14_innsn"]
+[ext_resource type="Script" path="res://scene/main/signal_hub.gd" id="14_p40ip"]
 [ext_resource type="PackedScene" uid="uid://dgblbv4xseynh" path="res://scene/debug/debug_screen.tscn" id="15_s6fxc"]
 
 [node name="MainScreen" type="Node2D"]
@@ -51,8 +51,8 @@ script = ExtResource("9_psynh")
 [node name="RandomNumber" type="Node2D" parent="."]
 script = ExtResource("12_ymw0w")
 
-[node name="GameProgress" type="Node2D" parent="."]
-script = ExtResource("13_ptfnh")
+[node name="SignalHub" type="Node2D" parent="."]
+script = ExtResource("14_p40ip")
 
 [node name="HelpScreen" parent="." instance=ExtResource("14_innsn")]
 

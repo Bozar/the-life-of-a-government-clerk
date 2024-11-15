@@ -58,6 +58,7 @@ var _linked_cart_state := LinkedCartState.new()
 
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
+var _progress_state := ProgressState.new()
 
 var _fov_map: Dictionary = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
 var _shadow_cast_fov_data: ShadowCastFov.FovData = ShadowCastFov.FovData.new(
@@ -80,10 +81,10 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    NodeHub.ref_GameProgress.update_world(self)
+    GameProgress.update_world(_progress_state, self, NodeHub.ref_RandomNumber)
 
     if Checkmate.is_game_over(self):
-        NodeHub.ref_GameProgress.game_over.emit(false)
+        NodeHub.ref_SignalHub.game_over.emit(false)
         return
     elif delay > 0:
         delay -= 1
@@ -153,7 +154,7 @@ func _on_PlayerInput_action_pressed(input_tag: StringName) -> void:
     ui_force_updated.emit()
 
 
-func _on_GameProgress_game_over(player_win: bool) -> void:
+func _on_SignalHub_game_over(player_win: bool) -> void:
     PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
     if not player_win:
         VisualEffect.set_dark_color(pc)
@@ -174,7 +175,7 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
         if sub_tag in VALID_ACTOR_TAGS:
             PcHitActor.handle_input(
                     sprite, self, NodeHub.ref_ActorAction,
-                    NodeHub.ref_GameProgress, NodeHub.ref_RandomNumber,
+                    NodeHub.ref_RandomNumber, NodeHub.ref_SignalHub,
                     NodeHub.ref_Schedule
                     )
         return

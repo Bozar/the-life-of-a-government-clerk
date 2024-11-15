@@ -1,22 +1,20 @@
 class_name GameProgress
-extends Node2D
 
 
 const MAX_RETRY: int = 10
 
 
-signal game_over(player_win: bool)
+static func update_world(
+        state: ProgressState, ref_PcAction: PcAction,
+        ref_RandomNumber: RandomNumber
+        ) -> void:
+    _init_ground_coords(state, ref_RandomNumber)
+    _create_servant(state, ref_PcAction, ref_RandomNumber, MAX_RETRY)
 
 
-var _progress_state := ProgressState.new()
-
-
-func update_world(ref_PcAction: PcAction) -> void:
-    _init_ground_coords(_progress_state)
-    _create_servant(_progress_state, ref_PcAction, MAX_RETRY)
-
-
-func _init_ground_coords(state: ProgressState) -> void:
+static func _init_ground_coords(
+        state: ProgressState, ref_RandomNumber: RandomNumber
+        ) -> void:
     if not state.ground_coords.is_empty():
         return
 
@@ -38,11 +36,12 @@ func _init_ground_coords(state: ProgressState) -> void:
             if save_coord:
                 state.ground_coords.push_back(coord)
 
-    ArrayHelper.shuffle(state.ground_coords, NodeHub.ref_RandomNumber)
+    ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
 
 
-func _create_servant(
-        state: ProgressState, ref_PcAction: PcAction, retry: int
+static func _create_servant(
+        state: ProgressState, ref_PcAction: PcAction,
+        ref_RandomNumber: RandomNumber, retry: int
         ) -> void:
     if retry < 0:
         return
@@ -64,25 +63,27 @@ func _create_servant(
     state.ground_index += 1
     if state.ground_index > state.ground_coords.size():
         state.ground_index = 0
-        ArrayHelper.shuffle(state.ground_coords, NodeHub.ref_RandomNumber)
+        ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
 
     if not is_created:
-        _create_servant(state, ref_PcAction, retry - 1)
+        _create_servant(state, ref_PcAction, ref_RandomNumber, retry - 1)
 
 
-func _has_max_servant(ref_PcAction: PcAction) -> bool:
+static func _has_max_servant(ref_PcAction: PcAction) -> bool:
     var remaining_delivery: int = GameData.MAX_DELIVERY - ref_PcAction.delivery
     var max_servant: int = GameData.BASE_SERVANT \
             + GameData.ADD_SERVANT * remaining_delivery
     var current_servant: int = SpriteState.get_sprites_by_sub_tag(
-            SubTag.SERVANT).size()
-    var carry_servant: int = Cart.count_item(SubTag.SERVANT, ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+            SubTag.SERVANT
+            ).size()
+    var carry_servant: int = Cart.count_item(
+            SubTag.SERVANT, ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
 
     return current_servant + carry_servant >= max_servant
 
 
-func _is_invalid_sprite(sprite: Sprite2D) -> bool:
+static func _is_invalid_sprite(sprite: Sprite2D) -> bool:
     return sprite.is_in_group(SubTag.INTERNAL_FLOOR) \
             or sprite.is_in_group(MainTag.BUILDING) \
             or (sprite.is_in_group(MainTag.ACTOR)

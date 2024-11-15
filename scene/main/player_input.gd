@@ -60,7 +60,7 @@ func _on_Schedule_turn_started(sprite: Sprite2D) -> void:
     set_process_unhandled_input(sprite.is_in_group(SubTag.PC))
 
 
-func _on_GameProgress_game_over(_player_win: bool) -> void:
+func _on_SignalHub_game_over(_player_win: bool) -> void:
     set_process_unhandled_input(true)
     _input_flag = _input_flag & ~GAMEPLAY_FLAG
     _input_flag = _input_flag | GAME_OVER_FLAG

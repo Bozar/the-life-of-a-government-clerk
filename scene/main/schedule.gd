@@ -45,7 +45,7 @@ func _on_SpriteFactory_sprite_removed(sprites: Array) -> void:
         LinkedList.remove_object(i, _schedule)
 
 
-func _on_GameProgress_game_over(_player_win: bool) -> void:
+func _on_SignalHub_game_over(_player_win: bool) -> void:
     _game_over = true
 
 

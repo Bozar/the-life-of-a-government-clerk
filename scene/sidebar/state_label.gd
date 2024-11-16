@@ -2,7 +2,7 @@ class_name StateLabel
 extends CustomLabel
 
 
-const PROGRESS: String = "+%s.%s|$%s.%s"
+const PROGRESS_TEMPLATE: String = "Turn: %s\nDocu: %s\nCash: %s-%s"
 
 const YOU_WIN: String = "You win.\n[Space]"
 const YOU_LOSE: String = "You lose.\n[Space]"
@@ -21,12 +21,13 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var progress: String = PROGRESS % [
+    var progress: String = PROGRESS_TEMPLATE % [
         _turn_counter, NodeHub.ref_PcAction.delivery,
         NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
     ]
-    var first_item: String = Cart.get_first_item_text(NodeHub.ref_PcAction.pc,
-            NodeHub.ref_PcAction.linked_cart_state)
+    var first_item: String = Cart.get_first_item_text(
+            NodeHub.ref_PcAction.pc, NodeHub.ref_PcAction.linked_cart_state
+            )
     var state: String = _get_state_text()
     var end_game: String = ""
 
@@ -50,6 +51,8 @@ func _get_state_text() -> String:
         NodeHub.ref_PcAction.NORMAL_MODE:
             return Cart.get_extend_text(NodeHub.ref_PcAction.linked_cart_state)
         NodeHub.ref_PcAction.EXAMINE_MODE:
-            return Cart.get_examine_text(NodeHub.ref_PcAction.pc,
-                    NodeHub.ref_PcAction.linked_cart_state)
+            return Cart.get_examine_text(
+                    NodeHub.ref_PcAction.pc,
+                    NodeHub.ref_PcAction.linked_cart_state
+                    )
     return ""

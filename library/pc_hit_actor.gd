@@ -101,26 +101,28 @@ static func _push_servant(actor: Sprite2D, ref_PcAction: PcAction) -> void:
     var actor_coord: Vector2i = ConvertCoord.get_coord(actor)
     var pc_coord: Vector2i = ref_PcAction.pc_coord
     var new_actor_coord: Vector2i
-    var add_delay: int
+    var trap: Sprite2D
+    var remove_actor: bool = true
 
     if Cart.count_cart(ref_PcAction.linked_cart_state) \
             < GameData.CART_LENGTH_SHORT:
         ref_PcAction.delay = 0
     else:
-        add_delay = floor(
-                Cart.get_full_load_amount(
+        ref_PcAction.delay = Cart.get_delay_duration(
                 ref_PcAction.pc, ref_PcAction.linked_cart_state
                 )
-                * GameData.LOAD_AMOUNT_MULTIPLER
-                / GameData.MAX_LOAD_PER_CART
-                )
-        ref_PcAction.delay = GameData.BASE_DELAY + add_delay
 
     new_actor_coord = ConvertCoord.get_mirror_coord(pc_coord, actor_coord)
     if _is_valid_coord(new_actor_coord):
-        SpriteState.move_sprite(actor, new_actor_coord)
-    else:
+        trap = SpriteState.get_trap_by_coord(new_actor_coord)
+        if trap == null:
+            remove_actor = false
+            SpriteState.move_sprite(actor, new_actor_coord)
+        else:
+            SpriteFactory.remove_sprite(trap)
+    if remove_actor:
         SpriteFactory.remove_sprite(actor)
+
     Cart.pull_cart(ref_PcAction.pc, actor_coord, ref_PcAction.linked_cart_state)
 
 

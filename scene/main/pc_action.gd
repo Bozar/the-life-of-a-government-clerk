@@ -4,7 +4,7 @@ extends Node2D
 
 enum {
     NORMAL_MODE,
-    EXAMINE_MODE
+    EXAMINE_MODE,
 }
 
 
@@ -21,6 +21,10 @@ const VALID_ACTOR_TAGS: Array = [
     SubTag.SERVANT,
     SubTag.STATION,
     SubTag.GARAGE,
+]
+
+const VALID_TRAP_TAGS: Array = [
+    SubTag.DRAFT_PILE,
 ]
 
 
@@ -118,7 +122,7 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE:
                     if Cart.enter_examine_mode(pc, linked_cart_state):
                         _game_mode = EXAMINE_MODE
-                        _enter_examine_mode(true, NodeHub.ref_ActorAction)
+                        PcSwitchMode.examine_mode(true, NodeHub.ref_ActorAction)
                     else:
                         return
                 InputTag.MOVE_LEFT:
@@ -146,7 +150,7 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
                 InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
                     _game_mode = NORMAL_MODE
                     Cart.exit_examine_mode(pc, linked_cart_state)
-                    _enter_examine_mode(false, NodeHub.ref_ActorAction)
+                    PcSwitchMode.examine_mode(false, NodeHub.ref_ActorAction)
                 InputTag.MOVE_UP:
                     Cart.examine_first_cart(pc, linked_cart_state)
                 InputTag.MOVE_DOWN:
@@ -186,6 +190,14 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
                     NodeHub.ref_Schedule
                     )
         return
+    elif SpriteState.has_trap_at_coord(coord):
+        sprite = SpriteState.get_trap_by_coord(coord)
+        sub_tag = SpriteState.get_sub_tag(sprite)
+        if sub_tag in VALID_TRAP_TAGS:
+            PcHitTrap.handle_input(
+                    sprite, self, NodeHub.ref_RandomNumber, NodeHub.ref_Schedule
+                    )
+        return
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)
         if not sprite.is_in_group(SubTag.DOOR):
@@ -193,11 +205,3 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
     Cart.pull_cart(pc, coord, state)
     Cart.add_draft(pc, state, NodeHub.ref_RandomNumber)
     NodeHub.ref_Schedule.start_next_turn()
-
-
-func _enter_examine_mode(is_enter: bool, ref_ActorAction: ActorAction) -> void:
-    HandleClerk.switch_examine_mode(is_enter, ref_ActorAction.clerk_states)
-    HandleRawFile.switch_examine_mode(is_enter, ref_ActorAction.raw_file_states)
-    HandleServant.switch_examine_mode(
-            is_enter, ref_ActorAction.get_actor_states(SubTag.SERVANT)
-            )

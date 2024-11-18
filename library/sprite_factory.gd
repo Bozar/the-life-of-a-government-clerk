@@ -1,5 +1,4 @@
 class_name SpriteFactory
-extends Node2D
 # A library script should not be aware of tree nodes directly, unless it is a
 # decorator of one or more nodes, such as SpriteFactory or SpriteState.
 

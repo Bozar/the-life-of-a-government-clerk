@@ -26,7 +26,7 @@ const VALID_ACTOR_TAGS: Array = [
 
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
-var delivery: int = GameData.MAX_DELIVERY
+var delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
 var delay: int = 0
 
 

@@ -1,6 +1,10 @@
 class_name GameProgress
 
 
+enum {
+    NONE, SERVANT, BOOK_PILE_0, BOOK_PILE_1, CLERK_0, CLERK_1,
+}
+
 const MAX_RETRY: int = 10
 
 
@@ -8,8 +12,26 @@ static func update_world(
         state: ProgressState, ref_PcAction: PcAction,
         ref_RandomNumber: RandomNumber
         ) -> void:
+    state.challenge_level = GameData.CHALLENGES_PER_DELIVERY.size() \
+            - ref_PcAction.delivery
+
     _init_ground_coords(state, ref_RandomNumber)
-    _create_servant(state, ref_PcAction, ref_RandomNumber, MAX_RETRY)
+    for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
+        match i:
+            SERVANT:
+                _create_servant(
+                        state, ref_PcAction, ref_RandomNumber, MAX_RETRY
+                        )
+            BOOK_PILE_0:
+                pass
+            BOOK_PILE_1:
+                pass
+            CLERK_0:
+                pass
+            CLERK_1:
+                pass
+            _:
+                continue
 
 
 static func _init_ground_coords(
@@ -45,7 +67,9 @@ static func _create_servant(
         ) -> void:
     if retry < 0:
         return
-    elif (retry == MAX_RETRY) and _has_max_servant(ref_PcAction):
+    elif (retry == MAX_RETRY) and _has_max_servant(
+            state.challenge_level, ref_PcAction
+            ):
         return
 
     var coord: Vector2i = state.ground_coords[state.ground_index]
@@ -69,10 +93,11 @@ static func _create_servant(
         _create_servant(state, ref_PcAction, ref_RandomNumber, retry - 1)
 
 
-static func _has_max_servant(ref_PcAction: PcAction) -> bool:
-    var remaining_delivery: int = GameData.MAX_DELIVERY - ref_PcAction.delivery
+static func _has_max_servant(
+        document_delivered: int, ref_PcAction: PcAction
+        ) -> bool:
     var max_servant: int = GameData.BASE_SERVANT \
-            + GameData.ADD_SERVANT * remaining_delivery
+            + GameData.ADD_SERVANT * document_delivered
     var current_servant: int = SpriteState.get_sprites_by_sub_tag(
             SubTag.SERVANT
             ).size()
@@ -87,4 +112,5 @@ static func _is_invalid_sprite(sprite: Sprite2D) -> bool:
     return sprite.is_in_group(SubTag.INTERNAL_FLOOR) \
             or sprite.is_in_group(MainTag.BUILDING) \
             or (sprite.is_in_group(MainTag.ACTOR)
-            and (not sprite.is_in_group(SubTag.PC)))
+            and (not sprite.is_in_group(SubTag.PC))
+            )

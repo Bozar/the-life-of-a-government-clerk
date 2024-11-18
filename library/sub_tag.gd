@@ -18,6 +18,7 @@ const BOOK_ON_DESK: StringName = &"book_on_desk"
 const CUP_ON_DESK: StringName = &"cup_on_desk"
 const ENCYCLOPEDIA_ON_DESK: StringName = &"encyclopedia_on_desk"
 
+const DRAFT_PILE: StringName = &"draft_pile"
 const PROGRESS_BAR: StringName = &"progress_bar"
 
 

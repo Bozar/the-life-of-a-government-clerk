@@ -2,7 +2,7 @@ class_name GameProgress
 
 
 enum {
-    NONE, SERVANT, BOOK_PILE_0, BOOK_PILE_1, CLERK_0, CLERK_1,
+    NONE, SERVANT, DRAFT_PILE_0, DRAFT_PILE_1, CLERK_0, CLERK_1,
 }
 
 const MAX_RETRY: int = 10
@@ -10,22 +10,34 @@ const MAX_RETRY: int = 10
 
 static func update_world(
         state: ProgressState, ref_PcAction: PcAction,
-        ref_RandomNumber: RandomNumber
+        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
         ) -> void:
     state.challenge_level = GameData.CHALLENGES_PER_DELIVERY.size() \
             - ref_PcAction.delivery
+    state.max_trap = HandleServant.count_idlers(
+            ref_ActorAction.get_actor_states(SubTag.SERVANT)
+            )
 
     _init_ground_coords(state, ref_RandomNumber)
     for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
         match i:
             SERVANT:
-                _create_servant(
-                        state, ref_PcAction, ref_RandomNumber, MAX_RETRY
+                _create_sprite(
+                        MainTag.ACTOR, SubTag.SERVANT, state,
+                        ref_PcAction, ref_RandomNumber, MAX_RETRY
                         )
-            BOOK_PILE_0:
-                pass
-            BOOK_PILE_1:
-                pass
+            DRAFT_PILE_0:
+                state.max_trap = floor(state.max_trap
+                        * GameData.DRAFT_PILE_MOD)
+                _create_sprite(
+                        MainTag.TRAP, SubTag.DRAFT_PILE, state,
+                        ref_PcAction, ref_RandomNumber, MAX_RETRY
+                        )
+            DRAFT_PILE_1:
+                _create_sprite(
+                        MainTag.TRAP, SubTag.DRAFT_PILE, state,
+                        ref_PcAction, ref_RandomNumber, MAX_RETRY
+                        )
             CLERK_0:
                 pass
             CLERK_1:
@@ -61,27 +73,36 @@ static func _init_ground_coords(
     ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
 
 
-static func _create_servant(
-        state: ProgressState, ref_PcAction: PcAction,
-        ref_RandomNumber: RandomNumber, retry: int
+static func _create_sprite(
+        main_tag: StringName, sub_tag: StringName, state: ProgressState,
+        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber, retry: int
         ) -> void:
-    if retry < 0:
+    if retry < 1:
         return
-    elif (retry == MAX_RETRY) and _has_max_servant(
-            state.challenge_level, ref_PcAction
-            ):
-        return
+    else:
+        match main_tag:
+            MainTag.ACTOR:
+                if _has_max_actor(state.challenge_level, ref_PcAction):
+                    return
+            MainTag.TRAP:
+                if _has_max_trap(state.max_trap):
+                    return
+            _:
+                pass
 
     var coord: Vector2i = state.ground_coords[state.ground_index]
     var is_created: bool = false
 
     if SpriteState.has_actor_at_coord(coord):
         pass
-    elif ConvertCoord.is_in_range(coord, ref_PcAction.pc_coord,
-            GameData.MIN_DISTANCE_TO_PC):
+    elif SpriteState.has_trap_at_coord(coord):
+        pass
+    elif ConvertCoord.is_in_range(
+            coord, ref_PcAction.pc_coord, GameData.MIN_DISTANCE_TO_PC
+            ):
         pass
     else:
-        SpriteFactory.create_actor(SubTag.SERVANT, coord, true)
+        SpriteFactory.create_sprite(main_tag, sub_tag, coord, true)
         is_created = true
 
     state.ground_index += 1
@@ -90,14 +111,17 @@ static func _create_servant(
         ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
 
     if not is_created:
-        _create_servant(state, ref_PcAction, ref_RandomNumber, retry - 1)
+        _create_sprite(
+                main_tag, sub_tag, state, ref_PcAction, ref_RandomNumber,
+                retry - 1
+                )
 
 
-static func _has_max_servant(
-        document_delivered: int, ref_PcAction: PcAction
+static func _has_max_actor(
+        challenge_level: int, ref_PcAction: PcAction
         ) -> bool:
     var max_servant: int = GameData.BASE_SERVANT \
-            + GameData.ADD_SERVANT * document_delivered
+            + GameData.ADD_SERVANT * challenge_level
     var current_servant: int = SpriteState.get_sprites_by_sub_tag(
             SubTag.SERVANT
             ).size()
@@ -114,3 +138,8 @@ static func _is_invalid_sprite(sprite: Sprite2D) -> bool:
             or (sprite.is_in_group(MainTag.ACTOR)
             and (not sprite.is_in_group(SubTag.PC))
             )
+
+
+static func _has_max_trap(max_trap: int) -> bool:
+    return SpriteState.get_sprites_by_sub_tag(SubTag.DRAFT_PILE).size() \
+            >= max_trap

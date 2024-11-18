@@ -12,27 +12,27 @@ static func reset_idle_duration(state: ServantState) -> void:
 
 
 static func switch_examine_mode(is_enter: bool, states: Array) -> void:
-    var state: ServantState
     var visual_tag: StringName
 
-    for i in states:
-        state = i
+    for i: ServantState in states:
         if is_enter:
             visual_tag = VisualTag.get_percent_tag(
-                    state.idle_duration, state.max_idle_duration
+                    i.idle_duration, i.max_idle_duration
                     )
-            VisualEffect.switch_sprite(state.sprite, visual_tag)
+            VisualEffect.switch_sprite(i.sprite, visual_tag)
         else:
             # Switch sprite implicitly.
-            state.idle_duration = state.idle_duration
+            i.idle_duration = i.idle_duration
 
 
 static func get_servant_cooldown(states: Array) -> int:
-    var state: ServantState
-    var cooldown: int = 0
+    return GameData.SERVANT_ADD_COOLDOWN * count_idlers(states)
 
-    for i in states:
-        state = i
-        if state.is_active:
-            cooldown += GameData.SERVANT_ADD_COOLDOWN
-    return cooldown
+
+static func count_idlers(states: Array) -> int:
+    var counter: int = 0
+
+    for i: ServantState in states:
+        if i.is_active:
+            counter += 1
+    return counter

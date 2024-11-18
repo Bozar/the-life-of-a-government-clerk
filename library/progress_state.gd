@@ -3,6 +3,7 @@ class_name ProgressState
 
 var ground_coords: Array
 var ground_index: int = 0
+var max_trap: int = 0
 
 
 var challenge_level: int = 0:

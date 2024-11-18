@@ -28,6 +28,7 @@ var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
 var delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
 var delay: int = 0
+var is_first_turn: bool = true
 
 
 var pc: Sprite2D:
@@ -78,7 +79,16 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
 
-    GameProgress.update_world(_progress_state, self, NodeHub.ref_RandomNumber)
+    # Wait 1 frame when the very first turn starts, so that sprites from the
+    # previous scene are properly removed.
+    if is_first_turn:
+        await get_tree().create_timer(0).timeout
+        is_first_turn = false
+
+    GameProgress.update_world(
+            _progress_state, self, NodeHub.ref_ActorAction,
+            NodeHub.ref_RandomNumber
+            )
 
     if Checkmate.is_game_over(self):
         NodeHub.ref_SignalHub.game_over.emit(false)

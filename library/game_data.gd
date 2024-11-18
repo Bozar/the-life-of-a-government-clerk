@@ -36,14 +36,14 @@ const CART_LENGTH_LONG: int = 7
 # Progress
 const CHALLENGES_PER_DELIVERY: Array = [
     [GameProgress.SERVANT,],
-    [GameProgress.SERVANT, GameProgress.BOOK_PILE_0],
-    [GameProgress.SERVANT, GameProgress.BOOK_PILE_0],
-    [GameProgress.SERVANT, GameProgress.BOOK_PILE_0, GameProgress.CLERK_0],
-    [GameProgress.SERVANT, GameProgress.BOOK_PILE_0, GameProgress.CLERK_0],
-    [GameProgress.SERVANT, GameProgress.BOOK_PILE_1, GameProgress.CLERK_1],
-    [GameProgress.SERVANT, GameProgress.BOOK_PILE_1, GameProgress.CLERK_1],
+    [GameProgress.SERVANT,],
+    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_0],
+    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_0, GameProgress.CLERK_0],
+    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_1, GameProgress.CLERK_0],
+    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_1, GameProgress.CLERK_1],
+    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_1, GameProgress.CLERK_1],
 ]
-const BOOK_PILE_EASY_MOD: float = 0.6
+const DRAFT_PILE_MOD: float = 0.6
 
 
 # Reward

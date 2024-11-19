@@ -24,7 +24,7 @@ var has_empty_desk: bool:
     get:
         var state: DeskState
 
-        for i in range(0, desk_states.size()):
+        for i: int in range(0, desk_states.size()):
             state = desk_states[i]
             if state == null:
                 push_warning("desk_states[%s] is null." % i)
@@ -49,7 +49,7 @@ func _init_desk_states() -> void:
 
     _desk_states = [null, null]
 
-    for i in SpriteState.get_sprites_by_sub_tag(SubTag.DESK):
+    for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(SubTag.DESK):
         desk_coord = ConvertCoord.get_coord(i)
         distance = ConvertCoord.get_range(self_coord, desk_coord)
         # It is guaranteed by game design that there are exactly two nearby

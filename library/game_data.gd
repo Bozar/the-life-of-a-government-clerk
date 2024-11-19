@@ -35,26 +35,25 @@ const CART_LENGTH_LONG: int = 7
 
 # Progress
 const CHALLENGES_PER_DELIVERY: Array = [
-    [GameProgress.SERVANT,],
-    [GameProgress.SERVANT,],
-    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_0],
-    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_0, GameProgress.CLERK_0],
-    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_1, GameProgress.CLERK_0],
-    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_1, GameProgress.CLERK_1],
-    [GameProgress.SERVANT, GameProgress.DRAFT_PILE_1, GameProgress.CLERK_1],
+    [],
+    [GameProgress.DRAFT_PILE_0,],
+    [GameProgress.DRAFT_PILE_0, GameProgress.LEAK,],
+    [GameProgress.DRAFT_PILE_0, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.DRAFT_PILE_1, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.DRAFT_PILE_1, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.DRAFT_PILE_1, GameProgress.LEAK, GameProgress.DOOR,],
 ]
 const DRAFT_PILE_MOD: float = 0.6
 
 
 # Reward
-const INCOME_INITIAL: int = 1
-const INCOME_ORDER: int = 1
+const INCOME_INITIAL: int = 2
 const INCOME_DOCUMENT: int = 3
 
 
 # Clerk and Officer
 const PAYMENT_GARAGE: int = 1
-const PAYMENT_CLEAN: int = 1
+const PAYMENT_CLEAN: int = 2
 
 const MAX_CLERK_PROGRESS: int = PROGRESS_BOOK * (PAGE_BOOK * 3)
 const OVERFLOW_PROGRESS: float = 0.25

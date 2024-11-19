@@ -43,7 +43,7 @@ func get_actor_states(sub_tag: StringName) -> Array:
     var state: ActorState
     var states: Array
 
-    for i in SpriteState.get_sprites_by_sub_tag(sub_tag):
+    for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(sub_tag):
         state = get_actor_state(i)
         if state != null:
             states.push_back(state)

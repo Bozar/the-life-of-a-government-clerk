@@ -22,13 +22,10 @@ static func send_raw_file(
     # print("CD: %s, Counter: %s" % [state.cooldown, state.send_counter])
 
 
-static func reset_cooldown(states: Array) -> void:
-    var state: RawFileState
-
-    for i in states:
-        state = i
-        state.cooldown = 0
-        state.send_counter -= GameData.RAW_FILE_SEND_COUNTER
+static func reset_cooldown(raw_file_states: Array) -> void:
+    for i: RawFileState in raw_file_states:
+        i.cooldown = 0
+        i.send_counter -= GameData.RAW_FILE_SEND_COUNTER
 
 
 static func update_cooldown(state: RawFileState) -> void:
@@ -36,19 +33,16 @@ static func update_cooldown(state: RawFileState) -> void:
 
 
 static func reduce_cooldown(
-        states: Array, ref_RandomNumber: RandomNumber
+        raw_file_states: Array, ref_RandomNumber: RandomNumber
         ) -> void:
-    var dup_states: Array
-    var state: RawFileState
+    var dup_states: Array = raw_file_states.duplicate()
 
-    dup_states = states.duplicate()
     ArrayHelper.shuffle(dup_states, ref_RandomNumber)
     dup_states.sort_custom(_sort_cooldown)
 
-    for i in dup_states:
-        state = i
-        if state.cooldown > 0:
-            state.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
+    for i: RawFileState in dup_states:
+        if i.cooldown > 0:
+            i.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
             break
 
 
@@ -61,21 +55,19 @@ static func receive_servant(state: RawFileState) -> void:
 
 
 static func switch_examine_mode(is_enter: bool, states: Array) -> void:
-    var state: RawFileState
     var progress_bar: Sprite2D
     var remaining_cooldown: int
     var visual_tag: StringName = VisualTag.DEFAULT
 
-    for i in states:
-        state = i
-        progress_bar = SpriteState.get_trap_by_coord(state.progress_bar_coord)
+    for i: RawFileState in states:
+        progress_bar = SpriteState.get_trap_by_coord(i.progress_bar_coord)
         if progress_bar == null:
             continue
 
         if is_enter:
-            remaining_cooldown = state.max_cooldown - state.cooldown
+            remaining_cooldown = i.max_cooldown - i.cooldown
             visual_tag = VisualTag.get_percent_tag(
-                    remaining_cooldown, state.max_cooldown
+                    remaining_cooldown, i.max_cooldown
                     )
         VisualEffect.switch_sprite(progress_bar, visual_tag)
 

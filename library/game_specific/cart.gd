@@ -125,7 +125,7 @@ static func clean_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     var cart_state: CartState
 
     # Note that the first cart is 0.
-    for i in range(0, state.linked_carts.size()):
+    for i: int in range(0, state.linked_carts.size()):
         cart = LinkedList.get_next_object(cart, state.linked_carts)
         # All carts have been examined.
         if cart == pc:

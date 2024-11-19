@@ -57,7 +57,9 @@ func _set_progress_bar_coord() -> void:
 
     # It is guaranteed by game design that there is exactly one building to the
     # left or right of a raw file sprite.
-    for i in [sprite_coord + Vector2i.LEFT, sprite_coord + Vector2i.RIGHT]:
+    for i: Vector2i in [
+            sprite_coord + Vector2i.LEFT, sprite_coord + Vector2i.RIGHT
+            ]:
         if SpriteState.has_building_at_coord(i):
             _progress_bar_coord = i
             return

@@ -50,8 +50,8 @@ static func receive_raw_file(state: ClerkState, item_tag: StringName) -> bool:
 
     desk_state = null
     new_tag = DESK_ITEM_TAGS[item_tag]
-    for i in state.desk_states:
-        desk_sprite = (i as DeskState).sprite
+    for i: DeskState in state.desk_states:
+        desk_sprite = i.sprite
         if desk_sprite == null:
             # Put new file on the first (closest) empty desk.
             if desk_state == null:
@@ -76,58 +76,48 @@ static func receive_raw_file(state: ClerkState, item_tag: StringName) -> bool:
 
 
 static func update_progress(state: ClerkState) -> void:
-    var desk_state: DeskState
     var remove_sprite: Sprite2D
 
     if state.has_empty_desk:
         return
 
-    for i in state.desk_states:
-        desk_state = i
-
+    for i: DeskState in state.desk_states:
         # Clean desk before updating progress. Otherwise Clerk sprite may not
         # be switched when progress is full.
-        desk_state.remaining_page -= 1
-        if desk_state.remaining_page < 1:
-            remove_sprite = desk_state.sprite
-            desk_state.sprite = null
+        i.remaining_page -= 1
+        if i.remaining_page < 1:
+            remove_sprite = i.sprite
+            i.sprite = null
             SpriteFactory.remove_sprite(remove_sprite)
 
-        state.progress += DESK_ITEM_PROGRESS[desk_state.sub_tag]
+        state.progress += DESK_ITEM_PROGRESS[i.sub_tag]
 
 
 static func reduce_progress(
-        states: Array, ref_RandomNumber: RandomNumber
+        clerk_states: Array, ref_RandomNumber: RandomNumber
         ) -> void:
-    var state: ClerkState
     var dup_states: Array
 
-    dup_states = states.duplicate()
+    dup_states = clerk_states.duplicate()
     ArrayHelper.shuffle(dup_states, ref_RandomNumber)
     dup_states.sort_custom(_sort_progress)
 
-    for i in dup_states:
-        state = i
-        if not _is_valid_progress(state.progress):
+    for i: ClerkState in dup_states:
+        if not _is_valid_progress(i.progress):
             continue
-        state.progress -= ref_RandomNumber.get_int(
+        i.progress -= ref_RandomNumber.get_int(
                 GameData.MIN_REDUCE_PROGRESS, GameData.MAX_REDUCE_PROGRESS + 1
                 )
         break
 
 
 static func switch_examine_mode(is_enter: bool, states: Array) -> void:
-    var clerk_state: ClerkState
-    var desk_state: DeskState
-
-    for i in states:
-        clerk_state = i
-        _switch_clerk_sprite(is_enter, clerk_state)
-        for j in clerk_state.desk_states:
-            desk_state = j
-            if desk_state.sprite == null:
+    for cs: ClerkState in states:
+        _switch_clerk_sprite(is_enter, cs)
+        for ds: DeskState in cs.desk_states:
+            if ds.sprite == null:
                 continue
-            _switch_desk_sprite(is_enter, desk_state)
+            _switch_desk_sprite(is_enter, ds)
 
 
 static func _switch_clerk_sprite(is_examine: bool, state: ClerkState) -> void:

@@ -2,7 +2,7 @@ class_name GameProgress
 
 
 enum {
-    DRAFT_PILE_0, DRAFT_PILE_1, LEAK, DOOR,
+    TRASH_0, TRASH_1, LEAK, DOOR,
 }
 
 const MAX_RETRY: int = 10
@@ -24,15 +24,15 @@ static func update_world(
             )
     for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
         match i:
-            DRAFT_PILE_0:
-                state.max_trap = floor(state.max_trap * GameData.DRAFT_PILE_MOD)
+            TRASH_0:
+                state.max_trap = floor(state.max_trap * GameData.TRASH_MOD)
                 _create_rand_sprite(
-                        MainTag.TRAP, SubTag.DRAFT_PILE, state,
+                        MainTag.TRAP, SubTag.TRASH, state,
                         ref_PcAction, ref_RandomNumber, MAX_RETRY
                         )
-            DRAFT_PILE_1:
+            TRASH_1:
                 _create_rand_sprite(
-                        MainTag.TRAP, SubTag.DRAFT_PILE, state,
+                        MainTag.TRAP, SubTag.TRASH, state,
                         ref_PcAction, ref_RandomNumber, MAX_RETRY
                         )
             LEAK:

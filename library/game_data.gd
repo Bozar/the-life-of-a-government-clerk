@@ -36,14 +36,14 @@ const CART_LENGTH_LONG: int = 7
 # Progress
 const CHALLENGES_PER_DELIVERY: Array = [
     [],
-    [GameProgress.DRAFT_PILE_0,],
-    [GameProgress.DRAFT_PILE_0, GameProgress.LEAK,],
-    [GameProgress.DRAFT_PILE_0, GameProgress.LEAK, GameProgress.DOOR,],
-    [GameProgress.DRAFT_PILE_1, GameProgress.LEAK, GameProgress.DOOR,],
-    [GameProgress.DRAFT_PILE_1, GameProgress.LEAK, GameProgress.DOOR,],
-    [GameProgress.DRAFT_PILE_1, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.TRASH_0,],
+    [GameProgress.TRASH_0, GameProgress.LEAK,],
+    [GameProgress.TRASH_0, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.TRASH_1, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.TRASH_1, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.TRASH_1, GameProgress.LEAK, GameProgress.DOOR,],
 ]
-const DRAFT_PILE_MOD: float = 0.6
+const TRASH_MOD: float = 0.6
 
 
 # Reward

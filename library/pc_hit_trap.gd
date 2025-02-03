@@ -21,7 +21,7 @@ static func handle_input(
 
     SpriteFactory.remove_sprite(trap)
     Cart.pull_cart(pc, trap_coord, linked_cart_state)
-    Cart.add_draft(pc, linked_cart_state, ref_RandomNumber)
+    Cart.add_trash(pc, linked_cart_state, ref_RandomNumber)
     ref_Schedule.start_next_turn()
 
 

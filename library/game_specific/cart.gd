@@ -219,7 +219,7 @@ static func remove_all_item(
     return is_removed
 
 
-static func add_draft(
+static func add_trash(
         pc: Sprite2D, state: LinkedCartState, ref_RandomNumber: RandomNumber
         ) -> void:
     var cart: Sprite2D = pc

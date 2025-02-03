@@ -24,7 +24,7 @@ const VALID_ACTOR_TAGS: Array = [
 ]
 
 const VALID_TRAP_TAGS: Array = [
-    SubTag.DRAFT_PILE,
+    SubTag.TRASH,
 ]
 
 
@@ -100,7 +100,7 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
         return
     elif delay > 0:
         delay -= 1
-        Cart.add_draft(pc, linked_cart_state, NodeHub.ref_RandomNumber)
+        Cart.add_trash(pc, linked_cart_state, NodeHub.ref_RandomNumber)
 
         # The game loops without player's input. If call start_next_turn()
         # directly, there might be a stack overflow error when too many turns
@@ -204,5 +204,5 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
         if not sprite.is_in_group(SubTag.DOOR):
             return
     Cart.pull_cart(pc, coord, state)
-    Cart.add_draft(pc, state, NodeHub.ref_RandomNumber)
+    Cart.add_trash(pc, state, NodeHub.ref_RandomNumber)
     NodeHub.ref_Schedule.start_next_turn()

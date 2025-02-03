@@ -30,7 +30,8 @@ const VALID_TRAP_TAGS: Array = [
 
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
-var delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
+var max_delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
+var delivery: int = max_delivery
 var delay: int = 0
 var is_first_turn: bool = true
 

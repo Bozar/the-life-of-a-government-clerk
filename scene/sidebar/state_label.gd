@@ -2,7 +2,7 @@ class_name StateLabel
 extends CustomLabel
 
 
-const PROGRESS_TEMPLATE: String = "Turn: %s\nDocu: %s\nCash: %s-%s"
+const PROGRESS_TEMPLATE: String = "Trn: %s\nDoc: %s-%s\nCsh: %s-%s"
 
 const YOU_WIN: String = "You win.\n[Space]"
 const YOU_LOSE: String = "You lose.\n[Space]"
@@ -22,7 +22,8 @@ func init_gui() -> void:
 
 func update_gui() -> void:
     var progress: String = PROGRESS_TEMPLATE % [
-        _turn_counter, NodeHub.ref_PcAction.delivery,
+        _turn_counter,
+        NodeHub.ref_PcAction.delivery, NodeHub.ref_PcAction.max_delivery,
         NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
     ]
     var first_item: String = Cart.get_first_item_text(

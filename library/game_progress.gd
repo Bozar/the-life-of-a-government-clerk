@@ -12,8 +12,7 @@ static func update_world(
         state: ProgressState, ref_PcAction: PcAction,
         ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
         ) -> void:
-    state.challenge_level = GameData.CHALLENGES_PER_DELIVERY.size() \
-            - ref_PcAction.delivery
+    state.challenge_level = ref_PcAction.max_delivery - ref_PcAction.delivery
     state.max_trap = HandleServant.count_idlers(
             ref_ActorAction.get_actor_states(SubTag.SERVANT)
             )

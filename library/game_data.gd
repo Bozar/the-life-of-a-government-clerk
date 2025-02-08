@@ -37,13 +37,15 @@ const CART_LENGTH_LONG: int = 7
 const CHALLENGES_PER_DELIVERY: Array = [
     [],
     [GameProgress.TRASH_0,],
-    [GameProgress.TRASH_0, GameProgress.LEAK,],
-    [GameProgress.TRASH_0, GameProgress.LEAK, GameProgress.DOOR,],
-    [GameProgress.TRASH_1, GameProgress.LEAK, GameProgress.DOOR,],
-    [GameProgress.TRASH_1, GameProgress.LEAK, GameProgress.DOOR,],
-    [GameProgress.TRASH_1, GameProgress.LEAK, GameProgress.DOOR,],
+    [GameProgress.TRASH_0, GameProgress.PHONE_0,],
+    [GameProgress.TRASH_0, GameProgress.PHONE_0, GameProgress.LEAK_0,],
+    [GameProgress.TRASH_1, GameProgress.PHONE_0, GameProgress.LEAK_0,],
+    [GameProgress.TRASH_1, GameProgress.PHONE_1, GameProgress.LEAK_0,],
+    [GameProgress.TRASH_1, GameProgress.PHONE_1, GameProgress.LEAK_1,],
 ]
-const TRASH_MOD: float = 0.6
+const TRASH_0_MOD: float = 0.6
+const LEAK_0_REPEAT: int = 1
+const LEAK_1_REPEAT: int = 2
 
 
 # Reward

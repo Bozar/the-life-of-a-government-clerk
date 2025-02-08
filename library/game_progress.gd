@@ -2,7 +2,7 @@ class_name GameProgress
 
 
 enum {
-    TRASH_0, TRASH_1, LEAK, DOOR,
+    TRASH_0, TRASH_1, PHONE_0, PHONE_1, LEAK_0, LEAK_1,
 }
 
 const MAX_RETRY: int = 10
@@ -16,34 +16,42 @@ static func update_world(
     state.max_trap = HandleServant.count_idlers(
             ref_ActorAction.get_actor_states(SubTag.SERVANT)
             )
+    state.max_leak_repeat = GameData.LEAK_0_REPEAT
 
     _init_ground_coords(state, ref_RandomNumber)
+
+    # Create Servants. This challenge is available throughout the game. It is
+    # NOT defined in `GameData.CHALLENGES_PER_DELIVERY`.
     _create_rand_sprite(
             MainTag.ACTOR, SubTag.SERVANT, state,
             ref_PcAction, ref_RandomNumber, MAX_RETRY
             )
+
+    # Set `state: ProgressState` based on `GameData.CHALLENGES_PER_DELIVERY`.
     for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
         match i:
             TRASH_0:
-                state.max_trap = floor(state.max_trap * GameData.TRASH_MOD)
-                _create_rand_sprite(
-                        MainTag.TRAP, SubTag.TRASH, state,
-                        ref_PcAction, ref_RandomNumber, MAX_RETRY
-                        )
-            TRASH_1:
-                _create_rand_sprite(
-                        MainTag.TRAP, SubTag.TRASH, state,
-                        ref_PcAction, ref_RandomNumber, MAX_RETRY
-                        )
-            LEAK:
-                HandleClerk.reduce_progress(
-                        ref_ActorAction.get_actor_states(SubTag.CLERK),
-                        ref_RandomNumber
-                        )
-            DOOR:
+                state.max_trap = floor(state.max_trap * GameData.TRASH_0_MOD)
+            LEAK_1:
+                state.max_leak_repeat = GameData.LEAK_1_REPEAT
+            PHONE_0:
+                pass
+            PHONE_1:
                 pass
             _:
                 continue
+
+    # Create traps.
+    _create_rand_sprite(
+            MainTag.TRAP, SubTag.TRASH, state,
+            ref_PcAction, ref_RandomNumber, MAX_RETRY
+            )
+    # Reduce Clerk progress.
+    for _i in range(0, state.max_leak_repeat):
+        HandleClerk.reduce_progress(
+                ref_ActorAction.get_actor_states(SubTag.CLERK),
+                ref_RandomNumber
+                )
 
 
 static func _init_ground_coords(

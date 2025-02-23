@@ -12,11 +12,13 @@ static func update_world(
         state: ProgressState, ref_PcAction: PcAction,
         ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
         ) -> void:
-    state.challenge_level = ref_PcAction.max_delivery - ref_PcAction.delivery
-    state.max_trap = HandleServant.count_idlers(
+    var idlers: int = HandleServant.count_idlers(
             ref_ActorAction.get_actor_states(SubTag.SERVANT)
             )
-    state.max_leak_repeat = GameData.LEAK_0_REPEAT
+
+    state.challenge_level = ref_PcAction.max_delivery - ref_PcAction.delivery
+    state.max_trap = GameData.MAX_TRAP_DEFAULT
+    state.max_leak_repeat = GameData.LEAK_REPEAT_DEFAULT
 
     _init_ground_coords(state, ref_RandomNumber)
 
@@ -31,9 +33,13 @@ static func update_world(
     for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
         match i:
             TRASH_0:
-                state.max_trap = floor(state.max_trap * GameData.TRASH_0_MOD)
+                state.max_trap = floor(idlers * GameData.TRASH_MOD_0)
+            TRASH_1:
+                state.max_trap = idlers
+            LEAK_0:
+                state.max_leak_repeat = GameData.LEAK_REPEAT_0
             LEAK_1:
-                state.max_leak_repeat = GameData.LEAK_1_REPEAT
+                state.max_leak_repeat = GameData.LEAK_REPEAT_1
             PHONE_0:
                 pass
             PHONE_1:

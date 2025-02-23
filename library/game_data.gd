@@ -43,9 +43,12 @@ const CHALLENGES_PER_DELIVERY: Array = [
     [GameProgress.TRASH_1, GameProgress.PHONE_1, GameProgress.LEAK_0,],
     [GameProgress.TRASH_1, GameProgress.PHONE_1, GameProgress.LEAK_1,],
 ]
-const TRASH_0_MOD: float = 0.6
-const LEAK_0_REPEAT: int = 1
-const LEAK_1_REPEAT: int = 2
+const TRASH_MOD_0: float = 0.6
+const LEAK_REPEAT_0: int = 1
+const LEAK_REPEAT_1: int = 2
+
+const MAX_TRAP_DEFAULT: int = 0
+const LEAK_REPEAT_DEFAULT: int = 0
 
 
 # Reward

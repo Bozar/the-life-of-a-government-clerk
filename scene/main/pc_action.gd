@@ -8,20 +8,22 @@ enum {
 }
 
 
-const VALID_ACTOR_TAGS: Array = [
-    SubTag.CLERK,
-    SubTag.OFFICER,
+# `VALID_ACTOR_TAGS` seems to be obseleted?
+# const VALID_ACTOR_TAGS: Array = [
+#     SubTag.CLERK,
+#     SubTag.OFFICER,
 
-    SubTag.ATLAS,
-    SubTag.BOOK,
-    SubTag.CUP,
-    SubTag.ENCYCLOPEDIA,
+#     SubTag.ATLAS,
+#     SubTag.BOOK,
+#     SubTag.CUP,
+#     SubTag.ENCYCLOPEDIA,
 
-    SubTag.SALARY,
-    SubTag.SERVANT,
-    SubTag.STATION,
-    SubTag.GARAGE,
-]
+#     SubTag.SALARY,
+#     SubTag.SERVANT,
+#     SubTag.STATION,
+#     SubTag.GARAGE,
+#     SubTag.PHONE,
+# ]
 
 const VALID_TRAP_TAGS: Array = [
     SubTag.TRASH,
@@ -30,10 +32,12 @@ const VALID_TRAP_TAGS: Array = [
 
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
+
 var max_delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
 var delivery: int = max_delivery
+
+
 var delay: int = 0
-var is_first_turn: bool = true
 
 
 var pc: Sprite2D:
@@ -56,12 +60,26 @@ var linked_cart_state: LinkedCartState:
         return _linked_cart_state
 
 
+var incoming_call: int:
+    get:
+        return _incoming_phone_call
+
+
+var missed_call: int:
+    get:
+        return _missed_phone_call
+
+
 var _linked_cart_state := LinkedCartState.new()
+
+var _incoming_phone_call: int = 0
+var _missed_phone_call: int = 0
 
 
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
 var _progress_state := ProgressState.new()
+var _is_first_turn: bool = true
 
 var _fov_map: Dictionary = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
 var _shadow_cast_fov_data: ShadowCastFov.FovData = ShadowCastFov.FovData.new(
@@ -69,15 +87,22 @@ var _shadow_cast_fov_data: ShadowCastFov.FovData = ShadowCastFov.FovData.new(
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
-    if pc != null:
-        return
-
     for i: TaggedSprite in tagged_sprites:
-        if i.sub_tag == SubTag.PC:
-            _pc = i.sprite
-            Cart.init_linked_carts(pc, linked_cart_state)
-            Cart.add_cart(GameData.MIN_CART, linked_cart_state)
-            return
+        match i.sub_tag:
+            SubTag.PC:
+                if pc != null:
+                    continue
+                _pc = i.sprite
+                Cart.init_linked_carts(pc, linked_cart_state)
+                Cart.add_cart(GameData.MIN_CART, linked_cart_state)
+            SubTag.PHONE:
+                _incoming_phone_call += 1
+
+
+func _on_SignalHub_sprite_removed(sprites: Array) -> void:
+    for i: Sprite2D in sprites:
+        if i.is_in_group(SubTag.PHONE):
+            _incoming_phone_call -= 1
 
 
 func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
@@ -86,9 +111,9 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
 
     # Wait 1 frame when the very first turn starts, so that sprites from the
     # previous scene are properly removed.
-    if is_first_turn:
+    if _is_first_turn:
         await get_tree().create_timer(0).timeout
-        is_first_turn = false
+        _is_first_turn = false
 
     GameProgress.update_world(
             _progress_state, self, NodeHub.ref_ActorAction,
@@ -184,12 +209,13 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
     elif SpriteState.has_actor_at_coord(coord):
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
-        if sub_tag in VALID_ACTOR_TAGS:
-            PcHitActor.handle_input(
-                    sprite, self, NodeHub.ref_ActorAction,
-                    NodeHub.ref_RandomNumber, NodeHub.ref_SignalHub,
-                    NodeHub.ref_Schedule
-                    )
+        # `VALID_ACTOR_TAGS` seems to be obseleted?
+        # if sub_tag in VALID_ACTOR_TAGS:
+        PcHitActor.handle_input(
+                sprite, self, NodeHub.ref_ActorAction,
+                NodeHub.ref_RandomNumber, NodeHub.ref_SignalHub,
+                NodeHub.ref_Schedule
+                )
         return
     elif SpriteState.has_trap_at_coord(coord):
         sprite = SpriteState.get_trap_by_coord(coord)

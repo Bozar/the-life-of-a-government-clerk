@@ -2,7 +2,10 @@ class_name StateLabel
 extends CustomLabel
 
 
-const PROGRESS_TEMPLATE: String = "Trn: %s\nDoc: %s\nCsh: %s-%s"
+const TURN: String = "Turn: %1d"
+const DOC: String = "Doc: %2d"
+const CASH: String = "Cash: %1d-%1d"
+const CALL: String = "Call: %1d-%1d"
 
 const YOU_WIN: String = "You win.\n[Space]"
 const YOU_LOSE: String = "You lose.\n[Space]"
@@ -21,10 +24,13 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var progress: String = PROGRESS_TEMPLATE % [
-        _turn_counter,
-        NodeHub.ref_PcAction.delivery,
+    var turn: String = TURN % _turn_counter
+    var doc: String = DOC % NodeHub.ref_PcAction.delivery
+    var cash: String = CASH % [
         NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
+    ]
+    var phone_call: String = CALL % [
+        NodeHub.ref_PcAction.incoming_call, NodeHub.ref_PcAction.missed_call,
     ]
     var first_item: String = Cart.get_first_item_text(
             NodeHub.ref_PcAction.pc, NodeHub.ref_PcAction.linked_cart_state
@@ -34,9 +40,10 @@ func update_gui() -> void:
 
     if game_over:
         end_game = YOU_WIN if player_win else YOU_LOSE
-    text = "%s\n\n%s\n%s\n%s" % [
-        progress, first_item, state, end_game
-    ]
+
+    text = "\n".join([
+        turn, doc, cash, phone_call, "", first_item, state, end_game
+    ])
 
 
 func add_turn_counter() -> void:

@@ -60,6 +60,8 @@ static func handle_input(
                     _unload_raw_file(ref_PcAction)
                 else:
                     return
+        SubTag.PHONE:
+            HandlePhone.answer_call(actor)
         _:
             return
 

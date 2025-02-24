@@ -1,12 +1,18 @@
 class_name WizardMode
-extends Node2D
 
 
-func handle_input(input_tag: StringName) -> void:
+const test_phone_coords: Array = [
+    Vector2i(1, 1),
+    Vector2i(1, 2),
+    Vector2i(2, 1),
+]
+
+
+static func handle_input(input_tag: StringName) -> void:
     _test(input_tag)
 
 
-func _test(input_tag: StringName) -> void:
+static func _test(input_tag: StringName) -> void:
     match input_tag:
         InputTag.WIZARD_1:
             Cart.add_cart(
@@ -19,3 +25,12 @@ func _test(input_tag: StringName) -> void:
                     NodeHub.ref_PcAction.linked_cart_state)
         InputTag.WIZARD_4:
             NodeHub.ref_PcAction.delivery -= 1
+        InputTag.WIZARD_5:
+            _create_phone()
+
+
+static func _create_phone() -> void:
+    for i: Vector2i in test_phone_coords:
+        if SpriteState.has_actor_at_coord(i):
+            continue
+        SpriteFactory.create_actor(SubTag.PHONE, i, true)

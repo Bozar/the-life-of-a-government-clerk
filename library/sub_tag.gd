@@ -41,6 +41,7 @@ const SALARY: StringName = &"salary"
 const SERVANT: StringName = &"servant"
 const GARAGE: StringName = &"garage"
 const STATION: StringName = &"station"
+const PHONE: StringName = &"phone"
 
 
 # Indicator

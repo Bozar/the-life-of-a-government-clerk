@@ -143,7 +143,7 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
                         InputTag.WIZARD_5, InputTag.WIZARD_6, \
                         InputTag.WIZARD_7, InputTag.WIZARD_8, \
                         InputTag.WIZARD_9, InputTag.WIZARD_0:
-                    $WizardMode.handle_input(input_tag)
+                    WizardMode.handle_input(input_tag)
                 _:
                     return
         EXAMINE_MODE:

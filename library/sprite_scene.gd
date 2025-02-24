@@ -38,6 +38,7 @@ const SPRITE_SCENES: Dictionary = {
     SubTag.GARAGE: preload("res://sprite/garage.tscn"),
     SubTag.SERVANT: preload("res://sprite/servant.tscn"),
     SubTag.STATION: preload("res://sprite/station.tscn"),
+    SubTag.PHONE: preload("res://sprite/phone.tscn"),
 
 
     # Indicator

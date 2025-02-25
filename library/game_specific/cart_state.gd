@@ -43,9 +43,8 @@ var load_amount: int:
         if _load_amount == GameData.MAX_LOAD_PER_CART:
             item_tag = SubTag.FULL
         # Change cart sprite when a fully loaded cart is cleaned.
-        elif _load_amount == GameData.MIN_LOAD:
-            if _item_tag == SubTag.FULL:
-                item_tag = SubTag.CART
+        elif _item_tag == SubTag.FULL:
+            item_tag = SubTag.CART
 
 
 var is_full: bool:

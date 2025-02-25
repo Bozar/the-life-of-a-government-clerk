@@ -27,6 +27,8 @@ static func _test(input_tag: StringName) -> void:
             NodeHub.ref_PcAction.delivery -= 1
         InputTag.WIZARD_5:
             _create_phone()
+        InputTag.WIZARD_6:
+            PcHitActor._load_document(NodeHub.ref_PcAction)
 
 
 static func _create_phone() -> void:

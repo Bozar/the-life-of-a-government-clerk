@@ -153,6 +153,11 @@ static func _unload_document(ref_PcAction: PcAction) -> bool:
     if ref_PcAction.delivery > 0:
         ref_PcAction.account += GameData.INCOME_DOCUMENT
         ref_PcAction.delivery -= 1
+
+        ref_PcAction.missed_call += ref_PcAction.incoming_call
+        if ref_PcAction.missed_call > GameData.MAX_MISSED_CALL:
+            ref_PcAction.missed_call -= GameData.MAX_MISSED_CALL
+            ref_PcAction.account -= GameData.MISSED_CALL_PENALTY
     return true
 
 
@@ -316,6 +321,7 @@ static func _document_unloaded_by_pc(
         ) -> void:
     HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
     HandleOfficer.set_active(ref_ActorAction.officer_states, ref_RandomNumber)
+    # TODO: Remove/Spawn phone sprites.
 
 
 static func _raw_file_loaded_by_pc(

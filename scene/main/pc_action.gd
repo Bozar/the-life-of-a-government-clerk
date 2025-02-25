@@ -33,6 +33,8 @@ const VALID_TRAP_TAGS: Array = [
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
 
+var missed_call: int = 0
+
 var max_delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
 var delivery: int = max_delivery
 
@@ -62,18 +64,11 @@ var linked_cart_state: LinkedCartState:
 
 var incoming_call: int:
     get:
-        return _incoming_phone_call
-
-
-var missed_call: int:
-    get:
-        return _missed_phone_call
+        return _incoming_call
 
 
 var _linked_cart_state := LinkedCartState.new()
-
-var _incoming_phone_call: int = 0
-var _missed_phone_call: int = 0
+var _incoming_call: int = 0
 
 
 var _pc: Sprite2D
@@ -96,13 +91,13 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                 Cart.init_linked_carts(pc, linked_cart_state)
                 Cart.add_cart(GameData.MIN_CART, linked_cart_state)
             SubTag.PHONE:
-                _incoming_phone_call += 1
+                _incoming_call += 1
 
 
 func _on_SignalHub_sprite_removed(sprites: Array) -> void:
     for i: Sprite2D in sprites:
         if i.is_in_group(SubTag.PHONE):
-            _incoming_phone_call -= 1
+            _incoming_call -= 1
 
 
 func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:

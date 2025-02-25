@@ -56,6 +56,9 @@ const LEAK_REPEAT_DEFAULT: int = 0
 const INCOME_INITIAL: int = 2
 const INCOME_DOCUMENT: int = 3
 
+const MAX_MISSED_CALL: int = 3
+const MISSED_CALL_PENALTY: int = 1
+
 
 # Clerk and Officer
 const PAYMENT_GARAGE: int = 1

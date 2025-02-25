@@ -183,7 +183,7 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
                     Cart.examine_last_cart(pc, linked_cart_state)
                 InputTag.MOVE_LEFT:
                     Cart.examine_previous_cart(pc, linked_cart_state)
-                InputTag.MOVE_RIGHT:
+                InputTag.MOVE_RIGHT, InputTag.EXAMINE_NEXT_CART:
                     Cart.examine_next_cart(pc, linked_cart_state)
                 _:
                     return

@@ -61,7 +61,7 @@ static func handle_input(
                 else:
                     return
         SubTag.PHONE:
-            HandlePhone.answer_call(actor)
+            HandlePhone.answer_call(actor, ref_PcAction)
         _:
             return
 

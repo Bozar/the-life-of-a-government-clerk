@@ -154,6 +154,31 @@ static func clean_cart(pc: Sprite2D, state: LinkedCartState) -> bool:
     return is_cleaned
 
 
+static func clean_short_cart(
+        pc: Sprite2D, state: LinkedCartState, remove_load: int
+        ) -> void:
+    var cart: Sprite2D = pc
+    var cart_state: CartState
+
+    # Only clean the first three carts.
+    for i: int in range(0, GameData.MIN_CART):
+        cart = LinkedList.get_next_object(cart, state.linked_carts)
+        # There are fewer than three carts for some reason.
+        if cart == pc:
+            break
+        cart_state = get_state(cart, state)
+        # This should not happen.
+        if cart_state == null:
+            continue
+
+        remove_load -= cart_state.load_amount
+        if remove_load > 0:
+            cart_state.load_amount = 0
+        else:
+            cart_state.load_amount = -remove_load
+            break
+
+
 static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
     var cart: Sprite2D = pc
     var cart_state: CartState

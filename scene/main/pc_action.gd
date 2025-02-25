@@ -144,49 +144,11 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
 func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
     match game_mode:
         NORMAL_MODE:
-            match input_tag:
-                InputTag.SWITCH_EXAMINE:
-                    if Cart.enter_examine_mode(pc, linked_cart_state):
-                        _game_mode = EXAMINE_MODE
-                        PcSwitchMode.examine_mode(true, NodeHub.ref_ActorAction)
-                    else:
-                        return
-                InputTag.MOVE_LEFT:
-                    _move(Vector2i.LEFT, linked_cart_state)
-                    return
-                InputTag.MOVE_RIGHT:
-                    _move(Vector2i.RIGHT, linked_cart_state)
-                    return
-                InputTag.MOVE_UP:
-                    _move(Vector2i.UP, linked_cart_state)
-                    return
-                InputTag.MOVE_DOWN:
-                    _move(Vector2i.DOWN, linked_cart_state)
-                    return
-                InputTag.WIZARD_1, InputTag.WIZARD_2, \
-                        InputTag.WIZARD_3, InputTag.WIZARD_4, \
-                        InputTag.WIZARD_5, InputTag.WIZARD_6, \
-                        InputTag.WIZARD_7, InputTag.WIZARD_8, \
-                        InputTag.WIZARD_9, InputTag.WIZARD_0:
-                    WizardMode.handle_input(input_tag)
-                _:
-                    return
+            if _handle_normal_input(input_tag):
+                return
         EXAMINE_MODE:
-            match input_tag:
-                InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
-                    _game_mode = NORMAL_MODE
-                    Cart.exit_examine_mode(pc, linked_cart_state)
-                    PcSwitchMode.examine_mode(false, NodeHub.ref_ActorAction)
-                InputTag.MOVE_UP:
-                    Cart.examine_first_cart(pc, linked_cart_state)
-                InputTag.MOVE_DOWN:
-                    Cart.examine_last_cart(pc, linked_cart_state)
-                InputTag.MOVE_LEFT:
-                    Cart.examine_previous_cart(pc, linked_cart_state)
-                InputTag.MOVE_RIGHT, InputTag.EXAMINE_NEXT_CART:
-                    Cart.examine_next_cart(pc, linked_cart_state)
-                _:
-                    return
+            if _handle_examine_input(input_tag):
+                return
     PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
     NodeHub.ref_SignalHub.ui_force_updated.emit()
 
@@ -232,3 +194,48 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
     Cart.pull_cart(pc, coord, state)
     Cart.add_trash(pc, state, NodeHub.ref_RandomNumber)
     NodeHub.ref_Schedule.start_next_turn()
+
+
+func _handle_normal_input(input_tag: StringName) -> bool:
+    match input_tag:
+        InputTag.SWITCH_EXAMINE:
+            if Cart.enter_examine_mode(pc, linked_cart_state):
+                _game_mode = EXAMINE_MODE
+                PcSwitchMode.examine_mode(true, NodeHub.ref_ActorAction)
+                return false
+        InputTag.MOVE_LEFT:
+            _move(Vector2i.LEFT, linked_cart_state)
+        InputTag.MOVE_RIGHT:
+            _move(Vector2i.RIGHT, linked_cart_state)
+        InputTag.MOVE_UP:
+            _move(Vector2i.UP, linked_cart_state)
+        InputTag.MOVE_DOWN:
+            _move(Vector2i.DOWN, linked_cart_state)
+        InputTag.WIZARD_1, InputTag.WIZARD_2, \
+                InputTag.WIZARD_3, InputTag.WIZARD_4, \
+                InputTag.WIZARD_5, InputTag.WIZARD_6, \
+                InputTag.WIZARD_7, InputTag.WIZARD_8, \
+                InputTag.WIZARD_9, InputTag.WIZARD_0:
+            WizardMode.handle_input(input_tag)
+        _:
+            return true
+    return true
+
+
+func _handle_examine_input(input_tag: StringName) -> bool:
+    match input_tag:
+        InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
+            _game_mode = NORMAL_MODE
+            Cart.exit_examine_mode(pc, linked_cart_state)
+            PcSwitchMode.examine_mode(false, NodeHub.ref_ActorAction)
+        InputTag.MOVE_UP:
+            Cart.examine_first_cart(pc, linked_cart_state)
+        InputTag.MOVE_DOWN:
+            Cart.examine_last_cart(pc, linked_cart_state)
+        InputTag.MOVE_LEFT:
+            Cart.examine_previous_cart(pc, linked_cart_state)
+        InputTag.MOVE_RIGHT, InputTag.EXAMINE_NEXT_CART:
+            Cart.examine_next_cart(pc, linked_cart_state)
+        _:
+            return true
+    return false

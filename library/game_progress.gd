@@ -9,14 +9,14 @@ const MAX_RETRY: int = 10
 
 
 static func update_world(
-        state: ProgressState, ref_PcAction: PcAction,
-        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ref_PcAction: PcAction, ref_ActorAction: ActorAction,
+        ref_RandomNumber: RandomNumber
         ) -> void:
+    var state: ProgressState = ref_PcAction.progress_state
     var idlers: int = HandleServant.count_idlers(
             ref_ActorAction.get_actor_states(SubTag.SERVANT)
             )
 
-    state.challenge_level = ref_PcAction.max_delivery - ref_PcAction.delivery
     state.max_trap = GameData.MAX_TRAP_DEFAULT
     state.max_leak_repeat = GameData.LEAK_REPEAT_DEFAULT
 
@@ -40,10 +40,6 @@ static func update_world(
                 state.max_leak_repeat = GameData.LEAK_REPEAT_0
             LEAK_1:
                 state.max_leak_repeat = GameData.LEAK_REPEAT_1
-            PHONE_0:
-                pass
-            PHONE_1:
-                pass
             _:
                 continue
 
@@ -58,6 +54,41 @@ static func update_world(
                 ref_ActorAction.get_actor_states(SubTag.CLERK),
                 ref_RandomNumber
                 )
+
+
+static func update_challenge_level(ref_PcAction: PcAction) -> void:
+    ref_PcAction.progress_state.challenge_level += 1
+
+
+static func update_phone(
+        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
+        ) -> void:
+    var state: ProgressState = ref_PcAction.progress_state
+    var max_phone: int = GameData.PHONE_REPEAT_DEFAULT
+    var phone_sprites: Array = SpriteState.get_sprites_by_sub_tag(SubTag.PHONE)
+    var phone_coord: Vector2i
+
+    for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
+        match i:
+            PHONE_0:
+                max_phone = GameData.PHONE_REPEAT_0
+                break
+            PHONE_1:
+                max_phone = GameData.PHONE_REPEAT_1
+                break
+            _:
+                continue
+
+    while max_phone > 0:
+        _update_phone_index(state, ref_RandomNumber)
+        phone_coord = state.phone_coords[state.phone_index]
+        if SpriteState.has_actor_at_coord(phone_coord):
+            continue
+        SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
+        max_phone -= 1
+
+    for i: Sprite2D in phone_sprites:
+        SpriteFactory.remove_sprite(i)
 
 
 static func _init_ground_coords(
@@ -162,6 +193,17 @@ static func _update_ground_index(
         state: ProgressState, ref_RandomNumber: RandomNumber
         ) -> void:
     state.ground_index += 1
-    if state.ground_index > state.ground_coords.size():
-        state.ground_index = 0
-        ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
+    if state.ground_index < state.ground_coords.size():
+        return
+    state.ground_index = 0
+    ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
+
+
+static func _update_phone_index(
+            state: ProgressState, ref_RandomNumber: RandomNumber
+            ) -> void:
+        state.phone_index += 1
+        if state.phone_index < state.phone_coords.size():
+            return
+        state.phone_index = 0
+        ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)

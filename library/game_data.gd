@@ -47,9 +47,12 @@ const CHALLENGES_PER_DELIVERY: Array = [
 const TRASH_MOD_0: float = 0.6
 const LEAK_REPEAT_0: int = 1
 const LEAK_REPEAT_1: int = 2
+const PHONE_REPEAT_0: int = 1
+const PHONE_REPEAT_1: int = 3
 
 const MAX_TRAP_DEFAULT: int = 0
 const LEAK_REPEAT_DEFAULT: int = 0
+const PHONE_REPEAT_DEFAULT: int = 0
 
 
 # Reward

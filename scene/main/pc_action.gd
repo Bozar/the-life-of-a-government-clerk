@@ -39,6 +39,7 @@ var max_delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
 var delivery: int = max_delivery
 
 
+var progress_state := ProgressState.new()
 var delay: int = 0
 
 
@@ -73,7 +74,6 @@ var _incoming_call: int = 0
 
 var _pc: Sprite2D
 var _game_mode: int = NORMAL_MODE
-var _progress_state := ProgressState.new()
 var _is_first_turn: bool = true
 
 var _fov_map: Dictionary = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
@@ -111,8 +111,7 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
         _is_first_turn = false
 
     GameProgress.update_world(
-            _progress_state, self, NodeHub.ref_ActorAction,
-            NodeHub.ref_RandomNumber
+            self, NodeHub.ref_ActorAction, NodeHub.ref_RandomNumber
             )
 
     if Checkmate.is_game_over(self):
@@ -212,6 +211,7 @@ func _handle_normal_input(input_tag: StringName) -> bool:
                 InputTag.WIZARD_7, InputTag.WIZARD_8, \
                 InputTag.WIZARD_9, InputTag.WIZARD_0:
             WizardMode.handle_input(input_tag)
+            return false
         _:
             return true
     return true

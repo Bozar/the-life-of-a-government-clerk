@@ -34,7 +34,9 @@ static func handle_input(
                 pass
             elif HandleOfficer.can_receive_document(actor_state) \
                     and _unload_document(ref_PcAction):
-                _document_unloaded_by_pc(ref_ActorAction, ref_RandomNumber)
+                _document_unloaded_by_pc(
+                        ref_PcAction, ref_ActorAction, ref_RandomNumber
+                        )
             else:
                 return
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
@@ -317,11 +319,13 @@ static func _servant_pushed_by_pc(
 
 
 static func _document_unloaded_by_pc(
-        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ref_PcAction: PcAction, ref_ActorAction: ActorAction,
+        ref_RandomNumber: RandomNumber
         ) -> void:
     HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
     HandleOfficer.set_active(ref_ActorAction.officer_states, ref_RandomNumber)
-    # TODO: Remove/Spawn phone sprites.
+    GameProgress.update_challenge_level(ref_PcAction)
+    GameProgress.update_phone(ref_PcAction, ref_RandomNumber)
 
 
 static func _raw_file_loaded_by_pc(

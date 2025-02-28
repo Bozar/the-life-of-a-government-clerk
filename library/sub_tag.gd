@@ -8,6 +8,7 @@ const INTERNAL_FLOOR: StringName = &"internal_floor"
 
 # Building
 const WALL: StringName = &"wall"
+const SPECIAL_WALL: StringName = &"special_wall"
 const DOOR: StringName = &"door"
 const DESK: StringName = &"desk"
 

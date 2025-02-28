@@ -78,6 +78,7 @@ static func update_phone(
                 break
             _:
                 continue
+    _init_phone_coords(state, ref_RandomNumber)
 
     while max_phone > 0:
         _update_phone_index(state, ref_RandomNumber)
@@ -116,6 +117,23 @@ static func _init_ground_coords(
                 state.ground_coords.push_back(coord)
 
     ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
+
+
+static func _init_phone_coords(
+        state: ProgressState, ref_RandomNumber: RandomNumber
+        ) -> void:
+    if not state.phone_coords.is_empty():
+        return
+
+    var special_wall_sprites: Array = SpriteState.get_sprites_by_sub_tag(
+            SubTag.SPECIAL_WALL
+            )
+
+    for i: Sprite2D in special_wall_sprites:
+        state.phone_coords.push_back(ConvertCoord.get_coord(i))
+        i.remove_from_group(SubTag.SPECIAL_WALL)
+    state.phone_index = -1
+    ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
 
 
 static func _create_rand_sprite(

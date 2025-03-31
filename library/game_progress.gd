@@ -2,7 +2,7 @@ class_name GameProgress
 
 
 enum {
-    TRASH, PHONE, LEAK,
+    TRASH_0, TRASH_1, PHONE, LEAK,
 }
 
 const MAX_RETRY: int = 10
@@ -32,8 +32,10 @@ static func update_world(
     # Set `state: ProgressState` based on `GameData.CHALLENGES_PER_DELIVERY`.
     for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
         match i:
-            TRASH:
-                state.max_trap = idlers
+            TRASH_0:
+                state.max_trap = idlers * GameData.TRASH_MOD_0
+            TRASH_1:
+                state.max_trap = idlers * GameData.TRASH_MOD_1
             LEAK:
                 state.max_leak_repeat = GameData.LEAK_REPEAT
             _:

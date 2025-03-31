@@ -72,7 +72,7 @@ const MAX_OFFICER_REPEAT: int = 1
 
 # Servant
 const BASE_SERVANT: int = 10
-const ADD_SERVANT: int = 2
+const ADD_SERVANT: int = 1
 const MIN_DISTANCE_TO_PC: int = PC_SIGHT_RANGE
 
 const BASE_DELAY: int = 1

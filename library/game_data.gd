@@ -17,7 +17,7 @@ const MIN_LOAD: int = 0
 const MIN_LOAD_PER_TURN: int = 1
 const MAX_LOAD_PER_TURN: int = 10
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
-const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 1.5)
+const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.8)
 
 const ADD_LOADS: Array = [
     [4, 3, 2, 1, 1,],

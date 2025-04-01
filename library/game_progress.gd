@@ -17,8 +17,8 @@ static func update_world(
             ref_ActorAction.get_actor_states(SubTag.SERVANT)
             )
 
-    state.max_trap = GameData.MAX_TRAP_DEFAULT
-    state.max_leak_repeat = GameData.LEAK_REPEAT_DEFAULT
+    state.max_trap = GameData.MIN_TRAP
+    state.max_leak = GameData.MIN_LEAK
 
     _init_ground_coords(state, ref_RandomNumber)
 
@@ -37,7 +37,7 @@ static func update_world(
             TRASH_1:
                 state.max_trap = idlers * GameData.TRASH_MOD_1
             LEAK:
-                state.max_leak_repeat = GameData.LEAK_REPEAT
+                state.max_leak = GameData.MAX_LEAK
             _:
                 continue
 
@@ -47,7 +47,7 @@ static func update_world(
             ref_PcAction, ref_RandomNumber, MAX_RETRY
             )
     # Reduce Clerk progress.
-    for _i in range(0, state.max_leak_repeat):
+    for _i in range(0, state.max_leak):
         HandleClerk.reduce_progress(
                 ref_ActorAction.get_actor_states(SubTag.CLERK),
                 ref_RandomNumber
@@ -62,14 +62,14 @@ static func update_phone(
         ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
         ) -> void:
     var state: ProgressState = ref_PcAction.progress_state
-    var max_phone: int = GameData.PHONE_REPEAT_DEFAULT
+    var max_phone: int = GameData.MIN_PHONE
     var phone_sprites: Array = SpriteState.get_sprites_by_sub_tag(SubTag.PHONE)
     var phone_coord: Vector2i
 
     for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
         match i:
             PHONE:
-                max_phone = GameData.PHONE_REPEAT
+                max_phone = GameData.MAX_PHONE
                 break
             _:
                 continue

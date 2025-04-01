@@ -106,7 +106,7 @@ static func reduce_progress(
         if not _is_valid_progress(i.progress):
             continue
         i.progress -= ref_RandomNumber.get_int(
-                GameData.MIN_REDUCE_PROGRESS, GameData.MAX_REDUCE_PROGRESS + 1
+                GameData.MIN_PROGRESS_LEAK, GameData.MAX_PROGRESS_LEAK + 1
                 )
         break
 

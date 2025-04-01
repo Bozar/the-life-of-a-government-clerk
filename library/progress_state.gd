@@ -6,7 +6,7 @@ var ground_index: int = 0
 var phone_coords: Array
 var phone_index: int = 0
 var max_trap: int
-var max_leak_repeat: int
+var max_leak: int
 
 
 var challenge_level: int = 0:

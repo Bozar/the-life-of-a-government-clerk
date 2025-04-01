@@ -42,14 +42,14 @@ const CHALLENGES_PER_DELIVERY: Array = [
     [GameProgress.TRASH_1, GameProgress.PHONE, GameProgress.LEAK,],
     [GameProgress.TRASH_1, GameProgress.PHONE, GameProgress.LEAK,],
 ]
-const LEAK_REPEAT: int = 2
-const PHONE_REPEAT: int = 3
+const MAX_LEAK: int = 2
+const MAX_PHONE: int = 3
 const TRASH_MOD_0: int = 1
 const TRASH_MOD_1: int = 2
 
-const MAX_TRAP_DEFAULT: int = 0
-const LEAK_REPEAT_DEFAULT: int = 0
-const PHONE_REPEAT_DEFAULT: int = 0
+const MIN_TRAP: int = 0
+const MIN_LEAK: int = 0
+const MIN_PHONE: int = 0
 
 
 # Reward
@@ -67,6 +67,9 @@ const PAYMENT_CLEAN: int = 2
 const MAX_CLERK_PROGRESS: int = PROGRESS_BOOK * (PAGE_BOOK * 3)
 const OVERFLOW_PROGRESS: float = 0.25
 
+const MIN_PROGRESS_LEAK: int = MIN_FILE_PROGRESS
+const MAX_PROGRESS_LEAK: int = MIN_FILE_PROGRESS * 3
+
 const MAX_OFFICER_REPEAT: int = 1
 
 
@@ -82,8 +85,6 @@ const MIN_IDLE_DURATION: int = PAGE_BOOK
 const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 2
 const SERVANT_ADD_COOLDOWN: int = BASE_PAGE * 3
 
-const MIN_REDUCE_PROGRESS: int = MIN_FILE_PROGRESS
-const MAX_REDUCE_PROGRESS: int = MIN_FILE_PROGRESS * 3
 
 
 # Raw file

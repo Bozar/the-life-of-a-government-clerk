@@ -56,7 +56,7 @@ const MIN_PHONE: int = 0
 const INCOME_INITIAL: int = 2
 const INCOME_DOCUMENT: int = 3
 
-const MAX_MISSED_CALL: int = 3
+const MAX_MISSED_CALL: int = 1
 const MISSED_CALL_PENALTY: int = 1
 
 

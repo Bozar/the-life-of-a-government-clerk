@@ -31,3 +31,4 @@ static func is_in_map(coord: Vector2i, map_2d: Dictionary) -> bool:
         column = map_2d[coord.x]
         return (coord.y >= 0) and (coord.y < column.size())
     return false
+

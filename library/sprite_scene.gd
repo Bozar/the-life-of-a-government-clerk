@@ -53,3 +53,4 @@ static func get_sprite_scene(sub_tag: StringName) -> PackedScene:
         return SPRITE_SCENES[sub_tag]
     push_error("Invalid sub tag: %s" % sub_tag)
     return null
+

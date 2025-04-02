@@ -234,3 +234,4 @@ func _handle_examine_input(input_tag: StringName) -> bool:
         _:
             return true
     return false
+

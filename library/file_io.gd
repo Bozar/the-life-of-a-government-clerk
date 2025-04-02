@@ -54,3 +54,4 @@ static func get_files(path_to_directory: String) -> Array:
 static func _get_full_path(file_name: String, args: Array) -> String:
     var path: String = args[0]
     return path + file_name
+

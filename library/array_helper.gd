@@ -35,3 +35,4 @@ static func shuffle(source: Array, rand: RandomNumber) -> void:
     for i: int in range(0, max_index):
         rand_index = rand.get_int(i, max_index)
         swap_element(source, i, rand_index)
+

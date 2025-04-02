@@ -86,3 +86,4 @@ const UI_INPUTS: Array[StringName] = [
     PAGE_BOTTOM,
     PAGE_TOP,
 ]
+

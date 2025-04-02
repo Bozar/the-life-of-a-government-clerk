@@ -34,3 +34,4 @@ static func set_background_color() -> void:
 
 static func set_visibility(sprite: Sprite2D, is_visible: bool) -> void:
     sprite.visible = is_visible
+

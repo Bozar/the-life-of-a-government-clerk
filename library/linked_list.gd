@@ -136,3 +136,4 @@ static func _warn_dup_object(object: Object, linked_list: Dictionary) -> bool:
         push_warning("Object already exists: %s." % object.name)
         return true
     return false
+

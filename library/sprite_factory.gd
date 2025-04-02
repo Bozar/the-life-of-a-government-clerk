@@ -42,3 +42,4 @@ static func create_actor(
 
 static func remove_sprite(sprite: Sprite2D) -> void:
     NodeHub.ref_SignalHub.sprite_removed.emit([sprite])
+

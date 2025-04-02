@@ -18,3 +18,4 @@ func reload() -> void:
 
 func quit() -> void:
     get_tree().quit()
+

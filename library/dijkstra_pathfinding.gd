@@ -87,3 +87,4 @@ static func _is_valid_distance(
     return Map2D.is_in_map(coord, map_2d) \
             and (map_2d[coord.x][coord.y] < max_distance) \
             and (map_2d[coord.x][coord.y] > UNKNOWN)
+

@@ -49,3 +49,4 @@ const DIGIT_TO_TAG: Dictionary = {
 static func get_percent_tag(current_value: int, max_value: int) -> StringName:
     var tens_digit: int = int(abs(current_value / (max_value * 1.0) * 10.0))
     return DIGIT_TO_TAG.get(tens_digit, PERCENT)
+

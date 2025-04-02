@@ -147,3 +147,4 @@ func _approach_pc(
 func _is_obstacle(coord: Vector2i, _opt_args: Array) -> bool:
     return SpriteState.has_building_at_coord(coord) \
             or SpriteState.has_actor_at_coord(coord)
+

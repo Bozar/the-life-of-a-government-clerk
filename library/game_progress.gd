@@ -215,3 +215,4 @@ static func _update_phone_index(
             return
         state.phone_index = 0
         ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
+

@@ -13,3 +13,4 @@ var challenge_level: int = 0:
         challenge_level = max(0,
                 min(value, GameData.CHALLENGES_PER_DELIVERY.size() - 1)
                 )
+

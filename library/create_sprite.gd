@@ -20,3 +20,4 @@ static func create(
     new_sprite.z_index = ZLayer.get_z_layer(main_tag)
 
     return TaggedSprite.new(new_sprite, main_tag, sub_tag)
+

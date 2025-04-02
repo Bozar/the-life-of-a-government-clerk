@@ -79,3 +79,4 @@ func _remove_progress_bar() -> void:
     if trap == null:
         return
     SpriteFactory.remove_sprite(trap)
+

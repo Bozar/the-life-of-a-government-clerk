@@ -171,3 +171,4 @@ class FovData:
 
     func _init(sight_range_: int) -> void:
         sight_range = sight_range_
+

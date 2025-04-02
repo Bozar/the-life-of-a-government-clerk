@@ -61,3 +61,4 @@ func _set_node_hub(node_names: Array) -> void:
     for i: String in node_names:
         ref_node = "ref_" + Array(i.split("/")).pop_back()
         NodeHub.set(ref_node, get_node(i))
+

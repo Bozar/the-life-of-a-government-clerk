@@ -25,3 +25,4 @@ func _set_font(is_light_color: bool) -> void:
 func _set_autowrap(minimum_size: Vector2 = Vector2(720, 0)) -> void:
     autowrap_mode = TextServer.AutowrapMode.AUTOWRAP_WORD_SMART
     custom_minimum_size = minimum_size
+

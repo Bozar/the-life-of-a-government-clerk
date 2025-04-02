@@ -131,3 +131,4 @@ static func _block_shadow_cast_fov_ray(
         _from_coord: Vector2i, to_coord: Vector2i, _args: Array
         ) -> bool:
     return _is_obstacle(to_coord)
+

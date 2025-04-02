@@ -52,3 +52,4 @@ func _point_to_next_sprite() -> Sprite2D:
         _is_first_turn = false
     _current_sprite = LinkedList.get_next_object(_current_sprite, _schedule)
     return _current_sprite
+

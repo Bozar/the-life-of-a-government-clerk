@@ -13,3 +13,4 @@ var _object: Object
 
 func _init(object_: Object) -> void:
     _object = object_
+

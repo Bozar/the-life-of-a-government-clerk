@@ -67,3 +67,4 @@ static func get_diamond_coords(center: Vector2i, max_range: int) -> Array:
 
 static func get_mirror_coord(coord: Vector2i, mirror: Vector2i) -> Vector2i:
     return Vector2i(mirror.x * 2 - coord.x, mirror.y * 2 - coord.y)
+

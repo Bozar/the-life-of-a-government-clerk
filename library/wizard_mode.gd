@@ -18,3 +18,4 @@ static func _test(input_tag: StringName) -> void:
                     NodeHub.ref_PcAction.linked_cart_state)
         InputTag.WIZARD_4:
             PcHitActor._load_document(NodeHub.ref_PcAction)
+

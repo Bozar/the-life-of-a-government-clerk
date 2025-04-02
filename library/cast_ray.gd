@@ -39,3 +39,4 @@ static func trim_coords(
         if not DungeonSize.is_in_dungeon(tail_coord):
             coords = coords.slice(0, -1)
     return coords
+

@@ -36,3 +36,4 @@ static func count_idlers(servant_states: Array) -> int:
         if i.is_active:
             counter += 1
     return counter
+

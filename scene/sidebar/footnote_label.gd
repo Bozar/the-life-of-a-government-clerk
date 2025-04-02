@@ -28,3 +28,4 @@ func _get_seed() -> String:
     var tail: String = ("-" + str_seed.substr(6)) if (seed_len > 6) else ""
 
     return "%s%s%s" % [head, body, tail]
+

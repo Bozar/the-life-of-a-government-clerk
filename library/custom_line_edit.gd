@@ -32,3 +32,4 @@ func _set_font() -> void:
         add_theme_font_size_override("font_size", 24)
         add_theme_color_override(color_name, Palette.get_color(palette,
                 MainTag.GUI_TEXT, is_light_color))
+

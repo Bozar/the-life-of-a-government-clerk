@@ -76,3 +76,4 @@ static func _compile_color_regex() -> void:
         return
     if _color_regex.compile(HTML_COLOR_REGEX) == OK:
         _color_regex_compiled = true
+

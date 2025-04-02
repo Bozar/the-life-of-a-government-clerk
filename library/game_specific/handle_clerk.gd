@@ -156,3 +156,4 @@ static func _is_valid_progress(progress: int) -> bool:
 
 static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:
     return left.progress < right.progress
+

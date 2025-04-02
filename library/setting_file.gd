@@ -118,3 +118,4 @@ class SettingValue:
     var bool_value: bool
     var string_value: String
     var dictionary_value: Dictionary
+

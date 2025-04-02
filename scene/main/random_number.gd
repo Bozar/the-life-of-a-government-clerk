@@ -37,3 +37,4 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
             TransferData.set_rng_seed(0)
         InputTag.START_NEW_GAME:
             TransferData.set_rng_seed(0)
+

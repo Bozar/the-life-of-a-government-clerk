@@ -26,3 +26,4 @@ static func set_active(
             state.is_active = true
         else:
             state.is_active = false
+

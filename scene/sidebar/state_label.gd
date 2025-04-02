@@ -64,3 +64,4 @@ func _get_state_text() -> String:
                     NodeHub.ref_PcAction.linked_cart_state
                     )
     return ""
+

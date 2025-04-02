@@ -7,3 +7,4 @@ static func answer_call(actor: Sprite2D, ref_PcAction: PcAction) -> void:
             GameData.CLEAN_PHONE_CALL
             )
     SpriteFactory.remove_sprite(actor)
+

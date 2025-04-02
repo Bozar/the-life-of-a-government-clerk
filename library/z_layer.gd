@@ -29,3 +29,4 @@ static func get_z_layer(main_tag: StringName) -> int:
 
 static func is_valid_z_layer(z_layer: int) -> bool:
     return (z_layer >= MIN_Z_LAYER) and (z_layer <= MAX_Z_LAYER)
+

@@ -55,3 +55,4 @@ static func _is_fully_loaded(ref_PcAction: PcAction) -> bool:
     if current_cart < 1:
         return false
     return current_load >= current_cart * GameData.MAX_LOAD_PER_CART
+

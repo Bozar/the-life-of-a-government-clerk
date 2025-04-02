@@ -10,3 +10,4 @@ signal sprite_removed(sprites: Array)
 
 signal ui_force_updated()
 signal action_pressed(input_tag: InputTag)
+

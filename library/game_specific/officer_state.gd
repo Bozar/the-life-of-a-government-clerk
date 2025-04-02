@@ -14,3 +14,4 @@ var is_active: bool = true:
 var repeat_counter: int = 0:
     set(value):
         repeat_counter = max(0, value)
+

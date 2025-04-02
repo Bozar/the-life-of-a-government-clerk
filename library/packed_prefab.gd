@@ -29,3 +29,4 @@ static func _get_max_y(init_prefab: Dictionary) -> int:
     elif typeof(init_prefab[0]) != TYPE_ARRAY:
         return 0
     return init_prefab[0].size()
+

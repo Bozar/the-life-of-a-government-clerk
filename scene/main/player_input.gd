@@ -151,3 +151,4 @@ func _handle_wizard_inputs(event: InputEvent) -> bool:
             NodeHub.ref_SignalHub.action_pressed.emit(i)
             return true
     return false
+

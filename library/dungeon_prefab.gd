@@ -141,3 +141,4 @@ static func _get_new_matrix(max_x: int, max_y: int) -> Dictionary:
         new_row.resize(max_x)
         new_matrix[x] = new_row
     return new_matrix
+

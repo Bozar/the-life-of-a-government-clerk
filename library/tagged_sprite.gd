@@ -23,3 +23,4 @@ func _init(
     _sprite = sprite_
     _main_tag = main_tag_
     _sub_tag = sub_tag_
+

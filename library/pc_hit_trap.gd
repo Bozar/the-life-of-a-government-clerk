@@ -39,3 +39,4 @@ static func _remove_servant(
         state.item_tag = SubTag.CART
         return true
     return false
+

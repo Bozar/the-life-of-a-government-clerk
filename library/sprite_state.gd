@@ -108,3 +108,4 @@ static func has_actor_at_coord(
     return NodeHub.ref_SpriteCoord.get_sprite_by_coord(
             MainTag.ACTOR, coord, z_layer
             ) != null
+

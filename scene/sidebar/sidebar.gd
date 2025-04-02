@@ -38,3 +38,4 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
             visible = true
         InputTag.OPEN_DEBUG_MENU, InputTag.OPEN_HELP_MENU:
             visible = false
+

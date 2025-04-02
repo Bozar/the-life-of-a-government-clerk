@@ -52,3 +52,4 @@ func set_load_setting_file(value: bool) -> void:
 
 func set_palette(value: Dictionary) -> void:
     _palette = value
+

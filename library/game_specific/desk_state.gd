@@ -17,3 +17,4 @@ var _coord: Vector2i
 
 func _init(coord_: Vector2i) -> void:
     _coord = coord_
+

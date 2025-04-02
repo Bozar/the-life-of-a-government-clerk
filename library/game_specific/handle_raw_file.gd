@@ -74,3 +74,4 @@ static func switch_examine_mode(is_enter: bool, states: Array) -> void:
 
 static func _sort_cooldown(left: RawFileState, right: RawFileState) -> bool:
     return left.cooldown < right.cooldown
+

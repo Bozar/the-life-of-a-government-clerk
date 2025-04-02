@@ -84,3 +84,4 @@ func _get_bool(line_edit_text: String) -> bool:
             return false
         _:
             return bool(int(text))
+

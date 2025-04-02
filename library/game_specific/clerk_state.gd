@@ -57,3 +57,4 @@ func _init_desk_states() -> void:
         match distance:
             1, 2:
                 _desk_states[distance - 1] = DeskState.new(desk_coord)
+

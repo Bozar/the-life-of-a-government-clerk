@@ -49,3 +49,4 @@ const PHONE: StringName = &"phone"
 const INDICATOR_TOP: StringName = &"indicator_top"
 const INDICATOR_BOTTOM: StringName = &"indicator_bottom"
 const INDICATOR_LEFT: StringName = &"indicator_left"
+

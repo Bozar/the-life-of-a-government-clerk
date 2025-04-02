@@ -17,3 +17,4 @@ static func get_fov_map(
             coord.y = y
             set_fov_value.call(coord, out_fov_map, PcFov.IS_IN_SIGHT_FLAG,
                     ConvertCoord.is_in_range(source, coord, sight_range))
+

@@ -19,3 +19,4 @@ var max_idle_duration: int:
 var is_active: bool:
     get:
         return idle_duration >= max_idle_duration
+

@@ -98,3 +98,4 @@ class FovData:
         _right = right_
         _down = down_
         _left = left_
+

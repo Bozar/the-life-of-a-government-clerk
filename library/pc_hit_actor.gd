@@ -339,3 +339,4 @@ static func _raw_file_loaded_by_pc(
             ref_ActorAction.get_actor_state(actor),
             ref_RandomNumber, servant_cooldown
             )
+

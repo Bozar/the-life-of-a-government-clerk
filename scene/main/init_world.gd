@@ -197,3 +197,4 @@ func _test(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
             coord.y = y
             _create_from_character(packed_prefab.prefab[x][y], coord,
                     occupied_grids, tagged_sprites)
+

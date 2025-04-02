@@ -18,3 +18,4 @@ var _sub_tag: StringName
 func _init(sprite_: Sprite2D, sub_tag_: StringName) -> void:
     _sprite = sprite_
     _sub_tag = sub_tag_
+

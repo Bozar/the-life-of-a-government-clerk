@@ -77,3 +77,4 @@ func _has_main_tag(sprite: Sprite2D, args: Array) -> bool:
     var main_tag: StringName = args[0]
 
     return sprite.is_in_group(main_tag)
+

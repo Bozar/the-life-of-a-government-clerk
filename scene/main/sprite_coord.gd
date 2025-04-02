@@ -147,3 +147,4 @@ func _set_visibility(coord: Vector2i) -> void:
 
 func _sort_by_layer(this_sprite: Sprite2D, that_sprite: Sprite2D) -> bool:
     return this_sprite.z_index < that_sprite.z_index
+

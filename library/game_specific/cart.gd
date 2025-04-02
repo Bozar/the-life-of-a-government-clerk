@@ -433,3 +433,4 @@ static func _remove_cart(
     # first_cart - ... - remove_cart - next_cart - ... - [first_cart]
     if next_cart != first_cart:
         _move_cart(next_cart, first_cart, remove_coord, state)
+

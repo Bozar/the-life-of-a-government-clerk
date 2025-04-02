@@ -146,3 +146,4 @@ func _get_scroll(gui_index: int) -> ScrollContainer:
 
 func _get_label(gui_index: int) -> CustomLabel:
     return _guis[gui_index][1]
+

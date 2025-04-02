@@ -42,13 +42,11 @@ const CHALLENGES_PER_DELIVERY: Array = [
     [GameProgress.TRASH_1, GameProgress.PHONE, GameProgress.LEAK,],
     [GameProgress.TRASH_1, GameProgress.PHONE, GameProgress.LEAK,],
 ]
-const MAX_LEAK: int = 2
 const MAX_PHONE: int = 3
 const TRASH_MOD_0: int = 1
 const TRASH_MOD_1: int = 2
 
 const MIN_TRAP: int = 0
-const MIN_LEAK: int = 0
 const MIN_PHONE: int = 0
 
 

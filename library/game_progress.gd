@@ -18,7 +18,6 @@ static func update_world(
             )
 
     state.max_trap = GameData.MIN_TRAP
-    state.max_leak = GameData.MIN_LEAK
 
     _init_ground_coords(state, ref_RandomNumber)
 
@@ -36,8 +35,6 @@ static func update_world(
                 state.max_trap = idlers * GameData.TRASH_MOD_0
             TRASH_1:
                 state.max_trap = idlers * GameData.TRASH_MOD_1
-            LEAK:
-                state.max_leak = GameData.MAX_LEAK
             _:
                 continue
 
@@ -47,11 +44,9 @@ static func update_world(
             ref_PcAction, ref_RandomNumber, MAX_RETRY
             )
     # Reduce Clerk progress.
-    for _i in range(0, state.max_leak):
-        HandleClerk.reduce_progress(
-                ref_ActorAction.get_actor_states(SubTag.CLERK),
-                ref_RandomNumber
-                )
+    HandleClerk.reduce_progress(
+            ref_ActorAction.get_actor_states(SubTag.CLERK), ref_RandomNumber
+            )
 
 
 static func update_challenge_level(ref_PcAction: PcAction) -> void:

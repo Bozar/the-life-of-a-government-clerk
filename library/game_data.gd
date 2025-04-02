@@ -63,6 +63,7 @@ const MISSED_CALL_PENALTY: int = 1
 # Clerk and Officer
 const PAYMENT_GARAGE: int = 1
 const PAYMENT_CLEAN: int = 2
+const MIN_PAYMENT: int = 0
 
 const MAX_CLERK_PROGRESS: int = PROGRESS_BOOK * (PAGE_BOOK * 3)
 const OVERFLOW_PROGRESS: float = 0.25

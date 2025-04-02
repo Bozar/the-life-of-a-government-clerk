@@ -3,7 +3,7 @@ class_name GameData
 
 # Sidebar
 const MIN_TURN_COUNTER: int = 1
-const MAX_TURN_COUNTER: int = 9
+const MAX_TURN_COUNTER: int = 99
 
 
 # Sprite

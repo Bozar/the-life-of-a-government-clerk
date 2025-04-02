@@ -29,7 +29,7 @@ static func reset_cooldown(raw_file_states: Array) -> void:
 
 
 static func update_cooldown(state: RawFileState) -> void:
-    state.cooldown -= 1
+    state.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_PASSIVE
 
 
 static func reduce_cooldown(
@@ -42,7 +42,7 @@ static func reduce_cooldown(
 
     for i: RawFileState in dup_states:
         if i.cooldown > 0:
-            i.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
+            i.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT
             break
 
 
@@ -51,7 +51,7 @@ static func can_receive_servant(state: RawFileState) -> bool:
 
 
 static func receive_servant(state: RawFileState) -> void:
-    state.cooldown -= GameData.RAW_FILE_ADD_COOLDOWN
+    state.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_UNLOAD_SERVANT
 
 
 static func switch_examine_mode(is_enter: bool, states: Array) -> void:

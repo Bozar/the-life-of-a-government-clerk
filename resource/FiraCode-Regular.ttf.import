@@ -32,4 +32,6 @@ compress=true
 preload=[]
 language_support={}
 script_support={}
-opentype_features={}
+opentype_features={
+1667329140: 0
+}

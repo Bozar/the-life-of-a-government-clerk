@@ -23,45 +23,51 @@ const DESK_ITEM_PROGRESS: Dictionary = {
 }
 
 
-static func send_document(state: ClerkState) -> bool:
-    var new_progress: int
+static func can_send_document(state: ClerkState) -> bool:
+    return state.has_document
+
+
+static func send_document(state: ClerkState) -> void:
+    var new_progress: int = state.progress
+
+    new_progress -= GameData.MAX_CLERK_PROGRESS
+    new_progress = max(0, new_progress)
+    new_progress = floor(GameData.OVERFLOW_PROGRESS * new_progress)
+    state.progress = new_progress
+
+
+static func can_receive_raw_file(
+        state: ClerkState, item_tag: StringName
+        ) -> bool:
+    var desk_sprite: Sprite2D
+    var new_tag: StringName = DESK_ITEM_TAGS.get(item_tag, "")
 
     if state.has_document:
-        new_progress = state.progress
-        new_progress -= GameData.MAX_CLERK_PROGRESS
-        new_progress = max(0, new_progress)
-        new_progress = floor(GameData.OVERFLOW_PROGRESS * new_progress)
-        state.progress = new_progress
-        return true
+        return false
+    elif new_tag == "":
+        return false
+
+    for i: DeskState in state.desk_states:
+        desk_sprite = i.sprite
+        if desk_sprite == null:
+            return true
+        elif desk_sprite.is_in_group(new_tag):
+            return false
     return false
 
 
-static func receive_raw_file(state: ClerkState, item_tag: StringName) -> bool:
+static func receive_raw_file(state: ClerkState, item_tag: StringName) -> void:
     var desk_state: DeskState
-    var desk_sprite: Sprite2D
     var new_tag: StringName
     var new_coord: Vector2i
     var new_tagged_sprite: TaggedSprite
 
-    if state.has_document:
-        return false
-    elif not DESK_ITEM_TAGS.has(item_tag):
-        return false
-
-    desk_state = null
     new_tag = DESK_ITEM_TAGS[item_tag]
     for i: DeskState in state.desk_states:
-        desk_sprite = i.sprite
-        if desk_sprite == null:
-            # Put new file on the first (closest) empty desk.
-            if desk_state == null:
-                desk_state = i
-        else:
-            if desk_sprite.is_in_group(new_tag):
-                return false
-
-    if desk_state == null:
-        return false
+        # Put a new raw file on the first (closest) empty desk.
+        if i.sprite == null:
+            desk_state = i
+            break
 
     new_coord = desk_state.coord
     new_tagged_sprite = SpriteFactory.create_trap(new_tag, new_coord, true)
@@ -72,7 +78,6 @@ static func receive_raw_file(state: ClerkState, item_tag: StringName) -> bool:
         desk_state.remaining_page = DESK_ITEM_PAGES[new_tag]
     else:
         push_error("Page not found: %s" % new_tag)
-    return true
 
 
 static func update_progress(state: ClerkState) -> void:

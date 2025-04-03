@@ -10,7 +10,5 @@ var max_trap: int
 
 var challenge_level: int = 0:
     set(value):
-        challenge_level = max(0,
-                min(value, GameData.CHALLENGES_PER_DELIVERY.size() - 1)
-                )
+        challenge_level = max(0, min(value, GameData.MAX_LEVEL))
 

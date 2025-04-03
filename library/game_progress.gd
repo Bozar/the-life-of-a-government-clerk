@@ -21,32 +21,27 @@ static func update_world(
 
     _init_ground_coords(state, ref_RandomNumber)
 
-    # Create Servants. This challenge is available throughout the game. It is
-    # NOT defined in `GameData.CHALLENGES_PER_DELIVERY`.
+    # Create Servants. This challenge is available throughout the game.
     _create_rand_sprite(
             MainTag.ACTOR, SubTag.SERVANT, state,
             ref_PcAction, ref_RandomNumber, MAX_RETRY
             )
 
-    # Set `state: ProgressState` based on `GameData.CHALLENGES_PER_DELIVERY`.
-    for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
-        match i:
-            TRASH_0:
-                state.max_trap = idlers * GameData.TRASH_MOD_0
-            TRASH_1:
-                state.max_trap = idlers * GameData.TRASH_MOD_1
-            _:
-                continue
-
     # Create traps.
+    if state.challenge_level < GameData.MIN_LEVEL_TRASH_1:
+        state.max_trap = idlers * GameData.TRASH_MOD_0
+    else:
+        state.max_trap = idlers * GameData.TRASH_MOD_1
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, state,
             ref_PcAction, ref_RandomNumber, MAX_RETRY
             )
+
     # Reduce Clerk progress.
-    HandleClerk.reduce_progress(
-            ref_ActorAction.get_actor_states(SubTag.CLERK), ref_RandomNumber
-            )
+    if state.challenge_level >= GameData.MIN_LEVEL_LEAK:
+        HandleClerk.reduce_progress(
+                ref_ActorAction.get_actor_states(SubTag.CLERK), ref_RandomNumber
+                )
 
 
 static func update_challenge_level(ref_PcAction: PcAction) -> void:
@@ -61,14 +56,9 @@ static func update_phone(
     var phone_sprites: Array = SpriteState.get_sprites_by_sub_tag(SubTag.PHONE)
     var phone_coord: Vector2i
 
-    for i: int in GameData.CHALLENGES_PER_DELIVERY[state.challenge_level]:
-        match i:
-            PHONE:
-                max_phone = GameData.MAX_PHONE
-                break
-            _:
-                continue
-    _init_phone_coords(state, ref_RandomNumber)
+    if state.challenge_level >= GameData.MIN_LEVEL_PHONE:
+        max_phone = GameData.MAX_PHONE
+        _init_phone_coords(state, ref_RandomNumber)
 
     while max_phone > 0:
         _update_phone_index(state, ref_RandomNumber)

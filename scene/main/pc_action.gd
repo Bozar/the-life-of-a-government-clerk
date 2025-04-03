@@ -35,7 +35,7 @@ var account: int = 0
 
 var missed_call: int = 0
 
-var max_delivery: int = GameData.CHALLENGES_PER_DELIVERY.size()
+var max_delivery: int = GameData.MAX_LEVEL
 var delivery: int = max_delivery
 
 

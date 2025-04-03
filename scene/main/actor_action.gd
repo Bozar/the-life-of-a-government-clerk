@@ -17,10 +17,27 @@ var clerk_states: Array:
         return _clerk_states
 
 
+var raw_file_sprites: Array:
+    get:
+        return _raw_file_sprites
+
+
+var officer_records: Array:
+    get:
+        return _officer_records
+
+
+var service_sprites: Array:
+    get:
+        return _service_sprites
+
+
 var _raw_file_states: Array
 var _officer_states: Array
 var _clerk_states: Array
-
+var _raw_file_sprites: Array
+var _officer_records: Array
+var _service_sprites: Array
 
 var _actor_states: Dictionary = {}
 
@@ -83,6 +100,7 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                 new_state = RawFileState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state
                 _raw_file_states.push_back(new_state)
+                _raw_file_sprites.push_back(i.sprite)
             SubTag.CLERK:
                 new_state = ClerkState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state
@@ -98,6 +116,10 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                         = NodeHub.ref_RandomNumber.get_int(
                         GameData.MIN_IDLE_DURATION,
                         GameData.MAX_IDLE_DURATION + 1)
+            SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
+                new_state = ActorState.new(i.sprite, i.sub_tag)
+                _actor_states[id] = new_state
+                _service_sprites.push_back(i.sprite)
             _:
                 _actor_states[id] = ActorState.new(i.sprite, i.sub_tag)
 

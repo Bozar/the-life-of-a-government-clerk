@@ -37,6 +37,10 @@ static func handle_input(
                 _document_unloaded_by_pc(
                         ref_PcAction, ref_ActorAction, ref_RandomNumber
                         )
+                GameProgress.update_challenge_level(ref_PcAction)
+                GameProgress.update_phone(ref_PcAction, ref_RandomNumber)
+                GameProgress.update_raw_file(ref_ActorAction, ref_RandomNumber)
+                GameProgress.update_service(ref_ActorAction, ref_RandomNumber)
             else:
                 return
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
@@ -326,6 +330,7 @@ static func _document_unloaded_by_pc(
     HandleOfficer.set_active(ref_ActorAction.officer_states, ref_RandomNumber)
     GameProgress.update_challenge_level(ref_PcAction)
     GameProgress.update_phone(ref_PcAction, ref_RandomNumber)
+    GameProgress.update_raw_file(ref_ActorAction, ref_RandomNumber)
 
 
 static func _raw_file_loaded_by_pc(

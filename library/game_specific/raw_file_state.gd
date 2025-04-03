@@ -40,6 +40,10 @@ var _cooldown: int = 0
 var _progress_bar_coord: Vector2i = INVALID_COORD
 
 
+func reset_progress_bar_coord() -> void:
+    _progress_bar_coord = INVALID_COORD
+
+
 func _set_encyclopedia_cooldown() -> void:
     var count_cart: int = SpriteState.get_sprites_by_sub_tag(SubTag.CART).size()
 

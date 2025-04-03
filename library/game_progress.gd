@@ -82,6 +82,33 @@ static func update_phone(
         SpriteFactory.remove_sprite(i)
 
 
+static func update_raw_file(
+        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ) -> void:
+    var sprites: Array = ref_ActorAction.raw_file_sprites
+    var states: Array = ref_ActorAction.raw_file_states
+
+    _swap_sprites(sprites, ref_RandomNumber)
+    for i in states:
+        i.reset_progress_bar_coord()
+    for i in SpriteState.get_sprites_by_sub_tag(SubTag.PROGRESS_BAR):
+        SpriteFactory.remove_sprite(i)
+
+
+static func update_service(
+        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ) -> void:
+    _swap_sprites(ref_ActorAction.service_sprites, ref_RandomNumber)
+
+
+static func _swap_sprites(
+        sprites: Array, ref_RandomNumber: RandomNumber
+        ) -> void:
+    ArrayHelper.shuffle(sprites, ref_RandomNumber)
+    for i in range(0, sprites.size() - 1):
+        SpriteState.swap_sprite(sprites[i], sprites[i + 1])
+
+
 static func _init_ground_coords(
         state: ProgressState, ref_RandomNumber: RandomNumber
         ) -> void:

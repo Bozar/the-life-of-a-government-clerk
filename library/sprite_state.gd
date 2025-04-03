@@ -13,6 +13,10 @@ static func move_sprite(
     NodeHub.ref_SpriteCoord.move_sprite(sprite, coord, z_layer)
 
 
+static func swap_sprite(this_sprite: Sprite2D, that_sprite: Sprite2D) -> void:
+    NodeHub.ref_SpriteCoord.swap_sprite(this_sprite, that_sprite)
+
+
 static func get_sprites_by_coord(coord: Vector2i) -> Array:
     return NodeHub.ref_SpriteCoord.get_sprites_by_coord(coord)
 

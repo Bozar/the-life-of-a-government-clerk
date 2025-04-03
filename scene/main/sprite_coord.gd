@@ -65,6 +65,26 @@ func get_sprite_by_coord(
     return null
 
 
+func swap_sprite(this_sprite: Sprite2D, that_sprite: Sprite2D) -> void:
+    var this_coord: Vector2i = ConvertCoord.get_coord(this_sprite)
+    var that_coord: Vector2i = ConvertCoord.get_coord(that_sprite)
+
+    var this_layer: int = this_sprite.z_index
+    var that_layer: int = that_sprite.z_index
+
+    var this_main_tag: StringName = SpriteState.get_main_tag(this_sprite)
+
+    if get_sprite_by_coord(this_main_tag, that_coord, ZLayer.MAX_Z_LAYER) \
+            != null:
+        push_error("Top layer has sprite: %s, [%d, %d]" \
+                % [this_main_tag, that_coord.x, that_coord.y])
+        return
+
+    move_sprite(this_sprite, that_coord, ZLayer.MAX_Z_LAYER)
+    move_sprite(that_sprite, this_coord, this_layer)
+    move_sprite(this_sprite, that_coord, that_layer)
+
+
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         if i.main_tag == MainTag.INDICATOR:

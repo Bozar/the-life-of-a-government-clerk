@@ -67,7 +67,7 @@ const OVERFLOW_PROGRESS: float = 0.25
 const MIN_PROGRESS_LEAK: int = MIN_FILE_PROGRESS
 const MAX_PROGRESS_LEAK: int = MIN_FILE_PROGRESS * 3
 
-const MAX_OFFICER_REPEAT: int = 1
+const MAX_OFFICER_REPEAT: int = 2
 
 
 # Servant

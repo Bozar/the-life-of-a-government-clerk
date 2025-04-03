@@ -2,9 +2,10 @@ class_name Cart
 extends Node2D
 
 
-const EXTEND_TEMPLATE: String = "EXTEND: %s"
+const EXTEND_TEMPLATE: String = "$> +%s"
 const EXAMINE_TEMPLATE: String = "?> %s: %s%%"
 const FIRST_ITEM_TEMPLATE: String = "1> %s: %s%%"
+const LAST_SLOT_TEMPLATE: String = "$> %s: %s%%"
 
 const PERCENT: float = 100.0
 
@@ -360,6 +361,17 @@ static func get_first_item_text(pc: Sprite2D, state: LinkedCartState) -> String:
     return _get_cart_state_text(coord, FIRST_ITEM_TEMPLATE, state)
 
 
+static func get_last_slot_text(pc: Sprite2D, state: LinkedCartState) -> String:
+    var cart: Sprite2D = get_last_slot(pc, state)
+    var coord: Vector2i
+
+    if cart == null:
+        # $> -: -%
+        return LAST_SLOT_TEMPLATE % ["-", "-"]
+    coord = ConvertCoord.get_coord(cart)
+    return _get_cart_state_text(coord, LAST_SLOT_TEMPLATE, state)
+
+
 static func _get_cart_state_text(
         coord: Vector2i, text_template: String, state: LinkedCartState
         ) -> String:
@@ -367,6 +379,7 @@ static func _get_cart_state_text(
     var cart_state: CartState = get_state(cart, state)
 
     if cart_state == null:
+        push_error("Cart state not found: [%d, %d]" % [coord.x, coord.y])
         return ""
     elif cart_state.is_detached:
         return DETACHED

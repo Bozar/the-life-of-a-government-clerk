@@ -35,14 +35,18 @@ func update_gui() -> void:
     var first_item: String = Cart.get_first_item_text(
             NodeHub.ref_PcAction.pc, NodeHub.ref_PcAction.linked_cart_state
             )
+    var last_slot: String = Cart.get_last_slot_text(
+            NodeHub.ref_PcAction.pc, NodeHub.ref_PcAction.linked_cart_state
+            )
+    var cart: String = last_slot if (first_item == "") else first_item
     var state: String = _get_state_text()
-    var end_game: String = ""
+    var end_game: String
 
     if game_over:
         end_game = YOU_WIN if player_win else YOU_LOSE
 
     text = "\n".join([
-        turn, doc, cash, phone_call, "", first_item, state, end_game
+        turn, doc, cash, phone_call, "", cart, state, "", end_game
     ])
 
 

@@ -4,7 +4,11 @@
     "show_full_map": false,
     "palette": {
     },
-    "default_palette": {
+    "HELP": {
+        "VALID_OPTIONS": ["rng_seed", "wizard_mode", "show_full_map", "palette"],
+        "HOW_TO_SET_PALETTE": "Add a key-value pair into 'palette' to customize color theme."
+    },
+    "DEFAULT_PALETTE": {
         "background": ["#212529", "#212529"],
         "gui_text": ["#ADB5BD", "#6C757D"],
         "ground": ["#6C757D", "#343A40"],
@@ -13,11 +17,11 @@
         "actor": ["#52B788", "#2D6A4F"],
         "indicator": ["#6C757D", "#6C757D"]
     },
-    "blue_palette": {
+    "BLUE_PALETTE": {
         "actor": ["56add8", "0e628c"]
     },
-    "grey_palette": {
-        "trap": ["#6C757D", "#343A40"],
+    "GREY_PALETTE": {
+        "trap": ["#ADB5BD", "#6C757D"],
         "actor": ["#ADB5BD", "#6C757D"]
     }
 }

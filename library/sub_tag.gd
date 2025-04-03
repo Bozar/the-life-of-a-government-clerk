@@ -43,6 +43,7 @@ const SERVANT: StringName = &"servant"
 const GARAGE: StringName = &"garage"
 const STATION: StringName = &"station"
 const PHONE: StringName = &"phone"
+const SHELF: StringName = &"shelf"
 
 
 # Indicator

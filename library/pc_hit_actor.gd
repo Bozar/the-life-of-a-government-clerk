@@ -68,6 +68,8 @@ static func handle_input(
                     return
         SubTag.PHONE:
             HandlePhone.answer_call(actor, ref_PcAction)
+        SubTag.SHELF:
+            HandleShelf.debug()
         _:
             return
 

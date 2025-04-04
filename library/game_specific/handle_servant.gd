@@ -25,11 +25,7 @@ static func switch_examine_mode(is_enter: bool, servant_states: Array) -> void:
             i.idle_duration = i.idle_duration
 
 
-static func get_servant_cooldown(servant_states: Array) -> int:
-    return GameData.SERVANT_ADD_COOLDOWN * count_idlers(servant_states)
-
-
-static func count_idlers(servant_states: Array) -> int:
+static func count_idle_servant(servant_states: Array) -> int:
     var counter: int = 0
 
     for i: ServantState in servant_states:

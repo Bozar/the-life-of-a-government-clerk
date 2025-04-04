@@ -8,7 +8,8 @@ static func handle_input(
         ) -> void:
     var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
     var player_win: bool
-    var env_cooldown: int = _get_env_cooldown(ref_ActorAction)
+    var env_cooldown: int = ref_ActorAction.count_combined_idler \
+            * GameData.RAW_FILE_ADD_COOLDOWN_SERVANT
     var first_item_tag: StringName = _get_first_item_tag(ref_PcAction)
 
     match SpriteState.get_sub_tag(actor):
@@ -409,13 +410,4 @@ static func _unload_servant(ref_PcAction: PcAction) -> void:
 static func _is_long_cart(ref_PcAction: PcAction) -> bool:
     return Cart.count_cart(ref_PcAction.linked_cart_state) \
             >= GameData.CART_LENGTH_LONG
-
-
-static func _get_env_cooldown(ref_ActorAction: ActorAction) -> int:
-    var servant_cooldown: int = HandleServant.get_servant_cooldown(
-            ref_ActorAction.get_actor_states(SubTag.SERVANT)
-            )
-    # TODO: Count shelf_cooldown.
-    var shelf_cooldown: int = 0
-    return servant_cooldown + shelf_cooldown
 

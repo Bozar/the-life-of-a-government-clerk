@@ -17,6 +17,11 @@ var clerk_states: Array:
         return _clerk_states
 
 
+var shelf_states: Array:
+    get:
+        return _shelf_states
+
+
 var raw_file_sprites: Array:
     get:
         return _raw_file_sprites
@@ -32,9 +37,19 @@ var service_sprites: Array:
         return _service_sprites
 
 
+var count_combined_idler: int:
+    get:
+        var servants: int = HandleServant.count_idle_servant(
+                get_actor_states(SubTag.SERVANT)
+                )
+        var shelves: int = HandleShelf.count_occupied_shelf(shelf_states)
+        return servants + shelves * GameData.SHELF_TO_IDLE_SERVANT
+
+
 var _raw_file_states: Array
 var _officer_states: Array
 var _clerk_states: Array
+var _shelf_states: Array
 var _raw_file_sprites: Array
 var _officer_records: Array
 var _service_sprites: Array
@@ -119,6 +134,7 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
             SubTag.SHELF:
                 new_state = ShelfState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state
+                _shelf_states.push_back(new_state)
             SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
                 new_state = ActorState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state

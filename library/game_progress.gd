@@ -13,12 +13,9 @@ static func update_world(
         ref_RandomNumber: RandomNumber
         ) -> void:
     var state: ProgressState = ref_PcAction.progress_state
-    var idlers: int = HandleServant.count_idlers(
-            ref_ActorAction.get_actor_states(SubTag.SERVANT)
-            )
+    var base_trap: int = ref_ActorAction.count_combined_idler
 
     state.max_trap = GameData.MIN_TRAP
-
     _init_ground_coords(state, ref_RandomNumber)
 
     # Create Servants. This challenge is available throughout the game.
@@ -29,9 +26,9 @@ static func update_world(
 
     # Create traps.
     if state.challenge_level < GameData.MIN_LEVEL_TRASH_1:
-        state.max_trap = idlers * GameData.TRASH_MOD_0
+        state.max_trap = base_trap * GameData.TRASH_MOD_0
     else:
-        state.max_trap = idlers * GameData.TRASH_MOD_1
+        state.max_trap = base_trap * GameData.TRASH_MOD_1
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, state,
             ref_PcAction, ref_RandomNumber, MAX_RETRY

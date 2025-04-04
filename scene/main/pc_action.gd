@@ -8,28 +8,6 @@ enum {
 }
 
 
-# `VALID_ACTOR_TAGS` seems to be obseleted?
-# const VALID_ACTOR_TAGS: Array = [
-#     SubTag.CLERK,
-#     SubTag.OFFICER,
-
-#     SubTag.ATLAS,
-#     SubTag.BOOK,
-#     SubTag.CUP,
-#     SubTag.ENCYCLOPEDIA,
-
-#     SubTag.SALARY,
-#     SubTag.SERVANT,
-#     SubTag.STATION,
-#     SubTag.GARAGE,
-#     SubTag.PHONE,
-# ]
-
-const VALID_TRAP_TAGS: Array = [
-    SubTag.TRASH,
-]
-
-
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
 
@@ -160,31 +138,33 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
 
     if not DungeonSize.is_in_dungeon(coord):
         return
+
     # Order matters in `The Life of a Government Clerk`. An actor may appear
     # above a building and therefore has a higher priority.
     elif SpriteState.has_actor_at_coord(coord):
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
-        # `VALID_ACTOR_TAGS` seems to be obseleted?
-        # if sub_tag in VALID_ACTOR_TAGS:
         PcHitActor.handle_input(
                 sprite, self, NodeHub.ref_ActorAction,
                 NodeHub.ref_RandomNumber, NodeHub.ref_SignalHub,
                 NodeHub.ref_Schedule
                 )
         return
+
     elif SpriteState.has_trap_at_coord(coord):
         sprite = SpriteState.get_trap_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
-        if sub_tag in VALID_TRAP_TAGS:
+        if sub_tag == SubTag.TRASH:
             PcHitTrap.handle_input(
                     sprite, self, NodeHub.ref_RandomNumber, NodeHub.ref_Schedule
                     )
         return
+
     elif SpriteState.has_building_at_coord(coord):
         sprite = SpriteState.get_building_by_coord(coord)
         if not sprite.is_in_group(SubTag.DOOR):
             return
+
     Cart.pull_cart(pc, coord, state)
     Cart.add_trash(pc, state, NodeHub.ref_RandomNumber)
     NodeHub.ref_Schedule.start_next_turn()

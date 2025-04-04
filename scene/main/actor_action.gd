@@ -116,6 +116,9 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                         = NodeHub.ref_RandomNumber.get_int(
                         GameData.MIN_IDLE_DURATION,
                         GameData.MAX_IDLE_DURATION + 1)
+            SubTag.SHELF:
+                new_state = ShelfState.new(i.sprite, i.sub_tag)
+                _actor_states[id] = new_state
             SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
                 new_state = ActorState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state

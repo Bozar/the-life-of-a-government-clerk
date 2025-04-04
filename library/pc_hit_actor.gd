@@ -67,7 +67,7 @@ static func handle_input(
 
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
             if _can_load_raw_file(actor, ref_PcAction, ref_ActorAction):
-                _load_raw_file(actor, ref_PcAction)
+                _load_raw_file(actor_state, ref_PcAction)
                 HandleRawFile.send_raw_file(
                         actor_state, env_cooldown, ref_RandomNumber
                         )
@@ -90,8 +90,8 @@ static func handle_input(
                         and HandleClerk.can_receive_raw_file(
                                 actor_state, first_item_tag
                                 ):
-                    HandleClerk.receive_raw_file(actor_state, first_item_tag)
                     _unload_raw_file(ref_PcAction)
+                    HandleClerk.receive_raw_file(actor_state, first_item_tag)
                 else:
                     return
 
@@ -99,7 +99,15 @@ static func handle_input(
             HandlePhone.answer_call(actor, ref_PcAction)
 
         SubTag.SHELF:
-            HandleShelf.debug()
+            if _can_load_tmp_file(actor_state, ref_PcAction):
+                _load_tmp_file(actor_state, ref_PcAction, ref_RandomNumber)
+                HandleShelf.send_tmp_file(actor_state)
+            elif _can_unload_tmp_file(ref_PcAction) \
+                    and HandleShelf.can_receive_tmp_file(actor_state):
+                _unload_tmp_file(ref_PcAction, ref_RandomNumber)
+                HandleShelf.receive_tmp_file(actor_state, first_item_tag)
+            else:
+                return
         _:
             return
 
@@ -215,7 +223,9 @@ static func _unload_document(ref_PcAction: PcAction) -> void:
 static func _can_load_raw_file(
         actor: Sprite2D, ref_PcAction: PcAction, ref_ActorAction: ActorAction
         ) -> bool:
-    if not HandleRawFile.can_send_file(ref_ActorAction.get_actor_state(actor)):
+    if not HandleRawFile.can_send_raw_file(
+            ref_ActorAction.get_actor_state(actor)
+            ):
         return false
     elif actor.is_in_group(SubTag.ENCYCLOPEDIA) \
             and (not _is_long_cart(ref_PcAction)):
@@ -227,16 +237,45 @@ static func _can_load_raw_file(
     return cart != null
 
 
-static func _load_raw_file(actor: Sprite2D, ref_PcAction: PcAction) -> void:
+static func _load_raw_file(
+        actor_state: ActorState, ref_PcAction: PcAction
+        ) -> void:
+    var cart_sprite: Sprite2D = Cart.get_last_slot(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var cart_state: CartState = Cart.get_state(
+            cart_sprite, ref_PcAction.linked_cart_state
+            )
+    cart_state.item_tag = actor_state.sub_tag
+
+
+static func _can_load_tmp_file(
+        actor_state: ActorState, ref_PcAction: PcAction
+        ) -> bool:
+    if not HandleShelf.can_send_tmp_file(actor_state):
+        return false
+
     var cart: Sprite2D = Cart.get_last_slot(
             ref_PcAction.pc, ref_PcAction.linked_cart_state
             )
-    var state: CartState
-    var sub_tag: StringName
+    return cart != null
 
-    state = Cart.get_state(cart, ref_PcAction.linked_cart_state)
-    sub_tag = SpriteState.get_sub_tag(actor)
-    state.item_tag = sub_tag
+
+static func _load_tmp_file(
+        actor_state: ActorState, ref_PcAction: PcAction,
+        ref_RandomNumber: RandomNumber
+        ) -> void:
+    var cart_sprite: Sprite2D = Cart.get_last_slot(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var cart_state: CartState = Cart.get_state(
+            cart_sprite, ref_PcAction.linked_cart_state
+            )
+
+    cart_state.item_tag = actor_state.item_tag
+    Cart.add_trash(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state, ref_RandomNumber
+            )
 
 
 static func _can_load_document(ref_PcAction: PcAction) -> bool:
@@ -265,7 +304,8 @@ static func _can_unload_raw_file(ref_PcAction: PcAction) -> bool:
         return false
 
     state = Cart.get_state(sprite, ref_PcAction.linked_cart_state)
-    return state.item_tag != SubTag.DOCUMENT
+    return (state.item_tag != SubTag.DOCUMENT) \
+            and (state.item_tag != SubTag.SERVANT)
 
 
 static func _unload_raw_file(ref_PcAction: PcAction) -> void:
@@ -275,8 +315,20 @@ static func _unload_raw_file(ref_PcAction: PcAction) -> void:
     var state: CartState = Cart.get_state(
             sprite, ref_PcAction.linked_cart_state
             )
-
     state.item_tag = SubTag.CART
+
+
+static func _can_unload_tmp_file(ref_PcAction: PcAction) -> bool:
+    return _can_unload_raw_file(ref_PcAction)
+
+
+static func _unload_tmp_file(
+        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
+        ) -> void:
+    _unload_raw_file(ref_PcAction)
+    Cart.add_trash(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state, ref_RandomNumber
+            )
 
 
 static func _get_first_item_tag(ref_PcAction: PcAction) -> StringName:

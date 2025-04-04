@@ -1,7 +1,7 @@
 class_name HandleRawFile
 
 
-static func can_send_file(state: RawFileState) -> bool:
+static func can_send_raw_file(state: RawFileState) -> bool:
     return state.cooldown < 1
 
 

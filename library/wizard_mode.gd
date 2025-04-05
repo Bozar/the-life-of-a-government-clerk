@@ -17,5 +17,14 @@ static func _test(input_tag: StringName) -> void:
             Cart.clean_cart(NodeHub.ref_PcAction.pc,
                     NodeHub.ref_PcAction.linked_cart_state)
         InputTag.WIZARD_4:
-            PcHitActor._load_document(NodeHub.ref_PcAction)
+            var sprite: Sprite2D =  Cart.get_last_slot(
+                    NodeHub.ref_PcAction.pc,
+                    NodeHub.ref_PcAction.linked_cart_state
+                    )
+            var state: CartState
+            if sprite != null:
+                state = Cart.get_state(
+                        sprite, NodeHub.ref_PcAction.linked_cart_state
+                        )
+                state.item_tag = SubTag.DOCUMENT
 

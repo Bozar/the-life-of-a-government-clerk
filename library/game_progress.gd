@@ -1,10 +1,6 @@
 class_name GameProgress
 
 
-enum {
-    TRASH_0, TRASH_1, PHONE, LEAK,
-}
-
 const MAX_RETRY: int = 10
 
 

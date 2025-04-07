@@ -9,25 +9,22 @@ static func update_world(
         ref_RandomNumber: RandomNumber
         ) -> void:
     var state: ProgressState = ref_PcAction.progress_state
-    var base_trap: int = ref_ActorAction.count_combined_idler
 
-    state.max_trap = GameData.MIN_TRAP
     _init_ground_coords(state, ref_RandomNumber)
 
     # Create Servants. This challenge is available throughout the game.
     _create_rand_sprite(
             MainTag.ACTOR, SubTag.SERVANT, state,
-            ref_PcAction, ref_RandomNumber, MAX_RETRY
+            ref_PcAction, ref_ActorAction, ref_RandomNumber, MAX_RETRY
             )
 
     # Create traps.
-    if state.challenge_level < GameData.MIN_LEVEL_TRASH_1:
-        state.max_trap = base_trap * GameData.TRASH_MOD_0
-    else:
-        state.max_trap = base_trap * GameData.TRASH_MOD_1
+    state.max_trap = min(
+            ref_ActorAction.count_combined_idler, GameData.MAX_TRAP
+            )
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, state,
-            ref_PcAction, ref_RandomNumber, MAX_RETRY
+            ref_PcAction, ref_ActorAction, ref_RandomNumber, MAX_RETRY
             )
 
     # Reduce Clerk progress.
@@ -138,14 +135,15 @@ static func _init_phone_coords(
 
 static func _create_rand_sprite(
         main_tag: StringName, sub_tag: StringName, state: ProgressState,
-        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber, retry: int
+        ref_PcAction: PcAction, ref_ActorAction: ActorAction,
+        ref_RandomNumber: RandomNumber, retry: int
         ) -> void:
     if retry < 1:
         return
 
     match main_tag:
         MainTag.ACTOR:
-            if _has_max_actor(state.challenge_level, ref_PcAction):
+            if _has_max_actor(ref_PcAction, ref_ActorAction):
                 return
         MainTag.TRAP:
             if _has_max_trap(state.max_trap, sub_tag):
@@ -163,24 +161,25 @@ static func _create_rand_sprite(
 
     if not is_created:
         _create_rand_sprite(
-                main_tag, sub_tag, state, ref_PcAction, ref_RandomNumber,
-                retry - 1
+                main_tag, sub_tag, state, ref_PcAction, ref_ActorAction,
+                ref_RandomNumber, retry - 1
                 )
 
 
 static func _has_max_actor(
-        challenge_level: int, ref_PcAction: PcAction
+        ref_PcAction: PcAction, ref_ActorAction: ActorAction
         ) -> bool:
-    var max_servant: int = GameData.BASE_SERVANT \
-            + GameData.ADD_SERVANT * challenge_level
+    var max_servant: int = GameData.BASE_SERVANT
+    var occupied_shelf: int = HandleShelf.count_occupied_shelf(
+            ref_ActorAction.shelf_states
+            )
     var current_servant: int = SpriteState.get_sprites_by_sub_tag(
             SubTag.SERVANT
             ).size()
     var carry_servant: int = Cart.count_item(
             SubTag.SERVANT, ref_PcAction.pc, ref_PcAction.linked_cart_state
             )
-
-    return current_servant + carry_servant >= max_servant
+    return current_servant + carry_servant >= max_servant + occupied_shelf
 
 
 static func _is_invalid_sprite(sprite: Sprite2D) -> bool:

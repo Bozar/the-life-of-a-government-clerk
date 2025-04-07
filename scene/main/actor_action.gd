@@ -42,8 +42,8 @@ var count_combined_idler: int:
         var servants: int = HandleServant.count_idle_servant(
                 get_actor_states(SubTag.SERVANT)
                 )
-        var shelves: int = HandleShelf.count_occupied_shelf(shelf_states)
-        return servants + shelves * GameData.SHELF_TO_IDLE_SERVANT
+        return servants \
+                * (NodeHub.ref_PcAction.progress_state.challenge_level + 1)
 
 
 var _raw_file_states: Array

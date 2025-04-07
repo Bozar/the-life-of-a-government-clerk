@@ -40,16 +40,13 @@ const CART_LENGTH_LONG: int = 7
 ### Progress ###
 
 const MAX_LEVEL: int = 5
-const MIN_LEVEL_TRASH_1: int = 1
 const MIN_LEVEL_PHONE: int = 1
 const MIN_LEVEL_LEAK: int = 2
 
 const MAX_PHONE: int = 3
-const TRASH_MOD_0: int = 1
-const TRASH_MOD_1: int = 2
-
-const MIN_TRAP: int = 0
 const MIN_PHONE: int = 0
+
+const MAX_TRAP: int = 25
 
 
 ### Reward ###
@@ -82,7 +79,6 @@ const MAX_OFFICER_REPEAT: int = 2
 ### Servant ###
 
 const BASE_SERVANT: int = 5
-const ADD_SERVANT: int = 1
 const MIN_DISTANCE_TO_PC: int = PC_SIGHT_RANGE
 const MAX_DISTANCE_TO_PC: int = PC_SIGHT_RANGE * 2
 
@@ -92,7 +88,6 @@ const LOAD_AMOUNT_MULTIPLER: float = 2.0
 
 const MIN_IDLE_DURATION: int = PAGE_BOOK
 const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 2
-const SHELF_TO_IDLE_SERVANT: int = 2
 
 
 ### Raw file ###
@@ -127,7 +122,7 @@ const RAW_FILE_MIN_BASE_COOLDOWN: int = PAGE_CUP * RAW_FILE_COOLDOWN_MOD
 const RAW_FILE_MAX_BASE_COOLDOWN: int = PAGE_ATLAS * RAW_FILE_COOLDOWN_MOD
 
 const RAW_FILE_ADD_COOLDOWN_SEND: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
-const RAW_FILE_ADD_COOLDOWN_SERVANT: int = PAGE_ATLAS * RAW_FILE_COOLDOWN_MOD
+const RAW_FILE_ADD_COOLDOWN_SERVANT: int = PAGE_CUP * RAW_FILE_COOLDOWN_MOD
 
 const RAW_FILE_SEND_COUNTER: int = 1
 

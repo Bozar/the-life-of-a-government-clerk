@@ -42,13 +42,11 @@ static func update_phone(
         ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
         ) -> void:
     var state: ProgressState = ref_PcAction.progress_state
-    var max_phone: int = GameData.MIN_PHONE
+    var max_phone: int = GameData.MAX_PHONE
     var phone_sprites: Array = SpriteState.get_sprites_by_sub_tag(SubTag.PHONE)
     var phone_coord: Vector2i
 
-    if state.challenge_level >= GameData.MIN_LEVEL_PHONE:
-        max_phone = GameData.MAX_PHONE
-        _init_phone_coords(state, ref_RandomNumber)
+    _init_phone_coords(state, ref_RandomNumber)
 
     while max_phone > 0:
         _update_phone_index(state, ref_RandomNumber)

@@ -40,12 +40,9 @@ const CART_LENGTH_LONG: int = 7
 ### Progress ###
 
 const MAX_LEVEL: int = 5
-const MIN_LEVEL_PHONE: int = 1
 const MIN_LEVEL_LEAK: int = 2
 
 const MAX_PHONE: int = 3
-const MIN_PHONE: int = 0
-
 const MAX_TRAP: int = 25
 
 

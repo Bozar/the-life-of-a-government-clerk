@@ -84,6 +84,7 @@ const MAX_OFFICER_REPEAT: int = 2
 const BASE_SERVANT: int = 5
 const ADD_SERVANT: int = 1
 const MIN_DISTANCE_TO_PC: int = PC_SIGHT_RANGE
+const MAX_DISTANCE_TO_PC: int = PC_SIGHT_RANGE * 2
 
 # Ideally, it takes 4 turns to bypass a Trash.
 const BASE_DELAY: int = 3

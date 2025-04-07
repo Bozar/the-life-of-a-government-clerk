@@ -204,6 +204,10 @@ static func _is_valid_coord(check_coord: Vector2i, pc_coord: Vector2i) -> bool:
             check_coord, pc_coord, GameData.MIN_DISTANCE_TO_PC
             ):
         return false
+    elif not ConvertCoord.is_in_range(
+            check_coord, pc_coord, GameData.MAX_DISTANCE_TO_PC
+            ):
+        return false
     return true
 
 

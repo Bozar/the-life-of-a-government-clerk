@@ -54,7 +54,8 @@ static func handle_input(
             elif HandleOfficer.can_receive_document(actor_state) \
                     and _can_unload_document(ref_PcAction):
                 _unload_document(ref_PcAction)
-                HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
+                # TODO: Uncomment this line if the game becomes too hard.
+                #HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
                 HandleOfficer.set_active(
                         ref_ActorAction.officer_states,
                         ref_ActorAction.officer_records, ref_RandomNumber

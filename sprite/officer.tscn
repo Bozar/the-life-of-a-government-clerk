@@ -8,7 +8,7 @@ region = Rect2(360, 144, 24, 36)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2ubsi"]
 atlas = ExtResource("1_ifpb7")
-region = Rect2(192, 180, 24, 36)
+region = Rect2(336, 540, 24, 36)
 
 [node name="Officer" type="Sprite2D"]
 

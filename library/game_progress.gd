@@ -179,7 +179,8 @@ static func _has_max_actor(
     var carry_servant: int = Cart.count_item(
             SubTag.SERVANT, ref_PcAction.pc, ref_PcAction.linked_cart_state
             )
-    return current_servant + carry_servant >= max_servant + occupied_shelf
+    return current_servant + carry_servant >= max_servant \
+            + occupied_shelf * GameData.SHELF_TO_SERVANT
 
 
 static func _is_invalid_sprite(sprite: Sprite2D) -> bool:

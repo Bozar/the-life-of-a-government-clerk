@@ -79,6 +79,7 @@ const MAX_OFFICER_REPEAT: int = 2
 ### Servant ###
 
 const BASE_SERVANT: int = 5
+const SHELF_TO_SERVANT: int = 2
 const MIN_DISTANCE_TO_PC: int = PC_SIGHT_RANGE
 const MAX_DISTANCE_TO_PC: int = PC_SIGHT_RANGE * 2
 

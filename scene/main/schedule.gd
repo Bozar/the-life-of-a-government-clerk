@@ -12,7 +12,11 @@ var _pc: Sprite2D
 func start_next_turn() -> void:
     if _game_over:
         return
-    NodeHub.ref_SignalHub.turn_started.emit(_point_to_next_sprite())
+
+    var next_sprite: Sprite2D = _point_to_next_sprite()
+
+    NodeHub.ref_SignalHub.turn_started.emit(next_sprite)
+    NodeHub.ref_SignalHub.ui_updated.emit(next_sprite)
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

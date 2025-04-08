@@ -87,6 +87,9 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
     if _is_first_turn:
         await get_tree().create_timer(0).timeout
         _is_first_turn = false
+    else:
+        # Do not update turn counter because it is already 1 in the first turn.
+        GameProgress.update_turn_counter(self)
 
     GameProgress.update_world(
             self, NodeHub.ref_ActorAction, NodeHub.ref_RandomNumber

@@ -29,6 +29,7 @@ const SIGNAL_GAME_OVER: String = "game_over"
 
 const SIGNAL_ACTION_PRESSED: String = "action_pressed"
 const SIGNAL_UI_FORCE_UPDATED: String = "ui_force_updated"
+const SIGNAL_UI_UPDATED: String = "ui_updated"
 
 
 # {source_node: {signal_name: [target_node_1, ...]}, ...}
@@ -48,12 +49,15 @@ const SIGNAL_CONNECTIONS: Dictionary = {
         SIGNAL_UI_FORCE_UPDATED: [
             SIDEBAR,
         ],
+        SIGNAL_UI_UPDATED: [
+            SIDEBAR,
+        ],
         SIGNAL_ACTION_PRESSED: [
             PC_ACTION, RANDOM_NUMBER, SIDEBAR, SPRITE_ROOT, HELP_SCREEN,
             DEBUG_SCREEN,
         ],
         SIGNAL_TURN_STARTED: [
-            PLAYER_INPUT, PC_ACTION, ACTOR_ACTION, SIDEBAR,
+            PLAYER_INPUT, PC_ACTION, ACTOR_ACTION,
         ],
     },
 }

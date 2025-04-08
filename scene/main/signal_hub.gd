@@ -9,5 +9,6 @@ signal sprite_created(tagged_sprites: Array)
 signal sprite_removed(sprites: Array)
 
 signal ui_force_updated()
+signal ui_updated(sprite: Sprite2D)
 signal action_pressed(input_tag: InputTag)
 

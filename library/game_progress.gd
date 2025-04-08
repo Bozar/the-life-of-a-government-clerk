@@ -34,6 +34,10 @@ static func update_world(
                 )
 
 
+static func update_turn_counter(ref_PcAction: PcAction) -> void:
+    ref_PcAction.progress_state.turn_counter += 1
+
+
 static func update_challenge_level(ref_PcAction: PcAction) -> void:
     ref_PcAction.progress_state.challenge_level += 1
 

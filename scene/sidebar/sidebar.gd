@@ -15,10 +15,9 @@ func update_gui() -> void:
     _ref_StateLabel.update_gui()
 
 
-func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
+func _on_SignalHub_ui_updated(sprite: Sprite2D) -> void:
     if not sprite.is_in_group(SubTag.PC):
         return
-    _ref_StateLabel.add_turn_counter()
     update_gui()
 
 

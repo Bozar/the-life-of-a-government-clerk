@@ -15,16 +15,13 @@ var game_over: bool = false
 var player_win: bool = false
 
 
-var _turn_counter: int = GameData.MIN_TURN_COUNTER - 1
-
-
 func init_gui() -> void:
     _set_font(true)
     update_gui()
 
 
 func update_gui() -> void:
-    var turn: String = TURN % _turn_counter
+    var turn: String = TURN % NodeHub.ref_PcAction.progress_state.turn_counter
     var doc: String = DOC % NodeHub.ref_PcAction.delivery
     var cash: String = CASH % [
         NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
@@ -48,14 +45,6 @@ func update_gui() -> void:
     text = "\n".join([
         turn, doc, cash, phone_call, "", cart, state, "", end_game
     ])
-
-
-func add_turn_counter() -> void:
-    _turn_counter += 1
-    if _turn_counter > GameData.MAX_TURN_COUNTER:
-        _turn_counter = GameData.MIN_TURN_COUNTER
-    else:
-        _turn_counter = max(_turn_counter, GameData.MIN_TURN_COUNTER)
 
 
 func _get_state_text() -> String:

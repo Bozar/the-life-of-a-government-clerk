@@ -37,13 +37,16 @@ const CART_LENGTH_SHORT: int = 4
 const CART_LENGTH_LONG: int = 7
 
 
-### Progress ###
+### Progress & Challenge ###
 
 const MAX_LEVEL: int = 5
 const MIN_LEVEL_LEAK: int = 2
 
 const MAX_PHONE: int = 3
 const MAX_TRAP: int = 25
+
+const NEW_ACTOR_INTERVAL: int = 5
+const NEW_TRAP_INTERVAL: int = 3
 
 
 ### Reward ###

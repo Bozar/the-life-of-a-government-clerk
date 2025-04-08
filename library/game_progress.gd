@@ -142,6 +142,8 @@ static func _create_rand_sprite(
         ) -> void:
     if retry < 1:
         return
+    elif not _is_valid_turn(ref_PcAction.progress_state.turn_counter, main_tag):
+        return
 
     match main_tag:
         MainTag.ACTOR:
@@ -191,6 +193,19 @@ static func _is_invalid_sprite(sprite: Sprite2D) -> bool:
             or (sprite.is_in_group(MainTag.ACTOR)
             and (not sprite.is_in_group(SubTag.PC))
             )
+
+
+static func _is_valid_turn(turn_counter: int, main_tag: StringName) -> bool:
+    var turn_interval: int
+
+    match main_tag:
+        MainTag.ACTOR:
+            turn_interval = GameData.NEW_ACTOR_INTERVAL
+        MainTag.TRAP:
+            turn_interval = GameData.NEW_TRAP_INTERVAL
+        _:
+            return false
+    return turn_counter % turn_interval == 0
 
 
 static func _has_max_trap(max_trap: int, sub_tag: StringName) -> bool:

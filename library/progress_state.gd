@@ -6,6 +6,7 @@ var ground_index: int = 0
 var phone_coords: Array
 var phone_index: int = 0
 var max_trap: int
+var max_phone: int
 
 
 var turn_counter: int = GameData.MIN_TURN_COUNTER:

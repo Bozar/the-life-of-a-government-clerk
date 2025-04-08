@@ -18,7 +18,7 @@ static func update_world(
             ref_PcAction, ref_ActorAction, ref_RandomNumber, MAX_RETRY
             )
 
-    # Create traps.
+    # Create Trashes.
     state.max_trap = min(
             ref_ActorAction.count_combined_idler, GameData.MAX_TRAP
             )
@@ -33,6 +33,18 @@ static func update_world(
                 ref_ActorAction.get_actor_states(SubTag.CLERK), ref_RandomNumber
                 )
 
+    # Create Phones.
+    # {cash: max_phone}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}
+    state.max_phone = GameData.DEFAULT_PHONE - ref_PcAction.cash
+    state.max_phone = min(GameData.MAX_PHONE, max(
+            GameData.MIN_PHONE, state.max_phone
+            ))
+    state.max_phone -= ref_PcAction.incoming_call
+    if (state.max_phone > 0) \
+            and (not _has_document(ref_PcAction)) \
+            and (not _is_safe_load_amount_percent(ref_PcAction)):
+        _create_rand_phone(ref_PcAction, ref_RandomNumber)
+
 
 static func update_turn_counter(ref_PcAction: PcAction) -> void:
     ref_PcAction.progress_state.turn_counter += 1
@@ -40,28 +52,6 @@ static func update_turn_counter(ref_PcAction: PcAction) -> void:
 
 static func update_challenge_level(ref_PcAction: PcAction) -> void:
     ref_PcAction.progress_state.challenge_level += 1
-
-
-static func update_phone(
-        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
-        ) -> void:
-    var state: ProgressState = ref_PcAction.progress_state
-    var max_phone: int = GameData.MAX_PHONE
-    var phone_sprites: Array = SpriteState.get_sprites_by_sub_tag(SubTag.PHONE)
-    var phone_coord: Vector2i
-
-    _init_phone_coords(state, ref_RandomNumber)
-
-    while max_phone > 0:
-        _update_phone_index(state, ref_RandomNumber)
-        phone_coord = state.phone_coords[state.phone_index]
-        if SpriteState.has_actor_at_coord(phone_coord):
-            continue
-        SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
-        max_phone -= 1
-
-    for i: Sprite2D in phone_sprites:
-        SpriteFactory.remove_sprite(i)
 
 
 static func update_raw_file(
@@ -170,6 +160,28 @@ static func _create_rand_sprite(
                 )
 
 
+static func _create_rand_phone(
+        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
+        ) -> void:
+    var state: ProgressState = ref_PcAction.progress_state
+    var phone_coord: Vector2i
+    var max_retry: int = MAX_RETRY
+
+    _init_phone_coords(state, ref_RandomNumber)
+
+    while (state.max_phone > 0) and (max_retry > 0):
+        max_retry -= 1
+        _update_phone_index(state, ref_RandomNumber)
+        phone_coord = state.phone_coords[state.phone_index]
+
+        if SpriteState.has_actor_at_coord(phone_coord):
+            continue
+        elif not _is_valid_coord(phone_coord, ref_PcAction.pc_coord):
+            continue
+        SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
+        state.max_phone -= 1
+
+
 static func _has_max_actor(
         ref_PcAction: PcAction, ref_ActorAction: ActorAction
         ) -> bool:
@@ -246,4 +258,29 @@ static func _update_phone_index(
             return
         state.phone_index = 0
         ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
+
+
+static func _has_document(ref_PcAction: PcAction) -> bool:
+    var cart_sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var cart_state: CartState
+
+    if cart_sprite == null:
+        return false
+
+    cart_state = Cart.get_state(
+            cart_sprite, ref_PcAction.linked_cart_state
+            )
+    return cart_state.item_tag == SubTag.DOCUMENT
+
+
+static func _is_safe_load_amount_percent(ref_PcAction: PcAction) -> bool:
+    var full_load: int = Cart.get_full_load_amount(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var count_cart: int = Cart.count_cart(ref_PcAction.linked_cart_state)
+    var max_load: int = GameData.MAX_LOAD_PER_CART * count_cart
+    var load_percent: float = full_load * 1.0 / max_load
+    return load_percent <= GameData.SAFE_LOAD_AMOUT_PERCENT
 

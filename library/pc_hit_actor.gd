@@ -61,7 +61,6 @@ static func handle_input(
                         ref_ActorAction.officer_records, ref_RandomNumber
                         )
                 GameProgress.update_challenge_level(ref_PcAction)
-                GameProgress.update_phone(ref_PcAction, ref_RandomNumber)
                 GameProgress.update_raw_file(ref_ActorAction, ref_RandomNumber)
                 GameProgress.update_service(ref_ActorAction, ref_RandomNumber)
             else:

@@ -20,7 +20,12 @@ const MIN_LOAD: int = 0
 const MIN_LOAD_PER_TURN: int = 1
 const MAX_LOAD_PER_TURN: int = 10
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
-const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.4)
+
+# 0.3 * PAGE_CUP (30) = 9 => Answering a Phone call grants 9 turns' survival 
+# time. Since a Phone might be as far as 10 grids (PC_SIGHT_RANGE * 2) away from 
+# PC, approaching it requires tactics.
+const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
+const SAFE_LOAD_AMOUT_PERCENT: float = 0.7
 
 const ADD_LOADS: Array = [
     [4, 3, 2, 1, 1,],
@@ -43,6 +48,9 @@ const MAX_LEVEL: int = 5
 const MIN_LEVEL_LEAK: int = 2
 
 const MAX_PHONE: int = 3
+const MIN_PHONE: int = 0
+const DEFAULT_PHONE: int = 2
+
 const MAX_TRAP: int = 25
 
 const NEW_ACTOR_INTERVAL: int = 5

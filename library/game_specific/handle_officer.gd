@@ -1,7 +1,7 @@
 class_name HandleOfficer
 
 
-static func can_receive_document(state: OfficerState) -> bool:
+static func can_receive_archive(state: OfficerState) -> bool:
     return state.is_active
 
 

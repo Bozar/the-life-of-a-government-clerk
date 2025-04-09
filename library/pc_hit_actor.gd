@@ -51,10 +51,17 @@ static func handle_input(
         SubTag.OFFICER:
             if _remove_all_servant(ref_PcAction):
                 pass
-            elif HandleOfficer.can_receive_document(actor_state) \
+            elif HandleOfficer.can_receive_archive(actor_state) \
+                    and _can_unload_report(ref_PcAction):
+                _unload_item(ref_PcAction)
+                HandleOfficer.set_active(
+                        ref_ActorAction.officer_states,
+                        ref_ActorAction.officer_records, ref_RandomNumber
+                        )
+            elif HandleOfficer.can_receive_archive(actor_state) \
                     and _can_unload_document(ref_PcAction):
                 _unload_document(ref_PcAction)
-                # TODO: Uncomment this line if the game becomes too hard.
+                # NOTE: Uncomment this line if the game becomes too hard.
                 #HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
                 HandleOfficer.set_active(
                         ref_ActorAction.officer_states,
@@ -75,7 +82,7 @@ static func handle_input(
                         )
             elif _can_unload_servant(actor, ref_PcAction) \
                     and HandleRawFile.can_receive_servant(actor_state):
-                _unload_servant(ref_PcAction)
+                _unload_item(ref_PcAction)
                 HandleRawFile.receive_servant(actor_state)
             else:
                 return
@@ -92,7 +99,7 @@ static func handle_input(
                         and HandleClerk.can_receive_raw_file(
                                 actor_state, first_item_tag
                                 ):
-                    _unload_raw_file(ref_PcAction)
+                    _unload_item(ref_PcAction)
                     HandleClerk.receive_raw_file(actor_state, first_item_tag)
                 else:
                     return
@@ -188,6 +195,16 @@ static func _is_valid_coord(coord: Vector2i) -> bool:
 
 
 static func _can_unload_document(ref_PcAction: PcAction) -> bool:
+    return _can_unload_archive(ref_PcAction, SubTag.DOCUMENT)
+
+
+static func _can_unload_report(ref_PcAction: PcAction) -> bool:
+    return _can_unload_archive(ref_PcAction, SubTag.FIELD_REPORT)
+
+
+static func _can_unload_archive(
+        ref_PcAction: PcAction, sub_tag: StringName
+        ) -> bool:
     var cart_sprite: Sprite2D = Cart.get_first_item(
             ref_PcAction.pc, ref_PcAction.linked_cart_state
             )
@@ -197,18 +214,11 @@ static func _can_unload_document(ref_PcAction: PcAction) -> bool:
         return false
 
     cart_state = Cart.get_state(cart_sprite, ref_PcAction.linked_cart_state)
-    return cart_state.item_tag == SubTag.DOCUMENT
+    return cart_state.item_tag == sub_tag
 
 
 static func _unload_document(ref_PcAction: PcAction) -> void:
-    var cart_sprite: Sprite2D = Cart.get_first_item(
-            ref_PcAction.pc, ref_PcAction.linked_cart_state
-            )
-    var cart_state: CartState = Cart.get_state(
-            cart_sprite, ref_PcAction.linked_cart_state
-            )
-
-    cart_state.item_tag = SubTag.CART
+    _unload_item(ref_PcAction)
 
     # PC can still unload document after reaching the final goal (deliver 5
     # documents), but has no profit or penalty in return.
@@ -220,6 +230,16 @@ static func _unload_document(ref_PcAction: PcAction) -> void:
         if ref_PcAction.missed_call > GameData.MAX_MISSED_CALL:
             ref_PcAction.missed_call -= GameData.MAX_MISSED_CALL
             ref_PcAction.account -= GameData.MISSED_CALL_PENALTY
+
+
+static func _unload_item(ref_PcAction: PcAction) -> void:
+    var cart_sprite: Sprite2D = Cart.get_first_item(
+            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            )
+    var cart_state: CartState = Cart.get_state(
+            cart_sprite, ref_PcAction.linked_cart_state
+            )
+    cart_state.item_tag = SubTag.CART
 
 
 static func _can_load_raw_file(
@@ -311,16 +331,6 @@ static func _can_unload_raw_file(ref_PcAction: PcAction) -> bool:
             and (state.item_tag != SubTag.SERVANT)
 
 
-static func _unload_raw_file(ref_PcAction: PcAction) -> void:
-    var sprite: Sprite2D = Cart.get_first_item(
-            ref_PcAction.pc, ref_PcAction.linked_cart_state
-            )
-    var state: CartState = Cart.get_state(
-            sprite, ref_PcAction.linked_cart_state
-            )
-    state.item_tag = SubTag.CART
-
-
 static func _can_unload_tmp_file(ref_PcAction: PcAction) -> bool:
     return _can_unload_raw_file(ref_PcAction)
 
@@ -328,7 +338,7 @@ static func _can_unload_tmp_file(ref_PcAction: PcAction) -> bool:
 static func _unload_tmp_file(
         ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
         ) -> void:
-    _unload_raw_file(ref_PcAction)
+    _unload_item(ref_PcAction)
     Cart.add_trash(
             ref_PcAction.pc, ref_PcAction.linked_cart_state, ref_RandomNumber
             )
@@ -396,17 +406,6 @@ static func _can_unload_servant(
     if actor.is_in_group(SubTag.ENCYCLOPEDIA):
         return _is_long_cart(ref_PcAction)
     return true
-
-
-static func _unload_servant(ref_PcAction: PcAction) -> void:
-        var cart_sprite: Sprite2D = Cart.get_first_item(
-                ref_PcAction.pc, ref_PcAction.linked_cart_state
-                )
-        var cart_state: CartState = Cart.get_state(
-                cart_sprite, ref_PcAction.linked_cart_state
-                )
-
-        cart_state.item_tag = SubTag.CART
 
 
 static func _is_long_cart(ref_PcAction: PcAction) -> bool:

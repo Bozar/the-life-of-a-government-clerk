@@ -25,6 +25,7 @@ const ATLAS_CHAR: StringName = "A"
 const BOOK_CHAR: StringName = "B"
 const CUP_CHAR: StringName = "C"
 const ENCYCLPEDIA_CHAR: StringName = "E"
+const FIELD_REPORT_CHAR: StringName = "F"
 
 const GARAGE_CHAR: StringName = "?"
 const SALARY_CHAR: StringName = "$"
@@ -43,6 +44,7 @@ const CHAR_TO_TAG: Dictionary = {
     BOOK_CHAR: SubTag.BOOK,
     CUP_CHAR: SubTag.CUP,
     ENCYCLPEDIA_CHAR: SubTag.ENCYCLOPEDIA,
+    FIELD_REPORT_CHAR: SubTag.FIELD_REPORT,
     GARAGE_CHAR: SubTag.GARAGE,
     SALARY_CHAR: SubTag.SALARY,
     STATION_CHAR: SubTag.STATION,
@@ -180,8 +182,8 @@ func _create_from_character(
             save_tagged_sprite.sprite.add_to_group(SubTag.SPECIAL_WALL)
             tagged_sprites.push_back(save_tagged_sprite)
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
-                ENCYCLPEDIA_CHAR, GARAGE_CHAR, SALARY_CHAR, STATION_CHAR, \
-                SHELF_CHAR:
+                ENCYCLPEDIA_CHAR, FIELD_REPORT_CHAR, GARAGE_CHAR, SALARY_CHAR, \
+                STATION_CHAR, SHELF_CHAR:
             tagged_sprites.push_back(SpriteFactory.create_actor(
                     CHAR_TO_TAG[character], coord, false
                     ))

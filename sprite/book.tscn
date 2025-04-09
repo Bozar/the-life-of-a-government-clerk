@@ -6,47 +6,47 @@
 atlas = ExtResource("1_p215e")
 region = Rect2(48, 144, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cqj8f"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbqgj"]
 atlas = ExtResource("1_p215e")
 region = Rect2(0, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iaehw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_58b74"]
 atlas = ExtResource("1_p215e")
 region = Rect2(24, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_x3mho"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_fcani"]
 atlas = ExtResource("1_p215e")
 region = Rect2(48, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_83fc6"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_23u5o"]
 atlas = ExtResource("1_p215e")
 region = Rect2(72, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_7shf1"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vddrt"]
 atlas = ExtResource("1_p215e")
 region = Rect2(96, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xwa25"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7lxkp"]
 atlas = ExtResource("1_p215e")
 region = Rect2(120, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i2n7j"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5tu55"]
 atlas = ExtResource("1_p215e")
 region = Rect2(144, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_y3snh"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cmfwa"]
 atlas = ExtResource("1_p215e")
 region = Rect2(168, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_say60"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_xpjqu"]
 atlas = ExtResource("1_p215e")
 region = Rect2(192, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5rgsp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1x2dj"]
 atlas = ExtResource("1_p215e")
 region = Rect2(216, 108, 24, 36)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5l2w5"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_y6cec"]
 atlas = ExtResource("1_p215e")
 region = Rect2(120, 72, 24, 36)
 
@@ -57,44 +57,44 @@ texture = SubResource("AtlasTexture_qcks3")
 
 [node name="zero" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_cqj8f")
+texture = SubResource("AtlasTexture_tbqgj")
 
 [node name="one" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_iaehw")
+texture = SubResource("AtlasTexture_58b74")
 
 [node name="two" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_x3mho")
+texture = SubResource("AtlasTexture_fcani")
 
 [node name="three" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_83fc6")
+texture = SubResource("AtlasTexture_23u5o")
 
 [node name="four" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_7shf1")
+texture = SubResource("AtlasTexture_vddrt")
 
 [node name="five" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_xwa25")
+texture = SubResource("AtlasTexture_7lxkp")
 
 [node name="six" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_i2n7j")
+texture = SubResource("AtlasTexture_5tu55")
 
 [node name="seven" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_y3snh")
+texture = SubResource("AtlasTexture_cmfwa")
 
 [node name="eight" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_say60")
+texture = SubResource("AtlasTexture_xpjqu")
 
 [node name="nine" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_5rgsp")
+texture = SubResource("AtlasTexture_1x2dj")
 
 [node name="percent" type="Sprite2D" parent="."]
 visible = false
-texture = SubResource("AtlasTexture_5l2w5")
+texture = SubResource("AtlasTexture_y6cec")

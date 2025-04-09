@@ -111,7 +111,8 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
 
         id = i.sprite.get_instance_id()
         match i.sub_tag:
-            SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
+            SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
+                    SubTag.FIELD_REPORT:
                 new_state = RawFileState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state
                 _raw_file_states.push_back(new_state)

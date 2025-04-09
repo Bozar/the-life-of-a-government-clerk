@@ -16,6 +16,7 @@ const ITEM_TO_STRING: Dictionary = {
     SubTag.CUP: "C",
     SubTag.DOCUMENT: "D",
     SubTag.ENCYCLOPEDIA: "E",
+    SubTag.FIELD_REPORT: "F",
     SubTag.SERVANT: "S",
 }
 

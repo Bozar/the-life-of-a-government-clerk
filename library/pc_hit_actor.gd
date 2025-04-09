@@ -66,7 +66,8 @@ static func handle_input(
             else:
                 return
 
-        SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
+        SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
+                SubTag.FIELD_REPORT:
             if _can_load_raw_file(actor, ref_PcAction, ref_ActorAction):
                 _load_raw_file(actor_state, ref_PcAction)
                 HandleRawFile.send_raw_file(
@@ -306,6 +307,7 @@ static func _can_unload_raw_file(ref_PcAction: PcAction) -> bool:
 
     state = Cart.get_state(sprite, ref_PcAction.linked_cart_state)
     return (state.item_tag != SubTag.DOCUMENT) \
+            and (state.item_tag != SubTag.FIELD_REPORT) \
             and (state.item_tag != SubTag.SERVANT)
 
 

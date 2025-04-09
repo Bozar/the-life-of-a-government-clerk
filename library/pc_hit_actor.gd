@@ -226,9 +226,7 @@ static func _unload_document(ref_PcAction: PcAction) -> void:
         ref_PcAction.account += GameData.INCOME_DOCUMENT
         ref_PcAction.delivery -= 1
 
-        ref_PcAction.missed_call += ref_PcAction.incoming_call
-        if ref_PcAction.missed_call > GameData.MAX_MISSED_CALL:
-            ref_PcAction.missed_call -= GameData.MAX_MISSED_CALL
+        if ref_PcAction.incoming_call > GameData.MAX_MISSED_CALL:
             ref_PcAction.account -= GameData.MISSED_CALL_PENALTY
 
 

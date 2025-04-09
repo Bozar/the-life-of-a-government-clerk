@@ -11,8 +11,6 @@ enum {
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
 
-var missed_call: int = 0
-
 var max_delivery: int = GameData.MAX_LEVEL
 var delivery: int = max_delivery
 

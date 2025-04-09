@@ -35,12 +35,8 @@ static func update_cooldown(state: RawFileState) -> void:
 static func reduce_cooldown(
         raw_file_states: Array, ref_RandomNumber: RandomNumber
         ) -> void:
-    var dup_states: Array = raw_file_states.duplicate()
-
-    ArrayHelper.shuffle(dup_states, ref_RandomNumber)
-    dup_states.sort_custom(_sort_cooldown)
-
-    for i: RawFileState in dup_states:
+    ArrayHelper.shuffle(raw_file_states, ref_RandomNumber)
+    for i: RawFileState in raw_file_states:
         if i.cooldown > 0:
             i.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT
             break
@@ -70,8 +66,4 @@ static func switch_examine_mode(is_enter: bool, states: Array) -> void:
                     remaining_cooldown, i.max_cooldown
                     )
         VisualEffect.switch_sprite(progress_bar, visual_tag)
-
-
-static func _sort_cooldown(left: RawFileState, right: RawFileState) -> bool:
-    return left.cooldown < right.cooldown
 

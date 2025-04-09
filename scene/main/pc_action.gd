@@ -122,7 +122,10 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
         EXAMINE_MODE:
             if _handle_examine_input(input_tag):
                 return
+
     PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
+    if game_mode == EXAMINE_MODE:
+        PcSwitchMode.highlight_actor()
     NodeHub.ref_SignalHub.ui_force_updated.emit()
 
 

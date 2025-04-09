@@ -184,9 +184,10 @@ func _create_from_character(
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
                 ENCYCLPEDIA_CHAR, FIELD_REPORT_CHAR, GARAGE_CHAR, SALARY_CHAR, \
                 STATION_CHAR, SHELF_CHAR:
-            tagged_sprites.push_back(SpriteFactory.create_actor(
+            save_tagged_sprite = SpriteFactory.create_actor(
                     CHAR_TO_TAG[character], coord, false
-                    ))
+                    )
+            tagged_sprites.push_back(save_tagged_sprite)
         _:
             occupied_grids[coord.x][coord.y] = false
 

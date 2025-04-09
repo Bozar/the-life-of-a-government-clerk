@@ -52,3 +52,26 @@ const INDICATOR_TOP: StringName = &"indicator_top"
 const INDICATOR_BOTTOM: StringName = &"indicator_bottom"
 const INDICATOR_LEFT: StringName = &"indicator_left"
 
+
+# Visual effect
+const HIGHLIGHT: StringName = &"highlight"
+
+
+# Some sprites belong to more than one sub tag.
+const RELATED_TAGS: Dictionary[StringName, Array] = {
+    CLERK: [HIGHLIGHT],
+    OFFICER: [HIGHLIGHT],
+    
+    ATLAS: [HIGHLIGHT],
+    BOOK: [HIGHLIGHT],
+    CUP: [HIGHLIGHT],
+    ENCYCLOPEDIA: [HIGHLIGHT],
+    FIELD_REPORT: [HIGHLIGHT],
+    
+    SALARY: [HIGHLIGHT],
+    GARAGE: [HIGHLIGHT],
+    STATION: [HIGHLIGHT],
+    PHONE: [HIGHLIGHT],
+    SHELF: [HIGHLIGHT],
+}
+

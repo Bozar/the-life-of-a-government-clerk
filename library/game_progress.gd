@@ -114,13 +114,8 @@ static func _init_phone_coords(
     if not state.phone_coords.is_empty():
         return
 
-    var special_wall_sprites: Array = SpriteState.get_sprites_by_sub_tag(
-            SubTag.SPECIAL_WALL
-            )
-
-    for i: Sprite2D in special_wall_sprites:
+    for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(SubTag.PHONE_BOOTH):
         state.phone_coords.push_back(ConvertCoord.get_coord(i))
-        i.remove_from_group(SubTag.SPECIAL_WALL)
     state.phone_index = -1
     ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
 

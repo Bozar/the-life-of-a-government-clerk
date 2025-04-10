@@ -19,6 +19,7 @@ const SPRITE_SCENES: Dictionary = {
 
     # Building
     SubTag.WALL: preload("res://sprite/wall.tscn"),
+    SubTag.PHONE_BOOTH: preload("res://sprite/phone_booth.tscn"),
     SubTag.DOOR: preload("res://sprite/door.tscn"),
     SubTag.DESK: preload("res://sprite/desk.tscn"),
 

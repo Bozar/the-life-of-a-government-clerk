@@ -16,7 +16,7 @@ const WALL_CHAR: StringName = "#"
 const DOOR_CHAR: StringName = "+"
 const DESK_CHAR: StringName = "="
 const SPECIAL_FLOOR_CHAR: StringName = "-"
-const SPECIAL_WALL_CHAR: StringName = "P"
+const PHONE_BOOTH_CHAR: StringName = "P"
 
 const CLERK_CHAR: StringName = "K"
 const OFFICER_CHAR: StringName = "O"
@@ -36,7 +36,7 @@ const CHAR_TO_TAG: Dictionary = {
     WALL_CHAR: SubTag.WALL,
     DOOR_CHAR: SubTag.DOOR,
     SPECIAL_FLOOR_CHAR: SubTag.INTERNAL_FLOOR,
-    SPECIAL_WALL_CHAR: SubTag.WALL,
+    PHONE_BOOTH_CHAR: SubTag.PHONE_BOOTH,
     CLERK_CHAR: SubTag.CLERK,
     OFFICER_CHAR: SubTag.OFFICER,
     DESK_CHAR: SubTag.DESK,
@@ -176,10 +176,9 @@ func _create_from_character(
                     CHAR_TO_TAG[character], coord, false)
             save_tagged_sprite.sprite.z_index = GameData.INTERNAL_FLOOR_Z_LAYER
             tagged_sprites.push_back(save_tagged_sprite)
-        SPECIAL_WALL_CHAR:
+        PHONE_BOOTH_CHAR:
             save_tagged_sprite = SpriteFactory.create_building(
                     CHAR_TO_TAG[character], coord, false)
-            save_tagged_sprite.sprite.add_to_group(SubTag.SPECIAL_WALL)
             tagged_sprites.push_back(save_tagged_sprite)
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
                 ENCYCLPEDIA_CHAR, FIELD_REPORT_CHAR, GARAGE_CHAR, SALARY_CHAR, \

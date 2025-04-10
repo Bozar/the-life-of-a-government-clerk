@@ -152,7 +152,9 @@ func _handle_normal_input(input_tag: StringName) -> bool:
                     NodeHub.ref_DataHub.linked_cart_state
                     ):
                 NodeHub.ref_DataHub.set_game_mode(EXAMINE_MODE)
-                PcSwitchMode.examine_mode(true, NodeHub.ref_ActorAction)
+                PcSwitchMode.examine_mode(
+                        true, NodeHub.ref_DataHub, NodeHub.ref_ActorAction
+                        )
                 return false
         InputTag.MOVE_LEFT:
             _move(Vector2i.LEFT, NodeHub.ref_DataHub.linked_cart_state)
@@ -182,7 +184,9 @@ func _handle_examine_input(input_tag: StringName) -> bool:
                     NodeHub.ref_DataHub.pc,
                     NodeHub.ref_DataHub.linked_cart_state
                     )
-            PcSwitchMode.examine_mode(false, NodeHub.ref_ActorAction)
+            PcSwitchMode.examine_mode(
+                    false, NodeHub.ref_DataHub, NodeHub.ref_ActorAction
+                    )
         InputTag.MOVE_UP:
             Cart.examine_first_cart(
                     NodeHub.ref_DataHub.pc,

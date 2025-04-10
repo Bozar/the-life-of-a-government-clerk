@@ -14,17 +14,15 @@ static func update_world(
 
     # Create Servants. This challenge is available throughout the game.
     _create_rand_sprite(
-            MainTag.ACTOR, SubTag.SERVANT, state,
-            ref_DataHub, ref_ActorAction, ref_RandomNumber, MAX_RETRY
+            MainTag.ACTOR, SubTag.SERVANT, ref_DataHub, ref_RandomNumber,
+            MAX_RETRY
             )
 
     # Create Trashes.
-    state.max_trap = min(
-            ref_ActorAction.count_combined_idler, GameData.MAX_TRAP
-            )
+    state.max_trap = min(ref_DataHub.count_combined_idler, GameData.MAX_TRAP)
     _create_rand_sprite(
-            MainTag.TRAP, SubTag.TRASH, state,
-            ref_DataHub, ref_ActorAction, ref_RandomNumber, MAX_RETRY
+            MainTag.TRAP, SubTag.TRASH, ref_DataHub, ref_RandomNumber,
+            MAX_RETRY
             )
 
     # Reduce Clerk progress.
@@ -55,10 +53,10 @@ static func update_challenge_level(ref_DataHub: DataHub) -> void:
 
 
 static func update_raw_file(
-        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    var sprites: Array = ref_ActorAction.raw_file_sprites
-    var states: Array = ref_ActorAction.raw_file_states
+    var sprites: Array = ref_DataHub.raw_file_sprites
+    var states: Array = ref_DataHub.raw_file_states
 
     _swap_sprites(sprites, ref_RandomNumber)
     for i in states:
@@ -68,9 +66,9 @@ static func update_raw_file(
 
 
 static func update_service(
-        ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    _swap_sprites(ref_ActorAction.service_sprites, ref_RandomNumber)
+    _swap_sprites(ref_DataHub.service_sprites, ref_RandomNumber)
 
 
 static func _swap_sprites(
@@ -121,10 +119,11 @@ static func _init_phone_coords(
 
 
 static func _create_rand_sprite(
-        main_tag: StringName, sub_tag: StringName, state: ProgressState,
-        ref_DataHub: DataHub, ref_ActorAction: ActorAction,
+        main_tag: StringName, sub_tag: StringName, ref_DataHub: DataHub,
         ref_RandomNumber: RandomNumber, retry: int
         ) -> void:
+    var state: ProgressState = ref_DataHub.progress_state
+
     if retry < 1:
         return
     elif not _is_valid_turn(state.turn_counter, main_tag):
@@ -132,7 +131,7 @@ static func _create_rand_sprite(
 
     match main_tag:
         MainTag.ACTOR:
-            if _has_max_actor(ref_DataHub, ref_ActorAction):
+            if _has_max_actor(ref_DataHub):
                 return
         MainTag.TRAP:
             if _has_max_trap(state.max_trap, sub_tag):
@@ -150,8 +149,7 @@ static func _create_rand_sprite(
 
     if not is_created:
         _create_rand_sprite(
-                main_tag, sub_tag, state, ref_DataHub, ref_ActorAction,
-                ref_RandomNumber, retry - 1
+                main_tag, sub_tag, ref_DataHub, ref_RandomNumber, retry - 1
                 )
 
 
@@ -177,12 +175,10 @@ static func _create_rand_phone(
         state.max_phone -= 1
 
 
-static func _has_max_actor(
-        ref_DataHub: DataHub, ref_ActorAction: ActorAction
-        ) -> bool:
+static func _has_max_actor(ref_DataHub: DataHub) -> bool:
     var max_servant: int = GameData.BASE_SERVANT
     var occupied_shelf: int = HandleShelf.count_occupied_shelf(
-            ref_ActorAction.shelf_states
+            ref_DataHub.shelf_states
             )
     var current_servant: int = SpriteState.get_sprites_by_sub_tag(
             SubTag.SERVANT

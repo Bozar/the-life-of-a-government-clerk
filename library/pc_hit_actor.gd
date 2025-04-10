@@ -8,7 +8,7 @@ static func handle_input(
         ) -> void:
     var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
     var player_win: bool
-    var env_cooldown: int = ref_ActorAction.count_combined_idler \
+    var env_cooldown: int = ref_DataHub.count_combined_idler \
             * GameData.RAW_FILE_ADD_COOLDOWN_SERVANT
     var first_item_tag: StringName = _get_first_item_tag(ref_DataHub)
 
@@ -39,10 +39,10 @@ static func handle_input(
                 _load_servant(actor, ref_DataHub)
             else:
                 HandleRawFile.reduce_cooldown(
-                        ref_ActorAction.raw_file_states, ref_RandomNumber
+                        ref_DataHub.raw_file_states, ref_RandomNumber
                         )
                 HandleClerk.reduce_progress(
-                        ref_ActorAction.clerk_states, ref_RandomNumber
+                        ref_DataHub.clerk_states, ref_RandomNumber
                         )
                 HandleServant.reset_idle_duration(actor_state)
                 # Order matters. The Servant may be removed by _push_servant().
@@ -55,21 +55,21 @@ static func handle_input(
                     and _can_unload_report(ref_DataHub):
                 _unload_item(ref_DataHub)
                 HandleOfficer.set_active(
-                        ref_ActorAction.officer_states,
-                        ref_ActorAction.officer_records, ref_RandomNumber
+                        ref_DataHub.officer_states,
+                        ref_DataHub.officer_records, ref_RandomNumber
                         )
             elif HandleOfficer.can_receive_archive(actor_state) \
                     and _can_unload_document(ref_DataHub):
                 _unload_document(ref_DataHub)
                 # NOTE: Uncomment this line if the game becomes too hard.
-                #HandleRawFile.reset_cooldown(ref_ActorAction.raw_file_states)
+                #HandleRawFile.reset_cooldown(ref_DataHub.raw_file_states)
                 HandleOfficer.set_active(
-                        ref_ActorAction.officer_states,
-                        ref_ActorAction.officer_records, ref_RandomNumber
+                        ref_DataHub.officer_states,
+                        ref_DataHub.officer_records, ref_RandomNumber
                         )
                 GameProgress.update_challenge_level(ref_DataHub)
-                GameProgress.update_raw_file(ref_ActorAction, ref_RandomNumber)
-                GameProgress.update_service(ref_ActorAction, ref_RandomNumber)
+                GameProgress.update_raw_file(ref_DataHub, ref_RandomNumber)
+                GameProgress.update_service(ref_DataHub, ref_RandomNumber)
             else:
                 return
 
@@ -240,9 +240,8 @@ static func _unload_item(ref_DataHub: DataHub) -> void:
     cart_state.item_tag = SubTag.CART
 
 
-static func _can_load_raw_file(
-        actor: Sprite2D, ref_DataHub: DataHub, ref_ActorAction: ActorAction
-        ) -> bool:
+static func _can_load_raw_file(actor: Sprite2D, ref_DataHub: DataHub,
+        ref_ActorAction: ActorAction) -> bool:
     if not HandleRawFile.can_send_raw_file(
             ref_ActorAction.get_actor_state(actor)
             ):
@@ -386,9 +385,7 @@ static func _remove_all_servant(ref_DataHub: DataHub) -> bool:
             )
 
 
-static func _can_unload_servant(
-        actor: Sprite2D, ref_DataHub: DataHub
-        ) -> bool:
+static func _can_unload_servant(actor: Sprite2D, ref_DataHub: DataHub) -> bool:
     var cart_sprite: Sprite2D = Cart.get_first_item(
             ref_DataHub.pc, ref_DataHub.linked_cart_state
             )

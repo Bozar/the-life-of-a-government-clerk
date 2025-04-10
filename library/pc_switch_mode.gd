@@ -9,6 +9,9 @@ static func examine_mode(
     HandleServant.switch_examine_mode(
             is_enter, ref_ActorAction.get_actor_states(SubTag.SERVANT)
             )
+    HandlePhoneBooth.switch_examine_mode(
+            is_enter, ref_DataHub.phone_booth_sprites
+            )
 
 
 static func highlight_actor() -> void:

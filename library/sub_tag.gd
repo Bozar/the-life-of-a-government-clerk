@@ -73,5 +73,7 @@ const RELATED_TAGS: Dictionary[StringName, Array] = {
     STATION: [HIGHLIGHT],
     PHONE: [HIGHLIGHT],
     SHELF: [HIGHLIGHT],
+
+    PHONE_BOOTH: [HIGHLIGHT],
 }
 

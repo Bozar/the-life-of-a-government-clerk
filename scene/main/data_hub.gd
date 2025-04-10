@@ -72,6 +72,11 @@ var service_sprites: Array[Sprite2D]:
         return _service_sprites
 
 
+var phone_booth_sprites: Array[Sprite2D]:
+    get:
+        return _phone_booth_sprites
+
+
 var count_combined_idler: int:
     get:
         var servants: int = HandleServant.count_idle_servant(
@@ -93,6 +98,8 @@ var _clerk_states: Array[ClerkState]
 var _shelf_states: Array[ShelfState]
 var _officer_records: Array[int]
 var _service_sprites: Array[Sprite2D]
+
+var _phone_booth_sprites: Array[Sprite2D]
 
 
 func set_pc(value: Sprite2D) -> void:
@@ -141,4 +148,11 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                 _raw_file_sprites.push_back(i.sprite)
             SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
                 _service_sprites.push_back(i.sprite)
+
+
+func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
+    for i: TaggedSprite in tagged_sprites:
+        match i.sub_tag:
+            SubTag.PHONE_BOOTH:
+                _phone_booth_sprites.push_back(i.sprite)
 

@@ -161,7 +161,7 @@ func _create_from_prefab(
 
 
 func _create_from_character(
-        character: String, coord: Vector2i, 
+        character: String, coord: Vector2i,
         occupied_grids: Dictionary, tagged_sprites: Array
         ) -> void:
     var save_tagged_sprite: TaggedSprite
@@ -169,16 +169,20 @@ func _create_from_character(
     occupied_grids[coord.x][coord.y] = true
     match character:
         WALL_CHAR, DOOR_CHAR, DESK_CHAR:
-            tagged_sprites.push_back(SpriteFactory.create_building(
-                    CHAR_TO_TAG[character], coord, false))
+            save_tagged_sprite = SpriteFactory.create_building(
+                    CHAR_TO_TAG[character], coord, false
+                    )
+            tagged_sprites.push_back(save_tagged_sprite)
         SPECIAL_FLOOR_CHAR:
             save_tagged_sprite = SpriteFactory.create_ground(
-                    CHAR_TO_TAG[character], coord, false)
+                    CHAR_TO_TAG[character], coord, false
+                    )
             save_tagged_sprite.sprite.z_index = GameData.INTERNAL_FLOOR_Z_LAYER
             tagged_sprites.push_back(save_tagged_sprite)
         PHONE_BOOTH_CHAR:
             save_tagged_sprite = SpriteFactory.create_building(
-                    CHAR_TO_TAG[character], coord, false)
+                    CHAR_TO_TAG[character], coord, false
+                    )
             tagged_sprites.push_back(save_tagged_sprite)
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
                 ENCYCLPEDIA_CHAR, FIELD_REPORT_CHAR, GARAGE_CHAR, SALARY_CHAR, \

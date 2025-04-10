@@ -8,72 +8,36 @@ enum {
 }
 
 
-var cash: int = GameData.INCOME_INITIAL
-var account: int = 0
-
-var max_delivery: int = GameData.MAX_LEVEL
-var delivery: int = max_delivery
-
-
-var progress_state := ProgressState.new()
-var delay: int = 0
-
-
-var pc: Sprite2D:
-    get:
-        return _pc
-
-
-var pc_coord: Vector2i:
-    get:
-        return ConvertCoord.get_coord(pc)
-
-
-var game_mode: int:
-    get:
-        return _game_mode
-
-
-var linked_cart_state: LinkedCartState:
-    get:
-        return _linked_cart_state
-
-
-var incoming_call: int:
-    get:
-        return _incoming_call
-
-
-var _linked_cart_state := LinkedCartState.new()
-var _incoming_call: int = 0
-
-
-var _pc: Sprite2D
-var _game_mode: int = NORMAL_MODE
 var _is_first_turn: bool = true
 
 var _fov_map: Dictionary = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
 var _shadow_cast_fov_data: ShadowCastFov.FovData = ShadowCastFov.FovData.new(
-        GameData.PC_SIGHT_RANGE)
+        GameData.PC_SIGHT_RANGE
+        )
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
     for i: TaggedSprite in tagged_sprites:
         match i.sub_tag:
             SubTag.PC:
-                if pc != null:
+                if NodeHub.ref_DataHub.pc != null:
                     continue
-                _pc = i.sprite
-                Cart.init_linked_carts(pc, linked_cart_state)
-                Cart.add_cart(GameData.MIN_CART, linked_cart_state)
+                NodeHub.ref_DataHub.set_pc(i.sprite)
+                Cart.init_linked_carts(
+                        NodeHub.ref_DataHub.pc,
+                        NodeHub.ref_DataHub.linked_cart_state
+                        )
+                Cart.add_cart(
+                        GameData.MIN_CART, NodeHub.ref_DataHub.linked_cart_state
+                        )
             SubTag.PHONE:
-                _incoming_call += 1
+                NodeHub.ref_DataHub.add_incoming_call(1)
 
 
 func _on_SignalHub_sprite_removed(sprites: Array) -> void:
     for i: Sprite2D in sprites:
         if i.is_in_group(SubTag.PHONE):
-            _incoming_call -= 1
+            NodeHub.ref_DataHub.add_incoming_call(-1)
 
 
 func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
@@ -87,18 +51,22 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
         _is_first_turn = false
     else:
         # Do not update turn counter because it is already 1 in the first turn.
-        GameProgress.update_turn_counter(self)
+        GameProgress.update_turn_counter(NodeHub.ref_DataHub)
 
     GameProgress.update_world(
-            self, NodeHub.ref_ActorAction, NodeHub.ref_RandomNumber
+            NodeHub.ref_DataHub, NodeHub.ref_ActorAction,
+            NodeHub.ref_RandomNumber
             )
 
-    if Checkmate.is_game_over(self):
+    if Checkmate.is_game_over(NodeHub.ref_DataHub):
         NodeHub.ref_SignalHub.game_over.emit(false)
         return
-    elif delay > 0:
-        delay -= 1
-        Cart.add_trash(pc, linked_cart_state, NodeHub.ref_RandomNumber)
+    elif NodeHub.ref_DataHub.delay > 0:
+        NodeHub.ref_DataHub.delay -= 1
+        Cart.add_trash(
+                NodeHub.ref_DataHub.pc, NodeHub.ref_DataHub.linked_cart_state,
+                NodeHub.ref_RandomNumber
+                )
 
         # The game loops without player's input. If call start_next_turn()
         # directly, there might be a stack overflow error when too many turns
@@ -111,11 +79,11 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
         # await get_tree().create_timer(0).timeout
 
         return
-    PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
+    PcFov.render_fov(NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data)
 
 
 func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
-    match game_mode:
+    match NodeHub.ref_DataHub.game_mode:
         NORMAL_MODE:
             if _handle_normal_input(input_tag):
                 return
@@ -123,20 +91,21 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
             if _handle_examine_input(input_tag):
                 return
 
-    PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
-    if game_mode == EXAMINE_MODE:
+    PcFov.render_fov(NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data)
+    if NodeHub.ref_DataHub.game_mode == EXAMINE_MODE:
         PcSwitchMode.highlight_actor()
     NodeHub.ref_SignalHub.ui_force_updated.emit()
 
 
 func _on_SignalHub_game_over(player_win: bool) -> void:
-    PcFov.render_fov(pc, _fov_map, _shadow_cast_fov_data)
+    PcFov.render_fov(NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data)
     if not player_win:
-        VisualEffect.set_dark_color(pc)
+        VisualEffect.set_dark_color(NodeHub.ref_DataHub.pc)
 
 
 func _move(direction: Vector2i, state: LinkedCartState) -> void:
-    var coord: Vector2i = ConvertCoord.get_coord(pc) + direction
+    var coord: Vector2i = ConvertCoord.get_coord(NodeHub.ref_DataHub.pc) \
+            + direction
     var sprite: Sprite2D
     var sub_tag: StringName
 
@@ -149,7 +118,7 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
         sprite = SpriteState.get_actor_by_coord(coord)
         sub_tag = SpriteState.get_sub_tag(sprite)
         PcHitActor.handle_input(
-                sprite, self, NodeHub.ref_ActorAction,
+                sprite, NodeHub.ref_DataHub, NodeHub.ref_ActorAction,
                 NodeHub.ref_RandomNumber, NodeHub.ref_SignalHub,
                 NodeHub.ref_Schedule
                 )
@@ -160,7 +129,8 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
         sub_tag = SpriteState.get_sub_tag(sprite)
         if sub_tag == SubTag.TRASH:
             PcHitTrap.handle_input(
-                    sprite, self, NodeHub.ref_RandomNumber, NodeHub.ref_Schedule
+                    sprite, NodeHub.ref_DataHub, NodeHub.ref_RandomNumber,
+                    NodeHub.ref_Schedule
                     )
         return
 
@@ -169,26 +139,29 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
         if not sprite.is_in_group(SubTag.DOOR):
             return
 
-    Cart.pull_cart(pc, coord, state)
-    Cart.add_trash(pc, state, NodeHub.ref_RandomNumber)
+    Cart.pull_cart(NodeHub.ref_DataHub.pc, coord, state)
+    Cart.add_trash(NodeHub.ref_DataHub.pc, state, NodeHub.ref_RandomNumber)
     NodeHub.ref_Schedule.start_next_turn()
 
 
 func _handle_normal_input(input_tag: StringName) -> bool:
     match input_tag:
         InputTag.SWITCH_EXAMINE:
-            if Cart.enter_examine_mode(pc, linked_cart_state):
-                _game_mode = EXAMINE_MODE
+            if Cart.enter_examine_mode(
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
+                    ):
+                NodeHub.ref_DataHub.set_game_mode(EXAMINE_MODE)
                 PcSwitchMode.examine_mode(true, NodeHub.ref_ActorAction)
                 return false
         InputTag.MOVE_LEFT:
-            _move(Vector2i.LEFT, linked_cart_state)
+            _move(Vector2i.LEFT, NodeHub.ref_DataHub.linked_cart_state)
         InputTag.MOVE_RIGHT:
-            _move(Vector2i.RIGHT, linked_cart_state)
+            _move(Vector2i.RIGHT, NodeHub.ref_DataHub.linked_cart_state)
         InputTag.MOVE_UP:
-            _move(Vector2i.UP, linked_cart_state)
+            _move(Vector2i.UP, NodeHub.ref_DataHub.linked_cart_state)
         InputTag.MOVE_DOWN:
-            _move(Vector2i.DOWN, linked_cart_state)
+            _move(Vector2i.DOWN, NodeHub.ref_DataHub.linked_cart_state)
         InputTag.WIZARD_1, InputTag.WIZARD_2, \
                 InputTag.WIZARD_3, InputTag.WIZARD_4, \
                 InputTag.WIZARD_5, InputTag.WIZARD_6, \
@@ -204,17 +177,32 @@ func _handle_normal_input(input_tag: StringName) -> bool:
 func _handle_examine_input(input_tag: StringName) -> bool:
     match input_tag:
         InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
-            _game_mode = NORMAL_MODE
-            Cart.exit_examine_mode(pc, linked_cart_state)
+            NodeHub.ref_DataHub.set_game_mode(NORMAL_MODE)
+            Cart.exit_examine_mode(
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
+                    )
             PcSwitchMode.examine_mode(false, NodeHub.ref_ActorAction)
         InputTag.MOVE_UP:
-            Cart.examine_first_cart(pc, linked_cart_state)
+            Cart.examine_first_cart(
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
+                    )
         InputTag.MOVE_DOWN:
-            Cart.examine_last_cart(pc, linked_cart_state)
+            Cart.examine_last_cart(
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
+                    )
         InputTag.MOVE_LEFT:
-            Cart.examine_previous_cart(pc, linked_cart_state)
+            Cart.examine_previous_cart(
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
+                    )
         InputTag.MOVE_RIGHT, InputTag.EXAMINE_NEXT_CART:
-            Cart.examine_next_cart(pc, linked_cart_state)
+            Cart.examine_next_cart(
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
+                    )
         _:
             return true
     return false

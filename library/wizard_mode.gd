@@ -9,22 +9,22 @@ static func _test(input_tag: StringName) -> void:
     match input_tag:
         InputTag.WIZARD_1:
             Cart.add_cart(
-                    GameData.ADD_CART, NodeHub.ref_PcAction.linked_cart_state
+                    GameData.ADD_CART, NodeHub.ref_DataHub.linked_cart_state
                     )
         InputTag.WIZARD_2:
-            NodeHub.ref_PcAction.cash += 1
+            NodeHub.ref_DataHub.cash += 1
         InputTag.WIZARD_3:
-            Cart.clean_cart(NodeHub.ref_PcAction.pc,
-                    NodeHub.ref_PcAction.linked_cart_state)
+            Cart.clean_cart(NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state)
         InputTag.WIZARD_4:
             var sprite: Sprite2D =  Cart.get_last_slot(
-                    NodeHub.ref_PcAction.pc,
-                    NodeHub.ref_PcAction.linked_cart_state
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
                     )
             var state: CartState
             if sprite != null:
                 state = Cart.get_state(
-                        sprite, NodeHub.ref_PcAction.linked_cart_state
+                        sprite, NodeHub.ref_DataHub.linked_cart_state
                         )
                 state.item_tag = SubTag.DOCUMENT
 

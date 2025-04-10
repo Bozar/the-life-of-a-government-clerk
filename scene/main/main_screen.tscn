@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://drb5ql5du1mxl"]
+[gd_scene load_steps=16 format=3 uid="uid://drb5ql5du1mxl"]
 
 [ext_resource type="Script" uid="uid://ojxsnvjxpc6s" path="res://scene/main/main_screen.gd" id="1_nhpgv"]
 [ext_resource type="Script" uid="uid://53ec4wq5jobt" path="res://scene/main/sprite_root.gd" id="2_k71b2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cl0cn7onqwmrg" path="res://scene/main/sprite_tag.gd" id="8_x038l"]
 [ext_resource type="Script" uid="uid://br17vkrbyefp6" path="res://scene/main/actor_action.gd" id="9_psynh"]
 [ext_resource type="PackedScene" uid="uid://dphslwd58ka2w" path="res://scene/sidebar/sidebar.tscn" id="10_do70e"]
+[ext_resource type="Script" uid="uid://ddkv0u6acvaio" path="res://scene/main/data_hub.gd" id="12_bex0h"]
 [ext_resource type="Script" uid="uid://d1ix7dqq76ltg" path="res://scene/main/random_number.gd" id="12_ymw0w"]
 [ext_resource type="PackedScene" uid="uid://dj58gs1r0ay2d" path="res://scene/help/help_screen.tscn" id="14_innsn"]
 [ext_resource type="Script" uid="uid://d31bmfnaxyqey" path="res://scene/main/signal_hub.gd" id="14_p40ip"]
@@ -47,6 +48,9 @@ script = ExtResource("12_ymw0w")
 
 [node name="SignalHub" type="Node2D" parent="."]
 script = ExtResource("14_p40ip")
+
+[node name="DataHub" type="Node2D" parent="."]
+script = ExtResource("12_bex0h")
 
 [node name="Sidebar" parent="." instance=ExtResource("10_do70e")]
 

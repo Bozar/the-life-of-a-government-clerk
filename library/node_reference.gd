@@ -11,6 +11,7 @@ const ACTOR_ACTION: String = "ActorAction"
 const RANDOM_NUMBER: String = "RandomNumber"
 const INIT_WORLD: String = "InitWorld"
 const SIGNAL_HUB: String = "SignalHub"
+const DATA_HUB: String = "DataHub"
 
 const SIDEBAR: String = "Sidebar"
 
@@ -64,24 +65,24 @@ const SIGNAL_CONNECTIONS: Dictionary = {
 
 
 # {source_node: [target_node_1, ...], ...}
-const NODE_CONNECTIONS: Dictionary = {
-    SPRITE_COORD: [
-        SPRITE_STATE,
-    ],
-    SPRITE_TAG: [
-        SPRITE_STATE,
-    ],
-    PC_ACTION: [
-        SIDEBAR,
-        # ACTOR_ACTION,
-    ],
-    ACTOR_ACTION: [
-        PC_ACTION,
-    ],
-    RANDOM_NUMBER: [
-        ACTOR_ACTION, SIDEBAR, INIT_WORLD, PC_ACTION,
-    ],
-}
+#const NODE_CONNECTIONS: Dictionary = {
+#    SPRITE_COORD: [
+#        SPRITE_STATE,
+#    ],
+#    SPRITE_TAG: [
+#        SPRITE_STATE,
+#    ],
+#    PC_ACTION: [
+#        SIDEBAR,
+#        # ACTOR_ACTION,
+#    ],
+#    ACTOR_ACTION: [
+#        PC_ACTION,
+#    ],
+#    RANDOM_NUMBER: [
+#        ACTOR_ACTION, SIDEBAR, INIT_WORLD, PC_ACTION,
+#    ],
+#}
 
 
 const NODE_NAMES: Array = [
@@ -92,5 +93,6 @@ const NODE_NAMES: Array = [
     ACTOR_ACTION,
     RANDOM_NUMBER,
     SIGNAL_HUB,
+    DATA_HUB,
 ]
 

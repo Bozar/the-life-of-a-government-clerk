@@ -43,7 +43,7 @@ var count_combined_idler: int:
                 get_actor_states(SubTag.SERVANT)
                 )
         return servants \
-                * (NodeHub.ref_PcAction.progress_state.challenge_level + 1)
+                * (NodeHub.ref_DataHub.progress_state.challenge_level + 1)
 
 
 var _raw_file_states: Array

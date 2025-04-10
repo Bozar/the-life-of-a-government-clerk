@@ -5,17 +5,17 @@ const MAX_RETRY: int = 10
 
 
 static func update_world(
-        ref_PcAction: PcAction, ref_ActorAction: ActorAction,
+        ref_DataHub: DataHub, ref_ActorAction: ActorAction,
         ref_RandomNumber: RandomNumber
         ) -> void:
-    var state: ProgressState = ref_PcAction.progress_state
+    var state: ProgressState = ref_DataHub.progress_state
 
     _init_ground_coords(state, ref_RandomNumber)
 
     # Create Servants. This challenge is available throughout the game.
     _create_rand_sprite(
             MainTag.ACTOR, SubTag.SERVANT, state,
-            ref_PcAction, ref_ActorAction, ref_RandomNumber, MAX_RETRY
+            ref_DataHub, ref_ActorAction, ref_RandomNumber, MAX_RETRY
             )
 
     # Create Trashes.
@@ -24,7 +24,7 @@ static func update_world(
             )
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, state,
-            ref_PcAction, ref_ActorAction, ref_RandomNumber, MAX_RETRY
+            ref_DataHub, ref_ActorAction, ref_RandomNumber, MAX_RETRY
             )
 
     # Reduce Clerk progress.
@@ -35,23 +35,23 @@ static func update_world(
 
     # Create Phones.
     # {cash: max_phone}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}
-    state.max_phone = GameData.DEFAULT_PHONE - ref_PcAction.cash
+    state.max_phone = GameData.DEFAULT_PHONE - ref_DataHub.cash
     state.max_phone = min(GameData.MAX_PHONE, max(
             GameData.MIN_PHONE, state.max_phone
             ))
-    state.max_phone -= ref_PcAction.incoming_call
+    state.max_phone -= ref_DataHub.incoming_call
     if (state.max_phone > 0) \
-            and (not _has_document(ref_PcAction)) \
-            and (not _is_safe_load_amount_percent(ref_PcAction)):
-        _create_rand_phone(ref_PcAction, ref_RandomNumber)
+            and (not _has_document(ref_DataHub)) \
+            and (not _is_safe_load_amount_percent(ref_DataHub)):
+        _create_rand_phone(ref_DataHub, ref_RandomNumber)
 
 
-static func update_turn_counter(ref_PcAction: PcAction) -> void:
-    ref_PcAction.progress_state.turn_counter += 1
+static func update_turn_counter(ref_DataHub: DataHub) -> void:
+    ref_DataHub.progress_state.turn_counter += 1
 
 
-static func update_challenge_level(ref_PcAction: PcAction) -> void:
-    ref_PcAction.progress_state.challenge_level += 1
+static func update_challenge_level(ref_DataHub: DataHub) -> void:
+    ref_DataHub.progress_state.challenge_level += 1
 
 
 static func update_raw_file(
@@ -122,17 +122,17 @@ static func _init_phone_coords(
 
 static func _create_rand_sprite(
         main_tag: StringName, sub_tag: StringName, state: ProgressState,
-        ref_PcAction: PcAction, ref_ActorAction: ActorAction,
+        ref_DataHub: DataHub, ref_ActorAction: ActorAction,
         ref_RandomNumber: RandomNumber, retry: int
         ) -> void:
     if retry < 1:
         return
-    elif not _is_valid_turn(ref_PcAction.progress_state.turn_counter, main_tag):
+    elif not _is_valid_turn(state.turn_counter, main_tag):
         return
 
     match main_tag:
         MainTag.ACTOR:
-            if _has_max_actor(ref_PcAction, ref_ActorAction):
+            if _has_max_actor(ref_DataHub, ref_ActorAction):
                 return
         MainTag.TRAP:
             if _has_max_trap(state.max_trap, sub_tag):
@@ -143,22 +143,22 @@ static func _create_rand_sprite(
     var coord: Vector2i = state.ground_coords[state.ground_index]
     var is_created: bool = false
 
-    if _is_valid_coord(coord, ref_PcAction.pc_coord):
+    if _is_valid_coord(coord, ref_DataHub.pc_coord):
         SpriteFactory.create_sprite(main_tag, sub_tag, coord, true)
         is_created = true
     _update_ground_index(state, ref_RandomNumber)
 
     if not is_created:
         _create_rand_sprite(
-                main_tag, sub_tag, state, ref_PcAction, ref_ActorAction,
+                main_tag, sub_tag, state, ref_DataHub, ref_ActorAction,
                 ref_RandomNumber, retry - 1
                 )
 
 
 static func _create_rand_phone(
-        ref_PcAction: PcAction, ref_RandomNumber: RandomNumber
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    var state: ProgressState = ref_PcAction.progress_state
+    var state: ProgressState = ref_DataHub.progress_state
     var phone_coord: Vector2i
     var max_retry: int = MAX_RETRY
 
@@ -171,14 +171,14 @@ static func _create_rand_phone(
 
         if SpriteState.has_actor_at_coord(phone_coord):
             continue
-        elif not _is_valid_coord(phone_coord, ref_PcAction.pc_coord):
+        elif not _is_valid_coord(phone_coord, ref_DataHub.pc_coord):
             continue
         SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
         state.max_phone -= 1
 
 
 static func _has_max_actor(
-        ref_PcAction: PcAction, ref_ActorAction: ActorAction
+        ref_DataHub: DataHub, ref_ActorAction: ActorAction
         ) -> bool:
     var max_servant: int = GameData.BASE_SERVANT
     var occupied_shelf: int = HandleShelf.count_occupied_shelf(
@@ -188,7 +188,7 @@ static func _has_max_actor(
             SubTag.SERVANT
             ).size()
     var carry_servant: int = Cart.count_item(
-            SubTag.SERVANT, ref_PcAction.pc, ref_PcAction.linked_cart_state
+            SubTag.SERVANT, ref_DataHub.pc, ref_DataHub.linked_cart_state
             )
     return current_servant + carry_servant >= max_servant \
             + occupied_shelf * GameData.SHELF_TO_SERVANT
@@ -255,9 +255,9 @@ static func _update_phone_index(
         ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
 
 
-static func _has_document(ref_PcAction: PcAction) -> bool:
+static func _has_document(ref_DataHub: DataHub) -> bool:
     var cart_sprite: Sprite2D = Cart.get_first_item(
-            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            ref_DataHub.pc, ref_DataHub.linked_cart_state
             )
     var cart_state: CartState
 
@@ -265,16 +265,16 @@ static func _has_document(ref_PcAction: PcAction) -> bool:
         return false
 
     cart_state = Cart.get_state(
-            cart_sprite, ref_PcAction.linked_cart_state
+            cart_sprite, ref_DataHub.linked_cart_state
             )
     return cart_state.item_tag == SubTag.DOCUMENT
 
 
-static func _is_safe_load_amount_percent(ref_PcAction: PcAction) -> bool:
+static func _is_safe_load_amount_percent(ref_DataHub: DataHub) -> bool:
     var full_load: int = Cart.get_full_load_amount(
-            ref_PcAction.pc, ref_PcAction.linked_cart_state
+            ref_DataHub.pc, ref_DataHub.linked_cart_state
             )
-    var count_cart: int = Cart.count_cart(ref_PcAction.linked_cart_state)
+    var count_cart: int = Cart.count_cart(ref_DataHub.linked_cart_state)
     var max_load: int = GameData.MAX_LOAD_PER_CART * count_cart
     var load_percent: float = full_load * 1.0 / max_load
     return load_percent <= GameData.SAFE_LOAD_AMOUT_PERCENT

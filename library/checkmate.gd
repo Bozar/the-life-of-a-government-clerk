@@ -10,10 +10,10 @@ const PASSABLE_TAGS: Array = [
 ]
 
 
-static func is_game_over(ref_PcAction: PcAction) -> bool:
-    if _is_trapped(ref_PcAction.pc_coord):
+static func is_game_over(ref_DataHub: DataHub) -> bool:
+    if _is_trapped(ref_DataHub.pc_coord):
         return true
-    elif _is_fully_loaded(ref_PcAction):
+    elif _is_fully_loaded(ref_DataHub):
         return true
     return false
 
@@ -47,10 +47,10 @@ static func _sort_by_index(lower: Sprite2D, higher: Sprite2D) -> bool:
     return lower.z_index <= higher.z_index
 
 
-static func _is_fully_loaded(ref_PcAction: PcAction) -> bool:
-    var current_cart: int = Cart.count_cart(ref_PcAction.linked_cart_state)
-    var current_load: int = Cart.get_full_load_amount(ref_PcAction.pc,
-            ref_PcAction.linked_cart_state)
+static func _is_fully_loaded(ref_DataHub: DataHub) -> bool:
+    var current_cart: int = Cart.count_cart(ref_DataHub.linked_cart_state)
+    var current_load: int = Cart.get_full_load_amount(ref_DataHub.pc,
+            ref_DataHub.linked_cart_state)
 
     if current_cart < 1:
         return false

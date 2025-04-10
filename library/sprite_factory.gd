@@ -1,6 +1,6 @@
 class_name SpriteFactory
-# A library script should not be aware of tree nodes directly, unless it is a
-# decorator of one or more nodes, such as SpriteFactory or SpriteState.
+## A library script should not be aware of tree nodes directly, unless it is a
+## decorator of one or more nodes, such as SpriteFactory or SpriteState.
 
 
 static func create_sprite(

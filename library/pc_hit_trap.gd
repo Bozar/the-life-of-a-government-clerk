@@ -2,22 +2,22 @@ class_name PcHitTrap
 
 
 static func handle_input(
-        trap: Sprite2D, ref_PcAction: PcAction, ref_RandomNumber: RandomNumber,
+        trap: Sprite2D, ref_DataHub: DataHub, ref_RandomNumber: RandomNumber,
         ref_Schedule: Schedule
         ) -> void:
     var trap_coord: Vector2i = ConvertCoord.get_coord(trap)
-    var pc: Sprite2D = ref_PcAction.pc
-    var linked_cart_state: LinkedCartState = ref_PcAction.linked_cart_state
+    var pc: Sprite2D = ref_DataHub.pc
+    var linked_cart_state: LinkedCartState = ref_DataHub.linked_cart_state
     var count_cart: int = Cart.count_cart(linked_cart_state)
     var delay: int = Cart.get_delay_duration(pc, linked_cart_state)
 
     if count_cart < GameData.CART_LENGTH_SHORT:
-        ref_PcAction.delay = delay
+        ref_DataHub.delay = delay
     else:
         if _remove_servant(pc, linked_cart_state):
             pass
         else:
-            ref_PcAction.delay = delay
+            ref_DataHub.delay = delay
 
     SpriteFactory.remove_sprite(trap)
     Cart.pull_cart(pc, trap_coord, linked_cart_state)

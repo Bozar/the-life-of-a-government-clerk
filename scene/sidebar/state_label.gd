@@ -21,17 +21,17 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var turn: String = TURN % NodeHub.ref_PcAction.progress_state.turn_counter
-    var doc: String = DOC % NodeHub.ref_PcAction.delivery
+    var turn: String = TURN % NodeHub.ref_DataHub.progress_state.turn_counter
+    var doc: String = DOC % NodeHub.ref_DataHub.delivery
     var cash: String = CASH % [
-        NodeHub.ref_PcAction.cash, NodeHub.ref_PcAction.account,
+        NodeHub.ref_DataHub.cash, NodeHub.ref_DataHub.account,
     ]
-    var phone_call: String = CALL % NodeHub.ref_PcAction.incoming_call
+    var phone_call: String = CALL % NodeHub.ref_DataHub.incoming_call
     var first_item: String = Cart.get_first_item_text(
-            NodeHub.ref_PcAction.pc, NodeHub.ref_PcAction.linked_cart_state
+            NodeHub.ref_DataHub.pc, NodeHub.ref_DataHub.linked_cart_state
             )
     var last_slot: String = Cart.get_last_slot_text(
-            NodeHub.ref_PcAction.pc, NodeHub.ref_PcAction.linked_cart_state
+            NodeHub.ref_DataHub.pc, NodeHub.ref_DataHub.linked_cart_state
             )
     var cart: String = last_slot if (first_item == "") else first_item
     var state: String = _get_state_text()
@@ -46,13 +46,13 @@ func update_gui() -> void:
 
 
 func _get_state_text() -> String:
-    match NodeHub.ref_PcAction.game_mode:
+    match NodeHub.ref_DataHub.game_mode:
         NodeHub.ref_PcAction.NORMAL_MODE:
-            return Cart.get_extend_text(NodeHub.ref_PcAction.linked_cart_state)
+            return Cart.get_extend_text(NodeHub.ref_DataHub.linked_cart_state)
         NodeHub.ref_PcAction.EXAMINE_MODE:
             return Cart.get_examine_text(
-                    NodeHub.ref_PcAction.pc,
-                    NodeHub.ref_PcAction.linked_cart_state
+                    NodeHub.ref_DataHub.pc,
+                    NodeHub.ref_DataHub.linked_cart_state
                     )
     return ""
 

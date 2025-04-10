@@ -138,7 +138,7 @@ static func _get_cash(ref_PcAction: PcAction) -> void:
 static func _can_use_garage(ref_PcAction: PcAction) -> bool:
     if ref_PcAction.delivery < 1:
         return false
-    elif ref_PcAction.cash < GameData.MIN_PAYMENT:
+    elif ref_PcAction.cash <= GameData.MIN_PAYMENT:
         return false
     return true
 
@@ -149,7 +149,7 @@ static func _use_garage(ref_PcAction: PcAction) -> void:
 
 
 static func _can_clean_cart(ref_PcAction: PcAction) -> bool:
-    return ref_PcAction.cash >= GameData.MIN_PAYMENT
+    return ref_DataHub.cash > GameData.MIN_PAYMENT
 
 
 static func _clean_cart(ref_PcAction: PcAction) -> bool:

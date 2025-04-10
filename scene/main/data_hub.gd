@@ -8,8 +8,12 @@ extends Node2D
 var cash: int = GameData.INCOME_INITIAL
 var account: int = 0
 var delivery: int = GameData.MAX_LEVEL
-var progress_state := ProgressState.new()
 var delay: int = 0
+
+var ground_index: int = 0
+var phone_index: int = 0
+var max_trap: int
+var max_phone: int
 
 
 var pc: Sprite2D:
@@ -77,13 +81,35 @@ var phone_booth_sprites: Array[Sprite2D]:
         return _phone_booth_sprites
 
 
+var ground_coords: Array[Vector2i]:
+    get:
+        return _ground_coords
+
+
+var phone_coords: Array[Vector2i]:
+    get:
+        return _phone_coords
+
+
 var count_combined_idler: int:
     get:
         var servants: int = HandleServant.count_idle_servant(
                 NodeHub.ref_ActorAction.get_actor_states(SubTag.SERVANT)
                 )
-        return servants \
-                * (NodeHub.ref_DataHub.progress_state.challenge_level + 1)
+        return servants * (challenge_level + 1)
+
+
+var turn_counter: int = GameData.MIN_TURN_COUNTER:
+    set(value):
+        if value > GameData.MAX_TURN_COUNTER:
+            turn_counter = GameData.MIN_TURN_COUNTER
+        else:
+            turn_counter = max(value, GameData.MIN_TURN_COUNTER)
+
+
+var challenge_level: int = 0:
+    set(value):
+        challenge_level = max(0, min(value, GameData.MAX_LEVEL))
 
 
 var _pc: Sprite2D
@@ -100,6 +126,8 @@ var _officer_records: Array[int]
 var _service_sprites: Array[Sprite2D]
 
 var _phone_booth_sprites: Array[Sprite2D]
+var _ground_coords: Array[Vector2i]
+var _phone_coords: Array[Vector2i]
 
 
 func set_pc(value: Sprite2D) -> void:
@@ -148,11 +176,4 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                 _raw_file_sprites.push_back(i.sprite)
             SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
                 _service_sprites.push_back(i.sprite)
-
-
-func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
-    for i: TaggedSprite in tagged_sprites:
-        match i.sub_tag:
-            SubTag.PHONE_BOOTH:
-                _phone_booth_sprites.push_back(i.sprite)
 

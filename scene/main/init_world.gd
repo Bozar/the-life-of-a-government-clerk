@@ -37,14 +37,17 @@ const CHAR_TO_TAG: Dictionary = {
     DOOR_CHAR: SubTag.DOOR,
     SPECIAL_FLOOR_CHAR: SubTag.INTERNAL_FLOOR,
     PHONE_BOOTH_CHAR: SubTag.PHONE_BOOTH,
+
     CLERK_CHAR: SubTag.CLERK,
     OFFICER_CHAR: SubTag.OFFICER,
     DESK_CHAR: SubTag.DESK,
+
     ATLAS_CHAR: SubTag.ATLAS,
     BOOK_CHAR: SubTag.BOOK,
     CUP_CHAR: SubTag.CUP,
     ENCYCLPEDIA_CHAR: SubTag.ENCYCLOPEDIA,
     FIELD_REPORT_CHAR: SubTag.FIELD_REPORT,
+
     GARAGE_CHAR: SubTag.GARAGE,
     SALARY_CHAR: SubTag.SALARY,
     STATION_CHAR: SubTag.STATION,
@@ -173,17 +176,20 @@ func _create_from_character(
                     CHAR_TO_TAG[character], coord, false
                     )
             tagged_sprites.push_back(save_tagged_sprite)
+
         SPECIAL_FLOOR_CHAR:
             save_tagged_sprite = SpriteFactory.create_ground(
                     CHAR_TO_TAG[character], coord, false
                     )
             save_tagged_sprite.sprite.z_index = GameData.INTERNAL_FLOOR_Z_LAYER
             tagged_sprites.push_back(save_tagged_sprite)
+
         PHONE_BOOTH_CHAR:
             save_tagged_sprite = SpriteFactory.create_building(
                     CHAR_TO_TAG[character], coord, false
                     )
             tagged_sprites.push_back(save_tagged_sprite)
+
         CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
                 ENCYCLPEDIA_CHAR, FIELD_REPORT_CHAR, GARAGE_CHAR, SALARY_CHAR, \
                 STATION_CHAR, SHELF_CHAR:
@@ -191,6 +197,7 @@ func _create_from_character(
                     CHAR_TO_TAG[character], coord, false
                     )
             tagged_sprites.push_back(save_tagged_sprite)
+
         _:
             occupied_grids[coord.x][coord.y] = false
 

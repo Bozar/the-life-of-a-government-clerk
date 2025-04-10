@@ -21,7 +21,7 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-    var turn: String = TURN % NodeHub.ref_DataHub.progress_state.turn_counter
+    var turn: String = TURN % NodeHub.ref_DataHub.turn_counter
     var doc: String = DOC % NodeHub.ref_DataHub.delivery
     var cash: String = CASH % [
         NodeHub.ref_DataHub.cash, NodeHub.ref_DataHub.account,

@@ -8,9 +8,7 @@ static func update_world(
         ref_DataHub: DataHub, ref_ActorAction: ActorAction,
         ref_RandomNumber: RandomNumber
         ) -> void:
-    var state: ProgressState = ref_DataHub.progress_state
-
-    _init_ground_coords(state, ref_RandomNumber)
+    _init_ground_coords(ref_DataHub, ref_RandomNumber)
 
     # Create Servants. This challenge is available throughout the game.
     _create_rand_sprite(
@@ -19,37 +17,38 @@ static func update_world(
             )
 
     # Create Trashes.
-    state.max_trap = min(ref_DataHub.count_combined_idler, GameData.MAX_TRAP)
+    ref_DataHub.max_trap = min(
+            ref_DataHub.count_combined_idler, GameData.MAX_TRAP
+            )
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, ref_DataHub, ref_RandomNumber,
             MAX_RETRY
             )
 
     # Reduce Clerk progress.
-    if state.challenge_level >= GameData.MIN_LEVEL_LEAK:
+    if ref_DataHub.challenge_level >= GameData.MIN_LEVEL_LEAK:
         HandleClerk.reduce_progress(
                 ref_ActorAction.get_actor_states(SubTag.CLERK), ref_RandomNumber
                 )
 
     # Create Phones.
     # {cash: max_phone}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}
-    state.max_phone = GameData.DEFAULT_PHONE - ref_DataHub.cash
-    state.max_phone = min(GameData.MAX_PHONE, max(
-            GameData.MIN_PHONE, state.max_phone
-            ))
-    state.max_phone -= ref_DataHub.incoming_call
-    if (state.max_phone > 0) \
+    ref_DataHub.max_phone = GameData.DEFAULT_PHONE - ref_DataHub.cash
+    ref_DataHub.max_phone = max(GameData.MIN_PHONE, ref_DataHub.max_phone)
+    ref_DataHub.max_phone = min(GameData.MAX_PHONE, ref_DataHub.max_phone)
+    ref_DataHub.max_phone -= ref_DataHub.incoming_call
+    if (ref_DataHub.max_phone > 0) \
             and (not _has_document(ref_DataHub)) \
             and (not _is_safe_load_amount_percent(ref_DataHub)):
         _create_rand_phone(ref_DataHub, ref_RandomNumber)
 
 
 static func update_turn_counter(ref_DataHub: DataHub) -> void:
-    ref_DataHub.progress_state.turn_counter += 1
+    ref_DataHub.turn_counter += 1
 
 
 static func update_challenge_level(ref_DataHub: DataHub) -> void:
-    ref_DataHub.progress_state.challenge_level += 1
+    ref_DataHub.challenge_level += 1
 
 
 static func update_raw_file(
@@ -80,9 +79,9 @@ static func _swap_sprites(
 
 
 static func _init_ground_coords(
-        state: ProgressState, ref_RandomNumber: RandomNumber
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    if not state.ground_coords.is_empty():
+    if not ref_DataHub.ground_coords.is_empty():
         return
 
     var coord: Vector2i = Vector2i(0, 0)
@@ -101,32 +100,30 @@ static func _init_ground_coords(
                     save_coord = false
                     break
             if save_coord:
-                state.ground_coords.push_back(coord)
+                ref_DataHub.set_ground_coords(coord)
 
-    ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
+    ArrayHelper.shuffle(ref_DataHub.ground_coords, ref_RandomNumber)
 
 
 static func _init_phone_coords(
-        state: ProgressState, ref_RandomNumber: RandomNumber
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    if not state.phone_coords.is_empty():
+    if not ref_DataHub.phone_coords.is_empty():
         return
 
     for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(SubTag.PHONE_BOOTH):
-        state.phone_coords.push_back(ConvertCoord.get_coord(i))
-    state.phone_index = -1
-    ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
+        ref_DataHub.set_phone_coords(ConvertCoord.get_coord(i))
+    ref_DataHub.phone_index = -1
+    ArrayHelper.shuffle(ref_DataHub.phone_coords, ref_RandomNumber)
 
 
 static func _create_rand_sprite(
         main_tag: StringName, sub_tag: StringName, ref_DataHub: DataHub,
         ref_RandomNumber: RandomNumber, retry: int
         ) -> void:
-    var state: ProgressState = ref_DataHub.progress_state
-
     if retry < 1:
         return
-    elif not _is_valid_turn(state.turn_counter, main_tag):
+    elif not _is_valid_turn(ref_DataHub.turn_counter, main_tag):
         return
 
     match main_tag:
@@ -134,18 +131,18 @@ static func _create_rand_sprite(
             if _has_max_actor(ref_DataHub):
                 return
         MainTag.TRAP:
-            if _has_max_trap(state.max_trap, sub_tag):
+            if _has_max_trap(ref_DataHub.max_trap, sub_tag):
                 return
         _:
             pass
 
-    var coord: Vector2i = state.ground_coords[state.ground_index]
+    var coord: Vector2i = ref_DataHub.ground_coords[ref_DataHub.ground_index]
     var is_created: bool = false
 
     if _is_valid_coord(coord, ref_DataHub.pc_coord):
         SpriteFactory.create_sprite(main_tag, sub_tag, coord, true)
         is_created = true
-    _update_ground_index(state, ref_RandomNumber)
+    _update_ground_index(ref_DataHub, ref_RandomNumber)
 
     if not is_created:
         _create_rand_sprite(
@@ -156,23 +153,22 @@ static func _create_rand_sprite(
 static func _create_rand_phone(
         ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    var state: ProgressState = ref_DataHub.progress_state
     var phone_coord: Vector2i
     var max_retry: int = MAX_RETRY
 
-    _init_phone_coords(state, ref_RandomNumber)
+    _init_phone_coords(ref_DataHub, ref_RandomNumber)
 
-    while (state.max_phone > 0) and (max_retry > 0):
+    while (ref_DataHub.max_phone > 0) and (max_retry > 0):
         max_retry -= 1
-        _update_phone_index(state, ref_RandomNumber)
-        phone_coord = state.phone_coords[state.phone_index]
+        _update_phone_index(ref_DataHub, ref_RandomNumber)
+        phone_coord = ref_DataHub.phone_coords[ref_DataHub.phone_index]
 
         if SpriteState.has_actor_at_coord(phone_coord):
             continue
         elif not _is_valid_coord(phone_coord, ref_DataHub.pc_coord):
             continue
         SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
-        state.max_phone -= 1
+        ref_DataHub.max_phone -= 1
 
 
 static func _has_max_actor(ref_DataHub: DataHub) -> bool:
@@ -232,23 +228,23 @@ static func _is_valid_coord(check_coord: Vector2i, pc_coord: Vector2i) -> bool:
 
 
 static func _update_ground_index(
-        state: ProgressState, ref_RandomNumber: RandomNumber
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> void:
-    state.ground_index += 1
-    if state.ground_index < state.ground_coords.size():
+    ref_DataHub.ground_index += 1
+    if ref_DataHub.ground_index < ref_DataHub.ground_coords.size():
         return
-    state.ground_index = 0
-    ArrayHelper.shuffle(state.ground_coords, ref_RandomNumber)
+    ref_DataHub.ground_index = 0
+    ArrayHelper.shuffle(ref_DataHub.ground_coords, ref_RandomNumber)
 
 
 static func _update_phone_index(
-            state: ProgressState, ref_RandomNumber: RandomNumber
-            ) -> void:
-        state.phone_index += 1
-        if state.phone_index < state.phone_coords.size():
-            return
-        state.phone_index = 0
-        ArrayHelper.shuffle(state.phone_coords, ref_RandomNumber)
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
+        ) -> void:
+    ref_DataHub.phone_index += 1
+    if ref_DataHub.phone_index < ref_DataHub.phone_coords.size():
+        return
+    ref_DataHub.phone_index = 0
+    ArrayHelper.shuffle(ref_DataHub.phone_coords, ref_RandomNumber)
 
 
 static func _has_document(ref_DataHub: DataHub) -> bool:

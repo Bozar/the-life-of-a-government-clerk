@@ -121,9 +121,12 @@ const PROGRESS_ENCYCLOPEDIA: int = MIN_FILE_PROGRESS * 7
 
 # Cooldown decreases very slowly per turn.
 const RAW_FILE_REDUCE_COOLDOWN_PASSIVE: int = 1
+
 const RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT: int = RAW_FILE_ADD_COOLDOWN_SEND
 const RAW_FILE_REDUCE_COOLDOWN_UNLOAD_SERVANT: int = \
         RAW_FILE_ADD_COOLDOWN_SEND * 5
+const RAW_FILE_REDUCE_COOLDOWN_MIN_PERCENT: float = 0.1
+const RAW_FILE_REDUCE_COOLDOWN_MAX_PERCENT: float = 0.9
 
 # Base cooldown & active effects are multiplied by a factor.
 const RAW_FILE_COOLDOWN_MOD: int = 20

@@ -35,11 +35,28 @@ static func update_cooldown(state: RawFileState) -> void:
 static func reduce_cooldown(
         raw_file_states: Array, ref_RandomNumber: RandomNumber
         ) -> void:
+    var cooldown_percent: float
+    var max_percent: float = GameData.RAW_FILE_REDUCE_COOLDOWN_MAX_PERCENT
+    var min_percent: float = GameData.RAW_FILE_REDUCE_COOLDOWN_MIN_PERCENT
+    var state: RawFileState = null
+
     ArrayHelper.shuffle(raw_file_states, ref_RandomNumber)
     for i: RawFileState in raw_file_states:
-        if i.cooldown > 0:
-            i.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT
-            break
+        # Skip usable Raw File nodes.
+        if i.cooldown == 0:
+            continue
+        else:
+            # Focus on nodes whose cooldowns are very high or very low.
+            cooldown_percent = i.cooldown * 1.0 / i.max_cooldown
+            if (cooldown_percent >= max_percent) \
+                    or (cooldown_percent <= min_percent):
+                i.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT
+                return
+            # Otherwise, reduce a random node's cooldown.
+            else:
+                state = i
+    if state != null:
+        state.cooldown -= GameData.RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT
 
 
 static func can_receive_servant(state: RawFileState) -> bool:

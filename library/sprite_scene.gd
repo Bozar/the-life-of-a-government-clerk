@@ -38,11 +38,12 @@ const SPRITE_SCENES: Dictionary = {
 
     SubTag.SALARY: preload("res://sprite/salary.tscn"),
     SubTag.GARAGE: preload("res://sprite/garage.tscn"),
-    SubTag.SERVANT: preload("res://sprite/servant.tscn"),
     SubTag.STATION: preload("res://sprite/station.tscn"),
     SubTag.PHONE: preload("res://sprite/phone.tscn"),
     SubTag.SHELF: preload("res://sprite/shelf.tscn"),
 
+    SubTag.SERVANT: preload("res://sprite/servant.tscn"),
+    SubTag.EMPTY_CART: preload("res://sprite/empty_cart.tscn"),
 
     # Indicator
     SubTag.INDICATOR_TOP: preload("res://sprite/indicator_top.tscn"),

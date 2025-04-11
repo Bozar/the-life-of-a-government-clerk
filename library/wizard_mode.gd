@@ -11,11 +11,14 @@ static func _test(input_tag: StringName) -> void:
             Cart.add_cart(
                     GameData.ADD_CART, NodeHub.ref_DataHub.linked_cart_state
                     )
+
         InputTag.WIZARD_2:
             NodeHub.ref_DataHub.cash += 1
+
         InputTag.WIZARD_3:
             Cart.clean_cart(NodeHub.ref_DataHub.pc,
                     NodeHub.ref_DataHub.linked_cart_state)
+
         InputTag.WIZARD_4:
             var sprite: Sprite2D =  Cart.get_last_slot(
                     NodeHub.ref_DataHub.pc,

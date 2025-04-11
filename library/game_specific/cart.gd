@@ -422,8 +422,9 @@ static func _add_cart_deferred(
     if state.add_cart_counter < 1:
         return
 
-    var new_cart: Sprite2D = SpriteFactory.create_actor(SubTag.CART,
-            new_coord, true).sprite
+    var new_cart: Sprite2D = SpriteFactory.create_actor(
+            SubTag.CART, new_coord, true
+            ).sprite
 
     LinkedList.insert_object(new_cart, first_cart, state.linked_carts)
     state.cart_states[new_cart.get_instance_id()] = CartState.new(new_cart)

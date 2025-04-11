@@ -41,6 +41,11 @@ const ADD_CART: int = 3
 const CART_LENGTH_SHORT: int = 4
 const CART_LENGTH_LONG: int = 7
 
+const ADD_EMPTY_CART_LENGTH: int = 1
+const ADD_EMPTY_CART_CHANCE: int = 50
+const EMPTY_CART_MIN_DURATION: int = MAX_DISTANCE_TO_PC
+const EMPTY_CART_MAX_DURATION: int = MAX_DISTANCE_TO_PC + MIN_DISTANCE_TO_PC + 1
+
 
 ### Progress & Challenge ###
 

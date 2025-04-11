@@ -4,7 +4,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qcks3"]
 atlas = ExtResource("1_2k5qn")
-region = Rect2(24, 540, 24, 36)
+region = Rect2(48, 540, 24, 36)
 
 [node name="Garage" type="Sprite2D"]
 

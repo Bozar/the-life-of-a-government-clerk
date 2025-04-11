@@ -140,7 +140,10 @@ static func _create_rand_sprite(
     var is_created: bool = false
 
     if _is_valid_coord(coord, ref_DataHub.pc_coord):
-        SpriteFactory.create_sprite(main_tag, sub_tag, coord, true)
+        if _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
+            SpriteFactory.create_actor(SubTag.EMPTY_CART, coord, true)
+        else:
+            SpriteFactory.create_sprite(main_tag, sub_tag, coord, true)
         is_created = true
     _update_ground_index(ref_DataHub, ref_RandomNumber)
 
@@ -270,4 +273,13 @@ static func _is_safe_load_amount_percent(ref_DataHub: DataHub) -> bool:
     var max_load: int = GameData.MAX_LOAD_PER_CART * count_cart
     var load_percent: float = full_load * 1.0 / max_load
     return load_percent <= GameData.SAFE_LOAD_AMOUT_PERCENT
+
+
+static func _can_create_empty_cart(
+        ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
+        ) -> bool:
+    return ref_RandomNumber.get_percent_chance(GameData.ADD_EMPTY_CART_CHANCE) \
+            and (Cart.count_cart(ref_DataHub.linked_cart_state) \
+                    >= GameData.CART_LENGTH_SHORT) \
+            and (not _is_safe_load_amount_percent(ref_DataHub))
 

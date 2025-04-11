@@ -40,11 +40,13 @@ const FULL: StringName = &"full"
 const DETACHED: StringName = &"detached"
 
 const SALARY: StringName = &"salary"
-const SERVANT: StringName = &"servant"
 const GARAGE: StringName = &"garage"
 const STATION: StringName = &"station"
 const PHONE: StringName = &"phone"
 const SHELF: StringName = &"shelf"
+
+const SERVANT: StringName = &"servant"
+const EMPTY_CART: StringName = &"empty_cart"
 
 
 # Indicator
@@ -75,5 +77,6 @@ const RELATED_TAGS: Dictionary[StringName, Array] = {
     SHELF: [HIGHLIGHT],
 
     PHONE_BOOTH: [HIGHLIGHT],
+    EMPTY_CART: [HIGHLIGHT],
 }
 

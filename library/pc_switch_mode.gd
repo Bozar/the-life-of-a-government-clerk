@@ -12,6 +12,9 @@ static func examine_mode(
     HandlePhoneBooth.switch_examine_mode(
             is_enter, ref_DataHub.phone_booth_sprites
             )
+    HandleEmptyCart.switch_examine_mode(
+            is_enter, ref_ActorAction.get_actor_states(SubTag.EMPTY_CART)
+            )
 
 
 static func highlight_actor() -> void:

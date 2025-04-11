@@ -45,7 +45,7 @@ func reset_progress_bar_coord() -> void:
 
 
 func _set_encyclopedia_cooldown() -> void:
-    var count_cart: int = SpriteState.get_sprites_by_sub_tag(SubTag.CART).size()
+    var count_cart: int = Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
 
     if count_cart < GameData.CART_LENGTH_LONG:
         _create_progress_bar()

@@ -91,7 +91,22 @@ var phone_coords: Array[Vector2i]:
         return _phone_coords
 
 
-var count_combined_idler: int:
+var count_servant: int:
+    get:
+        return _count_servant
+
+
+var count_trash: int:
+    get:
+        return _count_trash
+
+
+var count_empty_cart: int:
+    get:
+        return _count_empty_cart
+
+
+var count_idler: int:
     get:
         var servants: int = HandleServant.count_idle_servant(
                 NodeHub.ref_ActorAction.get_actor_states(SubTag.SERVANT)
@@ -128,6 +143,10 @@ var _service_sprites: Array[Sprite2D]
 var _phone_booth_sprites: Array[Sprite2D]
 var _ground_coords: Array[Vector2i]
 var _phone_coords: Array[Vector2i]
+
+var _count_servant: int = 0
+var _count_trash: int = 0
+var _count_empty_cart: int = 0
 
 
 func set_pc(value: Sprite2D) -> void:
@@ -176,4 +195,20 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
                 _raw_file_sprites.push_back(i.sprite)
             SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
                 _service_sprites.push_back(i.sprite)
+            SubTag.SERVANT:
+                _count_servant += 1
+            SubTag.TRASH:
+                _count_trash += 1
+            SubTag.EMPTY_CART:
+                _count_empty_cart += 1
+
+
+func _on_SignalHub_sprite_removed(sprites: Array) -> void:
+    for i: Sprite2D in sprites:
+        if i.is_in_group(SubTag.SERVANT):
+            _count_servant -= 1
+        elif i.is_in_group(SubTag.TRASH):
+            _count_trash -= 1
+        elif i.is_in_group(SubTag.EMPTY_CART):
+            _count_empty_cart -= 1
 

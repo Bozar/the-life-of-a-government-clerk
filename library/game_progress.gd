@@ -131,7 +131,7 @@ static func _create_rand_sprite(
             if _has_max_actor(ref_DataHub):
                 return
         MainTag.TRAP:
-            if _has_max_trap(ref_DataHub.max_trap, sub_tag):
+            if _has_max_trap(ref_DataHub):
                 return
         _:
             pass
@@ -179,9 +179,7 @@ static func _has_max_actor(ref_DataHub: DataHub) -> bool:
     var occupied_shelf: int = HandleShelf.count_occupied_shelf(
             ref_DataHub.shelf_states
             )
-    var current_servant: int = SpriteState.get_sprites_by_sub_tag(
-            SubTag.SERVANT
-            ).size()
+    var current_servant: int = ref_DataHub.count_servant
     var carry_servant: int = Cart.count_item(
             SubTag.SERVANT, ref_DataHub.pc, ref_DataHub.linked_cart_state
             )
@@ -210,8 +208,9 @@ static func _is_valid_turn(turn_counter: int, main_tag: StringName) -> bool:
     return turn_counter % turn_interval == 0
 
 
-static func _has_max_trap(max_trap: int, sub_tag: StringName) -> bool:
-    return SpriteState.get_sprites_by_sub_tag(sub_tag).size() >= max_trap
+static func _has_max_trap(ref_DataHub: DataHub) -> bool:
+    return ref_DataHub.count_trash + ref_DataHub.count_empty_cart \
+            >= ref_DataHub.max_trap
 
 
 static func _is_valid_coord(check_coord: Vector2i, pc_coord: Vector2i) -> bool:

@@ -11,6 +11,11 @@ var sub_tag: StringName:
         return _sub_tag
 
 
+var coord: Vector2i:
+    get:
+        return ConvertCoord.get_coord(sprite)
+
+
 var _sprite: Sprite2D
 var _sub_tag: StringName
 

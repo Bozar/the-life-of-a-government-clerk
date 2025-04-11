@@ -45,7 +45,7 @@ const SIGNAL_CONNECTIONS: Dictionary = {
         ],
         SIGNAL_SPRITE_REMOVED: [
             SPRITE_ROOT, SPRITE_COORD, SPRITE_TAG, SCHEDULE, ACTOR_ACTION,
-            PC_ACTION,
+            PC_ACTION, DATA_HUB,
         ],
         SIGNAL_UI_FORCE_UPDATED: [
             SIDEBAR,

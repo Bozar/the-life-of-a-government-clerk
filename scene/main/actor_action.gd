@@ -39,10 +39,16 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
     match sub_tag:
         SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
             HandleRawFile.update_cooldown(actor_state)
+
         SubTag.CLERK:
             HandleClerk.update_progress(actor_state)
+
         SubTag.SERVANT:
             HandleServant.update_idle_duration(actor_state)
+
+        SubTag.EMPTY_CART:
+            HandleEmptyCart.update_duration(actor_state)
+
     NodeHub.ref_Schedule.start_next_turn()
 
 
@@ -77,10 +83,6 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
             SubTag.SERVANT:
                 new_state = ServantState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state
-                new_state.max_idle_duration \
-                        = NodeHub.ref_RandomNumber.get_int(
-                        GameData.MIN_IDLE_DURATION,
-                        GameData.MAX_IDLE_DURATION + 1)
 
             SubTag.SHELF:
                 new_state = ShelfState.new(i.sprite, i.sub_tag)
@@ -89,6 +91,10 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
 
             SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
                 new_state = ActorState.new(i.sprite, i.sub_tag)
+                _actor_states[id] = new_state
+
+            SubTag.EMPTY_CART:
+                new_state = EmptyCartState.new(i.sprite, i.sub_tag)
                 _actor_states[id] = new_state
 
             _:

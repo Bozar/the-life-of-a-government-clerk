@@ -117,6 +117,10 @@ static func handle_input(
                 HandleShelf.receive_tmp_file(actor_state, first_item_tag)
             else:
                 return
+
+        SubTag.EMPTY_CART:
+            _load_cart(actor, ref_DataHub)
+
         _:
             return
 
@@ -182,10 +186,7 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
             SpriteState.move_sprite(actor, new_actor_coord)
         else:
             SpriteFactory.remove_sprite(trap)
-    if remove_actor:
-        SpriteFactory.remove_sprite(actor)
-
-    Cart.pull_cart(ref_DataHub.pc, actor_coord, ref_DataHub.linked_cart_state)
+    _move_cart(actor, remove_actor, actor_coord, ref_DataHub)
 
 
 static func _is_valid_coord(coord: Vector2i) -> bool:
@@ -307,9 +308,7 @@ static func _load_document(ref_DataHub: DataHub) -> void:
     var sprite: Sprite2D =  Cart.get_last_slot(
             ref_DataHub.pc, ref_DataHub.linked_cart_state
             )
-    var state: CartState = Cart.get_state(
-            sprite, ref_DataHub.linked_cart_state
-            )
+    var state: CartState = Cart.get_state(sprite, ref_DataHub.linked_cart_state)
     state.item_tag = SubTag.DOCUMENT
 
 
@@ -365,18 +364,13 @@ static func _can_load_servant(ref_DataHub: DataHub) -> bool:
 
 
 static func _load_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
-    var sprite: Sprite2D = Cart.get_last_slot(ref_DataHub.pc,
-            ref_DataHub.linked_cart_state)
-    var state: CartState
-
-    state = Cart.get_state(sprite, ref_DataHub.linked_cart_state)
-    state.item_tag = SubTag.SERVANT
-
-    SpriteFactory.remove_sprite(actor)
-    Cart.pull_cart(
-            ref_DataHub.pc, ConvertCoord.get_coord(actor),
-            ref_DataHub.linked_cart_state
+    var sprite: Sprite2D = Cart.get_last_slot(
+            ref_DataHub.pc, ref_DataHub.linked_cart_state
             )
+    var state: CartState = Cart.get_state(sprite, ref_DataHub.linked_cart_state)
+
+    state.item_tag = SubTag.SERVANT
+    _move_cart(actor, true, ConvertCoord.get_coord(actor), ref_DataHub)
 
 
 static func _remove_all_servant(ref_DataHub: DataHub) -> bool:
@@ -406,4 +400,20 @@ static func _can_unload_servant(actor: Sprite2D, ref_DataHub: DataHub) -> bool:
 static func _is_long_cart(ref_DataHub: DataHub) -> bool:
     return Cart.count_cart(ref_DataHub.linked_cart_state) \
             >= GameData.CART_LENGTH_LONG
+
+
+static func _load_cart(actor: Sprite2D, ref_DataHub: DataHub) -> void:
+    Cart.add_cart(GameData.ADD_EMPTY_CART_LENGTH, ref_DataHub.linked_cart_state)
+    _move_cart(actor, true, ConvertCoord.get_coord(actor), ref_DataHub)
+
+
+static func _move_cart(
+        actor: Sprite2D, remove_actor: bool, coord: Vector2i,
+        ref_DataHub: DataHub
+        ) -> void:
+    if remove_actor:
+        SpriteFactory.remove_sprite(actor)
+    Cart.pull_cart(
+            ref_DataHub.pc, coord, ref_DataHub.linked_cart_state
+            )
 

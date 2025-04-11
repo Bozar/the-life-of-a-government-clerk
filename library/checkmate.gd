@@ -7,6 +7,7 @@ const PASSABLE_TAGS: Array = [
     SubTag.DOOR,
     SubTag.SERVANT,
     SubTag.TRASH,
+    SubTag.EMPTY_CART,
 ]
 
 

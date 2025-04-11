@@ -17,9 +17,8 @@ static func update_world(
             )
 
     # Create Trashes.
-    ref_DataHub.max_trap = min(
-            ref_DataHub.count_combined_idler, GameData.MAX_TRAP
-            )
+    ref_DataHub.max_trap = ref_DataHub.count_idler \
+            * (ref_DataHub.challenge_level + GameData.HIGH_LEVEL_MOD)
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, ref_DataHub, ref_RandomNumber,
             MAX_RETRY

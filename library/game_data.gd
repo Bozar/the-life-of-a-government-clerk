@@ -25,7 +25,7 @@ const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 # time. Since a Phone might be as far as 10 grids (PC_SIGHT_RANGE * 2) away from 
 # PC, approaching it requires tactics.
 const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
-const SAFE_LOAD_AMOUT_PERCENT: float = 0.7
+const SAFE_LOAD_AMOUT_PERCENT: float = 0.8
 
 const ADD_LOADS: Array = [
     [4, 3, 2, 1, 1,],
@@ -44,19 +44,19 @@ const CART_LENGTH_LONG: int = 7
 const ADD_EMPTY_CART_LENGTH: int = 1
 const ADD_EMPTY_CART_CHANCE: int = 50
 const MIN_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC
-const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC + MIN_DISTANCE_TO_PC
+const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 2
 
 
 ### Progress & Challenge ###
 
 const MAX_LEVEL: int = 5
 const MIN_LEVEL_LEAK: int = 2
+const LOW_LEVEL_MOD: int = 1
+const HIGH_LEVEL_MOD: int = 2
 
 const MAX_PHONE: int = 3
 const MIN_PHONE: int = 0
 const DEFAULT_PHONE: int = 2
-
-const MAX_TRAP: int = 25
 
 const NEW_ACTOR_INTERVAL: int = 5
 const NEW_TRAP_INTERVAL: int = 3
@@ -138,8 +138,8 @@ const RAW_FILE_COOLDOWN_MOD: int = 20
 const RAW_FILE_MIN_BASE_COOLDOWN: int = PAGE_CUP * RAW_FILE_COOLDOWN_MOD
 const RAW_FILE_MAX_BASE_COOLDOWN: int = PAGE_ATLAS * RAW_FILE_COOLDOWN_MOD
 
-const RAW_FILE_ADD_COOLDOWN_SEND: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
-const RAW_FILE_ADD_COOLDOWN_SERVANT: int = PAGE_CUP * RAW_FILE_COOLDOWN_MOD
+const RAW_FILE_ADD_COOLDOWN_SEND: int = PAGE_ATLAS * RAW_FILE_COOLDOWN_MOD
+const RAW_FILE_ADD_COOLDOWN_SERVANT: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
 
 const RAW_FILE_SEND_COUNTER: int = 1
 

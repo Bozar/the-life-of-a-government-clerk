@@ -111,7 +111,7 @@ var count_idler: int:
         var servants: int = HandleServant.count_idle_servant(
                 NodeHub.ref_ActorAction.get_actor_states(SubTag.SERVANT)
                 )
-        return servants * (challenge_level + 1)
+        return servants
 
 
 var turn_counter: int = GameData.MIN_TURN_COUNTER:

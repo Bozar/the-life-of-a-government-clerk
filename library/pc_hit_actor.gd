@@ -8,8 +8,8 @@ static func handle_input(
         ) -> void:
     var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
     var player_win: bool
-    var env_cooldown: int = (ref_DataHub.count_idler \
-            + ref_DataHub.challenge_level + GameData.LOW_LEVEL_MOD) \
+    var env_cooldown: int = (ref_DataHub.count_servant \
+            + ref_DataHub.challenge_level) \
             * GameData.RAW_FILE_ADD_COOLDOWN_SERVANT
     var first_item_tag: StringName = _get_first_item_tag(ref_DataHub)
 
@@ -43,7 +43,7 @@ static func handle_input(
                         ref_DataHub.raw_file_states, ref_RandomNumber
                         )
                 HandleClerk.reduce_progress(
-                        ref_DataHub.clerk_states, ref_RandomNumber
+                        ref_DataHub.clerk_states, ref_DataHub, ref_RandomNumber
                         )
                 HandleServant.reset_idle_duration(actor_state)
                 # Order matters. The Servant may be removed by _push_servant().

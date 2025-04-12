@@ -99,7 +99,8 @@ static func update_progress(state: ClerkState) -> void:
 
 
 static func reduce_progress(
-        clerk_states: Array, ref_RandomNumber: RandomNumber
+        clerk_states: Array, ref_DataHub: DataHub,
+        ref_RandomNumber: RandomNumber
         ) -> void:
     var dup_states: Array
 
@@ -113,6 +114,8 @@ static func reduce_progress(
         i.progress -= ref_RandomNumber.get_int(
                 GameData.MIN_PROGRESS_LEAK, GameData.MAX_PROGRESS_LEAK + 1
                 )
+        i.progress -= ref_DataHub.count_idler * GameData.PROGRESS_LEAK_SERVANT
+        i.progress = max(GameData.PROGRESS_CUP, i.progress)
         break
 
 
@@ -156,7 +159,7 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
 
 static func _is_valid_progress(progress: int) -> bool:
     return (progress > GameData.PROGRESS_CUP) \
-            and (progress < GameData.MAX_CLERK_PROGRESS )
+            and (progress < GameData.MAX_CLERK_PROGRESS)
 
 
 static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:

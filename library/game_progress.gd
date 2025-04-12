@@ -17,8 +17,8 @@ static func update_world(
             )
 
     # Create Trashes.
-    ref_DataHub.max_trap = ref_DataHub.count_idler \
-            * (ref_DataHub.challenge_level + GameData.HIGH_LEVEL_MOD)
+    ref_DataHub.max_trap = ref_DataHub.count_servant \
+            * (ref_DataHub.challenge_level + GameData.LEVEL_MOD)
     _create_rand_sprite(
             MainTag.TRAP, SubTag.TRASH, ref_DataHub, ref_RandomNumber,
             MAX_RETRY
@@ -27,7 +27,8 @@ static func update_world(
     # Reduce Clerk progress.
     if ref_DataHub.challenge_level >= GameData.MIN_LEVEL_LEAK:
         HandleClerk.reduce_progress(
-                ref_ActorAction.get_actor_states(SubTag.CLERK), ref_RandomNumber
+                ref_ActorAction.get_actor_states(SubTag.CLERK), ref_DataHub,
+                ref_RandomNumber
                 )
 
     # Create Phones.

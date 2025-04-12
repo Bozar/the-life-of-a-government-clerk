@@ -134,17 +134,27 @@ static func _create_rand_sprite(
             if _has_max_trap(ref_DataHub):
                 return
         _:
-            pass
+            return
 
     var coord: Vector2i = ref_DataHub.ground_coords[ref_DataHub.ground_index]
     var is_created: bool = false
 
     if _is_valid_coord(coord, ref_DataHub.pc_coord):
-        if _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
-            SpriteFactory.create_actor(SubTag.EMPTY_CART, coord, true)
-        else:
-            SpriteFactory.create_sprite(main_tag, sub_tag, coord, true)
-        is_created = true
+        match main_tag:
+            MainTag.ACTOR:
+                SpriteFactory.create_actor(sub_tag, coord, true)
+                is_created = true
+            MainTag.TRAP:
+                if _is_valid_trap_coord(coord, ref_DataHub):
+                    if _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
+                        SpriteFactory.create_actor(
+                                SubTag.EMPTY_CART, coord, true
+                                )
+                    else:
+                        SpriteFactory.create_trap(sub_tag, coord, true)
+                    is_created = true
+            _:
+                is_created = false
     _update_ground_index(ref_DataHub, ref_RandomNumber)
 
     if not is_created:
@@ -281,4 +291,11 @@ static func _can_create_empty_cart(
             and (Cart.count_cart(ref_DataHub.linked_cart_state) \
                     >= GameData.CART_LENGTH_SHORT) \
             and (not _is_safe_load_amount_percent(ref_DataHub))
+
+
+static func _is_valid_trap_coord(coord: Vector2i, ref_DataHub: DataHub) -> bool:
+    var count_x: int = ref_DataHub.get_count_trash_x(coord.x)
+    var count_y: int = ref_DataHub.get_count_trash_y(coord.y)
+    return (count_x < GameData.MAX_TRASH_PER_LINE) \
+            and (count_y < GameData.MAX_TRASH_PER_LINE)
 

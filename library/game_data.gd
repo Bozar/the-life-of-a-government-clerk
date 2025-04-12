@@ -21,8 +21,8 @@ const MIN_LOAD_PER_TURN: int = 1
 const MAX_LOAD_PER_TURN: int = 10
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 
-# 0.3 * PAGE_CUP (30) = 9 => Answering a Phone call grants 9 turns' survival 
-# time. Since a Phone might be as far as 10 grids (PC_SIGHT_RANGE * 2) away from 
+# 0.3 * PAGE_CUP (30) = 9 => Answering a Phone call grants 9 turns' survival
+# time. Since a Phone might be as far as 10 grids (PC_SIGHT_RANGE * 2) away from
 # PC, approaching it requires tactics.
 const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
 const SAFE_LOAD_AMOUT_PERCENT: float = 0.8
@@ -96,12 +96,16 @@ const SHELF_TO_SERVANT: int = 2
 const MIN_DISTANCE_TO_PC: int = PC_SIGHT_RANGE
 const MAX_DISTANCE_TO_PC: int = PC_SIGHT_RANGE * 2
 
+const MIN_IDLE_DURATION: int = PAGE_ATLAS
+const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
+
+
+### Trash ###
+
 # Ideally, it takes 4 turns to bypass a Trash.
 const BASE_DELAY: int = 3
 const LOAD_AMOUNT_MULTIPLER: float = 2.0
-
-const MIN_IDLE_DURATION: int = PAGE_ATLAS
-const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
+const MAX_TRASH_PER_LINE: int = 3
 
 
 ### Raw file ###
@@ -142,4 +146,3 @@ const RAW_FILE_ADD_COOLDOWN_SEND: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
 const RAW_FILE_ADD_COOLDOWN_SERVANT: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
 
 const RAW_FILE_SEND_COUNTER: int = 1
-

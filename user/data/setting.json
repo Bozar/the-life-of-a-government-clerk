@@ -5,8 +5,12 @@
     "palette": {
     },
     "HELP": {
-        "VALID_OPTIONS": ["rng_seed", "wizard_mode", "show_full_map", "palette"],
-        "HOW_TO_SET_PALETTE": "Add a key-value pair into 'palette' to customize color theme."
+        "VALID_OPTION": ["rng_seed", "wizard_mode", "show_full_map", "palette"],
+        "PALETTES": {
+            "GREY": "https://coolors.co/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529",
+            "GREEN": "https://coolors.co/d8f3dc-b7e4c7-95d5b2-74c69d-52b788-40916c-2d6a4f-1b4332-081c15",
+            "ORANGE": "https://coolors.co/f8b945-dc8a14-b9690b-854e19-a03401"
+        }
     },
     "DEFAULT_PALETTE": {
         "background": ["#212529", "#212529"],
@@ -15,13 +19,15 @@
         "trap": ["#F8B945", "#854E19"],
         "building": ["#6C757D", "#343A40"],
         "actor": ["#52B788", "#2D6A4F"],
-        "indicator": ["#6C757D", "#6C757D"]
+        "indicator": ["#6C757D", "#6C757D"],
+        "pc": ["#95D5B2", "#40916C"]
     },
     "BLUE_PALETTE": {
-        "actor": ["56add8", "0e628c"]
+        "actor": ["56ADD8", "0E628C"]
     },
     "GREY_PALETTE": {
         "trap": ["#ADB5BD", "#6C757D"],
-        "actor": ["#ADB5BD", "#6C757D"]
+        "actor": ["#ADB5BD", "#6C757D"],
+        "pc": ["#DEE2E6", "#6C757D"]
     }
 }

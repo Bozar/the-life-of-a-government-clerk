@@ -6,16 +6,21 @@ const BACKGROUND_BLACK: String = "#212529"
 const GREY: String = "#6C757D"
 const DARK_GREY: String = "#343A40"
 const LIGHT_GREY: String = "#ADB5BD"
+const PC_GREY: String = "#DEE2E6"
 
 # https://coolors.co/d8f3dc-b7e4c7-95d5b2-74c69d-52b788-40916c-2d6a4f-1b4332-081c15
 const GREEN: String = "#52B788"
 const DARK_GREEN: String = "#2D6A4F"
+const PC_GREEN: String = "#95D5B2"
+const DARK_PC_GREEN: String = "#40916C"
 
 # https://coolors.co/f8b945-dc8a14-b9690b-854e19-a03401
 const ORANGE: String = "#F8B945"
 const DARK_ORANGE: String = "#854E19"
 
 const DEBUG: String = "#FE4A49"
+const INVALID_COLORS: Array = [DEBUG, DEBUG]
+
 
 const DEFAULT_PALETTE: Dictionary = {
     MainTag.BACKGROUND: [BACKGROUND_BLACK, BACKGROUND_BLACK],
@@ -26,7 +31,10 @@ const DEFAULT_PALETTE: Dictionary = {
     MainTag.BUILDING: [GREY, DARK_GREY],
     MainTag.ACTOR: [GREEN, DARK_GREEN],
     MainTag.INDICATOR: [GREY, GREY],
+
+    SubTag.PC: [PC_GREEN, DARK_PC_GREEN],
 }
+
 
 const HTML_COLOR_REGEX: String = "^#{0,1}([0-9A-Fa-f]{3}){1,2}$"
 
@@ -37,9 +45,18 @@ static var _color_regex_compiled: bool = false
 
 
 static func get_color(
-        palette: Dictionary, main_tag: StringName, is_light_color: bool
+        palette: Dictionary, main_tag: StringName, sub_tag: StringName,
+        is_light_color: bool
         ) -> String:
-    var colors: Array = palette.get(main_tag, DEFAULT_PALETTE[main_tag])
+    # Desending priorities: palette[sub_tag], DEFAULT_PALETTE[sub_tag],
+    # palette[main_tag], DEFAULT_PALETTE[main_tag]
+    var colors: Array = palette.get(
+            sub_tag, DEFAULT_PALETTE.get(
+                    sub_tag, palette.get(main_tag, DEFAULT_PALETTE.get(
+                            main_tag, INVALID_COLORS)
+                            )
+                    )
+            )
     if is_light_color:
         return colors[0]
     return colors[1]

@@ -17,19 +17,22 @@ static func switch_sprite(sprite: Sprite2D, visual_tag: StringName) -> void:
 static func set_light_color(sprite: Sprite2D) -> void:
     var palette: Dictionary = TransferData.palette
     var main_tag: StringName = SpriteState.get_main_tag(sprite)
-    sprite.modulate = Palette.get_color(palette, main_tag, true)
+    var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
+    sprite.modulate = Palette.get_color(palette, main_tag, sub_tag, true)
 
 
 static func set_dark_color(sprite: Sprite2D) -> void:
     var palette: Dictionary = TransferData.palette
     var main_tag: StringName = SpriteState.get_main_tag(sprite)
-    sprite.modulate = Palette.get_color(palette, main_tag, false)
+    var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
+    sprite.modulate = Palette.get_color(palette, main_tag, sub_tag, false)
 
 
 static func set_background_color() -> void:
     var palette: Dictionary = TransferData.palette
-    RenderingServer.set_default_clear_color(Palette.get_color(palette,
-            MainTag.BACKGROUND, true))
+    RenderingServer.set_default_clear_color(
+            Palette.get_color(palette, MainTag.BACKGROUND, "", true)
+            )
 
 
 static func set_visibility(sprite: Sprite2D, is_visible: bool) -> void:

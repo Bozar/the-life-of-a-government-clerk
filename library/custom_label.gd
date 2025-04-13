@@ -18,8 +18,10 @@ func _set_font(is_light_color: bool) -> void:
 
     add_theme_font_override("font", _font)
     add_theme_font_size_override("font_size", 24)
-    add_theme_color_override("font_color", Palette.get_color(palette,
-            MainTag.GUI_TEXT, is_light_color))
+    add_theme_color_override(
+            "font_color", Palette.get_color(palette, MainTag.GUI_TEXT, "",
+            is_light_color)
+            )
 
 
 func _set_autowrap(minimum_size: Vector2 = Vector2(720, 0)) -> void:

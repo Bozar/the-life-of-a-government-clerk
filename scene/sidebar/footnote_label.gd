@@ -2,6 +2,9 @@ class_name FootnoteLabel
 extends CustomLabel
 
 
+var VERSION: String = "0.1.1"
+
+
 func init_gui() -> void:
     _set_font(false)
     text = "%s\n%s\n%s" % [
@@ -11,9 +14,8 @@ func init_gui() -> void:
 
 func _get_version() -> String:
     var wizard: String = "+" if TransferData.wizard_mode else ""
-    var version: String = "0.1.0"
 
-    return "%s%s" % [wizard, version]
+    return "%s%s" % [wizard, VERSION]
 
 
 func _get_menu() -> String:

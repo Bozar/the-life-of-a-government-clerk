@@ -26,6 +26,8 @@ func _unhandled_input(event: InputEvent) -> void:
             return
         elif _handle_copy_seed(event):
             return
+        elif _handle_copy_setting(event):
+            return
         elif _handle_restart_game(event):
             return
         elif _handle_replay_game(event):
@@ -105,6 +107,13 @@ func _handle_quit_game(event: InputEvent) -> bool:
 func _handle_copy_seed(event: InputEvent) -> bool:
     if event.is_action_pressed(InputTag.COPY_SEED):
         NodeHub.ref_SignalHub.action_pressed.emit(InputTag.COPY_SEED)
+        return true
+    return false
+
+
+func _handle_copy_setting(event: InputEvent) -> bool:
+    if event.is_action_pressed(InputTag.COPY_SETTING):
+        NodeHub.ref_SignalHub.action_pressed.emit(InputTag.COPY_SETTING)
         return true
     return false
 

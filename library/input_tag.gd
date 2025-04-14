@@ -31,6 +31,7 @@ const RESTART_GAME: StringName = &"restart_game"
 const REPLAY_GAME: StringName = &"replay_game"
 const QUIT_GAME: StringName = &"quit_game"
 const COPY_SEED: StringName = &"copy_seed"
+const COPY_SETTING: StringName = &"copy_setting"
 
 
 ### Menu ###

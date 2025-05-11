@@ -11,6 +11,13 @@ const EDIT_TAGS: Array = [
     DungeonPrefab.FLIP_VERTICALLY, DungeonPrefab.FLIP_HORIZONTALLY,
 ]
 
+const INDEX_TO_START_COORD: Dictionary = {
+    0: Vector2i(1, 1),
+    1: Vector2i(7, 0),
+    2: Vector2i(0, 6),
+    3: Vector2i(14, 9),
+}
+
 
 const WALL_CHAR: StringName = "#"
 const DOOR_CHAR: StringName = "+"
@@ -61,7 +68,8 @@ func create_world() -> void:
     var pc_coord: Vector2i
 
     _create_floor(tagged_sprites)
-    _test(occupied_grids, tagged_sprites)
+    _test_block(occupied_grids, tagged_sprites)
+    #_test(occupied_grids, tagged_sprites)
     # _create_from_file(PATH_TO_PREFAB, occupied_grids, tagged_sprites)
     pc_coord = _create_pc(occupied_grids, tagged_sprites)
     _create_indicator(pc_coord, tagged_sprites)
@@ -228,4 +236,28 @@ func _test(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
                     packed_prefab.prefab[x][y], coord,
                     occupied_grids, tagged_sprites
                     )
+
+
+func _test_block(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
+    const PATH_TO_FILE: Array = [
+        "res://resource/dungeon_prefab/aa1.txt",
+        "res://resource/dungeon_prefab/top_right.txt",
+        "res://resource/dungeon_prefab/bottom_left.txt",
+        "res://resource/dungeon_prefab/aa2.txt",
+    ]
+    var parsed_file: ParsedFile
+    var packed_prefab: PackedPrefab
+    var coord: Vector2i = Vector2i(0, 0)
+
+    for i: int in range(0, PATH_TO_FILE.size()):
+        parsed_file = FileIo.read_as_line(PATH_TO_FILE[i])
+        packed_prefab = DungeonPrefab.get_prefab(parsed_file.output_line, [])
+        for x: int in range(0, packed_prefab.max_x):
+            for y: int in range(0, packed_prefab.max_y):
+                coord.x = x + INDEX_TO_START_COORD[i].x
+                coord.y = y + INDEX_TO_START_COORD[i].y
+                _create_from_character(
+                        packed_prefab.prefab[x][y], coord,
+                        occupied_grids, tagged_sprites
+                )
 

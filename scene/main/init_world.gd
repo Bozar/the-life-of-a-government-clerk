@@ -65,10 +65,12 @@ const CHAR_TO_TAG: Dictionary = {
 func create_world() -> void:
     var tagged_sprites: Array = []
     var occupied_grids: Dictionary = Map2D.init_map(false)
+    # {y * 100 + x: true}
+    var overlap_grids: Dictionary
     var pc_coord: Vector2i
 
     _create_floor(tagged_sprites)
-    _test_block(occupied_grids, tagged_sprites)
+    _test_block(occupied_grids, tagged_sprites, overlap_grids)
     #_test(occupied_grids, tagged_sprites)
     # _create_from_file(PATH_TO_PREFAB, occupied_grids, tagged_sprites)
     pc_coord = _create_pc(occupied_grids, tagged_sprites)
@@ -238,7 +240,10 @@ func _test(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
                     )
 
 
-func _test_block(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
+func _test_block(
+        occupied_grids: Dictionary, tagged_sprites: Array,
+        overlap_grids: Dictionary
+) -> void:
     const PATH_TO_FILE: Array = [
         "res://resource/dungeon_prefab/aa1.txt",
         "res://resource/dungeon_prefab/top_right.txt",
@@ -248,6 +253,7 @@ func _test_block(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
     var parsed_file: ParsedFile
     var packed_prefab: PackedPrefab
     var coord: Vector2i = Vector2i(0, 0)
+    var hashed_coord: int
 
     for i: int in range(0, PATH_TO_FILE.size()):
         parsed_file = FileIo.read_as_line(PATH_TO_FILE[i])
@@ -256,6 +262,11 @@ func _test_block(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
             for y: int in range(0, packed_prefab.max_y):
                 coord.x = x + INDEX_TO_START_COORD[i].x
                 coord.y = y + INDEX_TO_START_COORD[i].y
+                hashed_coord = 100 * coord.y + coord.x
+                if i == 1:
+                    overlap_grids[hashed_coord] = true
+                elif (i == 2) and overlap_grids.has(hashed_coord):
+                    continue
                 _create_from_character(
                         packed_prefab.prefab[x][y], coord,
                         occupied_grids, tagged_sprites

@@ -24,41 +24,40 @@ const DOOR_CHAR: StringName = "+"
 const DESK_CHAR: StringName = "="
 const SPECIAL_FLOOR_CHAR: StringName = "-"
 const PHONE_BOOTH_CHAR: StringName = "P"
+const SHELF_CHAR: StringName = "%"
 
-const CLERK_CHAR: StringName = "K"
+const CLERK_CHAR: StringName = "C"
 const OFFICER_CHAR: StringName = "O"
 
-const ATLAS_CHAR: StringName = "A"
-const BOOK_CHAR: StringName = "B"
-const CUP_CHAR: StringName = "C"
-const ENCYCLPEDIA_CHAR: StringName = "E"
-const FIELD_REPORT_CHAR: StringName = "F"
+const RAW_FILE_A_CHAR: StringName = "A"
+const RAW_FILE_B_CHAR: StringName = "B"
+const SERVICE_1_CHAR: StringName = "1"
+const SERVICE_2_CHAR: StringName = "2"
 
-const GARAGE_CHAR: StringName = "?"
-const SALARY_CHAR: StringName = "$"
-const STATION_CHAR: StringName = "Z"
-const SHELF_CHAR: StringName = "%"
+
+const RAW_FILE_SUB_TAGS: Array = [
+    SubTag.ATLAS,
+    SubTag.BOOK,
+    SubTag.CUP,
+    SubTag.ENCYCLOPEDIA,
+    SubTag.FIELD_REPORT,
+]
+const SERVICE_SUB_TAGS: Array = [
+    SubTag.GARAGE,
+    SubTag.SALARY,
+    SubTag.STATION,
+]
 
 const CHAR_TO_TAG: Dictionary = {
     WALL_CHAR: SubTag.WALL,
     DOOR_CHAR: SubTag.DOOR,
     SPECIAL_FLOOR_CHAR: SubTag.INTERNAL_FLOOR,
     PHONE_BOOTH_CHAR: SubTag.PHONE_BOOTH,
+    SHELF_CHAR: SubTag.SHELF,
 
     CLERK_CHAR: SubTag.CLERK,
     OFFICER_CHAR: SubTag.OFFICER,
     DESK_CHAR: SubTag.DESK,
-
-    ATLAS_CHAR: SubTag.ATLAS,
-    BOOK_CHAR: SubTag.BOOK,
-    CUP_CHAR: SubTag.CUP,
-    ENCYCLPEDIA_CHAR: SubTag.ENCYCLOPEDIA,
-    FIELD_REPORT_CHAR: SubTag.FIELD_REPORT,
-
-    GARAGE_CHAR: SubTag.GARAGE,
-    SALARY_CHAR: SubTag.SALARY,
-    STATION_CHAR: SubTag.STATION,
-    SHELF_CHAR: SubTag.SHELF,
 }
 
 
@@ -71,8 +70,6 @@ func create_world() -> void:
 
     _create_floor(tagged_sprites)
     _test_block(occupied_grids, tagged_sprites, overlap_grids)
-    #_test(occupied_grids, tagged_sprites)
-    # _create_from_file(PATH_TO_PREFAB, occupied_grids, tagged_sprites)
     pc_coord = _create_pc(occupied_grids, tagged_sprites)
     _create_indicator(pc_coord, tagged_sprites)
 
@@ -123,60 +120,15 @@ func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
         new_offset = indicators[i][1]
         tagged_sprites.push_back(CreateSprite.create(
                 MainTag.INDICATOR, i, new_coord, new_offset
-                ))
-
-
-func _create_from_file(
-        path_to_file: String, occupied_grids: Dictionary, tagged_sprites: Array
-        ) -> void:
-    var prefabs: Array = FileIo.get_files(path_to_file)
-    var file_name: String
-    var parsed: ParsedFile
-    var packed_prefab: PackedPrefab
-    var shift_coord: Vector2i = Vector2i(0, 0)
-    var row: int = 0
-
-    ArrayHelper.shuffle(prefabs, NodeHub.ref_RandomNumber)
-    prefabs.resize(MAX_PREFABS)
-    for i: int in range(0, prefabs.size()):
-        file_name = prefabs[i]
-        parsed = FileIo.read_as_line(file_name)
-        if not parsed.parse_success:
-            return
-
-        # print(file_name)
-        packed_prefab = DungeonPrefab.get_prefab(
-                parsed.output_line, _get_edit_tags(EDIT_TAGS)
-                )
-
-        if (i > 0) and (i % MAX_PREFABS_PER_ROW == 0):
-            row += 1
-        shift_coord.x = (i - MAX_PREFABS_PER_ROW * row) * packed_prefab.max_x
-        shift_coord.y = row * packed_prefab.max_y
-
-        _create_from_prefab(
-                packed_prefab, shift_coord, occupied_grids, tagged_sprites
-                )
-
-
-func _create_from_prefab(
-        packed_prefab: PackedPrefab, shift_coord: Vector2i,
-        occupied_grids: Dictionary, tagged_sprites: Array
-        ) -> void:
-    var coord: Vector2i = Vector2i(0, 0)
-
-    for y: int in range(0, packed_prefab.max_y):
-        for x: int in range(0, packed_prefab.max_x):
-            coord.x = x + shift_coord.x
-            coord.y = y + shift_coord.y
-            _create_from_character(packed_prefab.prefab[x][y], coord,
-                    occupied_grids, tagged_sprites)
+        ))
 
 
 func _create_from_character(
         character: String, coord: Vector2i,
-        occupied_grids: Dictionary, tagged_sprites: Array
-        ) -> void:
+        occupied_grids: Dictionary, tagged_sprites: Array,
+        coords_raw_a: Array, coords_raw_b: Array,
+        coords_service_1: Array, coords_service_2: Array
+) -> void:
     var save_tagged_sprite: TaggedSprite
 
     occupied_grids[coord.x][coord.y] = true
@@ -200,13 +152,24 @@ func _create_from_character(
                     )
             tagged_sprites.push_back(save_tagged_sprite)
 
-        CLERK_CHAR, OFFICER_CHAR, ATLAS_CHAR, BOOK_CHAR, CUP_CHAR, \
-                ENCYCLPEDIA_CHAR, FIELD_REPORT_CHAR, GARAGE_CHAR, SALARY_CHAR, \
-                STATION_CHAR, SHELF_CHAR:
+        CLERK_CHAR, OFFICER_CHAR, SHELF_CHAR:
             save_tagged_sprite = SpriteFactory.create_actor(
                     CHAR_TO_TAG[character], coord, false
                     )
             tagged_sprites.push_back(save_tagged_sprite)
+
+        RAW_FILE_A_CHAR:
+            coords_raw_a.push_back(coord)
+
+        RAW_FILE_B_CHAR:
+            if coord.x < DungeonSize.CENTER_X:
+                coords_raw_b.push_back(coord)
+
+        SERVICE_1_CHAR:
+            coords_service_1.push_back(coord)
+
+        SERVICE_2_CHAR:
+            coords_service_2.push_back(coord)
 
         _:
             occupied_grids[coord.x][coord.y] = false
@@ -221,43 +184,40 @@ func _get_edit_tags(edit_tags: Array) -> Array:
     return tags
 
 
-func _test(occupied_grids: Dictionary, tagged_sprites: Array) -> void:
-    var parsed_file: ParsedFile = FileIo.read_as_line(
-            "res://resource/dungeon_prefab/test.txt"
-            )
-    var packed_prefab: PackedPrefab = DungeonPrefab.get_prefab(
-            parsed_file.output_line, []
-            )
-    var coord: Vector2i = Vector2i(0, 0)
-
-    for x: int in range(0, packed_prefab.max_x):
-        for y: int in range(0, packed_prefab.max_y):
-            coord.x = x
-            coord.y = y
-            _create_from_character(
-                    packed_prefab.prefab[x][y], coord,
-                    occupied_grids, tagged_sprites
-                    )
-
-
 func _test_block(
         occupied_grids: Dictionary, tagged_sprites: Array,
         overlap_grids: Dictionary
 ) -> void:
     const PATH_TO_FILE: Array = [
         "res://resource/dungeon_prefab/aa1.txt",
-        "res://resource/dungeon_prefab/top_right.txt",
-        "res://resource/dungeon_prefab/bottom_left.txt",
+        "res://resource/dungeon_prefab/quarter.txt",
+        "res://resource/dungeon_prefab/quarter.txt",
         "res://resource/dungeon_prefab/aa2.txt",
     ]
     var parsed_file: ParsedFile
     var packed_prefab: PackedPrefab
     var coord: Vector2i = Vector2i(0, 0)
     var hashed_coord: int
+    var transforms: Array = [
+        DungeonPrefab.DO_NOT_TRANSFORM, DungeonPrefab.DO_NOT_TRANSFORM
+    ]
+    var coords_raw_a: Array
+    var coords_raw_b: Array
+    var coords_service_1: Array
+    var coords_service_2: Array
+    var save_tagged_sprite: TaggedSprite
 
     for i: int in range(0, PATH_TO_FILE.size()):
         parsed_file = FileIo.read_as_line(PATH_TO_FILE[i])
-        packed_prefab = DungeonPrefab.get_prefab(parsed_file.output_line, [])
+        if i == 2:
+            transforms[0] = DungeonPrefab.FLIP_HORIZONTALLY
+            transforms[1] = DungeonPrefab.FLIP_VERTICALLY
+        else:
+            transforms[0] = DungeonPrefab.DO_NOT_TRANSFORM
+            transforms[1] = DungeonPrefab.DO_NOT_TRANSFORM
+        packed_prefab = DungeonPrefab.get_prefab(
+                parsed_file.output_line, transforms
+        )
         for x: int in range(0, packed_prefab.max_x):
             for y: int in range(0, packed_prefab.max_y):
                 coord.x = x + INDEX_TO_START_COORD[i].x
@@ -269,6 +229,29 @@ func _test_block(
                     continue
                 _create_from_character(
                         packed_prefab.prefab[x][y], coord,
-                        occupied_grids, tagged_sprites
+                        occupied_grids, tagged_sprites,
+                        coords_raw_a, coords_raw_b,
+                        coords_service_1, coords_service_2
                 )
+
+    #ArrayHelper.shuffle(coords_raw_b, NodeHub.ref_RandomNumber)
+    ArrayHelper.shuffle(coords_service_2, NodeHub.ref_RandomNumber)
+
+    coords_raw_a.push_back(coords_raw_b.pop_back())
+    coords_service_1.push_back(coords_service_2.pop_back())
+
+    ArrayHelper.shuffle(coords_raw_a, NodeHub.ref_RandomNumber)
+    ArrayHelper.shuffle(coords_service_1, NodeHub.ref_RandomNumber)
+
+    for i: int in range(0, coords_raw_a.size()):
+        save_tagged_sprite = SpriteFactory.create_actor(
+                RAW_FILE_SUB_TAGS[i], coords_raw_a[i], false
+        )
+        tagged_sprites.push_back(save_tagged_sprite)
+
+    for i: int in range(0, coords_service_1.size()):
+        save_tagged_sprite = SpriteFactory.create_actor(
+                SERVICE_SUB_TAGS[i], coords_service_1[i], false
+        )
+        tagged_sprites.push_back(save_tagged_sprite)
 

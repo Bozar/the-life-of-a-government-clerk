@@ -4,9 +4,8 @@ extends Node2D
 
 const INDICATOR_OFFSET: int = 32
 
-const PATH_TO_PREFAB: StringName = "res://resource/dungeon_prefab/"
-const MAX_PREFABS_PER_ROW: int = 3
-const MAX_PREFABS: int = 9
+const PATH_TO_ROOM: StringName = "res://resource/dungeon_prefab/room/"
+const PATH_TO_QUARTER: StringName = "res://resource/dungeon_prefab/quarter/"
 const EDIT_TAGS: Array = [
     DungeonPrefab.FLIP_VERTICALLY, DungeonPrefab.FLIP_HORIZONTALLY,
 ]
@@ -188,33 +187,40 @@ func _test_block(
         occupied_grids: Dictionary, tagged_sprites: Array,
         overlap_grids: Dictionary
 ) -> void:
-    const PATH_TO_FILE: Array = [
-        "res://resource/dungeon_prefab/aa1.txt",
-        "res://resource/dungeon_prefab/quarter.txt",
-        "res://resource/dungeon_prefab/quarter.txt",
-        "res://resource/dungeon_prefab/aa2.txt",
+    var path_to_rooms: Array = FileIo.get_files(PATH_TO_ROOM)
+    var path_to_quarters: Array = FileIo.get_files(PATH_TO_QUARTER)
+
+    ArrayHelper.shuffle(path_to_rooms, NodeHub.ref_RandomNumber)
+    ArrayHelper.shuffle(path_to_quarters, NodeHub.ref_RandomNumber)
+
+    var path_to_file: Array = [
+        path_to_rooms[0],
+        path_to_quarters[0],
+        path_to_quarters[1],
+        path_to_rooms[1],
     ]
     var parsed_file: ParsedFile
     var packed_prefab: PackedPrefab
     var coord: Vector2i = Vector2i(0, 0)
     var hashed_coord: int
-    var transforms: Array = [
-        DungeonPrefab.DO_NOT_TRANSFORM, DungeonPrefab.DO_NOT_TRANSFORM
-    ]
+    var transforms: Array 
     var coords_raw_a: Array
     var coords_raw_b: Array
     var coords_service_1: Array
     var coords_service_2: Array
     var save_tagged_sprite: TaggedSprite
 
-    for i: int in range(0, PATH_TO_FILE.size()):
-        parsed_file = FileIo.read_as_line(PATH_TO_FILE[i])
+    for i: int in range(0, path_to_file.size()):
+        parsed_file = FileIo.read_as_line(path_to_file[i])
         if i == 2:
-            transforms[0] = DungeonPrefab.FLIP_HORIZONTALLY
-            transforms[1] = DungeonPrefab.FLIP_VERTICALLY
+            transforms = [
+                DungeonPrefab.FLIP_HORIZONTALLY,
+                DungeonPrefab.FLIP_VERTICALLY
+            ]
+        elif i == 1:
+            transforms = []
         else:
-            transforms[0] = DungeonPrefab.DO_NOT_TRANSFORM
-            transforms[1] = DungeonPrefab.DO_NOT_TRANSFORM
+            transforms = _get_edit_tags(EDIT_TAGS)
         packed_prefab = DungeonPrefab.get_prefab(
                 parsed_file.output_line, transforms
         )

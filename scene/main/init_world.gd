@@ -6,7 +6,7 @@ const INDICATOR_OFFSET: int = 32
 
 const PATH_TO_ROOM: StringName = "res://resource/dungeon_prefab/room/"
 const PATH_TO_QUARTER: StringName = "res://resource/dungeon_prefab/quarter/"
-const EDIT_TAGS: Array = [
+const TRANSFORM_TAGS: Array = [
     DungeonPrefab.FLIP_VERTICALLY, DungeonPrefab.FLIP_HORIZONTALLY,
 ]
 
@@ -63,12 +63,10 @@ const CHAR_TO_TAG: Dictionary = {
 func create_world() -> void:
     var tagged_sprites: Array = []
     var occupied_grids: Dictionary = Map2D.init_map(false)
-    # {y * 100 + x: true}
-    var overlap_grids: Dictionary
     var pc_coord: Vector2i
 
     _create_floor(tagged_sprites)
-    _test_block(occupied_grids, tagged_sprites, overlap_grids)
+    _create_from_file(occupied_grids, tagged_sprites)
     pc_coord = _create_pc(occupied_grids, tagged_sprites)
     _create_indicator(pc_coord, tagged_sprites)
 
@@ -86,7 +84,7 @@ func _create_pc(occupied_grids: Dictionary, tagged_sprites: Array) -> Vector2i:
 
     tagged_sprites.push_back(SpriteFactory.create_actor(
             SubTag.PC, coord, false
-            ))
+    ))
     return coord
 
 
@@ -95,7 +93,7 @@ func _create_floor(tagged_sprites: Array) -> void:
         for y: int in range(0, DungeonSize.MAX_Y):
             tagged_sprites.push_back(SpriteFactory.create_ground(
                     SubTag.DUNGEON_FLOOR, Vector2i(x, y), false
-                    ))
+            ))
 
 
 func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
@@ -122,6 +120,10 @@ func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
         ))
 
 
+# Create a sprite now:
+#>> character, coord, occupied_grids, tagged_sprites
+# Create a sprite later:
+#>> coords_raw_a, coords_raw_b, coords_service_1, coords_service_2
 func _create_from_character(
         character: String, coord: Vector2i,
         occupied_grids: Dictionary, tagged_sprites: Array,
@@ -132,34 +134,29 @@ func _create_from_character(
 
     occupied_grids[coord.x][coord.y] = true
     match character:
-        WALL_CHAR, DOOR_CHAR, DESK_CHAR:
+        WALL_CHAR, DOOR_CHAR, DESK_CHAR, PHONE_BOOTH_CHAR:
             save_tagged_sprite = SpriteFactory.create_building(
                     CHAR_TO_TAG[character], coord, false
-                    )
+            )
             tagged_sprites.push_back(save_tagged_sprite)
 
         SPECIAL_FLOOR_CHAR:
             save_tagged_sprite = SpriteFactory.create_ground(
                     CHAR_TO_TAG[character], coord, false
-                    )
+            )
             save_tagged_sprite.sprite.z_index = GameData.INTERNAL_FLOOR_Z_LAYER
-            tagged_sprites.push_back(save_tagged_sprite)
-
-        PHONE_BOOTH_CHAR:
-            save_tagged_sprite = SpriteFactory.create_building(
-                    CHAR_TO_TAG[character], coord, false
-                    )
             tagged_sprites.push_back(save_tagged_sprite)
 
         CLERK_CHAR, OFFICER_CHAR, SHELF_CHAR:
             save_tagged_sprite = SpriteFactory.create_actor(
                     CHAR_TO_TAG[character], coord, false
-                    )
+            )
             tagged_sprites.push_back(save_tagged_sprite)
 
         RAW_FILE_A_CHAR:
             coords_raw_a.push_back(coord)
 
+        # Only one Raw File Node in the middle-left row.
         RAW_FILE_B_CHAR:
             if coord.x < DungeonSize.CENTER_X:
                 coords_raw_b.push_back(coord)
@@ -167,72 +164,77 @@ func _create_from_character(
         SERVICE_1_CHAR:
             coords_service_1.push_back(coord)
 
+        # Only one Service Station in the middle-right row.
         SERVICE_2_CHAR:
-            coords_service_2.push_back(coord)
+            if coord.x > DungeonSize.CENTER_X:
+                coords_service_2.push_back(coord)
 
         _:
             occupied_grids[coord.x][coord.y] = false
 
 
-func _get_edit_tags(edit_tags: Array) -> Array:
-    var tags: Array = []
+func _get_transform_tags(prefab_index: int, transform_tags: Array) -> Array:
+    var tags: Array
 
-    for i: int in edit_tags:
-        if NodeHub.ref_RandomNumber.get_percent_chance(50):
-            tags.push_back(i)
+    # Do not transform the first quarter.
+    if prefab_index == 1:
+        tags = []
+    # Flip the second quarter twice to fit into the bottom left corner.
+    elif prefab_index == 2:
+        tags = [
+                DungeonPrefab.FLIP_VERTICALLY,
+                DungeonPrefab.FLIP_HORIZONTALLY,
+        ]
+    # Transform two rooms randomly based on possible options.
+    else:
+        for i: int in transform_tags:
+            if NodeHub.ref_RandomNumber.get_percent_chance(50):
+                tags.push_back(i)
     return tags
 
 
-func _test_block(
-        occupied_grids: Dictionary, tagged_sprites: Array,
-        overlap_grids: Dictionary
+func _create_from_file(
+        occupied_grids: Dictionary, tagged_sprites: Array
 ) -> void:
-    var path_to_rooms: Array = FileIo.get_files(PATH_TO_ROOM)
-    var path_to_quarters: Array = FileIo.get_files(PATH_TO_QUARTER)
+    var path_to_file: Array = _get_file_path(PATH_TO_ROOM, PATH_TO_QUARTER)
 
-    ArrayHelper.shuffle(path_to_rooms, NodeHub.ref_RandomNumber)
-    ArrayHelper.shuffle(path_to_quarters, NodeHub.ref_RandomNumber)
-
-    var path_to_file: Array = [
-        path_to_rooms[0],
-        path_to_quarters[0],
-        path_to_quarters[1],
-        path_to_rooms[1],
-    ]
     var parsed_file: ParsedFile
+    var transform_tags: Array
     var packed_prefab: PackedPrefab
+
     var coord: Vector2i = Vector2i(0, 0)
+    # y * 100 + x
     var hashed_coord: int
-    var transforms: Array 
+    # Two quarter blocks overlap each other. Therefore the top-right corner of
+    # the second quarter block is ignored.
+    # {y * 100 + x: true}
+    var overlap_grids: Dictionary
+
     var coords_raw_a: Array
     var coords_raw_b: Array
     var coords_service_1: Array
     var coords_service_2: Array
-    var save_tagged_sprite: TaggedSprite
 
     for i: int in range(0, path_to_file.size()):
         parsed_file = FileIo.read_as_line(path_to_file[i])
-        if i == 2:
-            transforms = [
-                DungeonPrefab.FLIP_HORIZONTALLY,
-                DungeonPrefab.FLIP_VERTICALLY
-            ]
-        elif i == 1:
-            transforms = []
-        else:
-            transforms = _get_edit_tags(EDIT_TAGS)
+        transform_tags = _get_transform_tags(i, TRANSFORM_TAGS)
         packed_prefab = DungeonPrefab.get_prefab(
-                parsed_file.output_line, transforms
+                parsed_file.output_line, transform_tags
         )
+
         for x: int in range(0, packed_prefab.max_x):
             for y: int in range(0, packed_prefab.max_y):
                 coord.x = x + INDEX_TO_START_COORD[i].x
                 coord.y = y + INDEX_TO_START_COORD[i].y
+
                 hashed_coord = 100 * coord.y + coord.x
+                # Record coords in the first quarter block.
                 if i == 1:
                     overlap_grids[hashed_coord] = true
+                # Skip overlap area in the second quarter block.
                 elif (i == 2) and overlap_grids.has(hashed_coord):
                     continue
+
                 _create_from_character(
                         packed_prefab.prefab[x][y], coord,
                         occupied_grids, tagged_sprites,
@@ -240,14 +242,43 @@ func _test_block(
                         coords_service_1, coords_service_2
                 )
 
-    #ArrayHelper.shuffle(coords_raw_b, NodeHub.ref_RandomNumber)
-    ArrayHelper.shuffle(coords_service_2, NodeHub.ref_RandomNumber)
+    _create_from_coord(
+            tagged_sprites,
+            coords_raw_a, coords_raw_b, coords_service_1, coords_service_2
+    )
 
-    coords_raw_a.push_back(coords_raw_b.pop_back())
-    coords_service_1.push_back(coords_service_2.pop_back())
 
-    ArrayHelper.shuffle(coords_raw_a, NodeHub.ref_RandomNumber)
-    ArrayHelper.shuffle(coords_service_1, NodeHub.ref_RandomNumber)
+func _get_file_path(
+        path_to_room: StringName, path_to_quarter: StringName
+) -> Array:
+    var rooms: Array = FileIo.get_files(path_to_room)
+    var quarters: Array = FileIo.get_files(path_to_quarter)
+
+    ArrayHelper.shuffle(rooms, NodeHub.ref_RandomNumber)
+    ArrayHelper.shuffle(quarters, NodeHub.ref_RandomNumber)
+
+    return [
+        rooms[0],
+        quarters[0],
+        quarters[1],
+        rooms[1],
+    ]
+
+
+func _get_merged_coords(source_coords: Array, new_coord: Vector2i) -> void:
+    source_coords.push_back(new_coord)
+    ArrayHelper.shuffle(source_coords, NodeHub.ref_RandomNumber)
+
+
+func _create_from_coord(
+        tagged_sprites: Array,
+        coords_raw_a: Array, coords_raw_b: Array,
+        coords_service_1: Array, coords_service_2: Array
+) -> void:
+    var save_tagged_sprite: TaggedSprite
+
+    _get_merged_coords(coords_raw_a, coords_raw_b.pop_back())
+    _get_merged_coords(coords_service_1, coords_service_2.pop_back())
 
     for i: int in range(0, coords_raw_a.size()):
         save_tagged_sprite = SpriteFactory.create_actor(

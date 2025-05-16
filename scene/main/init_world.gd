@@ -2,6 +2,8 @@ class_name InitWorld
 extends Node2D
 
 
+const DEBUG: bool = true
+const PERCENT_CHANCE: int = 50
 const INDICATOR_OFFSET: int = 32
 
 const PATH_TO_ROOM: StringName = "res://resource/dungeon_prefab/room/"
@@ -19,6 +21,7 @@ const INDEX_TO_START_COORD: Dictionary = {
 
 
 const WALL_CHAR: StringName = "#"
+const OPTIONAL_WALL_CHAR: StringName = "?"
 const DOOR_CHAR: StringName = "+"
 const DESK_CHAR: StringName = "="
 const SPECIAL_FLOOR_CHAR: StringName = "-"
@@ -128,7 +131,8 @@ func _create_from_character(
         character: String, coord: Vector2i,
         occupied_grids: Dictionary, tagged_sprites: Array,
         coords_raw_a: Array, coords_raw_b: Array,
-        coords_service_1: Array, coords_service_2: Array
+        coords_service_1: Array, coords_service_2: Array,
+        coords_optional_wall: Array
 ) -> void:
     var save_tagged_sprite: TaggedSprite
 
@@ -169,6 +173,9 @@ func _create_from_character(
             if coord.x > DungeonSize.CENTER_X:
                 coords_service_2.push_back(coord)
 
+        OPTIONAL_WALL_CHAR:
+            coords_optional_wall.push_back(coord)
+
         _:
             occupied_grids[coord.x][coord.y] = false
 
@@ -188,7 +195,7 @@ func _get_transform_tags(prefab_index: int, transform_tags: Array) -> Array:
     # Transform two rooms randomly based on possible options.
     else:
         for i: int in transform_tags:
-            if NodeHub.ref_RandomNumber.get_percent_chance(50):
+            if NodeHub.ref_RandomNumber.get_percent_chance(PERCENT_CHANCE):
                 tags.push_back(i)
     return tags
 
@@ -214,6 +221,7 @@ func _create_from_file(
     var coords_raw_b: Array
     var coords_service_1: Array
     var coords_service_2: Array
+    var coords_optional_wall: Array
 
     for i: int in range(0, path_to_file.size()):
         parsed_file = FileIo.read_as_line(path_to_file[i])
@@ -239,12 +247,14 @@ func _create_from_file(
                         packed_prefab.prefab[x][y], coord,
                         occupied_grids, tagged_sprites,
                         coords_raw_a, coords_raw_b,
-                        coords_service_1, coords_service_2
+                        coords_service_1, coords_service_2,
+                        coords_optional_wall
                 )
 
     _create_from_coord(
             tagged_sprites,
-            coords_raw_a, coords_raw_b, coords_service_1, coords_service_2
+            coords_raw_a, coords_raw_b, coords_service_1, coords_service_2,
+            coords_optional_wall
     )
 
 
@@ -256,6 +266,11 @@ func _get_file_path(
 
     ArrayHelper.shuffle(rooms, NodeHub.ref_RandomNumber)
     ArrayHelper.shuffle(quarters, NodeHub.ref_RandomNumber)
+
+    if DEBUG:
+        for i: int in range(0, 2):
+            print(rooms[i])
+            print(quarters[i])
 
     return [
         rooms[0],
@@ -270,15 +285,22 @@ func _get_merged_coords(source_coords: Array, new_coord: Vector2i) -> void:
     ArrayHelper.shuffle(source_coords, NodeHub.ref_RandomNumber)
 
 
+func _get_halved_coords(source_coords: Array) -> void:
+    ArrayHelper.shuffle(source_coords, NodeHub.ref_RandomNumber)
+    source_coords.resize(floor(source_coords.size() * 0.5))
+
+
 func _create_from_coord(
         tagged_sprites: Array,
         coords_raw_a: Array, coords_raw_b: Array,
-        coords_service_1: Array, coords_service_2: Array
+        coords_service_1: Array, coords_service_2: Array,
+        coords_optional_wall: Array
 ) -> void:
     var save_tagged_sprite: TaggedSprite
 
     _get_merged_coords(coords_raw_a, coords_raw_b.pop_back())
     _get_merged_coords(coords_service_1, coords_service_2.pop_back())
+    _get_halved_coords(coords_optional_wall)
 
     for i: int in range(0, coords_raw_a.size()):
         save_tagged_sprite = SpriteFactory.create_actor(
@@ -289,6 +311,12 @@ func _create_from_coord(
     for i: int in range(0, coords_service_1.size()):
         save_tagged_sprite = SpriteFactory.create_actor(
                 SERVICE_SUB_TAGS[i], coords_service_1[i], false
+        )
+        tagged_sprites.push_back(save_tagged_sprite)
+
+    for i: int in range(0, coords_optional_wall.size()):
+        save_tagged_sprite = SpriteFactory.create_building(
+                SubTag.WALL, coords_optional_wall[i], false
         )
         tagged_sprites.push_back(save_tagged_sprite)
 

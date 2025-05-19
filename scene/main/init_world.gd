@@ -317,3 +317,15 @@ func _create_from_coord(
         )
         tagged_sprites.push_back(save_tagged_sprite)
 
+    for i: int in range(0, coords_raw_b.size()):
+        save_tagged_sprite = SpriteFactory.create_building(
+                SubTag.WALL, coords_raw_b[i], false
+        )
+        tagged_sprites.push_back(save_tagged_sprite)
+
+    for i: int in range(0, coords_service_2.size()):
+        save_tagged_sprite = SpriteFactory.create_building(
+                SubTag.WALL, coords_service_2[i], false
+        )
+        tagged_sprites.push_back(save_tagged_sprite)
+

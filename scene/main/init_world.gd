@@ -160,18 +160,14 @@ func _create_from_character(
         RAW_FILE_A_CHAR:
             coords_raw_a.push_back(coord)
 
-        # Only one Raw File Node in the middle-left row.
         RAW_FILE_B_CHAR:
-            if coord.x < DungeonSize.CENTER_X:
-                coords_raw_b.push_back(coord)
+            coords_raw_b.push_back(coord)
 
         SERVICE_1_CHAR:
             coords_service_1.push_back(coord)
 
-        # Only one Service Station in the middle-right row.
         SERVICE_2_CHAR:
-            if coord.x > DungeonSize.CENTER_X:
-                coords_service_2.push_back(coord)
+            coords_service_2.push_back(coord)
 
         OPTIONAL_WALL_CHAR:
             coords_optional_wall.push_back(coord)
@@ -280,8 +276,9 @@ func _get_file_path(
     ]
 
 
-func _get_merged_coords(source_coords: Array, new_coord: Vector2i) -> void:
-    source_coords.push_back(new_coord)
+func _get_merged_coords(source_coords: Array, new_coords: Array) -> void:
+    ArrayHelper.shuffle(new_coords, NodeHub.ref_RandomNumber)
+    source_coords.push_back(new_coords.pop_back())
     ArrayHelper.shuffle(source_coords, NodeHub.ref_RandomNumber)
 
 
@@ -298,8 +295,8 @@ func _create_from_coord(
 ) -> void:
     var save_tagged_sprite: TaggedSprite
 
-    _get_merged_coords(coords_raw_a, coords_raw_b.pop_back())
-    _get_merged_coords(coords_service_1, coords_service_2.pop_back())
+    _get_merged_coords(coords_raw_a, coords_raw_b)
+    _get_merged_coords(coords_service_1, coords_service_2)
     _get_halved_coords(coords_optional_wall)
 
     for i: int in range(0, coords_raw_a.size()):

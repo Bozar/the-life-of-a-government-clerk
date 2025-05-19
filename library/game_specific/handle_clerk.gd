@@ -41,6 +41,7 @@ static func can_receive_raw_file(
         ) -> bool:
     var desk_sprite: Sprite2D
     var new_tag: StringName = DESK_ITEM_TAGS.get(item_tag, "")
+    var has_empty_desk: bool = false
 
     if state.has_document:
         return false
@@ -50,10 +51,10 @@ static func can_receive_raw_file(
     for i: DeskState in state.desk_states:
         desk_sprite = i.sprite
         if desk_sprite == null:
-            return true
+            has_empty_desk = true
         elif desk_sprite.is_in_group(new_tag):
             return false
-    return false
+    return has_empty_desk
 
 
 static func receive_raw_file(state: ClerkState, item_tag: StringName) -> void:

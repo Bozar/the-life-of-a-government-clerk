@@ -287,10 +287,13 @@ static func _is_safe_load_amount_percent(ref_DataHub: DataHub) -> bool:
 static func _can_create_empty_cart(
         ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
         ) -> bool:
-    return ref_RandomNumber.get_percent_chance(GameData.ADD_EMPTY_CART_CHANCE) \
-            and (Cart.count_cart(ref_DataHub.linked_cart_state) \
-                    >= GameData.CART_LENGTH_SHORT) \
-            and (not _is_safe_load_amount_percent(ref_DataHub))
+    return \
+                    Cart.count_cart(ref_DataHub.linked_cart_state) \
+                            >= GameData.CART_LENGTH_SHORT \
+                    and (not _is_safe_load_amount_percent(ref_DataHub)) \
+                    and ref_RandomNumber.get_percent_chance(
+                            GameData.ADD_EMPTY_CART_CHANCE
+                    )
 
 
 static func _is_valid_trap_coord(coord: Vector2i, ref_DataHub: DataHub) -> bool:

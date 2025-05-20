@@ -28,11 +28,11 @@ const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
 const SAFE_LOAD_AMOUT_PERCENT: float = 0.8
 
 const ADD_LOADS: Array = [
-    [4, 3, 2, 1, 1,],
-    [4, 2, 2, 2, 1,],
-    [3, 3, 2, 2, 1,],
-    [3, 3, 3, 1, 1,],
-    [3, 2, 2, 2, 2,],
+	[4, 3, 2, 1, 1,],
+	[4, 2, 2, 2, 1,],
+	[3, 3, 2, 2, 1,],
+	[3, 3, 3, 1, 1,],
+	[3, 2, 2, 2, 2,],
 ]
 
 const MIN_CART: int = 3
@@ -133,7 +133,7 @@ const RAW_FILE_REDUCE_COOLDOWN_PASSIVE: int = 1
 
 const RAW_FILE_REDUCE_COOLDOWN_PUSH_SERVANT: int = RAW_FILE_ADD_COOLDOWN_SEND
 const RAW_FILE_REDUCE_COOLDOWN_UNLOAD_SERVANT: int = \
-        RAW_FILE_ADD_COOLDOWN_SEND * 5
+		RAW_FILE_ADD_COOLDOWN_SEND * 5
 const RAW_FILE_REDUCE_COOLDOWN_MIN_PERCENT: float = 0.1
 const RAW_FILE_REDUCE_COOLDOWN_MAX_PERCENT: float = 0.9
 
@@ -146,3 +146,4 @@ const RAW_FILE_ADD_COOLDOWN_SEND: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
 const RAW_FILE_ADD_COOLDOWN_SERVANT: int = PAGE_BOOK * RAW_FILE_COOLDOWN_MOD
 
 const RAW_FILE_SEND_COUNTER: int = 1
+

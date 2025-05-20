@@ -54,37 +54,37 @@ const PAGE_BOTTOM: StringName = &"page_bottom"
 ### List of Inputs ###
 
 const GAME_PLAY_INPUTS: Array[StringName] = [
-    MOVE_LEFT,
-    MOVE_RIGHT,
-    MOVE_UP,
-    MOVE_DOWN,
-    SWITCH_EXAMINE,
-    EXIT_EXAMINE,
-    EXAMINE_NEXT_CART,
+	MOVE_LEFT,
+	MOVE_RIGHT,
+	MOVE_UP,
+	MOVE_DOWN,
+	SWITCH_EXAMINE,
+	EXIT_EXAMINE,
+	EXAMINE_NEXT_CART,
 ]
 
 const WIZARD_INPUTS: Array[StringName] = [
-    WIZARD_1,
-    WIZARD_2,
-    WIZARD_3,
-    WIZARD_4,
-    WIZARD_5,
-    WIZARD_6,
-    WIZARD_7,
-    WIZARD_8,
-    WIZARD_9,
-    WIZARD_0,
+	WIZARD_1,
+	WIZARD_2,
+	WIZARD_3,
+	WIZARD_4,
+	WIZARD_5,
+	WIZARD_6,
+	WIZARD_7,
+	WIZARD_8,
+	WIZARD_9,
+	WIZARD_0,
 ]
 
 const UI_INPUTS: Array[StringName] = [
-    NEXT_SCREEN,
-    PREVIOUS_SCREEN,
-    PAGE_DOWN,
-    PAGE_UP,
-    LINE_DOWN,
-    LINE_UP,
-    # PAGE_BOTTOM (Shift + G) goes before PAGE_TOP (G).
-    PAGE_BOTTOM,
-    PAGE_TOP,
+	NEXT_SCREEN,
+	PREVIOUS_SCREEN,
+	PAGE_DOWN,
+	PAGE_UP,
+	LINE_DOWN,
+	LINE_UP,
+	# PAGE_BOTTOM (Shift + G) goes before PAGE_TOP (G).
+	PAGE_BOTTOM,
+	PAGE_TOP,
 ]
 

@@ -3,9 +3,9 @@ extends MarginContainer
 
 
 func init_gui() -> void:
-    pass
+	pass
 
 
 func update_gui() -> void:
-    pass
+	pass
 

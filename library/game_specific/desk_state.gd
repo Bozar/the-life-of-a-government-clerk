@@ -2,8 +2,8 @@ class_name DeskState
 
 
 var coord: Vector2i:
-    get:
-        return _coord
+	get:
+		return _coord
 
 
 var sprite: Sprite2D
@@ -16,5 +16,5 @@ var _coord: Vector2i
 
 
 func _init(coord_: Vector2i) -> void:
-    _coord = coord_
+	_coord = coord_
 

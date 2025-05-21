@@ -106,6 +106,7 @@ const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
 const BASE_DELAY: int = 3
 const LOAD_AMOUNT_MULTIPLER: float = 2.0
 const MAX_TRASH_PER_LINE: int = 3
+const MAX_SERVANT_PER_LINE: int = 1
 
 
 ### Raw file ###

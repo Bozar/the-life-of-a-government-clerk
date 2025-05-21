@@ -128,14 +128,6 @@ var challenge_level: int = 0:
 		challenge_level = max(0, min(value, GameData.MAX_LEVEL))
 
 
-func get_count_trash_x(x: int) -> int:
-	return _count_trash_x.get(x, 0)
-
-
-func get_count_trash_y(y: int) -> int:
-	return _count_trash_y.get(y, 0)
-
-
 var _pc: Sprite2D
 var _game_mode: int = PcAction.NORMAL_MODE
 var _linked_cart_state := LinkedCartState.new()
@@ -157,8 +149,6 @@ var _count_servant: int = 0
 var _count_empty_cart: int = 0
 
 var _count_trash: int = 0
-var _count_trash_x: Dictionary[int, int]
-var _count_trash_y: Dictionary[int, int]
 
 
 func set_pc(value: Sprite2D) -> void:
@@ -206,30 +196,10 @@ func _on_SignalHub_sprite_removed(sprites: Array) -> void:
 	for i: Sprite2D in sprites:
 		if i.is_in_group(SubTag.SERVANT):
 			_count_servant -= 1
-		elif i.is_in_group(SubTag.TRASH):
-			_update_count_trash(i, -1)
 		elif i.is_in_group(SubTag.EMPTY_CART):
 			_count_empty_cart -= 1
-
-
-func _update_count_trash(sprite: Sprite2D, value: int) -> void:
-	var coord: Vector2i = ConvertCoord.get_coord(sprite)
-
-	_count_trash += value
-
-	if _count_trash_x.has(coord.x):
-		_count_trash_x[coord.x] += value
-		if _count_trash_x[coord.x] == 0:
-			_count_trash_x.erase(coord.x)
-	else:
-		_count_trash_x[coord.x] = value
-
-	if _count_trash_y.has(coord.y):
-		_count_trash_y[coord.y] += value
-		if _count_trash_y[coord.y] == 0:
-			_count_trash_y.erase(coord.y)
-	else:
-		_count_trash_y[coord.y] = value
+		elif i.is_in_group(SubTag.TRASH):
+			_count_trash -= 1
 
 
 func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
@@ -243,8 +213,8 @@ func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
 			_service_sprites.push_back(sprite)
 		SubTag.SERVANT:
 			_count_servant += 1
-		SubTag.TRASH:
-			_update_count_trash(sprite, 1)
 		SubTag.EMPTY_CART:
 			_count_empty_cart += 1
+		SubTag.TRASH:
+			_count_trash += 1
 

@@ -129,36 +129,27 @@ static func _create_rand_sprite(
 	var coord: Vector2i = ref_DataHub.ground_coords[
 			ref_DataHub.ground_index
 	]
-	var is_created: bool = false
+	var is_valid: bool = _is_valid_coord(
+			coord, ref_DataHub.pc_coord, sub_tag
+	)
 
-	if _is_valid_coord(coord, ref_DataHub.pc_coord):
-		is_created = _create_actor_or_trap(
-				main_tag, sub_tag, coord, ref_DataHub,
-				ref_RandomNumber
-		)
 	_update_ground_index(ref_DataHub, ref_RandomNumber)
-
-	if not is_created:
+	if not is_valid:
+		_update_ground_index(ref_DataHub, ref_RandomNumber)
 		_create_rand_sprite(
 				main_tag, sub_tag, ref_DataHub,
 				ref_RandomNumber, retry - 1
 		)
+		return
 
-
-static func _create_actor_or_trap(
-		main_tag: StringName, sub_tag: StringName, coord: Vector2i,
-		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
-) -> bool:
 	match main_tag:
 		MainTag.ACTOR:
 			SpriteFactory.create_actor(sub_tag, coord, true)
-			return true
 		MainTag.TRAP:
-			return _create_trap(
+			_create_trap(
 					sub_tag, coord,
 					ref_DataHub, ref_RandomNumber
 			)
-	return false
 
 
 static func _create_rand_phone(
@@ -176,7 +167,9 @@ static func _create_rand_phone(
 
 		if SpriteState.has_actor_at_coord(phone_coord):
 			continue
-		elif not _is_valid_coord(phone_coord, ref_DataHub.pc_coord):
+		elif not _is_valid_coord(
+				phone_coord, ref_DataHub.pc_coord, SubTag.PHONE
+		):
 			continue
 		SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
 		ref_DataHub.max_phone -= 1
@@ -232,7 +225,9 @@ static func _has_max_trap(ref_DataHub: DataHub) -> bool:
 	)
 
 
-static func _is_valid_coord(check_coord: Vector2i, pc_coord: Vector2i) -> bool:
+static func _is_valid_coord(
+		check_coord: Vector2i, pc_coord: Vector2i, sub_tag: StringName
+) -> bool:
 	if SpriteState.has_actor_at_coord(check_coord):
 		return false
 	elif SpriteState.has_trap_at_coord(check_coord):
@@ -245,6 +240,22 @@ static func _is_valid_coord(check_coord: Vector2i, pc_coord: Vector2i) -> bool:
 			check_coord, pc_coord, GameData.MAX_DISTANCE_TO_PC
 	):
 		return false
+
+	var max_count: int
+
+	match sub_tag:
+		SubTag.TRASH:
+			max_count = GameData.MAX_TRASH_PER_LINE
+			return _is_valid_line(
+					MainTag.TRAP, sub_tag,
+					check_coord, max_count
+			)
+		SubTag.SERVANT:
+			max_count = GameData.MAX_SERVANT_PER_LINE
+			return _is_valid_line(
+					MainTag.ACTOR, sub_tag,
+					check_coord, max_count
+			)
 	return true
 
 
@@ -308,13 +319,40 @@ static func _can_create_empty_cart(
 	)
 
 
-static func _is_valid_trap_coord(coord: Vector2i, ref_DataHub: DataHub) -> bool:
-	var count_x: int = ref_DataHub.get_count_trash_x(coord.x)
-	var count_y: int = ref_DataHub.get_count_trash_y(coord.y)
-	return (
-			(count_x < GameData.MAX_TRASH_PER_LINE)
-			and (count_y < GameData.MAX_TRASH_PER_LINE)
-	)
+static func _is_valid_line(
+		main_tag: StringName, sub_tag: StringName,
+		check_coord: Vector2i, max_count: int
+) -> bool:
+	var coord: Vector2i = Vector2i(0, 0)
+	var count: int
+	var sprite: Sprite2D
+
+	count = 0
+	for i: int in range(0, DungeonSize.MAX_X):
+		coord.x = i
+		coord.y = check_coord.y
+		sprite = SpriteState.get_sprite_by_coord(main_tag, coord)
+		if sprite == null:
+			continue
+		elif not sprite.is_in_group(sub_tag):
+			continue
+		count += 1
+		if count >= max_count:
+			return false
+
+	count = 0
+	for i: int in range(0, DungeonSize.MAX_Y):
+		coord.x = check_coord.x
+		coord.y = i
+		sprite = SpriteState.get_sprite_by_coord(main_tag, coord)
+		if sprite == null:
+			continue
+		elif not sprite.is_in_group(sub_tag):
+			continue
+		count += 1
+		if count >= max_count:
+			return false
+	return true
 
 
 static func _init_ground_xy(x: int, y: int, ref_DataHub: DataHub) -> void:
@@ -331,13 +369,9 @@ static func _init_ground_xy(x: int, y: int, ref_DataHub: DataHub) -> void:
 static func _create_trap(
 		sub_tag: StringName, coord: Vector2i,
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
-) -> bool:
-	if not _is_valid_trap_coord(coord, ref_DataHub):
-		return false
-	elif _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
+) -> void:
+	if _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
 		SpriteFactory.create_actor(SubTag.EMPTY_CART, coord, true)
-		return true
 	else:
 		SpriteFactory.create_trap(sub_tag, coord, true)
-		return true
 

@@ -74,9 +74,13 @@ func swap_sprite(this_sprite: Sprite2D, that_sprite: Sprite2D) -> void:
 
 	var this_main_tag: StringName = SpriteState.get_main_tag(this_sprite)
 
-	if get_sprite_by_coord(this_main_tag, that_coord, ZLayer.MAX_Z_LAYER) \
-			!= null:
-		push_error("Top layer has sprite: %s, [%d, %d]" \
+	if (
+			get_sprite_by_coord(
+					this_main_tag, that_coord,
+					ZLayer.MAX_Z_LAYER
+			) != null
+	):
+		push_error("Top layer has sprite: %s, [%d, %d]"
 				% [this_main_tag, that_coord.x, that_coord.y]
 		)
 		return

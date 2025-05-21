@@ -73,8 +73,10 @@ func _on_SignalHub_sprite_removed(sprites: Array) -> void:
 
 
 func _is_npc(sprite: Sprite2D) -> bool:
-	return sprite.is_in_group(MainTag.ACTOR) \
+	return (
+			sprite.is_in_group(MainTag.ACTOR)
 			and (not sprite.is_in_group(SubTag.PC))
+	)
 
 
 func _approach_pc(
@@ -104,8 +106,10 @@ func _approach_pc(
 
 
 func _is_obstacle(coord: Vector2i, _opt_args: Array) -> bool:
-	return SpriteState.has_building_at_coord(coord) \
+	return (
+			SpriteState.has_building_at_coord(coord)
 			or SpriteState.has_actor_at_coord(coord)
+	)
 
 
 func _create_actor_state(sub_tag: StringName, sprite: Sprite2D) -> void:

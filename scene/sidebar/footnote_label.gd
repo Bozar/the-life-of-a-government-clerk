@@ -26,12 +26,16 @@ func _get_seed() -> String:
 	var str_seed: String = "%d" % NodeHub.ref_RandomNumber.get_seed()
 	var seed_len: int = str_seed.length()
 	var head: String = str_seed.substr(0, 3)
-	var body: String = ("-" + str_seed.substr(3, 3)) \
-			if (seed_len > 3) \
+	var body: String = (
+			("-" + str_seed.substr(3, 3))
+			if (seed_len > 3)
 			else ""
-	var tail: String = ("-" + str_seed.substr(6)) \
-			if (seed_len > 6) \
+	)
+	var tail: String = (
+			("-" + str_seed.substr(6))
+			if (seed_len > 6)
 			else ""
+	)
 
 	return "%s%s%s" % [head, body, tail]
 

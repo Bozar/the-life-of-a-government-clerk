@@ -22,8 +22,10 @@ static func get_coord(sprite: Sprite2D) -> Vector2i:
 
 
 static func get_range(this_coord: Vector2i, that_coord: Vector2i) -> int:
-	return abs(this_coord.x - that_coord.x) \
+	return (
+			abs(this_coord.x - that_coord.x)
 			+ abs(this_coord.y - that_coord.y)
+	)
 
 
 static func is_in_range(

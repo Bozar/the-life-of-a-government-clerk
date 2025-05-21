@@ -8,9 +8,12 @@ static func handle_input(
 ) -> void:
 	var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
 	var player_win: bool
-	var env_cooldown: int = (ref_DataHub.count_servant \
-			+ ref_DataHub.challenge_level) \
-			* GameData.RAW_FILE_ADD_COOLDOWN_SERVANT
+	var count_servant: int = (
+			ref_DataHub.count_servant + ref_DataHub.challenge_level
+	)
+	var env_cooldown: int = (
+			count_servant * GameData.RAW_FILE_ADD_COOLDOWN_SERVANT
+	)
 	var first_item_tag: StringName = _get_first_item_tag(ref_DataHub)
 
 	match SpriteState.get_sub_tag(actor):
@@ -117,8 +120,10 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 	var trap: Sprite2D
 	var remove_actor: bool = true
 
-	if Cart.count_cart(ref_DataHub.linked_cart_state) \
-			< GameData.CART_LENGTH_SHORT:
+	if (
+			Cart.count_cart(ref_DataHub.linked_cart_state)
+			< GameData.CART_LENGTH_SHORT
+	):
 		ref_DataHub.delay = 0
 	else:
 		ref_DataHub.delay = Cart.get_delay_duration(
@@ -137,9 +142,11 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 
 
 static func _is_valid_coord(coord: Vector2i) -> bool:
-	return DungeonSize.is_in_dungeon(coord) \
-			and (not SpriteState.has_building_at_coord(coord)) \
+	return (
+			DungeonSize.is_in_dungeon(coord)
+			and (not SpriteState.has_building_at_coord(coord))
 			and (not SpriteState.has_actor_at_coord(coord))
+	)
 
 
 static func _can_unload_document(ref_DataHub: DataHub) -> bool:
@@ -196,8 +203,10 @@ static func _can_load_raw_file(
 			ref_ActorAction.get_actor_state(actor)
 	):
 		return false
-	elif actor.is_in_group(SubTag.ENCYCLOPEDIA) \
-			and (not _is_long_cart(ref_DataHub)):
+	elif (
+			actor.is_in_group(SubTag.ENCYCLOPEDIA)
+			and (not _is_long_cart(ref_DataHub))
+	):
 		return false
 
 	var cart: Sprite2D = Cart.get_last_slot(
@@ -274,9 +283,11 @@ static func _can_unload_raw_file(ref_DataHub: DataHub) -> bool:
 		return false
 
 	state = Cart.get_state(sprite, ref_DataHub.linked_cart_state)
-	return (state.item_tag != SubTag.DOCUMENT) \
-			and (state.item_tag != SubTag.FIELD_REPORT) \
+	return (
+			(state.item_tag != SubTag.DOCUMENT)
+			and (state.item_tag != SubTag.FIELD_REPORT)
 			and (state.item_tag != SubTag.SERVANT)
+	)
 
 
 static func _can_unload_tmp_file(ref_DataHub: DataHub) -> bool:
@@ -306,8 +317,10 @@ static func _get_first_item_tag(ref_DataHub: DataHub) -> StringName:
 
 
 static func _can_load_servant(ref_DataHub: DataHub) -> bool:
-	if Cart.count_cart(ref_DataHub.linked_cart_state) \
-			< GameData.CART_LENGTH_SHORT:
+	if (
+			Cart.count_cart(ref_DataHub.linked_cart_state)
+			< GameData.CART_LENGTH_SHORT
+	):
 		return false
 
 	var sprite: Sprite2D = Cart.get_last_slot(
@@ -354,8 +367,10 @@ static func _can_unload_servant(actor: Sprite2D, ref_DataHub: DataHub) -> bool:
 
 
 static func _is_long_cart(ref_DataHub: DataHub) -> bool:
-	return Cart.count_cart(ref_DataHub.linked_cart_state) \
+	return (
+			Cart.count_cart(ref_DataHub.linked_cart_state)
 			>= GameData.CART_LENGTH_LONG
+	)
 
 
 static func _load_cart(actor: Sprite2D, ref_DataHub: DataHub) -> void:
@@ -422,8 +437,10 @@ static func _handle_officer(
 ) -> bool:
 	if _remove_all_servant(ref_DataHub):
 		return false
-	elif HandleOfficer.can_receive_archive(actor_state) \
-			and _can_unload_report(ref_DataHub):
+	elif (
+			HandleOfficer.can_receive_archive(actor_state)
+			and _can_unload_report(ref_DataHub)
+	):
 		_unload_item(ref_DataHub)
 		HandleOfficer.set_active(
 				ref_DataHub.officer_states,
@@ -431,8 +448,10 @@ static func _handle_officer(
 				ref_RandomNumber
 		)
 		return false
-	elif HandleOfficer.can_receive_archive(actor_state) \
-			and _can_unload_document(ref_DataHub):
+	elif (
+			HandleOfficer.can_receive_archive(actor_state)
+			and _can_unload_document(ref_DataHub)
+	):
 		_unload_document(ref_DataHub)
 		# NOTE: Uncomment this line if the game becomes too hard.
 		#HandleRawFile.reset_cooldown(ref_DataHub.raw_file_states)
@@ -459,8 +478,10 @@ static func _handle_raw_file(
 				ref_RandomNumber
 		)
 		return false
-	elif _can_unload_servant(actor, ref_DataHub) \
-			and HandleRawFile.can_receive_servant(actor_state):
+	elif (
+			_can_unload_servant(actor, ref_DataHub)
+			and HandleRawFile.can_receive_servant(actor_state)
+	):
 		_unload_item(ref_DataHub)
 		HandleRawFile.receive_servant(actor_state)
 		return false
@@ -473,15 +494,19 @@ static func _handle_clerk(
 ) -> bool:
 	if _remove_all_servant(ref_DataHub):
 		return false
-	elif _can_load_document(ref_DataHub) \
-			and HandleClerk.can_send_document(actor_state):
+	elif (
+			_can_load_document(ref_DataHub)
+			and HandleClerk.can_send_document(actor_state)
+	):
 		_load_document(ref_DataHub)
 		HandleClerk.send_document(actor_state)
 		return false
-	elif _can_unload_raw_file(ref_DataHub) \
+	elif (
+			_can_unload_raw_file(ref_DataHub)
 			and HandleClerk.can_receive_raw_file(
 					actor_state, first_item_tag
-			):
+			)
+	):
 		_unload_item(ref_DataHub)
 		HandleClerk.receive_raw_file(actor_state, first_item_tag)
 		return false
@@ -496,8 +521,10 @@ static func _handle_shelf(
 		_load_tmp_file(actor_state, ref_DataHub, ref_RandomNumber)
 		HandleShelf.send_tmp_file(actor_state)
 		return false
-	elif _can_unload_tmp_file(ref_DataHub) \
-			and HandleShelf.can_receive_tmp_file(actor_state):
+	elif (
+			_can_unload_tmp_file(ref_DataHub)
+			and HandleShelf.can_receive_tmp_file(actor_state)
+	):
 		_unload_tmp_file(ref_DataHub, ref_RandomNumber)
 		HandleShelf.receive_tmp_file(actor_state, first_item_tag)
 		return false

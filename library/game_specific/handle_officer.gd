@@ -38,8 +38,10 @@ static func set_active(
 			_save_record(i, officer_records)
 			has_active_officer = true
 		else:
-			if officer_records.size() + 1\
-					> GameData.MAX_OFFICER_REPEAT:
+			if (
+					officer_records.size() + 1
+					> GameData.MAX_OFFICER_REPEAT
+			):
 				has_active_officer = false
 			else:
 				_save_record(i, officer_records)

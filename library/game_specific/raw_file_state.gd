@@ -67,11 +67,13 @@ func _set_progress_bar_coord() -> void:
 			sprite_coord + Vector2i.LEFT,
 			sprite_coord + Vector2i.RIGHT
 			]:
-		if DungeonSize.is_in_dungeon(i) \
-				and SpriteState.has_building_at_coord(i):
+		if (
+				DungeonSize.is_in_dungeon(i)
+				and SpriteState.has_building_at_coord(i)
+		):
 			_progress_bar_coord = i
 			return
-	push_error("%s at [%s, %s] has no progress bar." \
+	push_error("%s at [%s, %s] has no progress bar."
 			% [sprite.name, sprite_coord.x, sprite_coord.y]
 	)
 

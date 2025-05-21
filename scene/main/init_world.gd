@@ -339,8 +339,10 @@ func _create_from_prefab(
 			if loop_index == 1:
 				overlap_grids[hashed_coord] = true
 			# Skip overlap area in the second quarter block.
-			elif (loop_index == 2) \
-					and overlap_grids.has(hashed_coord):
+			elif (
+					(loop_index == 2)
+					and overlap_grids.has(hashed_coord)
+			):
 				continue
 
 			_create_from_character(

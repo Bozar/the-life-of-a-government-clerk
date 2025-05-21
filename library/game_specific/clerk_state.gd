@@ -36,8 +36,10 @@ var has_empty_desk: bool:
 
 var has_document: bool:
 	get:
-		return (progress >= GameData.MAX_CLERK_PROGRESS) \
+		return (
+				(progress >= GameData.MAX_CLERK_PROGRESS)
 				and has_empty_desk
+		)
 
 
 var _desk_states: Array
@@ -55,8 +57,6 @@ func _init_desk_states() -> void:
 		distance = ConvertCoord.get_range(self_coord, desk_coord)
 		# It is guaranteed by game design that there are exactly two
 		# nearby sprites.
-		match distance:
-			1, 2:
-				_desk_states[distance - 1] \
-						= DeskState.new(desk_coord)
+		if (distance == 1) or (distance == 2):
+			_desk_states[distance - 1] = DeskState.new(desk_coord)
 

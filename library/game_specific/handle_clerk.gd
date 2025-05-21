@@ -115,8 +115,10 @@ static func reduce_progress(
 				GameData.MIN_PROGRESS_LEAK,
 				GameData.MAX_PROGRESS_LEAK + 1
 		)
-		i.progress -= ref_DataHub.count_idler \
+		i.progress -= (
+				ref_DataHub.count_idler
 				* GameData.PROGRESS_LEAK_SERVANT
+		)
 		i.progress = max(GameData.PROGRESS_CUP, i.progress)
 		break
 
@@ -160,8 +162,10 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
 
 
 static func _is_valid_progress(progress: int) -> bool:
-	return (progress > GameData.PROGRESS_CUP) \
+	return (
+			(progress > GameData.PROGRESS_CUP)
 			and (progress < GameData.MAX_CLERK_PROGRESS)
+	)
 
 
 static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:

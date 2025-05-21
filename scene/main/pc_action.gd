@@ -101,8 +101,10 @@ func _on_SignalHub_game_over(player_win: bool) -> void:
 
 
 func _move(direction: Vector2i, state: LinkedCartState) -> void:
-	var coord: Vector2i = ConvertCoord.get_coord(NodeHub.ref_DataHub.pc) \
+	var coord: Vector2i = (
+			ConvertCoord.get_coord(NodeHub.ref_DataHub.pc)
 			+ direction
+	)
 	var sprite: Sprite2D
 	var sub_tag: StringName
 

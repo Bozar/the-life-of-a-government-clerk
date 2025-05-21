@@ -57,8 +57,10 @@ func _handle_target_node(
 				+ signal_name
 		]
 
-		if source_signal.connect(target_function) \
-				== ERR_INVALID_PARAMETER:
+		if (
+				source_signal.connect(target_function)
+				== ERR_INVALID_PARAMETER
+		):
 			push_error("Signal error: %s -> %s, %s." %
 					[source_node, target_node, signal_name]
 			)

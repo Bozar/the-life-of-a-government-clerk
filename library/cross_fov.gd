@@ -68,13 +68,18 @@ static func _set_fov_map(
 static func _is_in_sight(
 		x: int, y: int, source: Vector2i, fov_data: FovData
 ) -> bool:
-	if (x >= source.x - fov_data.half_width) \
-			and (x <= source.x + fov_data.half_width) \
-			and (y >= fov_data.min_y) and (y <= fov_data.max_y):
+	if (
+			(x >= source.x - fov_data.half_width)
+			and (x <= source.x + fov_data.half_width)
+			and (y >= fov_data.min_y)
+			and (y <= fov_data.max_y)
+	):
 		return true
-	elif (y >= source.y - fov_data.half_width) \
-			and (y <= source.y + fov_data.half_width) \
-			and (x >= fov_data.min_x) and (x <= fov_data.max_x):
+	elif (
+			(y >= source.y - fov_data.half_width)
+			and (y <= source.y + fov_data.half_width)
+			and (x >= fov_data.min_x) and (x <= fov_data.max_x)
+	):
 		return true
 	return false
 

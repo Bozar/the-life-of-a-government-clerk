@@ -204,8 +204,8 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
 
 static func get_delay_duration(pc: Sprite2D, state: LinkedCartState) -> int:
 	var add_delay: int = floor(
-			get_full_load_amount(pc, state) \
-			* GameData.LOAD_AMOUNT_MULTIPLER \
+			get_full_load_amount(pc, state)
+			* GameData.LOAD_AMOUNT_MULTIPLER
 			/ GameData.MAX_LOAD_PER_CART
 	)
 	return GameData.BASE_DELAY + add_delay
@@ -397,8 +397,9 @@ static func _get_cart_state_text(
 	var load_amount: int
 
 	if cart_state == null:
-		push_error("Cart state not found: [%d, %d]" \
-				% [coord.x, coord.y])
+		push_error("Cart state not found: [%d, %d]"
+				% [coord.x, coord.y]
+		)
 		return ""
 	elif cart_state.is_detached:
 		return DETACHED
@@ -406,8 +407,8 @@ static func _get_cart_state_text(
 		return FULL
 
 	load_amount = int(
-			cart_state.load_amount \
-			* PERCENT \
+			cart_state.load_amount
+			* PERCENT
 			/ GameData.MAX_LOAD_PER_CART
 	)
 	return text_template % [

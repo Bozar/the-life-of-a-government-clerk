@@ -126,8 +126,10 @@ static func _sort_by_z_index(this: Sprite2D, that: Sprite2D) -> bool:
 
 static func _is_obstacle(coord: Vector2i) -> bool:
 	if DungeonSize.is_in_dungeon(coord):
-		return SpriteState.has_building_at_coord(coord) \
+		return (
+				SpriteState.has_building_at_coord(coord)
 				or SpriteState.has_actor_at_coord(coord)
+		)
 	return true
 
 

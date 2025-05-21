@@ -16,8 +16,10 @@ static func update_world(
 	)
 
 	# Create Trashes.
-	ref_DataHub.max_trap = ref_DataHub.count_servant \
+	ref_DataHub.max_trap = (
+			ref_DataHub.count_servant
 			* (ref_DataHub.challenge_level + GameData.LEVEL_MOD)
+	)
 	_create_rand_sprite(
 			MainTag.TRAP, SubTag.TRASH, ref_DataHub,
 			ref_RandomNumber, MAX_RETRY
@@ -35,9 +37,11 @@ static func update_world(
 	ref_DataHub.max_phone = max(GameData.MIN_PHONE, ref_DataHub.max_phone)
 	ref_DataHub.max_phone = min(GameData.MAX_PHONE, ref_DataHub.max_phone)
 	ref_DataHub.max_phone -= ref_DataHub.incoming_call
-	if (ref_DataHub.max_phone > 0) \
-			and (not _has_document(ref_DataHub)) \
-			and (not _is_safe_load_amount_percent(ref_DataHub)):
+	if (
+			(ref_DataHub.max_phone > 0)
+			and (not _has_document(ref_DataHub))
+			and (not _is_safe_load_amount_percent(ref_DataHub))
+	):
 		_create_rand_phone(ref_DataHub, ref_RandomNumber)
 
 
@@ -205,21 +209,29 @@ static func _has_max_actor(ref_DataHub: DataHub) -> bool:
 	var occupied_shelf: int = HandleShelf.count_occupied_shelf(
 			ref_DataHub.shelf_states
 	)
+
 	var current_servant: int = ref_DataHub.count_servant
 	var carry_servant: int = Cart.count_item(
 			SubTag.SERVANT, ref_DataHub.pc,
 			ref_DataHub.linked_cart_state
 	)
-	return current_servant + carry_servant >= max_servant \
-			+ occupied_shelf * GameData.SHELF_TO_SERVANT
+
+	current_servant += carry_servant
+	max_servant += occupied_shelf * GameData.SHELF_TO_SERVANT
+	return current_servant >= max_servant
 
 
 static func _is_invalid_sprite(sprite: Sprite2D) -> bool:
-	return sprite.is_in_group(SubTag.INTERNAL_FLOOR) \
-			or sprite.is_in_group(MainTag.BUILDING) \
-			or (sprite.is_in_group(MainTag.ACTOR)
-			and (not sprite.is_in_group(SubTag.PC))
-	)
+	var main_tag: StringName = SpriteState.get_main_tag(sprite)
+	var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
+
+	if sub_tag == SubTag.INTERNAL_FLOOR:
+		return true
+	elif main_tag == MainTag.BUILDING:
+		return true
+	elif (main_tag == MainTag.ACTOR) and (sub_tag != SubTag.PC):
+		return true
+	return false
 
 
 static func _is_valid_turn(turn_counter: int, main_tag: StringName) -> bool:
@@ -236,8 +248,10 @@ static func _is_valid_turn(turn_counter: int, main_tag: StringName) -> bool:
 
 
 static func _has_max_trap(ref_DataHub: DataHub) -> bool:
-	return ref_DataHub.count_trash + ref_DataHub.count_empty_cart \
+	return (
+			ref_DataHub.count_trash + ref_DataHub.count_empty_cart
 			>= ref_DataHub.max_trap
+	)
 
 
 static func _is_valid_coord(check_coord: Vector2i, pc_coord: Vector2i) -> bool:
@@ -304,17 +318,23 @@ static func _is_safe_load_amount_percent(ref_DataHub: DataHub) -> bool:
 static func _can_create_empty_cart(
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> bool:
-	return Cart.count_cart(ref_DataHub.linked_cart_state) \
-			>= GameData.CART_LENGTH_SHORT \
-			and (not _is_safe_load_amount_percent(ref_DataHub)) \
-			and ref_RandomNumber.get_percent_chance(
-					GameData.ADD_EMPTY_CART_CHANCE
-			)
+	if (
+			Cart.count_cart(ref_DataHub.linked_cart_state)
+			< GameData.CART_LENGTH_SHORT
+	):
+		return false
+	elif _is_safe_load_amount_percent(ref_DataHub):
+		return false
+	return ref_RandomNumber.get_percent_chance(
+			GameData.ADD_EMPTY_CART_CHANCE
+	)
 
 
 static func _is_valid_trap_coord(coord: Vector2i, ref_DataHub: DataHub) -> bool:
 	var count_x: int = ref_DataHub.get_count_trash_x(coord.x)
 	var count_y: int = ref_DataHub.get_count_trash_y(coord.y)
-	return (count_x < GameData.MAX_TRASH_PER_LINE) \
+	return (
+			(count_x < GameData.MAX_TRASH_PER_LINE)
 			and (count_y < GameData.MAX_TRASH_PER_LINE)
+	)
 

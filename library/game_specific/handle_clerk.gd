@@ -111,10 +111,10 @@ static func reduce_progress(
 	for i: ClerkState in dup_states:
 		if not _is_valid_progress(i.progress):
 			continue
-		i.progress -= ref_RandomNumber.get_int(
-				GameData.MIN_PROGRESS_LEAK,
-				GameData.MAX_PROGRESS_LEAK + 1
-		)
+		#i.progress -= ref_RandomNumber.get_int(
+		#		GameData.MIN_PROGRESS_LEAK,
+		#		GameData.MAX_PROGRESS_LEAK + 1
+		#)
 		i.progress -= (
 				ref_DataHub.count_idler
 				* GameData.PROGRESS_LEAK_SERVANT

@@ -135,7 +135,6 @@ static func _create_rand_sprite(
 
 	_update_ground_index(ref_DataHub, ref_RandomNumber)
 	if not is_valid:
-		_update_ground_index(ref_DataHub, ref_RandomNumber)
 		_create_rand_sprite(
 				main_tag, sub_tag, ref_DataHub,
 				ref_RandomNumber, retry - 1

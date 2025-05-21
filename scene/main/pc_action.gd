@@ -16,14 +16,7 @@ var _shadow_cast_fov_data := ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
 	for i: TaggedSprite in tagged_sprites:
-		match i.sub_tag:
-			SubTag.PC:
-				if NodeHub.ref_DataHub.pc != null:
-					continue
-				_init_pc(i.sprite)
-
-			SubTag.PHONE:
-				NodeHub.ref_DataHub.add_incoming_call(1)
+		_init_sprite(i.sub_tag, i.sprite)
 
 
 func _on_SignalHub_sprite_removed(sprites: Array) -> void:
@@ -150,22 +143,29 @@ func _handle_normal_input(input_tag: StringName) -> bool:
 
 	match input_tag:
 		InputTag.SWITCH_EXAMINE:
-			if Cart.enter_examine_mode(dh.pc, dh.linked_cart_state):
-				dh.set_game_mode(EXAMINE_MODE)
-				PcSwitchMode.examine_mode(
-						true, dh,
-						NodeHub.ref_ActorAction
-				)
-				return false
+			if not Cart.enter_examine_mode(
+					dh.pc, dh.linked_cart_state
+			):
+				return true
+			dh.set_game_mode(EXAMINE_MODE)
+			PcSwitchMode.examine_mode(
+					true, dh,
+					NodeHub.ref_ActorAction
+			)
+			return false
 
 		InputTag.MOVE_LEFT:
 			_move(Vector2i.LEFT, dh.linked_cart_state)
+			return true
 		InputTag.MOVE_RIGHT:
 			_move(Vector2i.RIGHT, dh.linked_cart_state)
+			return true
 		InputTag.MOVE_UP:
 			_move(Vector2i.UP, dh.linked_cart_state)
+			return true
 		InputTag.MOVE_DOWN:
 			_move(Vector2i.DOWN, dh.linked_cart_state)
+			return true
 
 		InputTag.WIZARD_1, InputTag.WIZARD_2, \
 				InputTag.WIZARD_3, InputTag.WIZARD_4, \
@@ -175,8 +175,6 @@ func _handle_normal_input(input_tag: StringName) -> bool:
 			WizardMode.handle_input(input_tag)
 			return false
 
-		_:
-			return true
 	return true
 
 
@@ -222,4 +220,15 @@ func _init_pc(pc_sprite: Sprite2D) -> void:
 			NodeHub.ref_DataHub.linked_cart_state
 	)
 	Cart.add_cart(GameData.MIN_CART, NodeHub.ref_DataHub.linked_cart_state)
+
+
+func _init_sprite(sub_tag: StringName, sprite: Sprite2D) -> void:
+	match sub_tag:
+		SubTag.PC:
+			if NodeHub.ref_DataHub.pc != null:
+				return
+			_init_pc(sprite)
+
+		SubTag.PHONE:
+			NodeHub.ref_DataHub.add_incoming_call(1)
 

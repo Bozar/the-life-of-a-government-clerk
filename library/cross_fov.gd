@@ -1,7 +1,7 @@
 class_name CrossFov
 
 
-# _set_fov_value(coord: Vector2i, fov_map: Dictionary, fov_flag: int,
+# set_fov_value(coord: Vector2i, fov_map: Dictionary, fov_flag: int,
 #> is_truthy: bool) -> void
 # is_obstacle(from_coord: Vector2i, to_coord: Vector2i, opt_args: Array) -> bool
 static func get_fov_map(
@@ -47,22 +47,34 @@ static func _set_fov_map(
 		source: Vector2i, out_fov_map: Dictionary,
 		set_fov_value: Callable, fov_data: FovData
 ) -> void:
-	var coord: Vector2i = Vector2i(0, 0)
-
 	for x: int in range(0, DungeonSize.MAX_X):
 		for y: int in range(0, DungeonSize.MAX_Y):
-			coord.x = x
-			coord.y = y
-			if _is_in_sight(x, y, source, fov_data):
-				set_fov_value.call(
-						coord, out_fov_map,
-						PcFov.IS_IN_SIGHT_FLAG, true
-				)
-			else:
-				set_fov_value.call(
-						coord, out_fov_map,
-						PcFov.IS_IN_SIGHT_FLAG, false
-				)
+			_set_fov_xy(
+					x, y,
+					source, out_fov_map,
+					set_fov_value, fov_data
+			)
+
+
+static func _set_fov_xy(
+		x: int, y: int,
+		source: Vector2i, out_fov_map: Dictionary,
+		set_fov_value: Callable, fov_data: FovData
+) -> void:
+	var coord: Vector2i = Vector2i(0, 0)
+
+	coord.x = x
+	coord.y = y
+	if _is_in_sight(x, y, source, fov_data):
+		set_fov_value.call(
+				coord, out_fov_map,
+				PcFov.IS_IN_SIGHT_FLAG, true
+		)
+	else:
+		set_fov_value.call(
+				coord, out_fov_map,
+				PcFov.IS_IN_SIGHT_FLAG, false
+		)
 
 
 static func _is_in_sight(

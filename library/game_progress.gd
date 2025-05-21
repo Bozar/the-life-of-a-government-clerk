@@ -86,23 +86,9 @@ static func _init_ground_coords(
 	if not ref_DataHub.ground_coords.is_empty():
 		return
 
-	var coord: Vector2i = Vector2i(0, 0)
-	var sprites: Array
-	var save_coord: bool
-
 	for x in range(0, DungeonSize.MAX_X):
 		for y in range(0, DungeonSize.MAX_Y):
-			coord.x = x
-			coord.y = y
-			sprites = SpriteState.get_sprites_by_coord(coord)
-			save_coord = true
-
-			for i: Sprite2D in sprites:
-				if _is_invalid_sprite(i):
-					save_coord = false
-					break
-			if save_coord:
-				ref_DataHub.set_ground_coords(coord)
+			_init_ground_xy(x, y, ref_DataHub)
 
 	ArrayHelper.shuffle(ref_DataHub.ground_coords, ref_RandomNumber)
 
@@ -168,18 +154,10 @@ static func _create_actor_or_trap(
 			SpriteFactory.create_actor(sub_tag, coord, true)
 			return true
 		MainTag.TRAP:
-			if not _is_valid_trap_coord(coord, ref_DataHub):
-				return false
-			elif _can_create_empty_cart(
+			return _create_trap(
+					sub_tag, coord,
 					ref_DataHub, ref_RandomNumber
-			):
-				SpriteFactory.create_actor(
-						SubTag.EMPTY_CART, coord, true
-				)
-				return true
-			else:
-				SpriteFactory.create_trap(sub_tag, coord, true)
-				return true
+			)
 	return false
 
 
@@ -337,4 +315,29 @@ static func _is_valid_trap_coord(coord: Vector2i, ref_DataHub: DataHub) -> bool:
 			(count_x < GameData.MAX_TRASH_PER_LINE)
 			and (count_y < GameData.MAX_TRASH_PER_LINE)
 	)
+
+
+static func _init_ground_xy(x: int, y: int, ref_DataHub: DataHub) -> void:
+	var coord: Vector2i = Vector2i(x, y)
+	var sprites: Array = SpriteState.get_sprites_by_coord(coord)
+
+	for i: Sprite2D in sprites:
+		if _is_invalid_sprite(i):
+			return
+
+	ref_DataHub.set_ground_coords(coord)
+
+
+static func _create_trap(
+		sub_tag: StringName, coord: Vector2i,
+		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
+) -> bool:
+	if not _is_valid_trap_coord(coord, ref_DataHub):
+		return false
+	elif _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
+		SpriteFactory.create_actor(SubTag.EMPTY_CART, coord, true)
+		return true
+	else:
+		SpriteFactory.create_trap(sub_tag, coord, true)
+		return true
 

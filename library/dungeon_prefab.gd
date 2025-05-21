@@ -45,19 +45,7 @@ static func get_prefab(
 	# 3. Move down or right until the new top left corner reaches the origin
 	# point.
 	for i: int in transforms:
-		match i:
-			FLIP_HORIZONTALLY:
-				prefab = _flip_horizontally(
-						prefab, max_x, max_y
-				)
-			FLIP_VERTICALLY:
-				prefab = _flip_vertically(prefab, max_x, max_y)
-			ROTATE_RIGHT:
-				prefab = _rotate_right(prefab, max_x, max_y)
-				refresh_size = true
-			ROTATE_LEFT:
-				prefab = _rotate_left(prefab, max_x, max_y)
-				refresh_size = true
+		refresh_size = _transform_prefab(i, max_x, max_y, prefab)
 		# Update max_x and max_y after the prefab is rotated.
 		if refresh_size:
 			swap_xy = max_x
@@ -149,4 +137,25 @@ static func _get_new_matrix(max_x: int, max_y: int) -> Dictionary:
 		new_row.resize(max_x)
 		new_matrix[x] = new_row
 	return new_matrix
+
+
+static func _transform_prefab(
+		transform: int, max_x: int, max_y: int, out_prefab: Dictionary
+) -> bool:
+	match transform:
+		FLIP_HORIZONTALLY:
+			out_prefab = _flip_horizontally(
+					out_prefab, max_x, max_y
+			)
+			return false
+		FLIP_VERTICALLY:
+			out_prefab = _flip_vertically(out_prefab, max_x, max_y)
+			return false
+		ROTATE_RIGHT:
+			out_prefab = _rotate_right(out_prefab, max_x, max_y)
+			return true
+		ROTATE_LEFT:
+			out_prefab = _rotate_left(out_prefab, max_x, max_y)
+			return true
+	return false
 

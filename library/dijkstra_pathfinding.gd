@@ -18,19 +18,19 @@ static func get_coords(
 
 	for i: int in range(0, neighbor.size()):
 		coord = neighbor[i]
-		if (
+		if not (
 				Map2D.is_in_map(coord, map_2d)
 				and _is_valid_distance(map_2d, coord, OBSTACLE)
 		):
-			if map_2d[coord.x][coord.y] < min_distance:
-				min_distance = map_2d[coord.x][coord.y]
-				ArrayHelper.swap_element(neighbor, 0, i)
-				current_index = 1
-			elif map_2d[coord.x][coord.y] == min_distance:
-				ArrayHelper.swap_element(
-						neighbor, current_index, i
-				)
-				current_index += 1
+			continue
+
+		if map_2d[coord.x][coord.y] < min_distance:
+			min_distance = map_2d[coord.x][coord.y]
+			ArrayHelper.swap_element(neighbor, 0, i)
+			current_index = 1
+		elif map_2d[coord.x][coord.y] == min_distance:
+			ArrayHelper.swap_element(neighbor, current_index, i)
+			current_index += 1
 
 	neighbor.resize(current_index)
 	return neighbor

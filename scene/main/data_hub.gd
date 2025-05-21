@@ -199,21 +199,7 @@ func set_phone_coords(value: Vector2i) -> void:
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
 	for i: TaggedSprite in tagged_sprites:
-		match i.sub_tag:
-			SubTag.PHONE_BOOTH:
-				_phone_booth_sprites.push_back(i.sprite)
-			SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, \
-					SubTag.ENCYCLOPEDIA, \
-					SubTag.FIELD_REPORT:
-				_raw_file_sprites.push_back(i.sprite)
-			SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
-				_service_sprites.push_back(i.sprite)
-			SubTag.SERVANT:
-				_count_servant += 1
-			SubTag.TRASH:
-				_update_count_trash(i.sprite, 1)
-			SubTag.EMPTY_CART:
-				_count_empty_cart += 1
+		_init_sprite_data(i.sub_tag, i.sprite)
 
 
 func _on_SignalHub_sprite_removed(sprites: Array) -> void:
@@ -244,4 +230,21 @@ func _update_count_trash(sprite: Sprite2D, value: int) -> void:
 			_count_trash_y.erase(coord.y)
 	else:
 		_count_trash_y[coord.y] = value
+
+
+func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
+	match sub_tag:
+		SubTag.PHONE_BOOTH:
+			_phone_booth_sprites.push_back(sprite)
+		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
+				SubTag.FIELD_REPORT:
+			_raw_file_sprites.push_back(sprite)
+		SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
+			_service_sprites.push_back(sprite)
+		SubTag.SERVANT:
+			_count_servant += 1
+		SubTag.TRASH:
+			_update_count_trash(sprite, 1)
+		SubTag.EMPTY_CART:
+			_count_empty_cart += 1
 

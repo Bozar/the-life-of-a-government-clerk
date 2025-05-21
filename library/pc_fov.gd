@@ -64,22 +64,22 @@ static func _set_sprite_visibility(
 		if sprite != null:
 			VisualEffect.set_visibility(sprite, true)
 	# If a grid is out of PC's sight, hide all sprites in the grid by
-	# default.
-	# If PC has seen the grid before, show the first sprite in memory_tags,
-	# and set its color to dark.
+	# default. If PC has seen the grid before, show the first sprite in
+	# memory_tags, and set its color to dark.
 	else:
 		for i: Sprite2D in sprites:
 			VisualEffect.set_visibility(i, false)
-		if _is_fov_flag(coord, fov_map, IS_IN_MEMORY_FLAG):
-			while true:
-				sprite = sprites.pop_back()
-				if sprite == null:
-					break
-				elif _match_sprite_tag(sprite, memory_tags):
-					break
-			if sprite != null:
-				VisualEffect.set_dark_color(sprite)
-				VisualEffect.set_visibility(sprite, true)
+		if not _is_fov_flag(coord, fov_map, IS_IN_MEMORY_FLAG):
+			return
+		while true:
+			sprite = sprites.pop_back()
+			if sprite == null:
+				break
+			elif _match_sprite_tag(sprite, memory_tags):
+				break
+		if sprite != null:
+			VisualEffect.set_dark_color(sprite)
+			VisualEffect.set_visibility(sprite, true)
 
 
 static func _is_fov_flag(

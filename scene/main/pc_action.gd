@@ -7,11 +7,15 @@ enum {
 	EXAMINE_MODE,
 }
 
+const INVALID_COORD: Vector2i = Vector2i(-1, -1)
+
 
 var _is_first_turn: bool = true
 
 var _fov_map: Dictionary = Map2D.init_map(PcFov.DEFAULT_FOV_FLAG)
 var _shadow_cast_fov_data := ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
+
+var _buffer_coord: Vector2i = INVALID_COORD
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
@@ -104,6 +108,9 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
 	if not DungeonSize.is_in_dungeon(coord):
 		return
 
+	elif _try_buffer_input(direction, coord):
+		return
+
 	# Order matters in `The Life of a Government Clerk`. An actor may appear
 	# above a building and therefore has a higher priority.
 	elif SpriteState.has_actor_at_coord(coord):
@@ -120,12 +127,12 @@ func _move(direction: Vector2i, state: LinkedCartState) -> void:
 	elif SpriteState.has_trap_at_coord(coord):
 		sprite = SpriteState.get_trap_by_coord(coord)
 		sub_tag = SpriteState.get_sub_tag(sprite)
-		if sub_tag == SubTag.TRASH:
-			PcHitTrap.handle_input(
-					sprite, NodeHub.ref_DataHub,
-					NodeHub.ref_RandomNumber,
-					NodeHub.ref_Schedule
-			)
+		if sub_tag != SubTag.TRASH:
+			return
+		PcHitTrap.handle_input(
+				sprite, NodeHub.ref_DataHub,
+				NodeHub.ref_RandomNumber, NodeHub.ref_Schedule
+		)
 		return
 
 	elif SpriteState.has_building_at_coord(coord):
@@ -183,6 +190,8 @@ func _handle_examine_input(input_tag: StringName) -> bool:
 
 	match input_tag:
 		InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
+			# Reset buffer state when leaving Examine Mode.
+			_set_buffer_state(INVALID_COORD, INVALID_COORD, false)
 			dh.set_game_mode(NORMAL_MODE)
 			Cart.exit_examine_mode(
 					dh.pc, dh.linked_cart_state
@@ -231,4 +240,84 @@ func _init_sprite(sub_tag: StringName, sprite: Sprite2D) -> void:
 
 		SubTag.PHONE:
 			NodeHub.ref_DataHub.add_incoming_call(1)
+
+
+func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
+	var is_same_input: bool
+
+	# There is a buffer input.
+	if _buffer_coord != INVALID_COORD:
+		is_same_input = (_buffer_coord == coord)
+		# Always reset buffer state.
+		_set_buffer_state(INVALID_COORD, INVALID_COORD, false)
+		# The same input key is pressed the second time. Pass the key to
+		# following code outside `_try_buffer_input()`.
+		if is_same_input:
+			return false
+		# Another input key is pressed. Check whether to buffer the key
+		# normally.
+		else:
+			pass
+
+	var sprite: Sprite2D
+	var sub_tag: StringName
+	var has_servant: bool = false
+
+	# It's safe to interact with a Building.
+	if SpriteState.has_building_at_coord(coord):
+		return false
+	# Only try to buffer an input when interacting with a Servant.
+	sprite = SpriteState.get_actor_by_coord(coord)
+	if sprite != null:
+		sub_tag = SpriteState.get_sub_tag(sprite)
+		if sub_tag != SubTag.SERVANT:
+			return false
+		has_servant = true
+
+	var mirror_coord: Vector2i
+	var top_sprite: Sprite2D
+
+	# Warn player when he might be trapped.
+	if Checkmate.is_trapped(coord):
+		_set_buffer_state(direction, coord, true)
+		return true
+	# Warn player when a Servant being pushed might disappear.
+	elif not has_servant:
+		return false
+	elif PcHitActor.can_load_servant(NodeHub.ref_DataHub):
+		return false
+	mirror_coord = ConvertCoord.get_mirror_coord(
+			NodeHub.ref_DataHub.pc_coord, coord
+	)
+	if not DungeonSize.is_in_dungeon(mirror_coord):
+		_set_buffer_state(direction, coord, true)
+		return true
+	top_sprite = SpriteState.get_top_sprite_by_coord(mirror_coord)
+	if top_sprite == null:
+		return false
+	elif (
+			top_sprite.is_in_group(MainTag.BUILDING)
+			or top_sprite.is_in_group(MainTag.ACTOR)
+			or top_sprite.is_in_group(MainTag.TRAP)
+	):
+		_set_buffer_state(direction, coord, true)
+		return true
+
+	return false
+
+
+func _set_buffer_state(
+		direction: Vector2i, coord: Vector2i, has_new_input: bool, 
+) -> void:
+	var visual_tag: StringName
+
+	if has_new_input:
+		visual_tag = VisualTag.VECTOR_TO_TAG.get(
+			direction, VisualTag.DEFAULT
+		)
+		_buffer_coord = coord
+	else:
+		visual_tag = VisualTag.DEFAULT
+		_buffer_coord = INVALID_COORD
+	VisualEffect.switch_sprite(NodeHub.ref_DataHub.pc, visual_tag)
 

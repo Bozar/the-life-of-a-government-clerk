@@ -18,6 +18,11 @@ const ACTIVE_9: StringName = &"active_9"
 const PASSIVE_1: StringName = &"passive_1"
 const PASSIVE_2: StringName = &"passive_2"
 
+const LEFT: StringName = &"left"
+const RIGHT: StringName = &"right"
+const UP: StringName = &"up"
+const DOWN: StringName = &"down"
+
 const ZERO: StringName = &"zero"
 const ONE: StringName = &"one"
 const TWO: StringName = &"two"
@@ -30,6 +35,7 @@ const EIGHT: StringName = &"eight"
 const NINE: StringName = &"nine"
 const PERCENT: StringName = &"percent"
 
+
 const DIGIT_TO_TAG: Dictionary = {
 	0: ZERO,
 	1: ONE,
@@ -41,6 +47,13 @@ const DIGIT_TO_TAG: Dictionary = {
 	7: SEVEN,
 	8: EIGHT,
 	9: NINE,
+}
+
+const VECTOR_TO_TAG: Dictionary = {
+	Vector2i.LEFT: LEFT,
+	Vector2i.RIGHT: RIGHT,
+	Vector2i.UP: UP,
+	Vector2i.DOWN: DOWN,
 }
 
 

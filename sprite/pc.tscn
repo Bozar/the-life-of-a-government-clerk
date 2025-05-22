@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://e6abfnq6reou"]
+[gd_scene load_steps=9 format=3 uid="uid://e6abfnq6reou"]
 
 [ext_resource type="Texture2D" uid="uid://cynswmw160utj" path="res://resource/curses_vector_24x36.png" id="1_r71xq"]
 
@@ -14,6 +14,22 @@ region = Rect2(24, 72, 24, 36)
 atlas = ExtResource("1_r71xq")
 region = Rect2(264, 72, 24, 36)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0tn50"]
+atlas = ExtResource("1_r71xq")
+region = Rect2(264, 36, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bmcdo"]
+atlas = ExtResource("1_r71xq")
+region = Rect2(240, 36, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6gcx"]
+atlas = ExtResource("1_r71xq")
+region = Rect2(192, 36, 24, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7mqb"]
+atlas = ExtResource("1_r71xq")
+region = Rect2(216, 36, 24, 36)
+
 [node name="Pc" type="Sprite2D"]
 
 [node name="default" type="Sprite2D" parent="."]
@@ -26,3 +42,19 @@ texture = SubResource("AtlasTexture_t8vxd")
 [node name="passive" type="Sprite2D" parent="."]
 visible = false
 texture = SubResource("AtlasTexture_aouhd")
+
+[node name="left" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_0tn50")
+
+[node name="right" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_bmcdo")
+
+[node name="up" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_u6gcx")
+
+[node name="down" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_p7mqb")

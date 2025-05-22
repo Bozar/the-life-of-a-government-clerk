@@ -80,6 +80,19 @@ static func handle_input(
 		ref_Schedule.start_next_turn()
 
 
+static func can_load_servant(ref_DataHub: DataHub) -> bool:
+	if (
+			Cart.count_cart(ref_DataHub.linked_cart_state)
+			< GameData.CART_LENGTH_SHORT
+	):
+		return false
+
+	var sprite: Sprite2D = Cart.get_last_slot(
+			ref_DataHub.pc, ref_DataHub.linked_cart_state
+	)
+	return sprite != null
+
+
 static func _can_get_cash(ref_DataHub: DataHub) -> bool:
 	return ref_DataHub.account > 0
 
@@ -316,19 +329,6 @@ static func _get_first_item_tag(ref_DataHub: DataHub) -> StringName:
 	return state.item_tag
 
 
-static func _can_load_servant(ref_DataHub: DataHub) -> bool:
-	if (
-			Cart.count_cart(ref_DataHub.linked_cart_state)
-			< GameData.CART_LENGTH_SHORT
-	):
-		return false
-
-	var sprite: Sprite2D = Cart.get_last_slot(
-			ref_DataHub.pc, ref_DataHub.linked_cart_state
-	)
-	return sprite != null
-
-
 static func _load_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 	var sprite: Sprite2D = Cart.get_last_slot(
 			ref_DataHub.pc, ref_DataHub.linked_cart_state
@@ -418,7 +418,7 @@ static func _handle_servant(
 		actor: Sprite2D, actor_state: ActorState, ref_DataHub: DataHub,
 		ref_RandomNumber: RandomNumber
 ) -> void:
-	if _can_load_servant(ref_DataHub):
+	if can_load_servant(ref_DataHub):
 		_load_servant(actor, ref_DataHub)
 	else:
 		HandleRawFile.reduce_cooldown(

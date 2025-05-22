@@ -12,7 +12,7 @@ const PASSABLE_TAGS: Array = [
 
 
 static func is_game_over(ref_DataHub: DataHub) -> bool:
-	if _is_trapped(ref_DataHub.pc_coord):
+	if is_trapped(ref_DataHub.pc_coord):
 		return true
 	elif _is_fully_loaded(ref_DataHub):
 		return true
@@ -20,12 +20,12 @@ static func is_game_over(ref_DataHub: DataHub) -> bool:
 
 
 # Return true if PC cannot move in any direction.
-static func _is_trapped(check_coord: Vector2i) -> bool:
+static func is_trapped(check_coord: Vector2i) -> bool:
 	var neighbor: Array = ConvertCoord.get_diamond_coords(check_coord, 1)
 	var sprites: Array
 	var top_sprite: Sprite2D
 
-	for coord in neighbor:
+	for coord: Vector2i in neighbor:
 		# Filter out a coord if it is in the center or outside the
 		# dungeon.
 		if (coord.x == check_coord.x) and (coord.y == check_coord.y):

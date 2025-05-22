@@ -30,6 +30,20 @@ static func get_sprite_by_coord(
 	)
 
 
+static func get_top_sprite_by_coord(coord: Vector2i) -> Sprite2D:
+	var sprites: Array = get_sprites_by_coord(coord)
+	var top_sprite: Sprite2D
+
+	if sprites.is_empty():
+		return null
+
+	top_sprite = sprites[0]
+	for i: Sprite2D in sprites:
+		if i.z_index > top_sprite.z_index:
+			top_sprite = i
+	return top_sprite
+
+
 static func get_main_tag(sprite: Sprite2D) -> StringName:
 	return NodeHub.ref_SpriteTag.get_main_tag(sprite)
 

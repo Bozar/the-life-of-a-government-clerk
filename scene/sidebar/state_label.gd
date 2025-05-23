@@ -7,8 +7,8 @@ const DOC: String = "Doc: %2d"
 const CASH: String = "Cash: %1d-%1d"
 const CALL: String = "Call: %1d"
 
-const YOU_WIN: String = "You win.\n[Space]"
-const YOU_LOSE: String = "You lose.\n[Space]"
+const YOU_WIN: String = "You win.\n[Enter]"
+const YOU_LOSE: String = "You lose.\n[Enter]"
 
 
 var game_over: bool = false

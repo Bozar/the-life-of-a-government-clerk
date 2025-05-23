@@ -49,16 +49,23 @@ const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
 
 ### Progress & Challenge ###
 
-const MAX_LEVEL: int = 5
-const MIN_LEVEL_LEAK: int = 2
-const LEVEL_MOD: int = 1
+const MAX_LEVEL: int = 4
+const MIN_LEVEL_LEAK: int = 1
 
 const MAX_PHONE: int = 3
 const MIN_PHONE: int = 0
 const DEFAULT_PHONE: int = 2
 
-const NEW_ACTOR_INTERVAL: int = 5
-const NEW_TRAP_INTERVAL: int = 3
+const NEW_ACTOR_INTERVAL: int = 7
+const NEW_TRAP_INTERVAL: int = 5
+
+const LEVEL_TO_SERVANT: Dictionary = {
+	0: 1,
+	1: 2,
+	2: 3,
+	3: 5,
+	4: 5,
+}
 
 
 ### Reward ###

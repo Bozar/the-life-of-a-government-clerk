@@ -16,10 +16,14 @@ static func update_world(
 	)
 
 	# Create Trashes.
-	ref_DataHub.max_trap = (
-			ref_DataHub.count_servant
-			* (ref_DataHub.challenge_level + GameData.LEVEL_MOD)
-	)
+	var servant_mod: int = 1
+
+	if not GameData.LEVEL_TO_SERVANT.has(ref_DataHub.challenge_level):
+		push_error("Invalid challenge level: %d"
+				% ref_DataHub.challenge_level
+		)
+	servant_mod = GameData.LEVEL_TO_SERVANT[ref_DataHub.challenge_level]
+	ref_DataHub.max_trap = ref_DataHub.count_servant * servant_mod
 	_create_rand_sprite(
 			MainTag.TRAP, SubTag.TRASH, ref_DataHub,
 			ref_RandomNumber, MAX_RETRY

@@ -22,8 +22,8 @@ const MAX_LOAD_PER_TURN: int = 10
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 
 # 0.3 * PAGE_CUP (30) = 9 => Answering a Phone call grants 9 turns' survival
-# time. Since a Phone might be as far as 10 grids (PC_SIGHT_RANGE * 2) away from
-# PC, approaching it requires tactics.
+# time. A Phone is 5 (PC_SIGHT_RANGE) to 10 grids (PC_SIGHT_RANGE * 2) away from
+# PC.
 const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
 const SAFE_LOAD_AMOUT_PERCENT: float = 0.8
 
@@ -42,7 +42,7 @@ const CART_LENGTH_SHORT: int = 4
 const CART_LENGTH_LONG: int = 7
 
 const ADD_EMPTY_CART_LENGTH: int = 1
-const ADD_EMPTY_CART_CHANCE: int = 80
+const ADD_EMPTY_CART_CHANCE: int = 60
 const MIN_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 2
 const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
 
@@ -60,9 +60,9 @@ const NEW_ACTOR_INTERVAL: int = 7
 const NEW_TRAP_INTERVAL: int = 5
 
 const LEVEL_TO_SERVANT: Dictionary = {
-	0: 1,
-	1: 2,
-	2: 3,
+	0: 2,
+	1: 3,
+	2: 4,
 	3: 5,
 	4: 5,
 }
@@ -110,7 +110,7 @@ const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
 ### Trash ###
 
 # Ideally, it takes 4 turns to bypass a Trash.
-const BASE_DELAY: int = 3
+const BASE_DELAY: int = 6
 const LOAD_AMOUNT_MULTIPLER: float = 2.0
 const MAX_TRASH_PER_LINE: int = 3
 const MAX_SERVANT_PER_LINE: int = 1

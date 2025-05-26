@@ -9,7 +9,7 @@ static func handle_input(
 	var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
 	var player_win: bool
 	var count_servant: int = (
-			ref_DataHub.count_servant + ref_DataHub.challenge_level
+			ref_DataHub.count_servant + ref_DataHub.count_idler
 	)
 	var env_cooldown: int = (
 			count_servant * GameData.RAW_FILE_ADD_COOLDOWN_SERVANT

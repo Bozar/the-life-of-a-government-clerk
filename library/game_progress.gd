@@ -23,7 +23,10 @@ static func update_world(
 				% ref_DataHub.challenge_level
 		)
 	servant_mod = GameData.LEVEL_TO_SERVANT[ref_DataHub.challenge_level]
-	ref_DataHub.max_trap = ref_DataHub.count_servant * servant_mod
+	ref_DataHub.max_trap = (
+			ref_DataHub.count_servant * servant_mod
+			+ ref_DataHub.count_idler
+	)
 	_create_rand_sprite(
 			MainTag.TRAP, SubTag.TRASH, ref_DataHub,
 			ref_RandomNumber, MAX_RETRY

@@ -2,6 +2,11 @@ class_name Cart
 extends Node2D
 
 
+enum SAFE_LOAD {
+	LAST_SLOT,
+	FULL_LINE,
+}
+
 const EXTEND_TEMPLATE: String = "$> +%s"
 const EXAMINE_TEMPLATE: String = "?> %s: %s%%"
 const FIRST_ITEM_TEMPLATE: String = "1> %s: %s%%"
@@ -387,6 +392,32 @@ static func get_last_slot_text(pc: Sprite2D, state: LinkedCartState) -> String:
 		return NO_LAST_SLOT
 	coord = ConvertCoord.get_coord(cart)
 	return _get_cart_state_text(coord, LAST_SLOT_TEMPLATE, state)
+
+
+static func is_safe_load_amount_percent(
+		check_type: int, safe_percent: float, ref_DataHub: DataHub
+) -> bool:
+	var pc: Sprite2D = ref_DataHub.pc
+	var linked: LinkedCartState = ref_DataHub.linked_cart_state
+
+	var cart: Sprite2D = get_last_slot(pc, linked)
+	var current_load: int
+	var count: int
+	var max_load: int
+
+	match check_type:
+		SAFE_LOAD.FULL_LINE:
+			current_load = get_full_load_amount(pc, linked)
+			count = count_cart(linked)
+		SAFE_LOAD.LAST_SLOT:
+			if cart == null:
+				return false
+			current_load = get_state(cart, linked).load_amount
+			count = 1
+		_:
+			return false
+	max_load = floor(GameData.MAX_LOAD_PER_CART * count * safe_percent)
+	return current_load < max_load
 
 
 static func _get_cart_state_text(

@@ -9,6 +9,19 @@ enum {
 
 const INVALID_COORD: Vector2i = Vector2i(-1, -1)
 
+const BUFFER_SUB_TAG: Dictionary = {
+	SubTag.SERVANT: true,
+	SubTag.CLERK: true,
+	SubTag.ATLAS: true,
+	SubTag.BOOK: true,
+	SubTag.CUP: true,
+	SubTag.ENCYCLOPEDIA: true,
+	SubTag.FIELD_REPORT: true,
+	SubTag.SHELF: true,
+	SubTag.GARAGE: true,
+	SubTag.STATION: true,
+}
+
 
 var _is_first_turn: bool = true
 
@@ -259,39 +272,113 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 		else:
 			pass
 
-	var sprite: Sprite2D
+	var actor: Sprite2D
 	var sub_tag: StringName
-	var has_servant: bool = false
+	var has_actor: bool = false
 
 	# It's safe to interact with a Building.
 	if SpriteState.has_building_at_coord(coord):
 		return false
-	# Only try to buffer an input when interacting with a Servant.
-	sprite = SpriteState.get_actor_by_coord(coord)
-	if sprite != null:
-		sub_tag = SpriteState.get_sub_tag(sprite)
-		if sub_tag != SubTag.SERVANT:
+	# Try to buffer an input when interacting with a specific actor.
+	actor = SpriteState.get_actor_by_coord(coord)
+	if actor != null:
+		sub_tag = SpriteState.get_sub_tag(actor)
+		if not BUFFER_SUB_TAG.has(sub_tag):
 			return false
-		has_servant = true
+		has_actor = true
 
+	var is_buffered: bool = false
+	var is_safe_last: bool = Cart.is_safe_load_amount_percent(
+			Cart.SAFE_LOAD.LAST_SLOT,
+			GameData.SAFE_LOAD_AMOUNT_PERCENT_1,
+			NodeHub.ref_DataHub
+	)
+	var is_safe_full: bool = Cart.is_safe_load_amount_percent(
+			Cart.SAFE_LOAD.FULL_LINE,
+			GameData.SAFE_LOAD_AMOUNT_PERCENT_2,
+			NodeHub.ref_DataHub
+	)
+	var is_all_safe: bool = is_safe_last and is_safe_full
+
+	if not has_actor:
+		# Warn player when he might be trapped; or when moving into a
+		# Trash and the overall load amout is more than 60%
+		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
+		is_buffered = (
+				Checkmate.is_trapped(coord)
+				or _handle_trash(coord, is_safe_full)
+		)
+		if is_buffered:
+			_set_buffer_state(direction, coord, true)
+			return true
+		return false
+
+	var state: ActorState = NodeHub.ref_ActorAction.get_actor_state(actor)
+
+	match sub_tag:
+		# Warn player when a Servant being pushed might disappear.
+		SubTag.SERVANT:
+			is_buffered = _handle_servant(coord)
+
+		# Warn player if his Cash is less than 1 after the service.
+		SubTag.GARAGE:
+			is_buffered = _handle_service(GameData.PAYMENT_GARAGE)
+
+		# Warn player if his Cash is less than 1 after the service.
+		SubTag.STATION:
+			is_buffered = _handle_service(GameData.PAYMENT_CLEAN)
+
+		# Warn player when loading a Raw File. He may want to keep the
+		# shelf occupied to complete an achievement.
+		SubTag.SHELF:
+			is_buffered = _handle_shelf(state)
+
+		# Warn player when loading a Document and the last slot is more
+		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full.
+		SubTag.CLERK:
+			is_buffered = _handle_clerk(state, is_all_safe)
+
+		# Warn player when loading a Raw File and the last slot is more
+		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full.
+		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
+				SubTag.FIELD_REPORT:
+			is_buffered = _handle_raw_file(actor, is_all_safe)
+
+	if is_buffered:
+		_set_buffer_state(direction, coord, true)
+		return true
+	return false
+
+
+func _set_buffer_state(
+		direction: Vector2i, coord: Vector2i, has_new_input: bool,
+) -> void:
+	var visual_tag: StringName
+
+	if has_new_input:
+		visual_tag = VisualTag.VECTOR_TO_TAG.get(
+				direction, VisualTag.DEFAULT
+		)
+		_buffer_coord = coord
+	else:
+		visual_tag = VisualTag.DEFAULT
+		_buffer_coord = INVALID_COORD
+	VisualEffect.switch_sprite(NodeHub.ref_DataHub.pc, visual_tag)
+
+
+func _handle_servant(coord: Vector2i) -> bool:
 	var mirror_coord: Vector2i
 	var top_sprite: Sprite2D
 
-	# Warn player when he might be trapped.
-	if Checkmate.is_trapped(coord):
-		_set_buffer_state(direction, coord, true)
-		return true
-	# Warn player when a Servant being pushed might disappear.
-	elif not has_servant:
+	if PcHitActor.can_load_servant(NodeHub.ref_DataHub):
 		return false
-	elif PcHitActor.can_load_servant(NodeHub.ref_DataHub):
-		return false
+
 	mirror_coord = ConvertCoord.get_mirror_coord(
 			NodeHub.ref_DataHub.pc_coord, coord
 	)
 	if not DungeonSize.is_in_dungeon(mirror_coord):
-		_set_buffer_state(direction, coord, true)
 		return true
+
 	top_sprite = SpriteState.get_top_sprite_by_coord(mirror_coord)
 	if top_sprite == null:
 		return false
@@ -300,24 +387,60 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 			or top_sprite.is_in_group(MainTag.ACTOR)
 			or top_sprite.is_in_group(MainTag.TRAP)
 	):
-		_set_buffer_state(direction, coord, true)
 		return true
-
 	return false
 
 
-func _set_buffer_state(
-		direction: Vector2i, coord: Vector2i, has_new_input: bool, 
-) -> void:
-	var visual_tag: StringName
+func _handle_service(cost: int) -> bool:
+	if (
+			(NodeHub.ref_DataHub.cash > 0)
+			and (NodeHub.ref_DataHub.cash <= cost)
+	):
+		return true
+	return false
 
-	if has_new_input:
-		visual_tag = VisualTag.VECTOR_TO_TAG.get(
-			direction, VisualTag.DEFAULT
-		)
-		_buffer_coord = coord
-	else:
-		visual_tag = VisualTag.DEFAULT
-		_buffer_coord = INVALID_COORD
-	VisualEffect.switch_sprite(NodeHub.ref_DataHub.pc, visual_tag)
+
+func _handle_shelf(actor_state: ActorState) -> bool:
+	if PcHitActor.can_load_tmp_file(actor_state, NodeHub.ref_DataHub):
+		return true
+	return false
+
+
+func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
+	var carry_servant: int = Cart.count_item(
+			SubTag.SERVANT, NodeHub.ref_DataHub.pc,
+			NodeHub.ref_DataHub.linked_cart_state
+	)
+
+	if carry_servant > 0:
+		return false
+	elif is_safe_load and (NodeHub.ref_DataHub.incoming_call < 1):
+		return false
+	elif not PcHitActor.can_load_document(NodeHub.ref_DataHub):
+		return false
+	elif not HandleClerk.can_send_document(actor_state):
+		return false
+	return true
+
+
+func _handle_raw_file(actor: Sprite2D, is_safe_load: bool) -> bool:
+	if is_safe_load:
+		return false
+	elif not PcHitActor.can_load_raw_file(
+			actor, NodeHub.ref_DataHub, NodeHub.ref_ActorAction,
+	):
+		return false
+	return true
+
+
+func _handle_trash(coord: Vector2i, is_safe_load: bool) -> bool:
+	var trap: Sprite2D = SpriteState.get_trap_by_coord(coord)
+
+	if trap == null:
+		return false
+	elif not trap.is_in_group(SubTag.TRASH):
+		return false
+	elif is_safe_load:
+		return false
+	return true
 

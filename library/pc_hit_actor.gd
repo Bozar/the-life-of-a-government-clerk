@@ -93,6 +93,44 @@ static func can_load_servant(ref_DataHub: DataHub) -> bool:
 	return sprite != null
 
 
+static func can_load_tmp_file(
+		actor_state: ActorState, ref_DataHub: DataHub
+) -> bool:
+	if not HandleShelf.can_send_tmp_file(actor_state):
+		return false
+
+	var cart: Sprite2D = Cart.get_last_slot(
+			ref_DataHub.pc, ref_DataHub.linked_cart_state
+	)
+	return cart != null
+
+
+static func can_load_document(ref_DataHub: DataHub) -> bool:
+	return Cart.get_last_slot(
+			ref_DataHub.pc, ref_DataHub.linked_cart_state
+	) != null
+
+
+static func can_load_raw_file(
+		actor: Sprite2D, ref_DataHub: DataHub,
+		ref_ActorAction: ActorAction
+) -> bool:
+	if not HandleRawFile.can_send_raw_file(
+			ref_ActorAction.get_actor_state(actor)
+	):
+		return false
+	elif (
+			actor.is_in_group(SubTag.ENCYCLOPEDIA)
+			and (not _is_long_cart(ref_DataHub))
+	):
+		return false
+
+	var cart: Sprite2D = Cart.get_last_slot(
+			ref_DataHub.pc, ref_DataHub.linked_cart_state
+	)
+	return cart != null
+
+
 static func _can_get_cash(ref_DataHub: DataHub) -> bool:
 	return ref_DataHub.account > 0
 
@@ -208,26 +246,6 @@ static func _unload_item(ref_DataHub: DataHub) -> void:
 	cart_state.item_tag = SubTag.CART
 
 
-static func _can_load_raw_file(
-		actor: Sprite2D, ref_DataHub: DataHub,
-		ref_ActorAction: ActorAction
-) -> bool:
-	if not HandleRawFile.can_send_raw_file(
-			ref_ActorAction.get_actor_state(actor)
-	):
-		return false
-	elif (
-			actor.is_in_group(SubTag.ENCYCLOPEDIA)
-			and (not _is_long_cart(ref_DataHub))
-	):
-		return false
-
-	var cart: Sprite2D = Cart.get_last_slot(
-			ref_DataHub.pc, ref_DataHub.linked_cart_state
-	)
-	return cart != null
-
-
 static func _load_raw_file(
 		actor_state: ActorState, ref_DataHub: DataHub
 ) -> void:
@@ -238,18 +256,6 @@ static func _load_raw_file(
 			cart_sprite, ref_DataHub.linked_cart_state
 	)
 	cart_state.item_tag = actor_state.sub_tag
-
-
-static func _can_load_tmp_file(
-		actor_state: ActorState, ref_DataHub: DataHub
-) -> bool:
-	if not HandleShelf.can_send_tmp_file(actor_state):
-		return false
-
-	var cart: Sprite2D = Cart.get_last_slot(
-			ref_DataHub.pc, ref_DataHub.linked_cart_state
-	)
-	return cart != null
 
 
 static func _load_tmp_file(
@@ -268,12 +274,6 @@ static func _load_tmp_file(
 			ref_DataHub.pc, ref_DataHub.linked_cart_state,
 			ref_RandomNumber
 	)
-
-
-static func _can_load_document(ref_DataHub: DataHub) -> bool:
-	return Cart.get_last_slot(
-			ref_DataHub.pc, ref_DataHub.linked_cart_state
-	) != null
 
 
 static func _load_document(ref_DataHub: DataHub) -> void:
@@ -471,7 +471,7 @@ static func _handle_raw_file(
 		ref_DataHub: DataHub, ref_ActorAction: ActorAction,
 		ref_RandomNumber: RandomNumber
 ) -> bool:
-	if _can_load_raw_file(actor, ref_DataHub, ref_ActorAction):
+	if can_load_raw_file(actor, ref_DataHub, ref_ActorAction):
 		_load_raw_file(actor_state, ref_DataHub)
 		HandleRawFile.send_raw_file(
 				actor_state, env_cooldown,
@@ -495,7 +495,7 @@ static func _handle_clerk(
 	if _remove_all_servant(ref_DataHub):
 		return true
 	elif (
-			_can_load_document(ref_DataHub)
+			can_load_document(ref_DataHub)
 			and HandleClerk.can_send_document(actor_state)
 	):
 		_load_document(ref_DataHub)
@@ -517,7 +517,7 @@ static func _handle_shelf(
 		actor_state: ActorState, first_item_tag: StringName,
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> bool:
-	if _can_load_tmp_file(actor_state, ref_DataHub):
+	if can_load_tmp_file(actor_state, ref_DataHub):
 		_load_tmp_file(actor_state, ref_DataHub, ref_RandomNumber)
 		HandleShelf.send_tmp_file(actor_state)
 		return true

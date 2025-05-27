@@ -34,9 +34,7 @@ static func update_world(
 
 	# Reduce Clerk progress.
 	if ref_DataHub.challenge_level >= GameData.MIN_LEVEL_LEAK:
-		HandleClerk.reduce_progress(
-				ref_DataHub, ref_RandomNumber
-		)
+		HandleClerk.reduce_progress(ref_DataHub, ref_RandomNumber)
 
 	# Create Phones.
 	# {cash: max_phone}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}
@@ -44,11 +42,7 @@ static func update_world(
 	ref_DataHub.max_phone = max(GameData.MIN_PHONE, ref_DataHub.max_phone)
 	ref_DataHub.max_phone = min(GameData.MAX_PHONE, ref_DataHub.max_phone)
 	ref_DataHub.max_phone -= ref_DataHub.incoming_call
-	if (
-			(ref_DataHub.max_phone > 0)
-			and (not _has_document(ref_DataHub))
-			and (not _is_safe_load_amount_percent(ref_DataHub))
-	):
+	if _can_create_phone(ref_DataHub):
 		_create_rand_phone(ref_DataHub, ref_RandomNumber)
 
 
@@ -300,16 +294,6 @@ static func _has_document(ref_DataHub: DataHub) -> bool:
 	return cart_state.item_tag == SubTag.DOCUMENT
 
 
-static func _is_safe_load_amount_percent(ref_DataHub: DataHub) -> bool:
-	var full_load: int = Cart.get_full_load_amount(
-			ref_DataHub.pc, ref_DataHub.linked_cart_state
-	)
-	var count_cart: int = Cart.count_cart(ref_DataHub.linked_cart_state)
-	var max_load: int = GameData.MAX_LOAD_PER_CART * count_cart
-	var load_percent: float = full_load * 1.0 / max_load
-	return load_percent <= GameData.SAFE_LOAD_AMOUT_PERCENT
-
-
 static func _can_create_empty_cart(
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> bool:
@@ -318,11 +302,29 @@ static func _can_create_empty_cart(
 			< GameData.CART_LENGTH_SHORT
 	):
 		return false
-	elif _is_safe_load_amount_percent(ref_DataHub):
+	elif Cart.is_safe_load_amount_percent(
+			Cart.SAFE_LOAD.FULL_LINE,
+			GameData.SAFE_LOAD_AMOUNT_PERCENT_3,
+			ref_DataHub
+	):
 		return false
 	return ref_RandomNumber.get_percent_chance(
 			GameData.ADD_EMPTY_CART_CHANCE
 	)
+
+
+static func _can_create_phone(ref_DataHub: DataHub) -> bool:
+	if ref_DataHub.max_phone <= 0:
+		return false
+	elif _has_document(ref_DataHub):
+		return false
+	elif Cart.is_safe_load_amount_percent(
+			Cart.SAFE_LOAD.FULL_LINE,
+			GameData.SAFE_LOAD_AMOUNT_PERCENT_3,
+			ref_DataHub
+	):
+		return false
+	return true
 
 
 static func _is_valid_line(

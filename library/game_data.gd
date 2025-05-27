@@ -25,7 +25,9 @@ const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 # time. A Phone is 5 (PC_SIGHT_RANGE) to 10 grids (PC_SIGHT_RANGE * 2) away from
 # PC.
 const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
-const SAFE_LOAD_AMOUT_PERCENT: float = 0.8
+const SAFE_LOAD_AMOUNT_PERCENT_1: float = 0.4
+const SAFE_LOAD_AMOUNT_PERCENT_2: float = 0.6
+const SAFE_LOAD_AMOUNT_PERCENT_3: float = 0.8
 
 const ADD_LOADS: Array = [
 	[4, 3, 2, 1, 1,],

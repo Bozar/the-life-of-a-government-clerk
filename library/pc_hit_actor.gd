@@ -19,15 +19,15 @@ static func handle_input(
 	match SpriteState.get_sub_tag(actor):
 		SubTag.SALARY:
 			player_win = ref_DataHub.delivery < 1
-			if _handle_salary(ref_DataHub, player_win):
+			if not _handle_salary(ref_DataHub, player_win):
 				return
 
 		SubTag.GARAGE:
-			if _handle_garage(ref_DataHub):
+			if not _handle_garage(ref_DataHub):
 				return
 
 		SubTag.STATION:
-			if _handle_station(ref_DataHub):
+			if not _handle_station(ref_DataHub):
 				return
 
 		SubTag.SERVANT:
@@ -37,7 +37,7 @@ static func handle_input(
 			)
 
 		SubTag.OFFICER:
-			if _handle_officer(
+			if not _handle_officer(
 					actor_state, ref_DataHub,
 					ref_RandomNumber
 			):
@@ -45,7 +45,7 @@ static func handle_input(
 
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
 				SubTag.FIELD_REPORT:
-			if _handle_raw_file(
+			if not _handle_raw_file(
 					actor, actor_state, env_cooldown,
 					ref_DataHub, ref_ActorAction,
 					ref_RandomNumber
@@ -53,7 +53,7 @@ static func handle_input(
 				return
 
 		SubTag.CLERK:
-			if _handle_clerk(
+			if not _handle_clerk(
 					actor_state, first_item_tag, ref_DataHub
 			):
 				return
@@ -62,7 +62,7 @@ static func handle_input(
 			HandlePhone.answer_call(actor, ref_DataHub)
 
 		SubTag.SHELF:
-			if _handle_shelf(
+			if not _handle_shelf(
 					actor_state, first_item_tag,
 					ref_DataHub, ref_RandomNumber
 			):
@@ -395,23 +395,23 @@ static func _move_cart(
 static func _handle_salary(ref_DataHub: DataHub, is_win: bool) -> bool:
 	if _can_get_cash(ref_DataHub):
 		_get_cash(ref_DataHub)
-		return false
+		return true
 	elif is_win:
-		return false
-	return true
+		return true
+	return false
 
 
 static func _handle_garage(ref_DataHub: DataHub) -> bool:
 	if _can_use_garage(ref_DataHub):
 		_use_garage(ref_DataHub)
-		return false
-	return true
+		return true
+	return false
 
 
 static func _handle_station(ref_DataHub: DataHub) -> bool:
 	if _can_clean_cart(ref_DataHub) and _clean_cart(ref_DataHub):
-		return false
-	return true
+		return true
+	return false
 
 
 static func _handle_servant(
@@ -436,7 +436,7 @@ static func _handle_officer(
 		ref_RandomNumber: RandomNumber
 ) -> bool:
 	if _remove_all_servant(ref_DataHub):
-		return false
+		return true
 	elif (
 			HandleOfficer.can_receive_archive(actor_state)
 			and _can_unload_report(ref_DataHub)
@@ -447,7 +447,7 @@ static func _handle_officer(
 				ref_DataHub.officer_records,
 				ref_RandomNumber
 		)
-		return false
+		return true
 	elif (
 			HandleOfficer.can_receive_archive(actor_state)
 			and _can_unload_document(ref_DataHub)
@@ -462,8 +462,8 @@ static func _handle_officer(
 		GameProgress.update_challenge_level(ref_DataHub)
 		GameProgress.update_raw_file(ref_DataHub, ref_RandomNumber)
 		GameProgress.update_service(ref_DataHub, ref_RandomNumber)
-		return false
-	return true
+		return true
+	return false
 
 
 static func _handle_raw_file(
@@ -477,15 +477,15 @@ static func _handle_raw_file(
 				actor_state, env_cooldown,
 				ref_RandomNumber
 		)
-		return false
+		return true
 	elif (
 			_can_unload_servant(actor, ref_DataHub)
 			and HandleRawFile.can_receive_servant(actor_state)
 	):
 		_unload_item(ref_DataHub)
 		HandleRawFile.receive_servant(actor_state)
-		return false
-	return true
+		return true
+	return false
 
 
 static func _handle_clerk(
@@ -493,14 +493,14 @@ static func _handle_clerk(
 		ref_DataHub: DataHub
 ) -> bool:
 	if _remove_all_servant(ref_DataHub):
-		return false
+		return true
 	elif (
 			_can_load_document(ref_DataHub)
 			and HandleClerk.can_send_document(actor_state)
 	):
 		_load_document(ref_DataHub)
 		HandleClerk.send_document(actor_state)
-		return false
+		return true
 	elif (
 			_can_unload_raw_file(ref_DataHub)
 			and HandleClerk.can_receive_raw_file(
@@ -509,8 +509,8 @@ static func _handle_clerk(
 	):
 		_unload_item(ref_DataHub)
 		HandleClerk.receive_raw_file(actor_state, first_item_tag)
-		return false
-	return true
+		return true
+	return false
 
 
 static func _handle_shelf(
@@ -520,13 +520,13 @@ static func _handle_shelf(
 	if _can_load_tmp_file(actor_state, ref_DataHub):
 		_load_tmp_file(actor_state, ref_DataHub, ref_RandomNumber)
 		HandleShelf.send_tmp_file(actor_state)
-		return false
+		return true
 	elif (
 			_can_unload_tmp_file(ref_DataHub)
 			and HandleShelf.can_receive_tmp_file(actor_state)
 	):
 		_unload_tmp_file(ref_DataHub, ref_RandomNumber)
 		HandleShelf.receive_tmp_file(actor_state, first_item_tag)
-		return false
-	return true
+		return true
+	return false
 

@@ -102,12 +102,12 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 	NodeHub.ref_SignalHub.ui_force_updated.emit()
 
 
-func _on_SignalHub_game_over(player_win: bool) -> void:
+func _on_SignalHub_game_over(_player_win: bool) -> void:
 	PcFov.render_fov(
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data
 	)
-	if not player_win:
-		VisualEffect.set_dark_color(NodeHub.ref_DataHub.pc)
+	#if not player_win:
+	#	VisualEffect.set_dark_color(NodeHub.ref_DataHub.pc)
 
 
 func _move(direction: Vector2i, state: LinkedCartState) -> void:

@@ -6,6 +6,7 @@ const EXTEND_TEMPLATE: String = "$> +%s"
 const EXAMINE_TEMPLATE: String = "?> %s: %s%%"
 const FIRST_ITEM_TEMPLATE: String = "1> %s: %s%%"
 const LAST_SLOT_TEMPLATE: String = "$> %s: %s%%"
+const NO_LAST_SLOT: String = "$> -: -%"
 
 const PERCENT: float = 100.0
 
@@ -383,8 +384,7 @@ static func get_last_slot_text(pc: Sprite2D, state: LinkedCartState) -> String:
 	var coord: Vector2i
 
 	if cart == null:
-		# $> -: -%
-		return LAST_SLOT_TEMPLATE % ["-", "-"]
+		return NO_LAST_SLOT
 	coord = ConvertCoord.get_coord(cart)
 	return _get_cart_state_text(coord, LAST_SLOT_TEMPLATE, state)
 

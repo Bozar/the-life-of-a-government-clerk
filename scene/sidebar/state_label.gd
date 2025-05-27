@@ -6,6 +6,7 @@ const TURN: String = "Turn: %1d"
 const DOC: String = "Doc: %2d"
 const CASH: String = "Cash: %1d-%1d"
 const CALL: String = "Call: %1d"
+const CART: String = "%s\n%s"
 
 const YOU_WIN: String = "You win.\n[Enter]"
 const YOU_LOSE: String = "You lose.\n[Enter]"
@@ -35,15 +36,24 @@ func update_gui() -> void:
 			NodeHub.ref_DataHub.pc,
 			NodeHub.ref_DataHub.linked_cart_state
 	)
-	var cart: String = last_slot if (first_item == "") else first_item
+	var cart: String
 	var state: String = _get_state_text()
 	var end_game: String
+
+	if first_item == "":
+		cart = last_slot
+	elif last_slot == Cart.NO_LAST_SLOT:
+		cart = first_item
+	else:
+		cart = CART % [first_item, last_slot]
 
 	if game_over:
 		end_game = YOU_WIN if player_win else YOU_LOSE
 
 	text = "\n".join([
-		turn, doc, cash, phone_call, "", cart, state, "", end_game
+		turn, doc, cash, phone_call,
+		"", cart, state,
+		"", end_game
 	])
 
 

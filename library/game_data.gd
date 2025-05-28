@@ -64,7 +64,7 @@ const CART_LENGTH_SHORT: int = 4
 const CART_LENGTH_LONG: int = 7
 
 const ADD_EMPTY_CART_LENGTH: int = 1
-const ADD_EMPTY_CART_CHANCE: int = 60
+const ADD_EMPTY_CART_CHANCE: int = 10
 const MIN_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 2
 const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
 
@@ -133,7 +133,8 @@ const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
 
 # Ideally, it takes 4 turns to bypass a Trash.
 const BASE_DELAY: int = 6
-const LOAD_AMOUNT_MULTIPLER: float = 2.0
+const LOAD_FACTOR_SHORT: float = 1.0
+const LOAD_FACTOR_LONG: float = 3.0
 const MAX_TRASH_PER_LINE: int = 3
 const MAX_SERVANT_PER_LINE: int = 1
 

@@ -209,12 +209,18 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
 
 
 static func get_delay_duration(pc: Sprite2D, state: LinkedCartState) -> int:
-	var add_delay: int = floor(
-			get_full_load_amount(pc, state)
-			* GameData.LOAD_AMOUNT_MULTIPLER
-			/ GameData.MAX_LOAD_PER_CART
-	)
-	return GameData.BASE_DELAY + add_delay
+	var full_load: int = get_full_load_amount(pc, state)
+	var load_factor: float
+	var delay: int
+
+	if count_cart(state) < GameData.CART_LENGTH_SHORT:
+		load_factor = GameData.LOAD_FACTOR_SHORT
+	else:
+		load_factor = GameData.LOAD_FACTOR_LONG
+
+	delay = GameData.BASE_DELAY
+	delay += floor(full_load * load_factor / GameData.MAX_LOAD_PER_CART)
+	return delay
 
 
 static func count_item(

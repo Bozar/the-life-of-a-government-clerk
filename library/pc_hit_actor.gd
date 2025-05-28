@@ -131,6 +131,10 @@ static func can_load_raw_file(
 	return cart != null
 
 
+static func can_unload_document(ref_DataHub: DataHub) -> bool:
+	return _can_unload_archive(ref_DataHub, SubTag.DOCUMENT)
+
+
 static func _can_get_cash(ref_DataHub: DataHub) -> bool:
 	return ref_DataHub.account > 0
 
@@ -198,10 +202,6 @@ static func _is_valid_coord(coord: Vector2i) -> bool:
 			and (not SpriteState.has_building_at_coord(coord))
 			and (not SpriteState.has_actor_at_coord(coord))
 	)
-
-
-static func _can_unload_document(ref_DataHub: DataHub) -> bool:
-	return _can_unload_archive(ref_DataHub, SubTag.DOCUMENT)
 
 
 static func _can_unload_report(ref_DataHub: DataHub) -> bool:
@@ -456,7 +456,7 @@ static func _handle_officer(
 		return true
 	elif (
 			HandleOfficer.can_receive_archive(actor_state)
-			and _can_unload_document(ref_DataHub)
+			and can_unload_document(ref_DataHub)
 	):
 		_unload_document(ref_DataHub)
 		# NOTE: Uncomment this line if the game becomes too hard.

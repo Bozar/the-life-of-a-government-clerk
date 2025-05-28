@@ -38,7 +38,7 @@ func update_gui() -> void:
 	)
 	var cart: String
 	var state: String = _get_state_text()
-	var end_game: String
+	var message: String
 
 	if first_item == "":
 		cart = last_slot
@@ -48,12 +48,15 @@ func update_gui() -> void:
 		cart = CART % [first_item, last_slot]
 
 	if game_over:
-		end_game = YOU_WIN if player_win else YOU_LOSE
+		message = YOU_WIN if player_win else YOU_LOSE
+	elif NodeHub.ref_DataHub.sidebar_message != "":
+		message = NodeHub.ref_DataHub.sidebar_message
+
 
 	text = "\n".join([
 		turn, doc, cash, phone_call,
 		"", cart, state,
-		"", end_game
+		"", message
 	])
 
 

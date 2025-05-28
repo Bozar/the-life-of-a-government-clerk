@@ -31,6 +31,11 @@ var game_mode: int:
 		return _game_mode
 
 
+var sidebar_message: String = "":
+	get:
+		return _sidebar_message
+
+
 var linked_cart_state: LinkedCartState:
 	get:
 		return _linked_cart_state
@@ -132,6 +137,7 @@ var _pc: Sprite2D
 var _game_mode: int = PcAction.NORMAL_MODE
 var _linked_cart_state := LinkedCartState.new()
 var _incoming_call: int = 0
+var _sidebar_message: String
 
 var _raw_file_states: Array[RawFileState]
 var _raw_file_sprites: Array[Sprite2D]
@@ -147,7 +153,6 @@ var _phone_coords: Array[Vector2i]
 
 var _count_servant: int = 0
 var _count_empty_cart: int = 0
-
 var _count_trash: int = 0
 
 
@@ -157,6 +162,10 @@ func set_pc(value: Sprite2D) -> void:
 
 func set_game_mode(value: int) -> void:
 	_game_mode = value
+
+
+func set_sidebar_message(value: String) -> void:
+	_sidebar_message = value
 
 
 func add_incoming_call(value: int) -> void:

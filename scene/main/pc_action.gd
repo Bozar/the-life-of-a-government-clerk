@@ -22,6 +22,8 @@ const BUFFER_SUB_TAG: Dictionary = {
 	SubTag.STATION: true,
 }
 
+const MESSAGE_TEMPLATE: String = "%s: %s"
+
 
 var _is_first_turn: bool = true
 
@@ -204,7 +206,10 @@ func _handle_examine_input(input_tag: StringName) -> bool:
 	match input_tag:
 		InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
 			# Reset buffer state when leaving Examine Mode.
-			_set_buffer_state(INVALID_COORD, INVALID_COORD, false)
+			_set_buffer_state(
+					INVALID_COORD, INVALID_COORD,
+					GameData.WARN.NO_ALERT, false
+			)
 			dh.set_game_mode(NORMAL_MODE)
 			Cart.exit_examine_mode(
 					dh.pc, dh.linked_cart_state
@@ -262,7 +267,10 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 	if _buffer_coord != INVALID_COORD:
 		is_same_input = (_buffer_coord == coord)
 		# Always reset buffer state.
-		_set_buffer_state(INVALID_COORD, INVALID_COORD, false)
+		_set_buffer_state(
+				INVALID_COORD, INVALID_COORD,
+				GameData.WARN.NO_ALERT, false
+		)
 		# The same input key is pressed the second time. Pass the key to
 		# following code outside `_try_buffer_input()`.
 		if is_same_input:
@@ -299,17 +307,22 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 			NodeHub.ref_DataHub
 	)
 	var is_all_safe: bool = is_safe_last and is_safe_full
+	var warn_type: int
 
 	if not has_actor:
-		# Warn player when he might be trapped; or when moving into a
-		# Trash and the overall load amout is more than 60%
-		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
-		is_buffered = (
-				Checkmate.is_trapped(coord)
-				or _handle_trash(coord, is_safe_full)
-		)
+		# Warn player when he might be trapped.
+		if Checkmate.is_trapped(coord):
+			is_buffered = true
+			warn_type = GameData.WARN.TRAPPED
+		# Warn player when moving into a Trash and the overall load
+		# amout is more than 60% (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
+		elif _handle_trash(coord, is_safe_full):
+			is_buffered = true
+			warn_type = GameData.WARN.TRASH
+		else:
+			is_buffered = false
 		if is_buffered:
-			_set_buffer_state(direction, coord, true)
+			_set_buffer_state(direction, coord, warn_type, true)
 			return true
 		return false
 
@@ -319,50 +332,73 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 		# Warn player when a Servant being pushed might disappear.
 		SubTag.SERVANT:
 			is_buffered = _handle_servant(coord)
+			warn_type = GameData.WARN.SERVANT
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.GARAGE:
 			is_buffered = _handle_service(GameData.PAYMENT_GARAGE)
+			warn_type = GameData.WARN.CASH
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:
 			is_buffered = _handle_service(GameData.PAYMENT_CLEAN)
+			warn_type = GameData.WARN.CASH
 
 		# Warn player when loading a Raw File. He may want to keep the
 		# shelf occupied to complete an achievement.
 		SubTag.SHELF:
 			is_buffered = _handle_shelf(state)
+			warn_type = GameData.WARN.SHELF
 
 		# Warn player when loading a Document and the last slot is more
-		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full.
+		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full, or the
+		# overall load amount is more than 60%
+		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		SubTag.CLERK:
 			is_buffered = _handle_clerk(state, is_all_safe)
+			warn_type = GameData.WARN.LOAD
 
 		# Warn player when loading a Raw File and the last slot is more
-		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full.
+		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full, or the
+		# overall load amount is more than 60%
+		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
 				SubTag.FIELD_REPORT:
 			is_buffered = _handle_raw_file(actor, is_all_safe)
+			warn_type = GameData.WARN.LOAD
 
 	if is_buffered:
-		_set_buffer_state(direction, coord, true)
+		_set_buffer_state(direction, coord, warn_type, true)
 		return true
 	return false
 
 
 func _set_buffer_state(
-		direction: Vector2i, coord: Vector2i, has_new_input: bool,
+		direction: Vector2i, coord: Vector2i, warn_type: int,
+		has_new_input: bool,
 ) -> void:
 	var visual_tag: StringName
+	var message: String
+	var str_dir: String
 
 	if has_new_input:
 		visual_tag = VisualTag.VECTOR_TO_TAG.get(
 				direction, VisualTag.DEFAULT
 		)
 		_buffer_coord = coord
+
+		message = GameData.WARN_TO_STRING.get(warn_type, "")
+		str_dir = ConvertCoord.VECTOR_TO_STRING.get(direction, "")
+		message = MESSAGE_TEMPLATE % [str_dir, message]
+
+		NodeHub.ref_DataHub.set_sidebar_message(message)
+		NodeHub.ref_SignalHub.ui_force_updated.emit()
+		NodeHub.ref_DataHub.set_sidebar_message("")
+
 	else:
 		visual_tag = VisualTag.DEFAULT
 		_buffer_coord = INVALID_COORD
+
 	VisualEffect.switch_sprite(NodeHub.ref_DataHub.pc, visual_tag)
 
 

@@ -6,6 +6,13 @@ const START_Y: int = 54
 const STEP_X: int = 26
 const STEP_Y: int = 34
 
+const VECTOR_TO_STRING: Dictionary = {
+	Vector2i.LEFT: "←",
+	Vector2i.RIGHT: "→",
+	Vector2i.UP: "↑",
+	Vector2i.DOWN: "↓",
+}
+
 
 static func get_position(
 		coord: Vector2i, offset: Vector2i = Vector2i(0, 0)

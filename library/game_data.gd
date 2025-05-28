@@ -6,6 +6,26 @@ class_name GameData
 const MIN_TURN_COUNTER: int = 1
 const MAX_TURN_COUNTER: int = 99
 
+enum WARN {
+	NO_ALERT,
+	TRAPPED,
+	TRASH,
+	SERVANT,
+	CASH,
+	SHELF,
+	LOAD,
+}
+
+const WARN_TO_STRING: Dictionary = {
+	WARN.NO_ALERT: "",
+	WARN.TRAPPED: "TRAPPED",
+	WARN.TRASH: "TRASH",
+	WARN.SERVANT: "SERVANT",
+	WARN.CASH: "CASH",
+	WARN.SHELF: "SHELF",
+	WARN.LOAD: "LOAD",
+}
+
 
 ### Sprite ###
 

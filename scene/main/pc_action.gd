@@ -329,7 +329,8 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 	var state: ActorState = NodeHub.ref_ActorAction.get_actor_state(actor)
 
 	match sub_tag:
-		# Warn player when a Servant being pushed might disappear.
+		# Warn player when a Servant being pushed might disappear, or
+		# the Servant is pushed by a long line of Carts.
 		SubTag.SERVANT:
 			is_buffered = _handle_servant(coord)
 			warn_type = GameData.WARN.SERVANT
@@ -408,6 +409,11 @@ func _handle_servant(coord: Vector2i) -> bool:
 
 	if PcHitActor.can_load_servant(NodeHub.ref_DataHub):
 		return false
+	elif (
+			Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
+			>= GameData.CART_LENGTH_SHORT
+	):
+		return true
 
 	mirror_coord = ConvertCoord.get_mirror_coord(
 			NodeHub.ref_DataHub.pc_coord, coord

@@ -329,15 +329,21 @@ static func _get_first_item_tag(ref_DataHub: DataHub) -> StringName:
 	return state.item_tag
 
 
-static func _load_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
-	var sprite: Sprite2D = Cart.get_last_slot(
-			ref_DataHub.pc, ref_DataHub.linked_cart_state
-	)
-	var state: CartState = Cart.get_state(
-			sprite, ref_DataHub.linked_cart_state
-	)
+static func _load_servant(
+		actor: Sprite2D, actor_state: ActorState, ref_DataHub: DataHub
+) -> void:
+	var sprite: Sprite2D
+	var state: CartState
 
-	state.item_tag = SubTag.SERVANT
+	if not actor_state.is_active:
+		sprite = Cart.get_last_slot(
+				ref_DataHub.pc, ref_DataHub.linked_cart_state
+		)
+		state = Cart.get_state(
+				sprite, ref_DataHub.linked_cart_state
+		)
+		state.item_tag = SubTag.SERVANT
+
 	_move_cart(actor, true, ConvertCoord.get_coord(actor), ref_DataHub)
 
 
@@ -419,7 +425,7 @@ static func _handle_servant(
 		ref_RandomNumber: RandomNumber
 ) -> void:
 	if can_load_servant(ref_DataHub):
-		_load_servant(actor, ref_DataHub)
+		_load_servant(actor, actor_state, ref_DataHub)
 	else:
 		HandleRawFile.reduce_cooldown(
 				ref_DataHub.raw_file_states,

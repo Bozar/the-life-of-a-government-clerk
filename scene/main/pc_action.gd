@@ -331,14 +331,19 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 			is_buffered = _handle_servant(coord)
 			warn_type = GameData.WARN.SERVANT
 
-		# Warn player if his Cash is less than 1 after the service.
+		# [Achievement] Warn player if his Cash is less than 1 after the
+		# service; or there are only 3 (GameData.CART_LENGTH_SHORT)
+		# Carts right now.
 		SubTag.GARAGE:
-			is_buffered = _handle_service(GameData.PAYMENT_GARAGE)
-			warn_type = GameData.WARN.CASH
+			is_buffered = (
+					_handle_cost(GameData.PAYMENT_GARAGE)
+					or _handle_garage()
+			)
+			warn_type = GameData.WARN.CART
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:
-			is_buffered = _handle_service(GameData.PAYMENT_CLEAN)
+			is_buffered = _handle_cost(GameData.PAYMENT_CLEAN)
 			warn_type = GameData.WARN.CASH
 
 		# [Achievement] Warn player when loading a Raw File.
@@ -439,13 +444,20 @@ func _handle_servant(coord: Vector2i) -> bool:
 	return false
 
 
-func _handle_service(cost: int) -> bool:
+func _handle_cost(cost: int) -> bool:
 	if (
 			(NodeHub.ref_DataHub.cash > 0)
 			and (NodeHub.ref_DataHub.cash <= cost)
 	):
 		return true
 	return false
+
+
+func _handle_garage() -> bool:
+	return (
+		Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
+		< GameData.CART_LENGTH_SHORT
+	)
 
 
 func _handle_shelf(actor_state: ActorState) -> bool:

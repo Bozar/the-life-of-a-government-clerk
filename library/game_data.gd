@@ -24,6 +24,7 @@ enum WARN {
 	LOAD,
 	PHONE,
 	REPORT,
+	CART,
 }
 
 const WARN_TO_STRING: Dictionary = {
@@ -36,6 +37,7 @@ const WARN_TO_STRING: Dictionary = {
 	WARN.LOAD: "LOAD",
 	WARN.PHONE: "PHONE",
 	WARN.REPORT: "REPORT",
+	WARN.CART: "CART",
 }
 
 

@@ -9,7 +9,7 @@ static func handle_input(
 	var pc: Sprite2D = ref_DataHub.pc
 	var linked_cart_state: LinkedCartState = ref_DataHub.linked_cart_state
 	var count_cart: int = Cart.count_cart(linked_cart_state)
-	var delay: int = Cart.get_delay_duration(pc, linked_cart_state)
+	var delay: int = get_delay_duration()
 
 	if count_cart < GameData.CART_LENGTH_SHORT:
 		ref_DataHub.delay = delay
@@ -23,6 +23,16 @@ static func handle_input(
 	Cart.pull_cart(pc, trap_coord, linked_cart_state)
 	Cart.add_trash(pc, linked_cart_state, ref_RandomNumber)
 	ref_Schedule.start_next_turn()
+
+
+static func get_delay_duration() -> int:
+	var delay: int = GameData.BASE_DELAY
+	var pc: Sprite2D = NodeHub.ref_DataHub.pc
+	var state: LinkedCartState = NodeHub.ref_DataHub.linked_cart_state
+
+	delay += NodeHub.ref_DataHub.count_idler
+	delay += Cart.get_delay_duration(pc, state)
+	return delay
 
 
 static func _remove_servant(

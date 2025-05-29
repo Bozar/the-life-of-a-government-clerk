@@ -145,8 +145,7 @@ const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
 
 ### Trash ###
 
-# Ideally, it takes 4 turns to bypass a Trash.
-const BASE_DELAY: int = 6
+const BASE_DELAY: int = 5
 const LOAD_FACTOR_SHORT: float = 1.0
 const LOAD_FACTOR_LONG: float = 3.0
 const MAX_TRASH_PER_LINE: int = 3

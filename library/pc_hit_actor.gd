@@ -181,9 +181,7 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 	):
 		ref_DataHub.delay = 0
 	else:
-		ref_DataHub.delay = Cart.get_delay_duration(
-				ref_DataHub.pc, ref_DataHub.linked_cart_state
-		)
+		ref_DataHub.delay = PcHitTrap.get_delay_duration()
 
 	new_actor_coord = ConvertCoord.get_mirror_coord(pc_coord, actor_coord)
 	if _is_valid_coord(new_actor_coord):

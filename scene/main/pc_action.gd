@@ -323,10 +323,6 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 		return false
 
 	var state: ActorState = NodeHub.ref_ActorAction.get_actor_state(actor)
-	var has_servant: bool = Cart.count_item(
-			SubTag.SERVANT, NodeHub.ref_DataHub.pc,
-			NodeHub.ref_DataHub.linked_cart_state
-	) > 0
 
 	match sub_tag:
 		# Warn player when a Servant being pushed might disappear, or
@@ -356,9 +352,7 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 		# overall load amount is more than 60%
 		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		SubTag.CLERK:
-			is_buffered = _handle_clerk(
-					state, is_all_safe, has_servant
-			)
+			is_buffered = _handle_clerk(state, is_all_safe)
 			warn_type = GameData.WARN.LOAD
 
 		# Warn player when loading a Raw File and the last slot is more
@@ -373,7 +367,7 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 		# Warn player when unloading a Document and there is more than
 		# 1 (GameData.MAX_MISSED_CALL) Phone calls.
 		SubTag.OFFICER:
-			is_buffered = _handle_officer(state, has_servant)
+			is_buffered = _handle_officer(state)
 			warn_type = GameData.WARN.PHONE
 
 	if is_buffered:
@@ -456,12 +450,8 @@ func _handle_shelf(actor_state: ActorState) -> bool:
 	return false
 
 
-func _handle_clerk(
-		actor_state: ActorState, is_safe_load: bool, has_servant: bool
-) -> bool:
-	if has_servant:
-		return false
-	elif is_safe_load:
+func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
+	if is_safe_load:
 		return false
 	elif not PcHitActor.can_load_document(NodeHub.ref_DataHub):
 		return false
@@ -492,8 +482,13 @@ func _handle_trash(coord: Vector2i, is_safe_load: bool) -> bool:
 	return true
 
 
-func _handle_officer(actor_state: ActorState, has_servant: bool) -> bool:
-	if has_servant:
+func _handle_officer(actor_state: ActorState) -> bool:
+	var count_servant: int = Cart.count_item(
+			SubTag.SERVANT, NodeHub.ref_DataHub.pc,
+			NodeHub.ref_DataHub.linked_cart_state
+	)
+
+	if count_servant > 0:
 		return false
 	elif NodeHub.ref_DataHub.incoming_call <= GameData.MAX_MISSED_CALL:
 		return false

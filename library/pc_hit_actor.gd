@@ -498,9 +498,7 @@ static func _handle_clerk(
 		actor_state: ActorState, first_item_tag: StringName,
 		ref_DataHub: DataHub
 ) -> bool:
-	if _remove_all_servant(ref_DataHub):
-		return true
-	elif (
+	if (
 			can_load_document(ref_DataHub)
 			and HandleClerk.can_send_document(actor_state)
 	):

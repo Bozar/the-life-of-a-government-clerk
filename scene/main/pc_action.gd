@@ -341,8 +341,7 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 			is_buffered = _handle_service(GameData.PAYMENT_CLEAN)
 			warn_type = GameData.WARN.CASH
 
-		# Warn player when loading a Raw File. He may want to keep the
-		# shelf occupied to complete an achievement.
+		# [Achievement] Warn player when loading a Raw File.
 		SubTag.SHELF:
 			is_buffered = _handle_shelf(state)
 			warn_type = GameData.WARN.SHELF
@@ -359,10 +358,15 @@ func _try_buffer_input(direction: Vector2i, coord: Vector2i) -> bool:
 		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full, or the
 		# overall load amount is more than 60%
 		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
-		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
-				SubTag.FIELD_REPORT:
+		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
 			is_buffered = _handle_raw_file(actor, is_all_safe)
 			warn_type = GameData.WARN.LOAD
+
+		# [Achievement] Warn player when loading a Field Report
+		# regardless of load amount.
+		SubTag.FIELD_REPORT:
+			is_buffered = _handle_raw_file(actor, false)
+			warn_type = GameData.WARN.REPORT
 
 		# Warn player when unloading a Document and there is more than
 		# 1 (GameData.MAX_MISSED_CALL) Phone calls.

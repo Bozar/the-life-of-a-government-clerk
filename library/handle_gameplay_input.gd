@@ -365,7 +365,7 @@ static func _handle_shelf(actor_state: ActorState) -> bool:
 
 
 static func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
-	if is_safe_load:
+	if is_safe_load and (not _handle_phone_call()):
 		return false
 	elif not PcHitActor.can_load_document(NodeHub.ref_DataHub):
 		return false
@@ -404,11 +404,17 @@ static func _handle_officer(actor_state: ActorState) -> bool:
 
 	if count_servant > 0:
 		return false
-	elif NodeHub.ref_DataHub.incoming_call <= GameData.MAX_MISSED_CALL:
+	elif _handle_phone_call():
 		return false
 	elif not HandleOfficer.can_receive_archive(actor_state):
 		return false
 	elif not PcHitActor.can_unload_document(NodeHub.ref_DataHub):
+		return false
+	return true
+
+
+static func _handle_phone_call() -> bool:
+	if NodeHub.ref_DataHub.incoming_call <= GameData.MAX_MISSED_CALL:
 		return false
 	return true
 

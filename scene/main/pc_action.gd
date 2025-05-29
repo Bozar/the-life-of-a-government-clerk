@@ -2,11 +2,6 @@ class_name PcAction
 extends Node2D
 
 
-enum {
-	NORMAL_MODE,
-	EXAMINE_MODE,
-}
-
 const INVALID_COORD: Vector2i = Vector2i(-1, -1)
 
 const BUFFER_SUB_TAG: Dictionary = {
@@ -90,17 +85,17 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
 
 func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 	match NodeHub.ref_DataHub.game_mode:
-		NORMAL_MODE:
+		GameData.NORMAL_MODE:
 			if _handle_normal_input(input_tag):
 				return
-		EXAMINE_MODE:
+		GameData.EXAMINE_MODE:
 			if _handle_examine_input(input_tag):
 				return
 
 	PcFov.render_fov(
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data
 	)
-	if NodeHub.ref_DataHub.game_mode == EXAMINE_MODE:
+	if NodeHub.ref_DataHub.game_mode == GameData.EXAMINE_MODE:
 		PcSwitchMode.highlight_actor()
 	NodeHub.ref_SignalHub.ui_force_updated.emit()
 
@@ -170,7 +165,7 @@ func _handle_normal_input(input_tag: StringName) -> bool:
 					dh.pc, dh.linked_cart_state
 			):
 				return true
-			dh.set_game_mode(EXAMINE_MODE)
+			dh.set_game_mode(GameData.EXAMINE_MODE)
 			PcSwitchMode.examine_mode(
 					true, dh,
 					NodeHub.ref_ActorAction
@@ -211,7 +206,7 @@ func _handle_examine_input(input_tag: StringName) -> bool:
 					INVALID_COORD, INVALID_COORD,
 					GameData.WARN.NO_ALERT, false
 			)
-			dh.set_game_mode(NORMAL_MODE)
+			dh.set_game_mode(GameData.NORMAL_MODE)
 			Cart.exit_examine_mode(
 					dh.pc, dh.linked_cart_state
 			)

@@ -1,6 +1,14 @@
 class_name GameData
 
 
+### Game Mode ###
+
+enum {
+	NORMAL_MODE,
+	EXAMINE_MODE,
+}
+
+
 ### Sidebar ###
 
 const MIN_TURN_COUNTER: int = 1

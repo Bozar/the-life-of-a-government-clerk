@@ -172,14 +172,14 @@ func _handle_wizard_inputs(event: InputEvent) -> bool:
 
 func _handle_examine_inputs(event: InputEvent) -> bool:
 	match NodeHub.ref_DataHub.game_mode:
-		PcAction.NORMAL_MODE:
+		GameData.NORMAL_MODE:
 			if not event.is_action_pressed(InputTag.SWITCH_EXAMINE):
 				return false
 			NodeHub.ref_SignalHub.action_pressed.emit(
 					InputTag.SWITCH_EXAMINE
 			)
 			return true
-		PcAction.EXAMINE_MODE:
+		GameData.EXAMINE_MODE:
 			if _handle_game_play_inputs(event):
 				return true
 			return false

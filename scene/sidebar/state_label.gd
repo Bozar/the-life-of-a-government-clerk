@@ -62,11 +62,11 @@ func update_gui() -> void:
 
 func _get_state_text() -> String:
 	match NodeHub.ref_DataHub.game_mode:
-		NodeHub.ref_PcAction.NORMAL_MODE:
+		GameData.NORMAL_MODE:
 			return Cart.get_extend_text(
 					NodeHub.ref_DataHub.linked_cart_state
 			)
-		NodeHub.ref_PcAction.EXAMINE_MODE:
+		GameData.EXAMINE_MODE:
 			return Cart.get_examine_text(
 					NodeHub.ref_DataHub.pc,
 					NodeHub.ref_DataHub.linked_cart_state

@@ -25,8 +25,10 @@ static func render_fov(
 	var pc_coord: Vector2i = ConvertCoord.get_coord(pc)
 	var this_coord: Vector2i = Vector2i(0, 0)
 
-	ShadowCastFov.get_fov_map(pc_coord, fov_map, _set_fov_value,
-			_block_shadow_cast_fov_ray, [], shadow_cast_fov_data)
+	ShadowCastFov.get_fov_map(
+			pc_coord, fov_map, _set_fov_value,
+			_block_shadow_cast_fov_ray, [], shadow_cast_fov_data
+	)
 
 	for x: int in range(0, DungeonSize.MAX_X):
 		for y: int in range(DungeonSize.MAX_Y):
@@ -124,17 +126,18 @@ static func _sort_by_z_index(this: Sprite2D, that: Sprite2D) -> bool:
 	return this.z_index < that.z_index
 
 
-static func _is_obstacle(coord: Vector2i) -> bool:
-	if DungeonSize.is_in_dungeon(coord):
-		return (
-				SpriteState.has_building_at_coord(coord)
-				or SpriteState.has_actor_at_coord(coord)
-		)
-	return true
-
-
 static func _block_shadow_cast_fov_ray(
 		_from_coord: Vector2i, to_coord: Vector2i, _args: Array
 ) -> bool:
-	return _is_obstacle(to_coord)
+	if not DungeonSize.is_in_dungeon(to_coord):
+		return true
+	elif SpriteState.has_building_at_coord(to_coord):
+		return true
+	elif not SpriteState.has_actor_at_coord(to_coord):
+		return false
+
+	# An Actor does not block sight in Examine Mode.
+	if NodeHub.ref_DataHub.game_mode == GameData.EXAMINE_MODE:
+		return false
+	return true
 

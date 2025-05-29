@@ -250,17 +250,21 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			is_buffered = _handle_shelf(state)
 			warn_type = GameData.WARN.SHELF
 
-		# Warn player when loading a Document and the last slot is more
-		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full, or the
-		# overall load amount is more than 60%
-		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
+		# Warn player when loading a Document and ..
+		# 1. the last slot is more than 40%
+		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full;
+		# 2. or the overall load amount is more than 60%
+		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2);
+		# 3. or there is more than 1 (GameData.MAX_MISSED_CALL) Phone
+		# calls.
 		SubTag.CLERK:
 			is_buffered = _handle_clerk(state, is_all_safe)
-			warn_type = GameData.WARN.LOAD
+			warn_type = GameData.WARN.DOCUMENT
 
-		# Warn player when loading a Raw File and the last slot is more
-		# than 40% (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full, or the
-		# overall load amount is more than 60%
+		# Warn player when loading a Raw File and ...
+		# 1. the last slot is more than 40%
+		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_1) full;
+		# 2. or the overall load amount is more than 60%
 		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
 			is_buffered = _handle_raw_file(actor, is_all_safe)
@@ -276,7 +280,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# 1 (GameData.MAX_MISSED_CALL) Phone calls.
 		SubTag.OFFICER:
 			is_buffered = _handle_officer(state)
-			warn_type = GameData.WARN.PHONE
+			warn_type = GameData.WARN.DOCUMENT
 
 	if is_buffered:
 		_set_buffer_state(data, warn_type, true)
@@ -352,10 +356,14 @@ static func _handle_cost(cost: int) -> bool:
 
 
 static func _handle_garage() -> bool:
-	return (
+	if NodeHub.ref_DataHub.cash < 1:
+		return false
+	elif (
 		Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
-		< GameData.CART_LENGTH_SHORT
-	)
+		>= GameData.CART_LENGTH_SHORT
+	):
+		return false
+	return true
 
 
 static func _handle_shelf(actor_state: ActorState) -> bool:
@@ -404,7 +412,7 @@ static func _handle_officer(actor_state: ActorState) -> bool:
 
 	if count_servant > 0:
 		return false
-	elif _handle_phone_call():
+	elif not _handle_phone_call():
 		return false
 	elif not HandleOfficer.can_receive_archive(actor_state):
 		return false

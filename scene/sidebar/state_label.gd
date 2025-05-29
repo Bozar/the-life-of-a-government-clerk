@@ -28,24 +28,14 @@ func update_gui() -> void:
 		NodeHub.ref_DataHub.cash, NodeHub.ref_DataHub.account,
 	]
 	var phone_call: String = CALL % NodeHub.ref_DataHub.incoming_call
-	var first_item: String = Cart.get_first_item_text(
-			NodeHub.ref_DataHub.pc,
-			NodeHub.ref_DataHub.linked_cart_state
-	)
-	var last_slot: String = Cart.get_last_slot_text(
-			NodeHub.ref_DataHub.pc,
-			NodeHub.ref_DataHub.linked_cart_state
-	)
 	var cart: String
-	var state: String = _get_state_text()
 	var message: String
 
-	if first_item == "":
-		cart = last_slot
-	elif last_slot == Cart.NO_LAST_SLOT:
-		cart = first_item
-	else:
-		cart = CART % [first_item, last_slot]
+	match NodeHub.ref_DataHub.game_mode:
+		GameData.NORMAL_MODE:
+			cart = _get_normal_text()
+		GameData.EXAMINE_MODE:
+			cart = _get_examine_text()
 
 	if game_over:
 		message = YOU_WIN if player_win else YOU_LOSE
@@ -55,21 +45,36 @@ func update_gui() -> void:
 
 	text = "\n".join([
 		turn, doc, cash, phone_call,
-		"", cart, state,
+		"", cart,
 		"", message
 	])
 
 
-func _get_state_text() -> String:
-	match NodeHub.ref_DataHub.game_mode:
-		GameData.NORMAL_MODE:
-			return Cart.get_extend_text(
-					NodeHub.ref_DataHub.linked_cart_state
-			)
-		GameData.EXAMINE_MODE:
-			return Cart.get_examine_text(
-					NodeHub.ref_DataHub.pc,
-					NodeHub.ref_DataHub.linked_cart_state
-			)
-	return ""
+func _get_examine_text() -> String:
+	var pc := NodeHub.ref_DataHub.pc
+	var lcs := NodeHub.ref_DataHub.linked_cart_state
+
+	return Cart.get_examine_text(pc, lcs)
+
+
+func _get_normal_text() -> String:
+	var pc := NodeHub.ref_DataHub.pc
+	var lcs := NodeHub.ref_DataHub.linked_cart_state
+
+	var first_item: String = Cart.get_first_item_text(pc, lcs)
+	var last_slot: String = Cart.get_last_slot_text(pc, lcs)
+	var extend: String = Cart.get_extend_text(lcs)
+	var snippets: Array
+
+	if first_item == "":
+		snippets = [last_slot]
+	elif last_slot == Cart.NO_LAST_SLOT:
+		snippets = [first_item]
+	else:
+		snippets = [first_item, last_slot]
+
+	if extend != "":
+		snippets.push_back(extend)
+
+	return "\n".join(snippets)
 

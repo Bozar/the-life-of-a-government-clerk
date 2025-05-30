@@ -23,28 +23,26 @@ var _dungeon_sprites: Dictionary = {}
 var _indicators: Dictionary = {}
 
 
-func move_sprite(sprite: Sprite2D, coord: Vector2i, z_layer: int) -> void:
+func move_sprite(
+		sprite: Sprite2D, target_coord: Vector2i, z_layer: int
+) -> void:
 	var main_tag: StringName = SpriteState.get_main_tag(sprite)
-
-	_remove_sprite(sprite, main_tag)
-	sprite.position = ConvertCoord.get_position(coord)
-	sprite.z_index = z_layer
-	_add_sprite(sprite, main_tag)
+	var source_coord: Vector2i = ConvertCoord.get_coord(sprite)
 
 	if sprite.is_in_group(SubTag.PC):
-		move_indicator(coord, _indicators)
+		_set_x_indicator_color(source_coord.x, true)
+		_set_y_indicator_color(source_coord.y, true)
+	_remove_sprite(sprite, main_tag)
 
+	sprite.position = ConvertCoord.get_position(target_coord)
+	sprite.z_index = z_layer
+	_add_sprite(sprite, main_tag)
+	if sprite.is_in_group(SubTag.PC):
+		_set_x_indicator_color(target_coord.x, false)
+		_set_y_indicator_color(target_coord.y, false)
 
-func move_indicator(coord: Vector2i, indicators: Dictionary) -> void:
-	var sprite: Sprite2D
-	var axis: StringName
-
-	for i: StringName in INDICATOR_AXES:
-		if not indicators.has(i):
-			continue
-		sprite = indicators[i]
-		axis = INDICATOR_AXES[i]
-		sprite.position[axis] = ConvertCoord.get_position(coord)[axis]
+	#if sprite.is_in_group(SubTag.PC):
+	#	move_arrow_indicator(target_coord, _indicators)
 
 
 func get_sprites_by_coord(coord: Vector2i) -> Array:
@@ -88,6 +86,34 @@ func swap_sprite(this_sprite: Sprite2D, that_sprite: Sprite2D) -> void:
 	move_sprite(this_sprite, that_coord, ZLayer.MAX_Z_LAYER)
 	move_sprite(that_sprite, this_coord, this_layer)
 	move_sprite(this_sprite, that_coord, that_layer)
+
+
+func _set_x_indicator_color(x: int, is_default: bool) -> void:
+	for i: Sprite2D in NodeHub.ref_DataHub.get_x_indicators(x):
+		if is_default:
+			VisualEffect.set_default_color(i)
+		else:
+			VisualEffect.set_alternative_color(i)
+
+
+func _set_y_indicator_color(y: int, is_default: bool) -> void:
+	for i: Sprite2D in NodeHub.ref_DataHub.get_y_indicators(y):
+		if is_default:
+			VisualEffect.set_default_color(i)
+		else:
+			VisualEffect.set_alternative_color(i)
+
+
+func _move_arrow_indicator(coord: Vector2i, indicators: Dictionary) -> void:
+	var sprite: Sprite2D
+	var axis: StringName
+
+	for i: StringName in INDICATOR_AXES:
+		if not indicators.has(i):
+			continue
+		sprite = indicators[i]
+		axis = INDICATOR_AXES[i]
+		sprite.position[axis] = ConvertCoord.get_position(coord)[axis]
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

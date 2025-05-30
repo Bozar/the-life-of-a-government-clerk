@@ -14,14 +14,14 @@ static func switch_sprite(sprite: Sprite2D, visual_tag: StringName) -> void:
 		push_error("Invalid visual tag: %s, %s." % [sprite, visual_tag])
 
 
-static func set_light_color(sprite: Sprite2D) -> void:
+static func set_default_color(sprite: Sprite2D) -> void:
 	var palette: Dictionary = TransferData.palette
 	var main_tag: StringName = SpriteState.get_main_tag(sprite)
 	var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
 	sprite.modulate = Palette.get_color(palette, main_tag, sub_tag, true)
 
 
-static func set_dark_color(sprite: Sprite2D) -> void:
+static func set_alternative_color(sprite: Sprite2D) -> void:
 	var palette: Dictionary = TransferData.palette
 	var main_tag: StringName = SpriteState.get_main_tag(sprite)
 	var sub_tag: StringName = SpriteState.get_sub_tag(sprite)

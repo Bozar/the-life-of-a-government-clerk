@@ -137,6 +137,9 @@ var _linked_cart_state := LinkedCartState.new()
 var _incoming_call: int = 0
 var _sidebar_message: String
 
+var _x_to_indicator: Dictionary
+var _y_to_indicator: Dictionary
+
 var _actor_states: Dictionary = {}
 var _raw_file_states: Array[RawFileState]
 var _raw_file_sprites: Array[Sprite2D]
@@ -226,6 +229,28 @@ func set_actor_state(sprite: Sprite2D, new_state: ActorState) -> void:
 
 func remove_actor_state(sprite: Sprite2D) -> bool:
 	return _actor_states.erase(sprite.get_instance_id())
+
+
+func get_x_indicators(x: int) -> Array:
+	return _x_to_indicator.get(x, [])
+
+
+func set_x_indicators(x: int, sprite: Sprite2D) -> void:
+	if _x_to_indicator.has(x):
+		_x_to_indicator[x].push_back(sprite)
+	else:
+		_x_to_indicator[x] = [sprite]
+
+
+func get_y_indicators(y: int) -> Array:
+	return _y_to_indicator.get(y, [])
+
+
+func set_y_indicators(y: int, sprite: Sprite2D) -> void:
+	if _y_to_indicator.has(y):
+		_y_to_indicator[y].push_back(sprite)
+	else:
+		_y_to_indicator[y] = [sprite]
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

@@ -65,19 +65,18 @@ const CHAR_TO_TAG: Dictionary = {
 static func create_sprite() -> void:
 	var tagged_sprites: Array = []
 	var occupied_grids: Dictionary = Map2D.init_map(false)
-	var pc_coord: Vector2i
 
 	_create_floor(tagged_sprites)
 	_create_from_file(occupied_grids, tagged_sprites)
-	pc_coord = _create_pc(occupied_grids, tagged_sprites)
-	_create_indicator(pc_coord, tagged_sprites)
+	_create_pc(occupied_grids, tagged_sprites)
+	_create_indicator(tagged_sprites)
 
 	NodeHub.ref_SignalHub.sprite_created.emit(tagged_sprites)
 
 
 static func _create_pc(
 		occupied_grids: Dictionary, tagged_sprites: Array
-) -> Vector2i:
+) -> void:
 	var coord: Vector2i = Vector2i.ZERO
 
 	while true:
@@ -89,7 +88,6 @@ static func _create_pc(
 	tagged_sprites.push_back(SpriteFactory.create_actor(
 			SubTag.PC, coord, false
 	))
-	return coord
 
 
 static func _create_floor(tagged_sprites: Array) -> void:
@@ -101,7 +99,56 @@ static func _create_floor(tagged_sprites: Array) -> void:
 			))
 
 
-static func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
+static func _create_indicator(tagged_sprites: Array) -> void:
+	const SUB_TAGS: Array = [
+		SubTag.INDICATOR_0, SubTag.INDICATOR_1, SubTag.INDICATOR_2,
+		SubTag.INDICATOR_3, SubTag.INDICATOR_4, SubTag.INDICATOR_5,
+		SubTag.INDICATOR_6, SubTag.INDICATOR_7, SubTag.INDICATOR_8,
+		SubTag.INDICATOR_9,
+
+		SubTag.INDICATOR_A, SubTag.INDICATOR_B, SubTag.INDICATOR_C,
+		SubTag.INDICATOR_D, SubTag.INDICATOR_E, SubTag.INDICATOR_F,
+		SubTag.INDICATOR_G, SubTag.INDICATOR_H, SubTag.INDICATOR_J,
+		SubTag.INDICATOR_K, SubTag.INDICATOR_L
+	]
+	var coord: Vector2i = Vector2i(0, 0)
+	var offset: Vector2i = Vector2i(0, 0)
+	var t_sprite: TaggedSprite
+
+	for x: int in range(0, DungeonSize.MAX_X):
+		coord.x = x
+		coord.y = 0
+		offset.x = 0
+		offset.y = -INDICATOR_OFFSET
+		t_sprite = CreateSprite.create(
+				MainTag.INDICATOR, SUB_TAGS[x], coord, offset
+		)
+		tagged_sprites.push_back(t_sprite)
+		NodeHub.ref_DataHub.set_x_indicators(x, t_sprite.sprite)
+
+		coord.y = DungeonSize.MAX_Y - 1
+		offset.y = INDICATOR_OFFSET
+		t_sprite = CreateSprite.create(
+				MainTag.INDICATOR, SUB_TAGS[x], coord, offset
+		)
+		tagged_sprites.push_back(t_sprite)
+		NodeHub.ref_DataHub.set_x_indicators(x, t_sprite.sprite)
+
+	for y: int in range(0, DungeonSize.MAX_Y):
+		coord.x = 0
+		coord.y = y
+		offset.x = -INDICATOR_OFFSET
+		offset.y = 0
+		t_sprite = CreateSprite.create(
+				MainTag.INDICATOR, SUB_TAGS[y], coord, offset
+		)
+		tagged_sprites.push_back(t_sprite)
+		NodeHub.ref_DataHub.set_y_indicators(y, t_sprite.sprite)
+
+
+static func _create_arrow_indicator(
+		coord: Vector2i, tagged_sprites: Array
+) -> void:
 	var indicators: Dictionary = {
 		SubTag.INDICATOR_TOP: [
 			Vector2i(coord.x, 0), Vector2i(0, -INDICATOR_OFFSET)
@@ -136,29 +183,29 @@ static func _create_from_character(
 		coords_service_1: Array, coords_service_2: Array,
 		coords_optional_wall: Array
 ) -> void:
-	var save_tagged_sprite: TaggedSprite
+	var t_sprite: TaggedSprite
 
 	occupied_grids[coord.x][coord.y] = true
 	match character:
 		WALL_CHAR, DOOR_CHAR, DESK_CHAR, PHONE_BOOTH_CHAR:
-			save_tagged_sprite = SpriteFactory.create_building(
+			t_sprite = SpriteFactory.create_building(
 					CHAR_TO_TAG[character], coord, false
 			)
-			tagged_sprites.push_back(save_tagged_sprite)
+			tagged_sprites.push_back(t_sprite)
 
 		SPECIAL_FLOOR_CHAR:
-			save_tagged_sprite = SpriteFactory.create_ground(
+			t_sprite = SpriteFactory.create_ground(
 					CHAR_TO_TAG[character], coord, false
 			)
-			save_tagged_sprite.sprite.z_index \
+			t_sprite.sprite.z_index \
 					= GameData.INTERNAL_FLOOR_Z_LAYER
-			tagged_sprites.push_back(save_tagged_sprite)
+			tagged_sprites.push_back(t_sprite)
 
 		CLERK_CHAR, OFFICER_CHAR, SHELF_CHAR:
-			save_tagged_sprite = SpriteFactory.create_actor(
+			t_sprite = SpriteFactory.create_actor(
 					CHAR_TO_TAG[character], coord, false
 			)
-			tagged_sprites.push_back(save_tagged_sprite)
+			tagged_sprites.push_back(t_sprite)
 
 		RAW_FILE_A_CHAR:
 			coords_raw_a.push_back(coord)
@@ -292,7 +339,7 @@ static func _create_from_coord(
 		coords_service_1: Array, coords_service_2: Array,
 		coords_optional_wall: Array
 ) -> void:
-	var save_tagged_sprite: TaggedSprite
+	var t_sprite: TaggedSprite
 	var wall_coords: Array
 
 	_get_merged_coords(coords_raw_a, coords_raw_b)
@@ -305,22 +352,22 @@ static func _create_from_coord(
 	])
 
 	for i: int in range(0, coords_raw_a.size()):
-		save_tagged_sprite = SpriteFactory.create_actor(
+		t_sprite = SpriteFactory.create_actor(
 				RAW_FILE_SUB_TAGS[i], coords_raw_a[i], false
 		)
-		tagged_sprites.push_back(save_tagged_sprite)
+		tagged_sprites.push_back(t_sprite)
 
 	for i: int in range(0, coords_service_1.size()):
-		save_tagged_sprite = SpriteFactory.create_actor(
+		t_sprite = SpriteFactory.create_actor(
 				SERVICE_SUB_TAGS[i], coords_service_1[i], false
 		)
-		tagged_sprites.push_back(save_tagged_sprite)
+		tagged_sprites.push_back(t_sprite)
 
 	for i: int in range(0, wall_coords.size()):
-		save_tagged_sprite = SpriteFactory.create_building(
+		t_sprite = SpriteFactory.create_building(
 				SubTag.WALL, wall_coords[i], false
 		)
-		tagged_sprites.push_back(save_tagged_sprite)
+		tagged_sprites.push_back(t_sprite)
 
 
 static func _create_from_prefab(

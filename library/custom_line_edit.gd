@@ -23,14 +23,14 @@ func init_gui() -> void:
 func _set_font() -> void:
 	var palette: Dictionary = TransferData.palette
 	var color_name: String
-	var is_light_color: bool
+	var is_default_color: bool
 	var font_color: String
 
 	for i: Array in FONT_COLOR_SETTINGS:
 		color_name = i[0]
-		is_light_color = i[1]
+		is_default_color = i[1]
 		font_color = Palette.get_color(
-				palette, MainTag.GUI_TEXT, "", is_light_color
+				palette, MainTag.GUI_TEXT, "", is_default_color
 		)
 
 		add_theme_font_override("font", _font)

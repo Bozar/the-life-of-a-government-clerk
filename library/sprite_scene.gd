@@ -49,6 +49,29 @@ const SPRITE_SCENES: Dictionary = {
 	SubTag.INDICATOR_TOP: preload("res://sprite/indicator_top.tscn"),
 	SubTag.INDICATOR_BOTTOM: preload("res://sprite/indicator_bottom.tscn"),
 	SubTag.INDICATOR_LEFT: preload("res://sprite/indicator_left.tscn"),
+
+	SubTag.INDICATOR_0: preload("res://sprite/indicator_0.tscn"),
+	SubTag.INDICATOR_1: preload("res://sprite/indicator_1.tscn"),
+	SubTag.INDICATOR_2: preload("res://sprite/indicator_2.tscn"),
+	SubTag.INDICATOR_3: preload("res://sprite/indicator_3.tscn"),
+	SubTag.INDICATOR_4: preload("res://sprite/indicator_4.tscn"),
+	SubTag.INDICATOR_5: preload("res://sprite/indicator_5.tscn"),
+	SubTag.INDICATOR_6: preload("res://sprite/indicator_6.tscn"),
+	SubTag.INDICATOR_7: preload("res://sprite/indicator_7.tscn"),
+	SubTag.INDICATOR_8: preload("res://sprite/indicator_8.tscn"),
+	SubTag.INDICATOR_9: preload("res://sprite/indicator_9.tscn"),
+
+	SubTag.INDICATOR_A: preload("res://sprite/indicator_a.tscn"),
+	SubTag.INDICATOR_B: preload("res://sprite/indicator_b.tscn"),
+	SubTag.INDICATOR_C: preload("res://sprite/indicator_c.tscn"),
+	SubTag.INDICATOR_D: preload("res://sprite/indicator_d.tscn"),
+	SubTag.INDICATOR_E: preload("res://sprite/indicator_e.tscn"),
+	SubTag.INDICATOR_F: preload("res://sprite/indicator_f.tscn"),
+	SubTag.INDICATOR_G: preload("res://sprite/indicator_g.tscn"),
+	SubTag.INDICATOR_H: preload("res://sprite/indicator_h.tscn"),
+	SubTag.INDICATOR_J: preload("res://sprite/indicator_j.tscn"),
+	SubTag.INDICATOR_K: preload("res://sprite/indicator_k.tscn"),
+	SubTag.INDICATOR_L: preload("res://sprite/indicator_l.tscn"),
 }
 
 

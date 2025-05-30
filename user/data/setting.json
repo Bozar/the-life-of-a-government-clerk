@@ -19,7 +19,7 @@
         "trap": ["#F8B945", "#854E19"],
         "building": ["#6C757D", "#343A40"],
         "actor": ["#52B788", "#2D6A4F"],
-        "indicator": ["#6C757D", "#6C757D"],
+        "indicator": ["#343A40", "#6C757D"],
         "pc": ["#95D5B2", "#40916C"]
     },
     "BLUE_PALETTE": {

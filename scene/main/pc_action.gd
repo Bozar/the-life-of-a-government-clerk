@@ -90,7 +90,7 @@ func _on_SignalHub_game_over(_player_win: bool) -> void:
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data
 	)
 	#if not player_win:
-	#	VisualEffect.set_dark_color(NodeHub.ref_DataHub.pc)
+	#	VisualEffect.set_alternative_color(NodeHub.ref_DataHub.pc)
 
 
 func _init_pc(pc_sprite: Sprite2D) -> void:

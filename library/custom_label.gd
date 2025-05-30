@@ -13,10 +13,10 @@ func update_gui() -> void:
 	pass
 
 
-func _set_font(is_light_color: bool) -> void:
+func _set_font(is_default_color: bool) -> void:
 	var palette: Dictionary = TransferData.palette
 	var font_color: String = Palette.get_color(
-			palette, MainTag.GUI_TEXT, "", is_light_color
+			palette, MainTag.GUI_TEXT, "", is_default_color
 	)
 
 	add_theme_font_override("font", _font)

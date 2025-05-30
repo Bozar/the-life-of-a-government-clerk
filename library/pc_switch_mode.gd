@@ -20,5 +20,5 @@ static func examine_mode(is_enter: bool, ref_DataHub: DataHub) -> void:
 static func highlight_actor() -> void:
 	for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(SubTag.HIGHLIGHT):
 		if i.visible:
-			VisualEffect.set_light_color(i)
+			VisualEffect.set_default_color(i)
 

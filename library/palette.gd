@@ -30,7 +30,7 @@ const DEFAULT_PALETTE: Dictionary = {
 	MainTag.TRAP: [ORANGE, DARK_ORANGE],
 	MainTag.BUILDING: [GREY, DARK_GREY],
 	MainTag.ACTOR: [GREEN, DARK_GREEN],
-	MainTag.INDICATOR: [GREY, GREY],
+	MainTag.INDICATOR: [DARK_GREY, GREY],
 
 	SubTag.PC: [PC_GREEN, DARK_PC_GREEN],
 }
@@ -46,14 +46,14 @@ static var _color_regex_compiled: bool = false
 
 static func get_color(
 		palette: Dictionary, main_tag: StringName, sub_tag: StringName,
-		is_light_color: bool
+		is_default_color: bool
 ) -> String:
 	var default_main: Array = DEFAULT_PALETTE.get(main_tag, INVALID_COLORS)
 	var palette_main: Array = palette.get(main_tag, default_main)
 	var default_sub: Array = DEFAULT_PALETTE.get(sub_tag, palette_main)
 	var colors: Array = palette.get(sub_tag, default_sub)
 
-	if is_light_color:
+	if is_default_color:
 		return colors[0]
 	return colors[1]
 

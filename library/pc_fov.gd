@@ -41,10 +41,10 @@ static func render_fov(
 static func _set_sprite_color(coord: Vector2i, fov_map: Dictionary) -> void:
 	if _is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
 		for i: Sprite2D in SpriteState.get_sprites_by_coord(coord):
-			VisualEffect.set_light_color(i)
+			VisualEffect.set_default_color(i)
 	else:
 		for i: Sprite2D in SpriteState.get_sprites_by_coord(coord):
-			VisualEffect.set_dark_color(i)
+			VisualEffect.set_alternative_color(i)
 
 
 static func _set_sprite_visibility(
@@ -60,7 +60,7 @@ static func _set_sprite_visibility(
 	if _is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
 		_set_fov_value(coord, fov_map, IS_IN_MEMORY_FLAG, true)
 		for i: Sprite2D in sprites:
-			VisualEffect.set_light_color(i)
+			VisualEffect.set_default_color(i)
 			VisualEffect.set_visibility(i, false)
 		sprite = sprites.pop_back()
 		if sprite != null:
@@ -80,7 +80,7 @@ static func _set_sprite_visibility(
 			elif _match_sprite_tag(sprite, memory_tags):
 				break
 		if sprite != null:
-			VisualEffect.set_dark_color(sprite)
+			VisualEffect.set_alternative_color(sprite)
 			VisualEffect.set_visibility(sprite, true)
 
 

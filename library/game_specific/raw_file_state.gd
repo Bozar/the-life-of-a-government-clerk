@@ -49,7 +49,7 @@ func _set_encyclopedia_cooldown() -> void:
 			NodeHub.ref_DataHub.linked_cart_state
 	)
 
-	if count_cart < GameData.CART_LENGTH_LONG:
+	if count_cart <= GameData.CART_LENGTH_LONG:
 		_create_progress_bar()
 	else:
 		_remove_progress_bar()

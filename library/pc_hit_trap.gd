@@ -11,7 +11,7 @@ static func handle_input(
 	var count_cart: int = Cart.count_cart(linked_cart_state)
 	var delay: int = get_delay_duration()
 
-	if count_cart < GameData.CART_LENGTH_SHORT:
+	if count_cart <= GameData.CART_LENGTH_SHORT:
 		ref_DataHub.delay = delay
 	else:
 		if _remove_servant(pc, linked_cart_state):

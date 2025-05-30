@@ -82,7 +82,7 @@ static func handle_input(
 static func can_load_servant(ref_DataHub: DataHub) -> bool:
 	if (
 			Cart.count_cart(ref_DataHub.linked_cart_state)
-			< GameData.CART_LENGTH_SHORT
+			<= GameData.CART_LENGTH_SHORT
 	):
 		return false
 
@@ -174,7 +174,7 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 
 	if (
 			Cart.count_cart(ref_DataHub.linked_cart_state)
-			< GameData.CART_LENGTH_SHORT
+			<= GameData.CART_LENGTH_SHORT
 	):
 		ref_DataHub.delay = 0
 	else:
@@ -370,7 +370,7 @@ static func _can_unload_servant(actor: Sprite2D, ref_DataHub: DataHub) -> bool:
 static func _is_long_cart(ref_DataHub: DataHub) -> bool:
 	return (
 			Cart.count_cart(ref_DataHub.linked_cart_state)
-			>= GameData.CART_LENGTH_LONG
+			> GameData.CART_LENGTH_LONG
 	)
 
 

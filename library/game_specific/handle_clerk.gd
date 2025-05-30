@@ -102,7 +102,18 @@ static func update_progress(state: ClerkState) -> void:
 static func reduce_progress(
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> void:
+	var idler: int = ref_DataHub.count_idler
+	var leak: int = GameData.PROGRESS_LEAK
 	var dup_states: Array
+
+	if (
+		Cart.count_cart(ref_DataHub.linked_cart_state)
+		> GameData.CART_LENGTH_SHORT
+	):
+		idler = max(idler, GameData.MIN_LEAK_IDLER)
+
+	if idler < 1:
+		return
 
 	dup_states = ref_DataHub.clerk_states.duplicate()
 	ArrayHelper.shuffle(dup_states, ref_RandomNumber)
@@ -115,10 +126,7 @@ static func reduce_progress(
 		#		GameData.MIN_PROGRESS_LEAK,
 		#		GameData.MAX_PROGRESS_LEAK + 1
 		#)
-		i.progress -= (
-				ref_DataHub.count_idler
-				* GameData.PROGRESS_LEAK_SERVANT
-		)
+		i.progress -= idler * leak
 		i.progress = max(GameData.PROGRESS_CUP, i.progress)
 		break
 

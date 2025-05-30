@@ -319,7 +319,7 @@ static func _handle_servant(coord: Vector2i) -> bool:
 		return false
 	elif (
 			Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
-			>= GameData.CART_LENGTH_SHORT
+			> GameData.CART_LENGTH_SHORT
 	):
 		return true
 
@@ -355,7 +355,7 @@ static func _handle_garage() -> bool:
 		return false
 	elif (
 		Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
-		>= GameData.CART_LENGTH_SHORT
+		> GameData.CART_LENGTH_SHORT
 	):
 		return false
 	return true

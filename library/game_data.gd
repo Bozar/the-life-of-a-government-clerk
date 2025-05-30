@@ -74,11 +74,11 @@ const ADD_LOADS: Array = [
 const MIN_CART: int = 3
 const ADD_CART: int = 3
 
-const CART_LENGTH_SHORT: int = 4
-const CART_LENGTH_LONG: int = 7
+const CART_LENGTH_SHORT: int = 3
+const CART_LENGTH_LONG: int = 6
 
 const ADD_EMPTY_CART_LENGTH: int = 1
-const ADD_EMPTY_CART_CHANCE: int = 10
+const ADD_EMPTY_CART_CHANCE: int = 30
 const MIN_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 2
 const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
 
@@ -95,7 +95,7 @@ const DEFAULT_PHONE: int = 2
 const NEW_ACTOR_INTERVAL: int = 7
 const NEW_TRAP_INTERVAL: int = 5
 
-const LEVEL_TO_SERVANT: Dictionary = {
+const LEVEL_TO_TRAP: Dictionary = {
 	0: 2,
 	1: 3,
 	2: 4,
@@ -125,9 +125,8 @@ const MIN_PAYMENT: int = 0
 const MAX_CLERK_PROGRESS: int = (PROGRESS_BOOK * PAGE_BOOK) * 3
 const OVERFLOW_PROGRESS: float = 0.25
 
-#const MIN_PROGRESS_LEAK: int = MIN_FILE_PROGRESS
-#const MAX_PROGRESS_LEAK: int = MIN_FILE_PROGRESS * 3
-const PROGRESS_LEAK_SERVANT: int = MIN_FILE_PROGRESS
+const PROGRESS_LEAK: int = MIN_FILE_PROGRESS
+const MIN_LEAK_IDLER: int = 1
 
 const MAX_OFFICER_REPEAT: int = 2
 

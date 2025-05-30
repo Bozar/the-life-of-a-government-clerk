@@ -18,11 +18,11 @@ static func update_world(
 	# Create Trashes.
 	var servant_mod: int = 1
 
-	if not GameData.LEVEL_TO_SERVANT.has(ref_DataHub.challenge_level):
+	if not GameData.LEVEL_TO_TRAP.has(ref_DataHub.challenge_level):
 		push_error("Invalid challenge level: %d"
 				% ref_DataHub.challenge_level
 		)
-	servant_mod = GameData.LEVEL_TO_SERVANT[ref_DataHub.challenge_level]
+	servant_mod = GameData.LEVEL_TO_TRAP[ref_DataHub.challenge_level]
 	ref_DataHub.max_trap = (
 			ref_DataHub.count_servant * servant_mod
 			+ ref_DataHub.count_idler
@@ -299,7 +299,7 @@ static func _can_create_empty_cart(
 ) -> bool:
 	if (
 			Cart.count_cart(ref_DataHub.linked_cart_state)
-			< GameData.CART_LENGTH_SHORT
+			<= GameData.CART_LENGTH_SHORT
 	):
 		return false
 	elif Cart.is_safe_load_amount_percent(

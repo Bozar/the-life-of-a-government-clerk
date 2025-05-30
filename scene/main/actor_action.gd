@@ -2,36 +2,12 @@ class_name ActorAction
 extends Node2D
 
 
-var _actor_states: Dictionary = {}
 # var _map_2d: Dictionary = Map2D.init_map(DijkstraPathfinding.UNKNOWN)
 
 
-func get_actor_state(sprite: Sprite2D) -> ActorState:
-	if not _is_npc(sprite):
-		return null
-
-	var id: int = sprite.get_instance_id()
-
-	if _actor_states.has(id):
-		return _actor_states[id]
-	push_error("Actor not found: %s." % [sprite.name])
-	return null
-
-
-func get_actor_states(sub_tag: StringName) -> Array:
-	var state: ActorState
-	var states: Array
-
-	for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(sub_tag):
-		state = get_actor_state(i)
-		if state != null:
-			states.push_back(state)
-	return states
-
-
-func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
-	var actor_state: ActorState = get_actor_state(sprite)
-	var sub_tag: StringName = SpriteState.get_sub_tag(sprite)
+func _on_SignalHub_turn_started(actor: Sprite2D) -> void:
+	var actor_state: ActorState = NodeHub.ref_DataHub.get_actor_state(actor)
+	var sub_tag: StringName = SpriteState.get_sub_tag(actor)
 
 	if actor_state == null:
 		return
@@ -62,21 +38,14 @@ func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
 
 
 func _on_SignalHub_sprite_removed(sprites: Array) -> void:
-	var id: int
-
 	for i: Sprite2D in sprites:
-		if not _is_npc(i):
+		if not i.is_in_group(MainTag.ACTOR):
 			continue
-		id = i.get_instance_id()
-		if not _actor_states.erase(id):
+		elif i.is_in_group(SubTag.PC):
+			continue
+
+		if not NodeHub.ref_DataHub.remove_actor_state(i):
 			push_error("Actor not found: %s." % [i.name])
-
-
-func _is_npc(sprite: Sprite2D) -> bool:
-	return (
-			sprite.is_in_group(MainTag.ACTOR)
-			and (not sprite.is_in_group(SubTag.PC))
-	)
 
 
 func _approach_pc(
@@ -113,43 +82,37 @@ func _is_obstacle(coord: Vector2i, _opt_args: Array) -> bool:
 
 
 func _create_actor_state(sub_tag: StringName, sprite: Sprite2D) -> void:
-	var id: int = sprite.get_instance_id()
 	var new_state: ActorState
 
 	match sub_tag:
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
 				SubTag.FIELD_REPORT:
 			new_state = RawFileState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 			NodeHub.ref_DataHub.set_raw_file_states(new_state)
 
 		SubTag.CLERK:
 			new_state = ClerkState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 			NodeHub.ref_DataHub.set_clerk_states(new_state)
 
 		SubTag.OFFICER:
 			new_state = OfficerState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 			NodeHub.ref_DataHub.set_officer_states(new_state)
 
 		SubTag.SERVANT:
 			new_state = ServantState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 
 		SubTag.SHELF:
 			new_state = ShelfState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 			NodeHub.ref_DataHub.set_shelf_states(new_state)
 
 		SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
 			new_state = ActorState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 
 		SubTag.EMPTY_CART:
 			new_state = EmptyCartState.new(sprite, sub_tag)
-			_actor_states[id] = new_state
 
 		_:
-			_actor_states[id] = ActorState.new(sprite, sub_tag)
+			new_state = ActorState.new(sprite, sub_tag)
+
+	NodeHub.ref_DataHub.set_actor_state(sprite, new_state)
 

@@ -113,9 +113,7 @@ var count_trash: int:
 
 var count_idler: int:
 	get:
-		var states: Array = NodeHub.ref_ActorAction.get_actor_states(
-				SubTag.SERVANT
-		)
+		var states: Array = get_actor_states(SubTag.SERVANT)
 		var servants: int = HandleServant.count_idle_servant(states)
 		return servants
 
@@ -139,6 +137,7 @@ var _linked_cart_state := LinkedCartState.new()
 var _incoming_call: int = 0
 var _sidebar_message: String
 
+var _actor_states: Dictionary = {}
 var _raw_file_states: Array[RawFileState]
 var _raw_file_sprites: Array[Sprite2D]
 var _officer_states: Array[OfficerState]
@@ -194,6 +193,39 @@ func set_ground_coords(value: Vector2i) -> void:
 
 func set_phone_coords(value: Vector2i) -> void:
 	_phone_coords.push_back(value)
+
+
+func get_actor_state(sprite: Sprite2D) -> ActorState:
+	if not sprite.is_in_group(MainTag.ACTOR):
+		return null
+	elif sprite.is_in_group(SubTag.PC):
+		return null
+
+	var id: int = sprite.get_instance_id()
+
+	if _actor_states.has(id):
+		return _actor_states[id]
+	push_error("Actor not found: %s." % [sprite.name])
+	return null
+
+
+func get_actor_states(sub_tag: StringName) -> Array:
+	var state: ActorState
+	var states: Array
+
+	for i: Sprite2D in SpriteState.get_sprites_by_sub_tag(sub_tag):
+		state = get_actor_state(i)
+		if state != null:
+			states.push_back(state)
+	return states
+
+
+func set_actor_state(sprite: Sprite2D, new_state: ActorState) -> void:
+	_actor_states[sprite.get_instance_id()] = new_state
+
+
+func remove_actor_state(sprite: Sprite2D) -> bool:
+	return _actor_states.erase(sprite.get_instance_id())
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

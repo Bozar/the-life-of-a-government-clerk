@@ -37,9 +37,7 @@ static func is_normal_input(
 			):
 				return true
 			dh.set_game_mode(GameData.EXAMINE_MODE)
-			PcSwitchMode.examine_mode(
-					true, dh, NodeHub.ref_ActorAction
-			)
+			PcSwitchMode.examine_mode(true, dh)
 			return false
 
 		InputTag.MOVE_LEFT:
@@ -79,9 +77,7 @@ static func is_examine_input(
 			Cart.exit_examine_mode(
 					dh.pc, dh.linked_cart_state
 			)
-			PcSwitchMode.examine_mode(
-					false, dh, NodeHub.ref_ActorAction
-			)
+			PcSwitchMode.examine_mode(false, dh)
 
 		InputTag.MOVE_UP:
 			Cart.examine_first_cart(
@@ -131,7 +127,6 @@ static func _move(
 		sub_tag = SpriteState.get_sub_tag(sprite)
 		PcHitActor.handle_input(
 				sprite, NodeHub.ref_DataHub,
-				NodeHub.ref_ActorAction,
 				NodeHub.ref_RandomNumber, NodeHub.ref_SignalHub,
 				NodeHub.ref_Schedule
 		)
@@ -221,7 +216,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			return true
 		return false
 
-	var state: ActorState = NodeHub.ref_ActorAction.get_actor_state(actor)
+	var state: ActorState = NodeHub.ref_DataHub.get_actor_state(actor)
 
 	match sub_tag:
 		# Warn player when a Servant being pushed might disappear, or
@@ -385,9 +380,7 @@ static func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
 static func _handle_raw_file(actor: Sprite2D, is_safe_load: bool) -> bool:
 	if is_safe_load:
 		return false
-	elif not PcHitActor.can_load_raw_file(
-			actor, NodeHub.ref_DataHub, NodeHub.ref_ActorAction,
-	):
+	elif not PcHitActor.can_load_raw_file(actor, NodeHub.ref_DataHub):
 		return false
 	return true
 

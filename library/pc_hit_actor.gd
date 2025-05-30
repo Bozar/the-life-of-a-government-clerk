@@ -3,10 +3,10 @@ class_name PcHitActor
 
 static func handle_input(
 		actor: Sprite2D, ref_DataHub: DataHub,
-		ref_ActorAction: ActorAction, ref_RandomNumber: RandomNumber,
-		ref_SignalHub: SignalHub, ref_Schedule: Schedule
+		ref_RandomNumber: RandomNumber, ref_SignalHub: SignalHub,
+		ref_Schedule: Schedule
 ) -> void:
-	var actor_state: ActorState = ref_ActorAction.get_actor_state(actor)
+	var actor_state: ActorState = ref_DataHub.get_actor_state(actor)
 	var player_win: bool
 	var count_servant: int = (
 			ref_DataHub.count_servant + ref_DataHub.count_idler
@@ -47,8 +47,7 @@ static func handle_input(
 				SubTag.FIELD_REPORT:
 			if not _handle_raw_file(
 					actor, actor_state, env_cooldown,
-					ref_DataHub, ref_ActorAction,
-					ref_RandomNumber
+					ref_DataHub, ref_RandomNumber
 			):
 				return
 
@@ -111,12 +110,9 @@ static func can_load_document(ref_DataHub: DataHub) -> bool:
 	) != null
 
 
-static func can_load_raw_file(
-		actor: Sprite2D, ref_DataHub: DataHub,
-		ref_ActorAction: ActorAction
-) -> bool:
+static func can_load_raw_file(actor: Sprite2D, ref_DataHub: DataHub) -> bool:
 	if not HandleRawFile.can_send_raw_file(
-			ref_ActorAction.get_actor_state(actor)
+			ref_DataHub.get_actor_state(actor)
 	):
 		return false
 	elif (
@@ -472,10 +468,9 @@ static func _handle_officer(
 
 static func _handle_raw_file(
 		actor: Sprite2D, actor_state: ActorState, env_cooldown: int,
-		ref_DataHub: DataHub, ref_ActorAction: ActorAction,
-		ref_RandomNumber: RandomNumber
+		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> bool:
-	if can_load_raw_file(actor, ref_DataHub, ref_ActorAction):
+	if can_load_raw_file(actor, ref_DataHub):
 		_load_raw_file(actor_state, ref_DataHub)
 		HandleRawFile.send_raw_file(
 				actor_state, env_cooldown,

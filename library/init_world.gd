@@ -1,5 +1,4 @@
 class_name InitWorld
-extends Node2D
 
 
 const DEBUG: bool = true
@@ -63,7 +62,7 @@ const CHAR_TO_TAG: Dictionary = {
 }
 
 
-func create_world() -> void:
+static func create_sprite() -> void:
 	var tagged_sprites: Array = []
 	var occupied_grids: Dictionary = Map2D.init_map(false)
 	var pc_coord: Vector2i
@@ -76,7 +75,9 @@ func create_world() -> void:
 	NodeHub.ref_SignalHub.sprite_created.emit(tagged_sprites)
 
 
-func _create_pc(occupied_grids: Dictionary, tagged_sprites: Array) -> Vector2i:
+static func _create_pc(
+		occupied_grids: Dictionary, tagged_sprites: Array
+) -> Vector2i:
 	var coord: Vector2i = Vector2i.ZERO
 
 	while true:
@@ -91,7 +92,7 @@ func _create_pc(occupied_grids: Dictionary, tagged_sprites: Array) -> Vector2i:
 	return coord
 
 
-func _create_floor(tagged_sprites: Array) -> void:
+static func _create_floor(tagged_sprites: Array) -> void:
 	for x: int in range(0, DungeonSize.MAX_X):
 		for y: int in range(0, DungeonSize.MAX_Y):
 			tagged_sprites.push_back(SpriteFactory.create_ground(
@@ -100,7 +101,7 @@ func _create_floor(tagged_sprites: Array) -> void:
 			))
 
 
-func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
+static func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
 	var indicators: Dictionary = {
 		SubTag.INDICATOR_TOP: [
 			Vector2i(coord.x, 0), Vector2i(0, -INDICATOR_OFFSET)
@@ -128,7 +129,7 @@ func _create_indicator(coord: Vector2i, tagged_sprites: Array) -> void:
 #>> character, coord, occupied_grids, tagged_sprites
 # Create a sprite later:
 #>> coords_raw_a, coords_raw_b, coords_service_1, coords_service_2
-func _create_from_character(
+static func _create_from_character(
 		character: String, coord: Vector2i,
 		occupied_grids: Dictionary, tagged_sprites: Array,
 		coords_raw_a: Array, coords_raw_b: Array,
@@ -178,7 +179,9 @@ func _create_from_character(
 			occupied_grids[coord.x][coord.y] = false
 
 
-func _get_transform_tags(prefab_index: int, transform_tags: Array) -> Array:
+static func _get_transform_tags(
+		prefab_index: int, transform_tags: Array
+) -> Array:
 	var tags: Array
 
 	# Do not transform the first quarter.
@@ -200,7 +203,7 @@ func _get_transform_tags(prefab_index: int, transform_tags: Array) -> Array:
 	return tags
 
 
-func _create_from_file(
+static func _create_from_file(
 		occupied_grids: Dictionary, tagged_sprites: Array
 ) -> void:
 	var path_to_file: Array = _get_file_path(PATH_TO_ROOM, PATH_TO_QUARTER)
@@ -243,7 +246,7 @@ func _create_from_file(
 	)
 
 
-func _get_file_path(
+static func _get_file_path(
 		path_to_room: StringName, path_to_quarter: StringName
 ) -> Array:
 	var rooms: Array = FileIo.get_files(path_to_room)
@@ -265,23 +268,25 @@ func _get_file_path(
 	]
 
 
-func _get_merged_coords(source_coords: Array, new_coords: Array) -> void:
+static func _get_merged_coords(source_coords: Array, new_coords: Array) -> void:
 	ArrayHelper.shuffle(new_coords, NodeHub.ref_RandomNumber)
 	source_coords.push_back(new_coords.pop_back())
 	ArrayHelper.shuffle(source_coords, NodeHub.ref_RandomNumber)
 
 
-func _get_halved_coords(source_coords: Array) -> void:
+static func _get_halved_coords(source_coords: Array) -> void:
 	ArrayHelper.shuffle(source_coords, NodeHub.ref_RandomNumber)
 	source_coords.resize(floor(source_coords.size() * 0.5))
 
 
-func _get_appended_coords(source_coords: Array, coord_arrays: Array) -> void:
+static func _get_appended_coords(
+		source_coords: Array, coord_arrays: Array
+) -> void:
 	for i: Array in coord_arrays:
 		source_coords.append_array(i)
 
 
-func _create_from_coord(
+static func _create_from_coord(
 		tagged_sprites: Array,
 		coords_raw_a: Array, coords_raw_b: Array,
 		coords_service_1: Array, coords_service_2: Array,
@@ -318,7 +323,7 @@ func _create_from_coord(
 		tagged_sprites.push_back(save_tagged_sprite)
 
 
-func _create_from_prefab(
+static func _create_from_prefab(
 		occupied_grids: Dictionary, tagged_sprites: Array,
 		loop_index: int, packed_prefab: PackedPrefab, coord: Vector2i,
 		overlap_grids: Dictionary,

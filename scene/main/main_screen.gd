@@ -12,7 +12,7 @@ func _ready() -> void:
 
 	VisualEffect.set_background_color()
 	$RandomNumber.set_initial_seed(TransferData.rng_seed)
-	$InitWorld.create_world()
+	InitWorld.create_sprite()
 	$Sidebar.init_gui()
 	$HelpScreen.init_gui()
 	$DebugScreen.init_gui()

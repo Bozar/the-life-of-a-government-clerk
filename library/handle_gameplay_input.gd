@@ -213,7 +213,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# amout is more than 60% (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		elif _handle_trash(data.input_coord, is_safe_full):
 			is_buffered = true
-			warn_type = GameData.WARN.TRASH
+			warn_type = GameData.WARN.SLOW
 		else:
 			is_buffered = false
 		if is_buffered:
@@ -228,7 +228,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# the Servant is pushed by a long line of Carts.
 		SubTag.SERVANT:
 			is_buffered = _handle_servant(data.input_coord)
-			warn_type = GameData.WARN.SERVANT
+			warn_type = GameData.WARN.PUSH
 
 		# [Achievement] Warn player if his Cash is less than 1 after the
 		# service; or there are only 3 (GameData.CART_LENGTH_SHORT)
@@ -238,7 +238,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 					_handle_cost(GameData.PAYMENT_GARAGE)
 					or _handle_garage()
 			)
-			warn_type = GameData.WARN.CART
+			warn_type = GameData.WARN.ADD_CART
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:

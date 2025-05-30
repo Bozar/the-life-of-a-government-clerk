@@ -8,6 +8,8 @@ static func update_idle_duration(state: ServantState) -> void:
 
 
 static func reset_idle_duration(state: ServantState) -> void:
+	if state.is_active:
+		return
 	state.idle_duration = 0
 
 

@@ -166,6 +166,7 @@ static func _clean_cart(ref_DataHub: DataHub) -> bool:
 
 static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 	var actor_coord: Vector2i = ConvertCoord.get_coord(actor)
+	var actor_state: ServantState = ref_DataHub.get_actor_state(actor)
 	var pc_coord: Vector2i = ref_DataHub.pc_coord
 	var new_actor_coord: Vector2i
 	var trap: Sprite2D
@@ -182,11 +183,11 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 	new_actor_coord = ConvertCoord.get_mirror_coord(pc_coord, actor_coord)
 	if _is_valid_coord(new_actor_coord):
 		trap = SpriteState.get_trap_by_coord(new_actor_coord)
-		if trap == null:
+		if trap != null:
+			SpriteFactory.remove_sprite(trap)
+		if (trap == null) and (not actor_state.is_active):
 			remove_actor = false
 			SpriteState.move_sprite(actor, new_actor_coord)
-		else:
-			SpriteFactory.remove_sprite(trap)
 	_move_cart(actor, remove_actor, actor_coord, ref_DataHub)
 
 

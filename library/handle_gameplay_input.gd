@@ -237,8 +237,11 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:
-			is_buffered = _handle_cost(GameData.PAYMENT_CLEAN)
-			warn_type = GameData.WARN.CASH
+			is_buffered = (
+					_handle_cost(GameData.PAYMENT_CLEAN)
+					or _handle_station()
+			)
+			warn_type = GameData.WARN.CLEAN
 
 		# [Achievement] Warn player when loading a Raw File.
 		SubTag.SHELF:
@@ -357,6 +360,30 @@ static func _handle_garage() -> bool:
 		Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
 		> GameData.CART_LENGTH_SHORT
 	):
+		return false
+	return true
+
+
+static func _handle_station() -> bool:
+	if NodeHub.ref_DataHub.cash < 1:
+		return false
+
+	var item_tags: Array = Cart.get_all_item_tag(
+			NodeHub.ref_DataHub.pc,
+			NodeHub.ref_DataHub.linked_cart_state
+	)
+
+	if item_tags.size() <= GameData.CART_LENGTH_SHORT:
+		return false
+
+	for i: int in range(0, item_tags.size()):
+		if i <= GameData.CART_LENGTH_SHORT:
+			continue
+		elif item_tags[i] == SubTag.FULL:
+			continue
+		# This should not happen.
+		elif item_tags[i] == SubTag.DETACHED:
+			continue
 		return false
 	return true
 

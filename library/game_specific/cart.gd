@@ -208,6 +208,22 @@ static func get_full_load_amount(pc: Sprite2D, state: LinkedCartState) -> int:
 	return load_amount
 
 
+static func get_all_item_tag(pc: Sprite2D, state: LinkedCartState) -> Array:
+	var cart: Sprite2D = pc
+	var cart_state: CartState
+	var item_tags: Array
+
+	while true:
+		cart = LinkedList.get_next_object(cart, state.linked_carts)
+		if cart == pc:
+			break
+
+		cart_state = get_state(cart, state)
+		item_tags.push_back(cart_state.item_tag)
+
+	return item_tags
+
+
 static func get_delay_duration(pc: Sprite2D, state: LinkedCartState) -> int:
 	var full_load: int = get_full_load_amount(pc, state)
 	var load_factor: float

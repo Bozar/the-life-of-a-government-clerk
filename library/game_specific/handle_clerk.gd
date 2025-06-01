@@ -22,6 +22,8 @@ const DESK_ITEM_PROGRESS: Dictionary = {
 	SubTag.ENCYCLOPEDIA_ON_DESK: GameData.PROGRESS_ENCYCLOPEDIA,
 }
 
+const MAX_ROOM_SIZE: int = 5
+
 
 static func can_send_document(state: ClerkState) -> bool:
 	return state.has_document
@@ -46,6 +48,8 @@ static func can_receive_raw_file(
 	if state.has_document:
 		return false
 	elif new_tag == "":
+		return false
+	elif not _has_active_officer(state):
 		return false
 
 	for i: DeskState in state.desk_states:
@@ -191,4 +195,18 @@ static func _is_valid_progress(progress: int) -> bool:
 
 static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:
 	return left.progress < right.progress
+
+
+static func _has_active_officer(state: ClerkState) -> bool:
+	var clerk_coord: Vector2i = state.coord
+	var officer_coord: Vector2i
+
+	for i: OfficerState in NodeHub.ref_DataHub.officer_states:
+		officer_coord = i.coord
+		if not ConvertCoord.is_in_range(
+				clerk_coord, officer_coord, MAX_ROOM_SIZE
+		):
+			continue
+		return i.is_active
+	return false
 

@@ -33,8 +33,8 @@ static func update_world(
 	)
 
 	# Reduce Clerk progress.
-	if ref_DataHub.challenge_level >= GameData.MIN_LEVEL_LEAK:
-		HandleClerk.reduce_progress(ref_DataHub, ref_RandomNumber)
+	#if ref_DataHub.challenge_level >= GameData.MIN_LEAK_LEVEL:
+	#	HandleClerk.reduce_progress(ref_DataHub, ref_RandomNumber)
 
 	# Create Phones.
 	# {cash: max_phone}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}

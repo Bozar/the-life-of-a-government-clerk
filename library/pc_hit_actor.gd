@@ -426,7 +426,7 @@ static func _handle_servant(
 				ref_DataHub.raw_file_states,
 				ref_RandomNumber
 		)
-		HandleClerk.reduce_progress(ref_DataHub, ref_RandomNumber)
+		#HandleClerk.reduce_progress(ref_DataHub, ref_RandomNumber)
 		HandleServant.reset_idle_duration(actor_state)
 		# Order matters. The Servant may be removed by _push_servant().
 		_push_servant(actor, ref_DataHub)

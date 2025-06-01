@@ -86,7 +86,7 @@ const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
 ### Progress & Challenge ###
 
 const MAX_LEVEL: int = 4
-const MIN_LEVEL_LEAK: int = 1
+const MIN_LEAK_LEVEL: int = 1
 
 const MAX_PHONE: int = 3
 const MIN_PHONE: int = 0
@@ -123,9 +123,10 @@ const MIN_PAYMENT: int = 0
 # Ideally, a Clerk needs 3 Books, (60 + 60) turns to create a Document. Note
 # that the Clerk can read two Raw Files and increase progress simultaneously.
 const MAX_CLERK_PROGRESS: int = (PROGRESS_BOOK * PAGE_BOOK) * 3
-const OVERFLOW_PROGRESS: float = 0.25
+const OVERFLOW_PROGRESS: float = 0.4
 
-const PROGRESS_LEAK: int = MIN_FILE_PROGRESS
+const PROGRESS_LEAK_1: int = MIN_FILE_PROGRESS
+const PROGRESS_LEAK_2: int = MIN_FILE_PROGRESS * 3
 const MIN_LEAK_IDLER: int = 1
 
 const MAX_OFFICER_REPEAT: int = 2

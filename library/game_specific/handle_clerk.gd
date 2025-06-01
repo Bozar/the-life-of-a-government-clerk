@@ -82,10 +82,15 @@ static func receive_raw_file(state: ClerkState, item_tag: StringName) -> void:
 
 
 static func update_progress(state: ClerkState) -> void:
-	var remove_sprite: Sprite2D
-
 	if state.has_empty_desk:
 		return
+
+	var dh := NodeHub.ref_DataHub
+
+	var remove_sprite: Sprite2D
+	var add_progress: int = 0
+	var count_cart: int = Cart.count_cart(dh.linked_cart_state)
+	var count_idler: int = dh.count_idler + GameData.MIN_LEAK_IDLER
 
 	for i: DeskState in state.desk_states:
 		# Clean desk before updating progress. Otherwise Clerk sprite
@@ -95,40 +100,48 @@ static func update_progress(state: ClerkState) -> void:
 			remove_sprite = i.sprite
 			i.sprite = null
 			SpriteFactory.remove_sprite(remove_sprite)
+		add_progress += DESK_ITEM_PROGRESS[i.sub_tag]
 
-		state.progress += DESK_ITEM_PROGRESS[i.sub_tag]
+	if dh.challenge_level >= GameData.MIN_LEAK_LEVEL:
+		if count_cart <= GameData.CART_LENGTH_SHORT:
+			add_progress -= GameData.PROGRESS_LEAK_1 * count_idler
+		else:
+			add_progress -= GameData.PROGRESS_LEAK_2 * count_idler
+		add_progress = max(add_progress, GameData.MIN_FILE_PROGRESS)
+
+	state.progress += add_progress
 
 
-static func reduce_progress(
-		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
-) -> void:
-	var idler: int = ref_DataHub.count_idler
-	var leak: int = GameData.PROGRESS_LEAK
-	var dup_states: Array
-
-	if (
-		Cart.count_cart(ref_DataHub.linked_cart_state)
-		> GameData.CART_LENGTH_SHORT
-	):
-		idler = max(idler, GameData.MIN_LEAK_IDLER)
-
-	if idler < 1:
-		return
-
-	dup_states = ref_DataHub.clerk_states.duplicate()
-	ArrayHelper.shuffle(dup_states, ref_RandomNumber)
-	dup_states.sort_custom(_sort_progress)
-
-	for i: ClerkState in dup_states:
-		if not _is_valid_progress(i.progress):
-			continue
-		#i.progress -= ref_RandomNumber.get_int(
-		#		GameData.MIN_PROGRESS_LEAK,
-		#		GameData.MAX_PROGRESS_LEAK + 1
-		#)
-		i.progress -= idler * leak
-		i.progress = max(GameData.PROGRESS_CUP, i.progress)
-		break
+#static func reduce_progress(
+#		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
+#) -> void:
+#	var idler: int = ref_DataHub.count_idler
+#	var leak: int = GameData.PROGRESS_LEAK
+#	var dup_states: Array
+#
+#	if (
+#		Cart.count_cart(ref_DataHub.linked_cart_state)
+#		> GameData.CART_LENGTH_SHORT
+#	):
+#		idler = max(idler, GameData.MIN_LEAK_IDLER)
+#
+#	if idler < 1:
+#		return
+#
+#	dup_states = ref_DataHub.clerk_states.duplicate()
+#	ArrayHelper.shuffle(dup_states, ref_RandomNumber)
+#	dup_states.sort_custom(_sort_progress)
+#
+#	for i: ClerkState in dup_states:
+#		if not _is_valid_progress(i.progress):
+#			continue
+#		#i.progress -= ref_RandomNumber.get_int(
+#		#		GameData.MIN_PROGRESS_LEAK,
+#		#		GameData.MAX_PROGRESS_LEAK + 1
+#		#)
+#		i.progress -= idler * leak
+#		i.progress = max(GameData.PROGRESS_CUP, i.progress)
+#		break
 
 
 static func switch_examine_mode(is_enter: bool, states: Array) -> void:

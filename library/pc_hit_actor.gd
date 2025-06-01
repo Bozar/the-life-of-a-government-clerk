@@ -189,6 +189,15 @@ static func _push_servant(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 			remove_actor = false
 			SpriteState.move_sprite(actor, new_actor_coord)
 	_move_cart(actor, remove_actor, actor_coord, ref_DataHub)
+	if ref_DataHub.turn_counter % GameData.ADD_TRASH_INTERVAL == 0:
+		Cart.add_trash(
+				ref_DataHub.pc, ref_DataHub.linked_cart_state,
+				NodeHub.ref_RandomNumber
+		)
+	#Cart.clean_short_cart(
+	#		ref_DataHub.pc, ref_DataHub.linked_cart_state,
+	#		GameData.CLEAN_SERVANT
+	#)
 
 
 static func _is_valid_coord(coord: Vector2i) -> bool:

@@ -59,6 +59,9 @@ const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 # time. A Phone is 5 (PC_SIGHT_RANGE) to 10 grids (PC_SIGHT_RANGE * 2) away from
 # PC.
 const CLEAN_PHONE_CALL: int = int(MAX_LOAD_PER_CART * 0.3)
+# The first Cart loads Trash more slowly when pushing a Servant.
+const CLEAN_SERVANT: int = 3
+
 const SAFE_LOAD_AMOUNT_PERCENT_1: float = 0.4
 const SAFE_LOAD_AMOUNT_PERCENT_2: float = 0.6
 const SAFE_LOAD_AMOUNT_PERCENT_3: float = 0.8
@@ -150,6 +153,8 @@ const LOAD_FACTOR_SHORT: float = 1.0
 const LOAD_FACTOR_LONG: float = 3.0
 const MAX_TRASH_PER_LINE: int = 3
 const MAX_SERVANT_PER_LINE: int = 1
+
+const ADD_TRASH_INTERVAL: int = 3
 
 
 ### Raw file ###

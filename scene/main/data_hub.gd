@@ -13,7 +13,8 @@ var delay: int = 0
 var ground_index: int = 0
 var phone_index: int = 0
 var max_trap: int
-var max_phone: int
+var max_call: int
+var remaining_call: int = GameData.INITIAL_REMAINING_CALL
 
 
 var pc: Sprite2D:

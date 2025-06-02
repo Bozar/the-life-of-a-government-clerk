@@ -472,6 +472,7 @@ static func _handle_officer(
 		GameProgress.update_challenge_level(ref_DataHub)
 		GameProgress.update_raw_file(ref_DataHub, ref_RandomNumber)
 		GameProgress.update_service(ref_DataHub, ref_RandomNumber)
+		GameProgress.update_remaining_call()
 		return true
 	return false
 
@@ -516,6 +517,7 @@ static func _handle_clerk(
 	):
 		_unload_item(ref_DataHub)
 		HandleClerk.receive_raw_file(actor_state, first_item_tag)
+		_add_remaining_call()
 		return true
 	return false
 
@@ -536,4 +538,8 @@ static func _handle_shelf(
 		HandleShelf.receive_tmp_file(actor_state, first_item_tag)
 		return true
 	return false
+
+
+static func _add_remaining_call() -> void:
+	NodeHub.ref_DataHub.remaining_call += GameData.ADD_REMAINING_CALL
 

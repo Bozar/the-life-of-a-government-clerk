@@ -37,11 +37,11 @@ static func update_world(
 	#	HandleClerk.reduce_progress(ref_DataHub, ref_RandomNumber)
 
 	# Create Phones.
-	# {cash: max_phone}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}
-	ref_DataHub.max_phone = GameData.DEFAULT_PHONE - ref_DataHub.cash
-	ref_DataHub.max_phone = max(GameData.MIN_PHONE, ref_DataHub.max_phone)
-	ref_DataHub.max_phone = min(GameData.MAX_PHONE, ref_DataHub.max_phone)
-	ref_DataHub.max_phone -= ref_DataHub.incoming_call
+	# {cash: max_call}: {-1: 3, 0: 2, 1: 1, 2: 0, 3: -1, ...}
+	ref_DataHub.max_call = GameData.DEFAULT_CALL - ref_DataHub.cash
+	ref_DataHub.max_call = max(GameData.MIN_CALL, ref_DataHub.max_call)
+	ref_DataHub.max_call = min(GameData.MAX_CALL, ref_DataHub.max_call)
+	ref_DataHub.max_call -= ref_DataHub.incoming_call
 	if _can_create_phone(ref_DataHub):
 		_create_rand_phone(ref_DataHub, ref_RandomNumber)
 
@@ -71,6 +71,10 @@ static func update_service(
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> void:
 	_swap_sprites(ref_DataHub.service_sprites, ref_RandomNumber)
+
+
+static func update_remaining_call() -> void:
+	NodeHub.ref_DataHub.remaining_call = GameData.INITIAL_REMAINING_CALL
 
 
 static func _swap_sprites(
@@ -160,7 +164,7 @@ static func _create_rand_phone(
 
 	_init_phone_coords(ref_DataHub, ref_RandomNumber)
 
-	while (ref_DataHub.max_phone > 0) and (max_retry > 0):
+	while (ref_DataHub.max_call > 0) and (max_retry > 0):
 		max_retry -= 1
 		_update_phone_index(ref_DataHub, ref_RandomNumber)
 		phone_coord = ref_DataHub.phone_coords[ref_DataHub.phone_index]
@@ -172,7 +176,8 @@ static func _create_rand_phone(
 		):
 			continue
 		SpriteFactory.create_actor(SubTag.PHONE, phone_coord, true)
-		ref_DataHub.max_phone -= 1
+		ref_DataHub.max_call -= 1
+		ref_DataHub.remaining_call -= 1
 
 
 static func _has_max_actor(ref_DataHub: DataHub) -> bool:
@@ -314,7 +319,9 @@ static func _can_create_empty_cart(
 
 
 static func _can_create_phone(ref_DataHub: DataHub) -> bool:
-	if ref_DataHub.max_phone <= 0:
+	if ref_DataHub.max_call <= 0:
+		return false
+	elif ref_DataHub.remaining_call <= 0:
 		return false
 	elif _has_document(ref_DataHub):
 		return false

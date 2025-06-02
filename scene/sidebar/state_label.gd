@@ -5,7 +5,7 @@ extends CustomLabel
 const TURN: String = "Turn: %1d"
 const DOC: String = "Doc: %2d"
 const CASH: String = "Cash: %1d-%1d"
-const CALL: String = "Call: %1d"
+const CALL: String = "Call: %1d-%1d"
 const CART: String = "%s\n%s"
 
 const YOU_WIN: String = "You win.\n[Enter]"
@@ -27,7 +27,10 @@ func update_gui() -> void:
 	var cash: String = CASH % [
 		NodeHub.ref_DataHub.cash, NodeHub.ref_DataHub.account,
 	]
-	var phone_call: String = CALL % NodeHub.ref_DataHub.incoming_call
+	var phone_call: String = CALL % [
+		NodeHub.ref_DataHub.incoming_call,
+		NodeHub.ref_DataHub.remaining_call,
+	]
 	var cart: String
 	var message: String
 

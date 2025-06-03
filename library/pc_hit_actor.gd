@@ -452,11 +452,13 @@ static func _handle_officer(
 			and _can_unload_report(ref_DataHub)
 	):
 		_unload_item(ref_DataHub)
-		HandleOfficer.set_active(
-				ref_DataHub.officer_states,
-				ref_DataHub.officer_records,
-				ref_RandomNumber
-		)
+		# Activate another Officer after unloading a Field Report.
+		while actor_state.is_active:
+			HandleOfficer.set_active(
+					ref_DataHub.officer_states,
+					ref_DataHub.officer_records,
+					ref_RandomNumber
+			)
 		return true
 	elif (
 			HandleOfficer.can_receive_archive(actor_state)

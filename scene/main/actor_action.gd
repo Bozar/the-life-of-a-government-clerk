@@ -13,7 +13,8 @@ func _on_SignalHub_turn_started(actor: Sprite2D) -> void:
 		return
 
 	match sub_tag:
-		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
+		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
+				SubTag.FIELD_REPORT:
 			HandleRawFile.update_cooldown(actor_state)
 
 		SubTag.CLERK:

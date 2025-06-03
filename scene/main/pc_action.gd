@@ -80,6 +80,7 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 	PcFov.render_fov(
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data
 	)
+	HandleGameplayInput.show_all_sprite()
 	if NodeHub.ref_DataHub.game_mode == GameData.EXAMINE_MODE:
 		PcSwitchMode.highlight_actor()
 	NodeHub.ref_SignalHub.ui_force_updated.emit()

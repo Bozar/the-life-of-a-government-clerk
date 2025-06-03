@@ -102,6 +102,14 @@ static func is_examine_input(
 	return false
 
 
+static func show_all_sprite() -> void:
+	if not NodeHub.ref_DataHub.show_all_sprite:
+		return
+	NodeHub.ref_DataHub.show_all_sprite = false
+	for i: Sprite2D in NodeHub.ref_SpriteRoot.get_children():
+		VisualEffect.set_visibility(i, true)
+
+
 static func _move(
 		direction: Vector2i, state: LinkedCartState,
 		data: BufferInputData

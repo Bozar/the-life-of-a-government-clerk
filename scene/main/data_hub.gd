@@ -16,6 +16,8 @@ var max_trap: int
 var max_call: int
 var remaining_call: int = GameData.INITIAL_REMAINING_CALL
 
+var show_all_sprite: bool = false
+
 
 var pc: Sprite2D:
 	get:

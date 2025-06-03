@@ -20,6 +20,9 @@ static func handle_input(input_tag: StringName) -> void:
 		InputTag.WIZARD_5:
 			_add_document()
 
+		InputTag.WIZARD_6:
+			NodeHub.ref_DataHub.show_all_sprite = true
+
 
 static func _add_document() -> void:
 	var dh := NodeHub.ref_DataHub

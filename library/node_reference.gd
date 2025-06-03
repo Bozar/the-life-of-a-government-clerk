@@ -73,5 +73,6 @@ const NODE_NAMES: Array = [
 	RANDOM_NUMBER,
 	SIGNAL_HUB,
 	DATA_HUB,
+	SPRITE_ROOT,
 ]
 

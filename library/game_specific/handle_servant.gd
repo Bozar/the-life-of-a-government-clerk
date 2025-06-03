@@ -22,8 +22,9 @@ static func switch_examine_mode(is_enter: bool, servant_states: Array) -> void:
 					i.idle_duration, i.max_idle_duration
 			)
 			VisualEffect.switch_sprite(i.sprite, visual_tag)
-			if i.is_active:
-				i.sprite.add_to_group(SubTag.HIGHLIGHT)
+			#if i.is_active:
+			#	i.sprite.add_to_group(SubTag.HIGHLIGHT)
+			i.sprite.add_to_group(SubTag.HIGHLIGHT)
 		else:
 			# Switch sprite implicitly.
 			i.idle_duration = i.idle_duration

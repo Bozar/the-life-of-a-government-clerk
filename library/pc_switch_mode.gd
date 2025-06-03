@@ -11,6 +11,7 @@ static func examine_mode(is_enter: bool, ref_DataHub: DataHub) -> void:
 	HandlePhoneBooth.switch_examine_mode(
 			is_enter, ref_DataHub.phone_booth_sprites
 	)
+	HandleDoor.switch_examine_mode(is_enter)
 	HandleEmptyCart.switch_examine_mode(
 			is_enter,
 			ref_DataHub.get_actor_states(SubTag.EMPTY_CART)

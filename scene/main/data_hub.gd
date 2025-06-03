@@ -87,6 +87,11 @@ var phone_booth_sprites: Array[Sprite2D]:
 		return _phone_booth_sprites
 
 
+var door_sprites: Array[Sprite2D]:
+	get:
+		return _door_sprites
+
+
 var ground_coords: Array[Vector2i]:
 	get:
 		return _ground_coords
@@ -151,6 +156,7 @@ var _officer_records: Array[int]
 var _service_sprites: Array[Sprite2D]
 
 var _phone_booth_sprites: Array[Sprite2D]
+var _door_sprites: Array[Sprite2D]
 var _ground_coords: Array[Vector2i]
 var _phone_coords: Array[Vector2i]
 
@@ -273,6 +279,8 @@ func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
 	match sub_tag:
 		SubTag.PHONE_BOOTH:
 			_phone_booth_sprites.push_back(sprite)
+		SubTag.DOOR:
+			_door_sprites.push_back(sprite)
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
 				SubTag.FIELD_REPORT:
 			_raw_file_sprites.push_back(sprite)

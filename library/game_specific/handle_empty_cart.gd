@@ -16,7 +16,9 @@ static func switch_examine_mode(is_enter: bool, states: Array) -> void:
 			visual_tag = VisualTag.get_percent_tag(
 					i.duration, i.max_duration
 			)
+			i.sprite.add_to_group(SubTag.HIGHLIGHT)
 		else:
 			visual_tag = VisualTag.DEFAULT
+			i.sprite.remove_from_group(SubTag.HIGHLIGHT)
 		VisualEffect.switch_sprite(i.sprite, visual_tag)
 

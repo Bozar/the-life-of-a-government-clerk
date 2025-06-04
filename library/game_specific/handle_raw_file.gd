@@ -73,21 +73,42 @@ static func receive_servant(state: RawFileState) -> void:
 
 
 static func switch_examine_mode(is_enter: bool, states: Array) -> void:
+	for i: RawFileState in states:
+		_switch_encyclopedia(is_enter, i)
+		if not _switch_progress_bar(is_enter, i):
+			continue
+
+
+static func _switch_encyclopedia(is_enter: bool, state: RawFileState) -> void:
+	if state.sub_tag != SubTag.ENCYCLOPEDIA:
+		return
+
+	var visual_tag: StringName = VisualTag.DEFAULT
+	var is_short_cart: bool = (
+			Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
+			<= GameData.CART_LENGTH_LONG
+	)
+
+	if is_enter:
+		if is_short_cart:
+			visual_tag = VisualTag.PASSIVE
+	VisualEffect.switch_sprite(state.sprite, visual_tag)
+
+
+static func _switch_progress_bar(is_enter: bool, state: RawFileState) -> bool:
 	var progress_bar: Sprite2D
 	var remaining_cooldown: int
 	var visual_tag: StringName = VisualTag.DEFAULT
 
-	for i: RawFileState in states:
-		progress_bar = SpriteState.get_trap_by_coord(
-				i.progress_bar_coord
-		)
-		if progress_bar == null:
-			continue
+	progress_bar = SpriteState.get_trap_by_coord(state.progress_bar_coord)
+	if progress_bar == null:
+		return false
 
-		if is_enter:
-			remaining_cooldown = i.max_cooldown - i.cooldown
-			visual_tag = VisualTag.get_percent_tag(
-					remaining_cooldown, i.max_cooldown
-			)
-		VisualEffect.switch_sprite(progress_bar, visual_tag)
+	if is_enter:
+		remaining_cooldown = state.max_cooldown - state.cooldown
+		visual_tag = VisualTag.get_percent_tag(
+				remaining_cooldown, state.max_cooldown
+		)
+	VisualEffect.switch_sprite(progress_bar, visual_tag)
+	return true
 

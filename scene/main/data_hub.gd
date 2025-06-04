@@ -167,20 +167,12 @@ var _count_empty_cart: int = 0
 var _count_trash: int = 0
 
 
-func set_pc(value: Sprite2D) -> void:
-	_pc = value
-
-
 func set_game_mode(value: int) -> void:
 	_game_mode = value
 
 
 func set_sidebar_message(value: String) -> void:
 	_sidebar_message = value
-
-
-func add_incoming_call(value: int) -> void:
-	_incoming_call += value
 
 
 func set_raw_file_states(value: RawFileState) -> void:
@@ -275,23 +267,46 @@ func _on_SignalHub_sprite_removed(sprites: Array) -> void:
 			_count_empty_cart -= 1
 		elif i.is_in_group(SubTag.TRASH):
 			_count_trash -= 1
+		elif i.is_in_group(SubTag.PHONE):
+			_incoming_call -= 1
 
 
 func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
 	match sub_tag:
 		SubTag.PHONE_BOOTH:
 			_phone_booth_sprites.push_back(sprite)
+
 		SubTag.DOOR:
 			_door_sprites.push_back(sprite)
+
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA, \
 				SubTag.FIELD_REPORT:
 			_raw_file_sprites.push_back(sprite)
+
 		SubTag.SALARY, SubTag.GARAGE, SubTag.STATION:
 			_service_sprites.push_back(sprite)
+
 		SubTag.SERVANT:
 			_count_servant += 1
+
 		SubTag.EMPTY_CART:
 			_count_empty_cart += 1
+
 		SubTag.TRASH:
 			_count_trash += 1
+
+		SubTag.PHONE:
+			_incoming_call += 1
+
+		SubTag.PC:
+			_init_pc(sprite)
+
+
+func _init_pc(pc_sprite: Sprite2D) -> void:
+	if pc != null:
+		return
+
+	_pc = pc_sprite
+	Cart.init_linked_carts(pc, linked_cart_state)
+	Cart.add_cart(GameData.MIN_CART, linked_cart_state)
 

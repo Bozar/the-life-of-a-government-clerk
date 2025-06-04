@@ -10,15 +10,12 @@ var _shadow_cast_fov_data := ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
 var _buffer_input_data := HandleGameplayInput.BufferInputData.new()
 
 
-func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:
-	for i: TaggedSprite in tagged_sprites:
-		_init_sprite(i.sub_tag, i.sprite)
+func _on_SignalHub_sprite_created(_tagged_sprites: Array) -> void:
+	pass
 
 
-func _on_SignalHub_sprite_removed(sprites: Array) -> void:
-	for i: Sprite2D in sprites:
-		if i.is_in_group(SubTag.PHONE):
-			NodeHub.ref_DataHub.add_incoming_call(-1)
+func _on_SignalHub_sprite_removed(_sprites: Array) -> void:
+	pass
 
 
 func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
@@ -92,24 +89,4 @@ func _on_SignalHub_game_over(_player_win: bool) -> void:
 	)
 	#if not player_win:
 	#	VisualEffect.set_alternative_color(NodeHub.ref_DataHub.pc)
-
-
-func _init_pc(pc_sprite: Sprite2D) -> void:
-	NodeHub.ref_DataHub.set_pc(pc_sprite)
-	Cart.init_linked_carts(
-			NodeHub.ref_DataHub.pc,
-			NodeHub.ref_DataHub.linked_cart_state
-	)
-	Cart.add_cart(GameData.MIN_CART, NodeHub.ref_DataHub.linked_cart_state)
-
-
-func _init_sprite(sub_tag: StringName, sprite: Sprite2D) -> void:
-	match sub_tag:
-		SubTag.PC:
-			if NodeHub.ref_DataHub.pc != null:
-				return
-			_init_pc(sprite)
-
-		SubTag.PHONE:
-			NodeHub.ref_DataHub.add_incoming_call(1)
 

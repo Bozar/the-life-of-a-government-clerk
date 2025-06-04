@@ -41,6 +41,10 @@ static func update_world(
 	ref_DataHub.max_call = GameData.DEFAULT_CALL - ref_DataHub.cash
 	ref_DataHub.max_call = max(GameData.MIN_CALL, ref_DataHub.max_call)
 	ref_DataHub.max_call = min(GameData.MAX_CALL, ref_DataHub.max_call)
+	ref_DataHub.max_call = min(
+			ref_DataHub.incoming_call + ref_DataHub.remaining_call,
+			ref_DataHub.max_call
+	)
 	ref_DataHub.max_call -= ref_DataHub.incoming_call
 	if _can_create_phone(ref_DataHub):
 		_create_rand_phone(ref_DataHub, ref_RandomNumber)
@@ -320,8 +324,6 @@ static func _can_create_empty_cart(
 
 static func _can_create_phone(ref_DataHub: DataHub) -> bool:
 	if ref_DataHub.max_call <= 0:
-		return false
-	elif ref_DataHub.remaining_call <= 0:
 		return false
 	elif _has_document(ref_DataHub):
 		return false

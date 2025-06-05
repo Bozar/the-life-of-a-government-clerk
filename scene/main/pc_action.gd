@@ -10,6 +10,10 @@ var _shadow_cast_fov_data := ShadowCastFov.FovData.new(GameData.PC_SIGHT_RANGE)
 var _buffer_input_data := HandleGameplayInput.BufferInputData.new()
 
 
+func is_fov_flag(coord: Vector2i, fov_flag: int) -> bool:
+	return PcFov.is_fov_flag(coord, _fov_map, fov_flag)
+
+
 func _on_SignalHub_sprite_created(_tagged_sprites: Array) -> void:
 	pass
 
@@ -73,6 +77,10 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 					input_tag, _buffer_input_data
 			):
 				return
+		GameData.HELP_MODE:
+			if HandleGameplayInput.is_help_input(input_tag):
+				NodeHub.ref_SignalHub.ui_force_updated.emit()
+			return
 
 	PcFov.render_fov(
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data

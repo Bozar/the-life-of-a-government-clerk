@@ -25,6 +25,7 @@ const PROGRESS_BAR: StringName = &"progress_bar"
 
 # Actor
 const PC: StringName = &"pc"
+const DUMMY_PC: StringName = &"dummy_pc"
 const CLERK: StringName = &"clerk"
 const OFFICER: StringName = &"officer"
 

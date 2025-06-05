@@ -185,6 +185,9 @@ func _remove_sprite(sprite: Sprite2D, main_tag: StringName) -> void:
 
 
 func _set_visibility(coord: Vector2i) -> void:
+	if not NodeHub.ref_PcAction.is_fov_flag(coord, PcFov.IS_IN_MEMORY_FLAG):
+		return
+
 	var sprites: Array = get_sprites_by_coord(coord)
 	var last_sprite: Sprite2D
 

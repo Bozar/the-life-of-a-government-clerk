@@ -6,6 +6,7 @@ class_name GameData
 enum {
 	NORMAL_MODE,
 	EXAMINE_MODE,
+	HELP_MODE,
 }
 
 

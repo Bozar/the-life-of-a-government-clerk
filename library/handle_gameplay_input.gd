@@ -4,6 +4,12 @@ class_name HandleGameplayInput
 const INVALID_COORD: Vector2i = Vector2i(-1, -1)
 const MESSAGE_TEMPLATE: String = "%s: %s"
 
+const FAST_STEP: int = 5
+const FAST_MOVE_LEFT: Vector2i = Vector2i(-FAST_STEP, 0)
+const FAST_MOVE_RIGHT: Vector2i = Vector2i(FAST_STEP, 0)
+const FAST_MOVE_UP: Vector2i = Vector2i(0, -FAST_STEP)
+const FAST_MOVE_DOWN: Vector2i = Vector2i(0, FAST_STEP)
+
 const BUFFER_SUB_TAG: Dictionary = {
 	SubTag.SERVANT: true,
 	SubTag.CLERK: true,
@@ -40,17 +46,22 @@ static func is_normal_input(
 			PcSwitchMode.examine_mode(true, dh)
 			return false
 
+		InputTag.SWITCH_HELP:
+			dh.set_game_mode(GameData.HELP_MODE)
+			PcSwitchMode.help_mode(true)
+			return true
+
 		InputTag.MOVE_LEFT:
-			_move(Vector2i.LEFT, dh.linked_cart_state, data)
+			_move_normal(Vector2i.LEFT, dh.linked_cart_state, data)
 			return true
 		InputTag.MOVE_RIGHT:
-			_move(Vector2i.RIGHT, dh.linked_cart_state, data)
+			_move_normal(Vector2i.RIGHT, dh.linked_cart_state, data)
 			return true
 		InputTag.MOVE_UP:
-			_move(Vector2i.UP, dh.linked_cart_state, data)
+			_move_normal(Vector2i.UP, dh.linked_cart_state, data)
 			return true
 		InputTag.MOVE_DOWN:
-			_move(Vector2i.DOWN, dh.linked_cart_state, data)
+			_move_normal(Vector2i.DOWN, dh.linked_cart_state, data)
 			return true
 
 		InputTag.WIZARD_1, InputTag.WIZARD_2, \
@@ -70,7 +81,7 @@ static func is_examine_input(
 	var dh := NodeHub.ref_DataHub
 
 	match input_tag:
-		InputTag.SWITCH_EXAMINE, InputTag.EXIT_EXAMINE:
+		InputTag.SWITCH_EXAMINE, InputTag.EXIT_ALT_MODE:
 			# Reset buffer state when leaving Examine Mode.
 			_set_buffer_state(data, GameData.WARN.NO_ALERT, false)
 			dh.set_game_mode(GameData.NORMAL_MODE)
@@ -110,7 +121,45 @@ static func show_all_sprite() -> void:
 		VisualEffect.set_visibility(i, true)
 
 
-static func _move(
+static func is_help_input(input_tag: StringName) -> bool:
+	var dh := NodeHub.ref_DataHub
+
+	match input_tag:
+		InputTag.SWITCH_HELP, InputTag.EXIT_ALT_MODE:
+			dh.set_game_mode(GameData.NORMAL_MODE)
+			PcSwitchMode.help_mode(false)
+			return true
+
+		InputTag.FAST_MOVE_LEFT:
+			_move_help(FAST_MOVE_LEFT)
+			return true
+		InputTag.FAST_MOVE_RIGHT:
+			_move_help(FAST_MOVE_RIGHT)
+			return true
+		InputTag.FAST_MOVE_UP:
+			_move_help(FAST_MOVE_UP)
+			return true
+		InputTag.FAST_MOVE_DOWN:
+			_move_help(FAST_MOVE_DOWN)
+			return true
+
+		InputTag.MOVE_LEFT:
+			_move_help(Vector2i.LEFT)
+			return true
+		InputTag.MOVE_RIGHT:
+			_move_help(Vector2i.RIGHT)
+			return true
+		InputTag.MOVE_UP:
+			_move_help(Vector2i.UP)
+			return true
+		InputTag.MOVE_DOWN:
+			_move_help(Vector2i.DOWN)
+			return true
+
+	return false
+
+
+static func _move_normal(
 		direction: Vector2i, state: LinkedCartState,
 		data: BufferInputData
 ) -> void:
@@ -453,4 +502,15 @@ static func _handle_phone_call() -> bool:
 	if NodeHub.ref_DataHub.incoming_call <= GameData.MAX_MISSED_CALL:
 		return false
 	return true
+
+
+static func _move_help(direction: Vector2i) -> void:
+	var dh := NodeHub.ref_DataHub
+
+	var coord: Vector2i = (dh.pc_coord + direction)
+
+	if not DungeonSize.is_in_dungeon(coord):
+		coord.x = max(0, min(DungeonSize.MAX_X - 1, coord.x))
+		coord.y = max(0, min(DungeonSize.MAX_Y - 1, coord.y))
+	SpriteState.move_sprite(dh.pc, coord)
 

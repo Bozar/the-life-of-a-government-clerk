@@ -26,6 +26,7 @@ const SPRITE_SCENES: Dictionary = {
 
 	# Actor
 	SubTag.PC: preload("res://sprite/pc.tscn"),
+	SubTag.DUMMY_PC: preload("res://sprite/pc.tscn"),
 	SubTag.CART: preload("res://sprite/cart.tscn"),
 	SubTag.CLERK: preload("res://sprite/clerk.tscn"),
 	SubTag.OFFICER: preload("res://sprite/officer.tscn"),

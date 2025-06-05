@@ -38,8 +38,19 @@ static func render_fov(
 			_set_sprite_visibility(this_coord, fov_map, MEMORY_TAGS)
 
 
+static func is_fov_flag(
+		coord: Vector2i, fov_map: Dictionary, fov_flag: int
+) -> bool:
+	if Map2D.is_in_map(coord, fov_map):
+		# There is only one `1` in fov_flag. Return 0 (false) if the
+		# correspoinding bit in fov_map[coord.x][coord.y] is 0, or a
+		# non-zero integer (true).
+		return fov_map[coord.x][coord.y] & fov_flag
+	return false
+
+
 static func _set_sprite_color(coord: Vector2i, fov_map: Dictionary) -> void:
-	if _is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
+	if is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
 		for i: Sprite2D in SpriteState.get_sprites_by_coord(coord):
 			VisualEffect.set_default_color(i)
 	else:
@@ -57,7 +68,7 @@ static func _set_sprite_visibility(
 	sprites.sort_custom(_sort_by_z_index)
 	# If a grid is in PC's sight, remember the grid in fov_map. Show the
 	# highest sprite and set its color to light.
-	if _is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
+	if is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
 		_set_fov_value(coord, fov_map, IS_IN_MEMORY_FLAG, true)
 		for i: Sprite2D in sprites:
 			VisualEffect.set_default_color(i)
@@ -71,7 +82,7 @@ static func _set_sprite_visibility(
 	else:
 		for i: Sprite2D in sprites:
 			VisualEffect.set_visibility(i, false)
-		if not _is_fov_flag(coord, fov_map, IS_IN_MEMORY_FLAG):
+		if not is_fov_flag(coord, fov_map, IS_IN_MEMORY_FLAG):
 			return
 		while true:
 			sprite = sprites.pop_back()
@@ -82,17 +93,6 @@ static func _set_sprite_visibility(
 		if sprite != null:
 			VisualEffect.set_alternative_color(sprite)
 			VisualEffect.set_visibility(sprite, true)
-
-
-static func _is_fov_flag(
-		coord: Vector2i, fov_map: Dictionary, fov_flag: int
-) -> bool:
-	if Map2D.is_in_map(coord, fov_map):
-		# There is only one `1` in fov_flag. Return 0 (false) if the
-		# correspoinding bit in fov_map[coord.x][coord.y] is 0, or a
-		# non-zero integer (true).
-		return fov_map[coord.x][coord.y] & fov_flag
-	return false
 
 
 static func _set_fov_value(

@@ -8,9 +8,15 @@ const MOVE_RIGHT: StringName = &"move_right"
 const MOVE_UP: StringName = &"move_up"
 const MOVE_DOWN: StringName = &"move_down"
 
+const FAST_MOVE_LEFT: StringName = &"fast_move_left"
+const FAST_MOVE_RIGHT: StringName = &"fast_move_right"
+const FAST_MOVE_UP: StringName = &"fast_move_up"
+const FAST_MOVE_DOWN: StringName = &"fast_move_down"
+
 const SWITCH_EXAMINE: StringName = &"switch_examine"
-const EXIT_EXAMINE: StringName = &"exit_examine"
 const EXAMINE_NEXT_CART: StringName = &"examine_next_cart"
+const SWITCH_HELP: StringName = &"switch_help"
+const EXIT_ALT_MODE: StringName = &"exit_alt_mode"
 
 const WIZARD_1: StringName = &"wizard_1"
 const WIZARD_2: StringName = &"wizard_2"
@@ -54,13 +60,20 @@ const PAGE_BOTTOM: StringName = &"page_bottom"
 ### List of Inputs ###
 
 const GAME_PLAY_INPUTS: Array[StringName] = [
+	FAST_MOVE_LEFT,
+	FAST_MOVE_RIGHT,
+	FAST_MOVE_UP,
+	FAST_MOVE_DOWN,
+
 	MOVE_LEFT,
 	MOVE_RIGHT,
 	MOVE_UP,
 	MOVE_DOWN,
+
 	SWITCH_EXAMINE,
-	EXIT_EXAMINE,
+	SWITCH_HELP,
 	EXAMINE_NEXT_CART,
+	EXIT_ALT_MODE,
 ]
 
 const WIZARD_INPUTS: Array[StringName] = [

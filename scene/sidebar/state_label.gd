@@ -9,7 +9,7 @@ const CALL: String = "Call: %1d-%1d"
 const CART: String = "%s\n%s"
 
 const YOU_WIN: String = "You win.\n[Enter]"
-const YOU_LOSE: String = "You lose.\n[Enter]"
+const YOU_LOSE: String = "You lose.\n[Enter]\n"
 
 
 var game_over: bool = false
@@ -37,16 +37,11 @@ func update_gui() -> void:
 	match NodeHub.ref_DataHub.game_mode:
 		GameData.NORMAL_MODE:
 			cart = _get_normal_text()
+			message = _get_message_text()
 		GameData.EXAMINE_MODE:
 			cart = _get_examine_text()
 		GameData.HELP_MODE:
 			cart = HelpMode.get_sidebar_text()
-
-	if game_over:
-		message = YOU_WIN if player_win else YOU_LOSE
-	elif NodeHub.ref_DataHub.sidebar_message != "":
-		message = NodeHub.ref_DataHub.sidebar_message
-
 
 	text = "\n".join([
 		turn, doc, cash, phone_call,
@@ -82,4 +77,14 @@ func _get_normal_text() -> String:
 		snippets.push_back(extend)
 
 	return "\n".join(snippets)
+
+
+func _get_message_text() -> String:
+	var message: String
+
+	if game_over:
+		message = YOU_WIN if player_win else YOU_LOSE
+	elif NodeHub.ref_DataHub.sidebar_message != "":
+		message = NodeHub.ref_DataHub.sidebar_message
+	return message
 

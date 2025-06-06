@@ -168,6 +168,14 @@ var _shelf_states: Array[ShelfState]
 var _officer_records: Array[int]
 var _service_sprites: Array[Sprite2D]
 
+var _challenge_states: Dictionary = {
+	ChallengeTag.SHORT_CART: ChallengeTag.AVAILABLE,
+	ChallengeTag.LONG_CART: ChallengeTag.AVAILABLE,
+	ChallengeTag.SHELF: ChallengeTag.AVAILABLE,
+	ChallengeTag.FIELD_REPORT: ChallengeTag.AVAILABLE,
+	ChallengeTag.BOOK: ChallengeTag.AVAILABLE,
+}
+
 var _phone_booth_sprites: Array[Sprite2D]
 var _door_sprites: Array[Sprite2D]
 var _ground_coords: Array[Vector2i]
@@ -263,6 +271,20 @@ func set_y_indicators(y: int, sprite: Sprite2D) -> void:
 		_y_to_indicator[y].push_back(sprite)
 	else:
 		_y_to_indicator[y] = [sprite]
+
+
+func get_challenge(challenge_tag: int) -> int:
+	if _challenge_states.has(challenge_tag):
+		return _challenge_states[challenge_tag]
+	push_error("Invalid challenge tag: %d" % challenge_tag)
+	return ChallengeTag.INVALID
+
+
+func set_challenge(challenge_tag: int, challenge_state: int) -> void:
+	if not _challenge_states.has(challenge_tag):
+		push_error("Invalid challenge tag: %d" % challenge_tag)
+		return
+	_challenge_states[challenge_tag] = challenge_state
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

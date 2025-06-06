@@ -49,7 +49,7 @@ static func is_normal_input(
 		InputTag.SWITCH_HELP:
 			dh.set_game_mode(GameData.HELP_MODE)
 			PcSwitchMode.help_mode(true)
-			return true
+			return false
 
 		InputTag.MOVE_LEFT:
 			_move_normal(Vector2i.LEFT, dh.linked_cart_state, data)

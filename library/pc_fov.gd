@@ -65,7 +65,7 @@ static func _set_sprite_visibility(
 	var sprite: Sprite2D
 
 	# Only the highest sprite is visible.
-	sprites.sort_custom(_sort_by_z_index)
+	sprites.sort_custom(SpriteState.sort_by_z_index)
 	# If a grid is in PC's sight, remember the grid in fov_map. Show the
 	# highest sprite and set its color to light.
 	if is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
@@ -120,10 +120,6 @@ static func _match_sprite_tag(sprite: Sprite2D, sprite_tags: Array) -> bool:
 		if sprite.is_in_group(i):
 			return true
 	return false
-
-
-static func _sort_by_z_index(this: Sprite2D, that: Sprite2D) -> bool:
-	return this.z_index < that.z_index
 
 
 static func _block_shadow_cast_fov_ray(

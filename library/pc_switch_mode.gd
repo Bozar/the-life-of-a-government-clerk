@@ -32,10 +32,9 @@ static func help_mode(is_enter: bool) -> void:
 
 	var pc: Sprite2D = dh.pc
 	var z_layer: int = dh.pc.z_index
+	var dummy: Sprite2D = dh.dummy_pc
 	var coord: Vector2i
 	var visual_tag: StringName
-
-	var dummy: Sprite2D
 
 	if is_enter:
 		coord = dh.pc_coord
@@ -46,8 +45,7 @@ static func help_mode(is_enter: bool) -> void:
 		SpriteFactory.create_actor(SubTag.DUMMY_PC, coord, true)
 
 	else:
-		dummy = SpriteState.get_sprites_by_sub_tag(SubTag.DUMMY_PC)[0]
-		coord = ConvertCoord.get_coord(dummy)
+		coord = dh.dummy_pc_coord
 		visual_tag = VisualTag.DEFAULT
 
 		SpriteFactory.remove_sprite(dummy)

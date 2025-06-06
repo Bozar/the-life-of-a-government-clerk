@@ -39,6 +39,8 @@ func update_gui() -> void:
 			cart = _get_normal_text()
 		GameData.EXAMINE_MODE:
 			cart = _get_examine_text()
+		GameData.HELP_MODE:
+			cart = HelpMode.get_sidebar_text()
 
 	if game_over:
 		message = YOU_WIN if player_win else YOU_LOSE

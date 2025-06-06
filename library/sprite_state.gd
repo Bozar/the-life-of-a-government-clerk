@@ -7,6 +7,10 @@ static func is_valid_sprite(sprite: Sprite2D) -> bool:
 	return not sprite.is_queued_for_deletion()
 
 
+static func sort_by_z_index(this: Sprite2D, that: Sprite2D) -> bool:
+	return this.z_index < that.z_index
+
+
 static func move_sprite(
 		sprite: Sprite2D, coord: Vector2i, z_layer: int = sprite.z_index
 ) -> void:

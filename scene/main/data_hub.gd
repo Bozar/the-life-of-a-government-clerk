@@ -29,6 +29,16 @@ var pc_coord: Vector2i:
 		return ConvertCoord.get_coord(pc)
 
 
+var dummy_pc: Sprite2D:
+	get:
+		return _dummy_pc
+
+
+var dummy_pc_coord: Vector2i:
+	get:
+		return ConvertCoord.get_coord(dummy_pc)
+
+
 var game_mode: int:
 	get:
 		return _game_mode
@@ -140,6 +150,7 @@ var challenge_level: int = 0:
 
 
 var _pc: Sprite2D
+var _dummy_pc: Sprite2D
 var _game_mode: int = GameData.NORMAL_MODE
 var _linked_cart_state := LinkedCartState.new()
 var _incoming_call: int = 0
@@ -269,6 +280,8 @@ func _on_SignalHub_sprite_removed(sprites: Array) -> void:
 			_count_trash -= 1
 		elif i.is_in_group(SubTag.PHONE):
 			_incoming_call -= 1
+		elif i.is_in_group(SubTag.DUMMY_PC):
+			_dummy_pc = null
 
 
 func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
@@ -300,6 +313,9 @@ func _init_sprite_data(sub_tag: StringName, sprite: Sprite2D) -> void:
 
 		SubTag.PC:
 			_init_pc(sprite)
+
+		SubTag.DUMMY_PC:
+			_dummy_pc = sprite
 
 
 func _init_pc(pc_sprite: Sprite2D) -> void:

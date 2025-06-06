@@ -37,16 +37,12 @@ static func is_trapped(check_coord: Vector2i) -> bool:
 		sprites = SpriteState.get_sprites_by_coord(coord)
 		if sprites.is_empty():
 			continue
-		sprites.sort_custom(_sort_by_index)
+		sprites.sort_custom(SpriteState.sort_by_z_index)
 		top_sprite = sprites.pop_back()
 		for sub_tag in PASSABLE_TAGS:
 			if top_sprite.is_in_group(sub_tag):
 				return false
 	return true
-
-
-static func _sort_by_index(lower: Sprite2D, higher: Sprite2D) -> bool:
-	return lower.z_index <= higher.z_index
 
 
 static func _is_fully_loaded(ref_DataHub: DataHub) -> bool:

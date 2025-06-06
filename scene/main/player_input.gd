@@ -46,12 +46,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 
 	if _input_flag & GAMEPLAY_FLAG:
-		if _handle_game_play_inputs(event):
+		if _handle_gameplay_inputs(event):
 			return
 		elif _handle_wizard_inputs(event):
 			return
 	elif _input_flag & GAME_OVER_FLAG:
-		if _handle_examine_inputs(event):
+		if _handle_mode_inputs(event):
 			return
 		elif _handle_start_new_game(event):
 			return
@@ -67,7 +67,7 @@ func _on_SignalHub_game_over(_player_win: bool) -> void:
 	_input_flag = _input_flag | GAME_OVER_FLAG
 
 
-func _handle_game_play_inputs(event: InputEvent) -> bool:
+func _handle_gameplay_inputs(event: InputEvent) -> bool:
 	for i: StringName in InputTag.GAME_PLAY_INPUTS:
 		if event.is_action_pressed(i):
 			NodeHub.ref_SignalHub.action_pressed.emit(i)
@@ -170,17 +170,20 @@ func _handle_wizard_inputs(event: InputEvent) -> bool:
 	return false
 
 
-func _handle_examine_inputs(event: InputEvent) -> bool:
+func _handle_mode_inputs(event: InputEvent) -> bool:
+	var sh := NodeHub.ref_SignalHub
+
 	match NodeHub.ref_DataHub.game_mode:
 		GameData.NORMAL_MODE:
-			if not event.is_action_pressed(InputTag.SWITCH_EXAMINE):
-				return false
-			NodeHub.ref_SignalHub.action_pressed.emit(
-					InputTag.SWITCH_EXAMINE
-			)
-			return true
-		GameData.EXAMINE_MODE:
-			if _handle_game_play_inputs(event):
+			if event.is_action_pressed(InputTag.SWITCH_EXAMINE):
+				sh.action_pressed.emit(InputTag.SWITCH_EXAMINE)
+				return true
+			elif event.is_action_pressed(InputTag.SWITCH_HELP):
+				sh.action_pressed.emit(InputTag.SWITCH_HELP)
+				return true
+			return false
+		GameData.EXAMINE_MODE, GameData.HELP_MODE:
+			if _handle_gameplay_inputs(event):
 				return true
 			return false
 	return false

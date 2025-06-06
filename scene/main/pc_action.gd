@@ -11,6 +11,12 @@ var _buffer_input_data := HandleGameplayInput.BufferInputData.new()
 
 
 func is_fov_flag(coord: Vector2i, fov_flag: int) -> bool:
+	if not TransferData.show_full_map:
+		return PcFov.is_fov_flag(coord, _fov_map, fov_flag)
+
+	match fov_flag:
+		PcFov.IS_IN_SIGHT_FLAG, PcFov.IS_IN_MEMORY_FLAG: 
+			return true
 	return PcFov.is_fov_flag(coord, _fov_map, fov_flag)
 
 

@@ -189,12 +189,12 @@ func _set_visibility(coord: Vector2i) -> void:
 		return
 
 	var sprites: Array = get_sprites_by_coord(coord)
-	var last_sprite: Sprite2D
+
+	if sprites.is_empty():
+		return
 
 	sprites.sort_custom(SpriteState.sort_by_z_index)
-	last_sprite = sprites.pop_back()
 	for i: Sprite2D in sprites:
 		VisualEffect.set_visibility(i, false)
-	if last_sprite != null:
-		VisualEffect.set_visibility(last_sprite, true)
+	VisualEffect.set_visibility(sprites[-1], true)
 

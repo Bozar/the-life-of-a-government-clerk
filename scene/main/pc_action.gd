@@ -85,7 +85,9 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 			):
 				return
 		GameData.HELP_MODE:
-			if HandleGameplayInput.is_help_input(input_tag):
+			if HandleGameplayInput.is_help_input(
+					input_tag, _buffer_input_data
+			):
 				NodeHub.ref_SignalHub.ui_force_updated.emit()
 			return
 

@@ -110,11 +110,15 @@ static func show_all_sprite() -> void:
 		VisualEffect.set_visibility(i, true)
 
 
-static func is_help_input(input_tag: StringName) -> bool:
+static func is_help_input(
+		input_tag: StringName, data: BufferInputData
+) -> bool:
 	var dh := NodeHub.ref_DataHub
 
 	match input_tag:
 		InputTag.SWITCH_HELP, InputTag.EXIT_ALT_MODE:
+			# Reset buffer state when leaving Help Mode.
+			_set_buffer_state(data, GameData.WARN.NO_ALERT, false)
 			dh.set_game_mode(GameData.NORMAL_MODE)
 			PcSwitchMode.help_mode(false)
 			return true

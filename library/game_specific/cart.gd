@@ -309,26 +309,12 @@ static func add_trash(
 		add_counter += 1
 
 
-static func enter_examine_mode(pc: Sprite2D, state: LinkedCartState) -> bool:
+static func can_enter_examine_mode(state: LinkedCartState) -> bool:
 	# There should be at least two sprites (PC and cart) to enable examine
 	# mode.
 	if state.linked_carts.size() < 2:
 		return false
-
-	var target_cart: Sprite2D = LinkedList.get_next_object(pc,
-			state.linked_carts)
-	var target_coord: Vector2i = ConvertCoord.get_coord(target_cart)
-
-	state.save_pc_coord = ConvertCoord.get_coord(pc)
-	# By game design, PC can move over cart sprites.
-	SpriteState.move_sprite(pc, target_coord, pc.z_index + 1)
-	VisualEffect.switch_sprite(pc, VisualTag.PASSIVE)
 	return true
-
-
-static func exit_examine_mode(pc: Sprite2D, state: LinkedCartState) -> void:
-	SpriteState.move_sprite(pc, state.save_pc_coord, pc.z_index - 1)
-	VisualEffect.switch_sprite(pc, VisualTag.DEFAULT)
 
 
 static func examine_first_cart(pc: Sprite2D, state: LinkedCartState) -> void:

@@ -35,12 +35,11 @@ static func is_normal_input(
 		input_tag: StringName, data: BufferInputData
 ) -> bool:
 	var dh := NodeHub.ref_DataHub
+	var linked := dh.linked_cart_state
 
 	match input_tag:
 		InputTag.SWITCH_EXAMINE:
-			if not Cart.enter_examine_mode(
-					dh.pc, dh.linked_cart_state
-			):
+			if not Cart.can_enter_examine_mode(linked):
 				return true
 			dh.set_game_mode(GameData.EXAMINE_MODE)
 			PcSwitchMode.examine_mode(true, dh)
@@ -52,16 +51,16 @@ static func is_normal_input(
 			return false
 
 		InputTag.MOVE_LEFT:
-			_move_normal(Vector2i.LEFT, dh.linked_cart_state, data)
+			_move_normal(Vector2i.LEFT, linked, data)
 			return true
 		InputTag.MOVE_RIGHT:
-			_move_normal(Vector2i.RIGHT, dh.linked_cart_state, data)
+			_move_normal(Vector2i.RIGHT, linked, data)
 			return true
 		InputTag.MOVE_UP:
-			_move_normal(Vector2i.UP, dh.linked_cart_state, data)
+			_move_normal(Vector2i.UP, linked, data)
 			return true
 		InputTag.MOVE_DOWN:
-			_move_normal(Vector2i.DOWN, dh.linked_cart_state, data)
+			_move_normal(Vector2i.DOWN, linked, data)
 			return true
 
 		InputTag.WIZARD_1, InputTag.WIZARD_2, \
@@ -79,33 +78,23 @@ static func is_examine_input(
 		input_tag: StringName, data: BufferInputData
 ) -> bool:
 	var dh := NodeHub.ref_DataHub
+	var linked := dh.linked_cart_state
 
 	match input_tag:
 		InputTag.SWITCH_EXAMINE, InputTag.EXIT_ALT_MODE:
 			# Reset buffer state when leaving Examine Mode.
 			_set_buffer_state(data, GameData.WARN.NO_ALERT, false)
 			dh.set_game_mode(GameData.NORMAL_MODE)
-			Cart.exit_examine_mode(
-					dh.pc, dh.linked_cart_state
-			)
 			PcSwitchMode.examine_mode(false, dh)
 
 		InputTag.MOVE_UP:
-			Cart.examine_first_cart(
-					dh.pc, dh.linked_cart_state
-			)
+			Cart.examine_first_cart(dh.pc, linked)
 		InputTag.MOVE_DOWN:
-			Cart.examine_last_cart(
-					dh.pc, dh.linked_cart_state
-			)
+			Cart.examine_last_cart(dh.pc, linked)
 		InputTag.MOVE_LEFT:
-			Cart.examine_previous_cart(
-					dh.pc, dh.linked_cart_state
-			)
+			Cart.examine_previous_cart(dh.pc, linked)
 		InputTag.MOVE_RIGHT, InputTag.EXAMINE_NEXT_CART:
-			Cart.examine_next_cart(
-					dh.pc, dh.linked_cart_state
-			)
+			Cart.examine_next_cart(dh.pc, linked)
 
 		_:
 			return true

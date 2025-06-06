@@ -63,6 +63,7 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
 	PcFov.render_fov(
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data
 	)
+	PcSwitchMode.set_normal_sprite()
 
 
 func _on_SignalHub_action_pressed(input_tag: StringName) -> void:

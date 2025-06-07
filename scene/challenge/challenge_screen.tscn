@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhwn7ocpy6ng0"]
+
+[ext_resource type="Script" uid="uid://t4mdlqm8476w" path="res://scene/challenge/challenge_screen.gd" id="1_7cped"]
+[ext_resource type="Script" uid="uid://de3lgqaetxvhq" path="res://scene/challenge/challenge_label.gd" id="2_7cped"]
+
+[node name="ChallengeScreen" type="MarginContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_7cped")
+metadata/_custom_type_script = "uid://bodsqjkv8erst"
+
+[node name="ChallengeScroll" type="ScrollContainer" parent="."]
+layout_mode = 2
+
+[node name="ChallengeLabel" type="Label" parent="ChallengeScroll"]
+layout_mode = 2
+script = ExtResource("2_7cped")
+metadata/_custom_type_script = "uid://bahyvxkbnnn3p"

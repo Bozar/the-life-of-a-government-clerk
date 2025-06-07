@@ -16,6 +16,7 @@ func _ready() -> void:
 	$Sidebar.init_gui()
 	$HelpScreen.init_gui()
 	$DebugScreen.init_gui()
+	$ChallengeScreen.init_gui()
 	$Schedule.start_next_turn()
 
 

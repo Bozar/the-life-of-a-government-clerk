@@ -44,6 +44,7 @@ const COPY_SETTING: StringName = &"copy_setting"
 
 const OPEN_HELP_MENU: StringName = &"open_help_menu"
 const OPEN_DEBUG_MENU: StringName = &"open_debug_menu"
+const OPEN_CHALLENGE_MENU: StringName = &"open_challenge_menu"
 const CLOSE_MENU: StringName = &"close_menu"
 
 const NEXT_SCREEN: StringName = &"next_screen"

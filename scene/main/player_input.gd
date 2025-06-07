@@ -2,15 +2,17 @@ class_name PlayerInput
 extends Node2D
 
 
-# HELP_FLAG | DEBUG_FLAG | GAME_OVER_FLAG | FUNCTION_FLAG | GAMEPLAY_FLAG
-const GAMEPLAY_FLAG: int = 0b000_01
-const FUNCTION_FLAG: int = 0b000_10
-const GAME_OVER_FLAG: int = 0b001_00
-const DEBUG_FLAG: int = 0b010_00
-const HELP_FLAG: int = 0b100_00
+# HELP_FLAG | DEBUG_FLAG | CHALLENGE_FLAG || GAME_OVER_FLAG
+# || FUNCTION_FLAG | GAMEPLAY_FLAG
+const GAMEPLAY_FLAG: int = 0b0_000_0_01
+const FUNCTION_FLAG: int = 0b0_000_0_10
+const GAME_OVER_FLAG: int = 0b0_000_1_00
+const HELP_FLAG: int = 0b0_001_0_00
+const DEBUG_FLAG: int = 0b0_010_0_00
+const CHALLENGE_FLAG: int = 0b0_100_0_00
 
 
-var _input_flag: int = 0b000_11
+var _input_flag: int = 0b0_000_0_11
 var _previous_input_flag: int = _input_flag
 
 
@@ -32,9 +34,20 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		elif _handle_replay_game(event):
 			return
-		elif _handle_open_help(event, _input_flag):
+		elif _handle_open_menu(
+				event, InputTag.OPEN_HELP_MENU, HELP_FLAG,
+				_input_flag
+		):
 			return
-		elif _handle_open_debug(event, _input_flag):
+		elif _handle_open_menu(
+				event, InputTag.OPEN_DEBUG_MENU, DEBUG_FLAG,
+				_input_flag
+		):
+			return
+		elif _handle_open_menu(
+				event, InputTag.OPEN_CHALLENGE_MENU,
+				CHALLENGE_FLAG, _input_flag
+		):
 			return
 	elif _input_flag & HELP_FLAG:
 		if _handle_close_menu(event, _previous_input_flag):
@@ -43,6 +56,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 	elif _input_flag & DEBUG_FLAG:
 		if _handle_close_menu(event, _previous_input_flag):
+			return
+	elif _input_flag & CHALLENGE_FLAG:
+		if _handle_close_menu(event, _previous_input_flag):
+			return
+		elif _handle_ui_inputs(event):
 			return
 
 	if _input_flag & GAMEPLAY_FLAG:
@@ -122,24 +140,14 @@ func _handle_copy_setting(event: InputEvent) -> bool:
 	return false
 
 
-func _handle_open_help(event: InputEvent, previous_input_flag: int) -> bool:
-	if event.is_action_pressed(InputTag.OPEN_HELP_MENU):
-		NodeHub.ref_SignalHub.action_pressed.emit(
-				InputTag.OPEN_HELP_MENU
-		)
+func _handle_open_menu(
+		event: InputEvent, input_tag: StringName, input_flag: int,
+		previous_input_flag: int
+) -> bool:
+	if event.is_action_pressed(input_tag):
+		NodeHub.ref_SignalHub.action_pressed.emit(input_tag)
 		_previous_input_flag = previous_input_flag
-		_input_flag = HELP_FLAG
-		return true
-	return false
-
-
-func _handle_open_debug(event: InputEvent, previous_input_flag: int) -> bool:
-	if event.is_action_pressed(InputTag.OPEN_DEBUG_MENU):
-		NodeHub.ref_SignalHub.action_pressed.emit(
-				InputTag.OPEN_DEBUG_MENU
-		)
-		_previous_input_flag = previous_input_flag
-		_input_flag = DEBUG_FLAG
+		_input_flag = input_flag
 		return true
 	return false
 

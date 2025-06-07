@@ -17,6 +17,7 @@ const SIDEBAR: String = "Sidebar"
 
 const HELP_SCREEN: String = "HelpScreen"
 const DEBUG_SCREEN: String = "DebugScreen"
+const CHALLENGE_SCREEN: String = "ChallengeScreen"
 
 const SPRITE_FACTORY: String = "/root/SpriteFactory"
 const SPRITE_STATE: String = "/root/SpriteState"
@@ -55,7 +56,7 @@ const SIGNAL_CONNECTIONS: Dictionary = {
 		],
 		SIGNAL_ACTION_PRESSED: [
 			PC_ACTION, RANDOM_NUMBER, SIDEBAR, SPRITE_ROOT,
-			HELP_SCREEN, DEBUG_SCREEN,
+			HELP_SCREEN, DEBUG_SCREEN, CHALLENGE_SCREEN,
 		],
 		SIGNAL_TURN_STARTED: [
 			PLAYER_INPUT, PC_ACTION, ACTOR_ACTION,

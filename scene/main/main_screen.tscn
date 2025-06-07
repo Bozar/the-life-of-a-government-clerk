@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://drb5ql5du1mxl"]
+[gd_scene load_steps=16 format=3 uid="uid://drb5ql5du1mxl"]
 
 [ext_resource type="Script" uid="uid://ojxsnvjxpc6s" path="res://scene/main/main_screen.gd" id="1_nhpgv"]
 [ext_resource type="Script" uid="uid://53ec4wq5jobt" path="res://scene/main/sprite_root.gd" id="2_k71b2"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://d1ix7dqq76ltg" path="res://scene/main/random_number.gd" id="12_ymw0w"]
 [ext_resource type="PackedScene" uid="uid://dj58gs1r0ay2d" path="res://scene/help/help_screen.tscn" id="14_innsn"]
 [ext_resource type="Script" uid="uid://d31bmfnaxyqey" path="res://scene/main/signal_hub.gd" id="14_p40ip"]
+[ext_resource type="PackedScene" uid="uid://bhwn7ocpy6ng0" path="res://scene/challenge/challenge_screen.tscn" id="15_bex0h"]
 [ext_resource type="PackedScene" uid="uid://dgblbv4xseynh" path="res://scene/debug/debug_screen.tscn" id="15_s6fxc"]
 
 [node name="MainScreen" type="Node2D"]
@@ -53,3 +54,5 @@ script = ExtResource("12_bex0h")
 [node name="HelpScreen" parent="." instance=ExtResource("14_innsn")]
 
 [node name="DebugScreen" parent="." instance=ExtResource("15_s6fxc")]
+
+[node name="ChallengeScreen" parent="." instance=ExtResource("15_bex0h")]

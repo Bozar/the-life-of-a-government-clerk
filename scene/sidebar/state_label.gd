@@ -7,8 +7,9 @@ const DOC: String = "Doc: %2d"
 const CASH: String = "Cash: %1d-%1d"
 const CALL: String = "Call: %1d-%1d"
 const CART: String = "%s\n%s"
+const CHALLENGE: String = "%s-%s-%s-%s-%s"
 
-const YOU_WIN: String = "You win.\n[Enter]"
+const YOU_WIN: String = "You win.\n%s\n[Enter]"
 const YOU_LOSE: String = "You lose.\n[Enter]\n"
 
 
@@ -83,8 +84,24 @@ func _get_message_text() -> String:
 	var message: String
 
 	if game_over:
-		message = YOU_WIN if player_win else YOU_LOSE
+		if player_win:
+			message = YOU_WIN % _get_challenge_text()
+		else:
+			message = YOU_LOSE
 	elif NodeHub.ref_DataHub.sidebar_message != "":
 		message = NodeHub.ref_DataHub.sidebar_message
 	return message
+
+
+func _get_challenge_text() -> String:
+	var state: int
+	var states: Array
+
+	for i: int in ChallengeTag.ALL_CHALLENGES:
+		state = NodeHub.ref_DataHub.get_challenge_state(i)
+		if state == ChallengeTag.FINISHED:
+			states.push_back(ChallengeTag.NAME_TO_STRING[i])
+		else:
+			states.push_back(ChallengeTag.NO_NAME)
+	return CHALLENGE % states
 

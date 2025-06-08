@@ -1,22 +1,22 @@
 # Challenge List
 
-[ ] BABA IS [P]USH
+[%s] BABA IS [P]USH
 
 There are at most 3 Carts.
 
-[ ] KEKE IS PIC[K]
+[%s] KEKE IS PIC[K]
 
 There are at least 4 Carts.
 
-[ ] [B]ookhounds of London
+[%s] [B]ookhounds of London
 
 There is at least 1 Raw File in a bookshelf.
 
-[ ] Mayor's [C]abinet
+[%s] Mayor's [C]abinet
 
 Do not unload a Field Report to any Officer.
 
-[ ] TLD[R]
+[%s] TLD[R]
 
 Do not unload a Book to any Clerk.
 

@@ -59,10 +59,10 @@ static func init_scroll_label(
 		])
 
 	for i: int in range(0, node_names.size()):
-		scroll = _get_scroll_node(gui_nodes, i)
+		scroll = get_scroll_node(gui_nodes, i)
 		scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-		label = _get_label_node(gui_nodes, i)
+		label = get_label_node(gui_nodes, i)
 		label.init_gui()
 
 		if i >= text_files.size():
@@ -92,15 +92,15 @@ static func switch_screen(
 	elif input_tag == InputTag.PREVIOUS_SCREEN:
 		move_step = -1
 
-	label = _get_label_node(gui_nodes, current_index)
-	scroll = _get_scroll_node(gui_nodes, current_index)
+	label = get_label_node(gui_nodes, current_index)
+	scroll = get_scroll_node(gui_nodes, current_index)
 
 	label.visible = false
 	scroll.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	new_index = _get_new_index(current_index, move_step, gui_nodes.size())
-	label = _get_label_node(gui_nodes, new_index)
-	scroll = _get_scroll_node(gui_nodes, new_index)
+	label = get_label_node(gui_nodes, new_index)
+	scroll = get_scroll_node(gui_nodes, new_index)
 
 	label.visible = true
 	scroll.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -112,7 +112,7 @@ static func switch_screen(
 static func scroll_screen(
 		input_tag: StringName, gui_nodes: Array, gui_index: int
 ) -> void:
-	var scroll: ScrollContainer = _get_scroll_node(gui_nodes, gui_index)
+	var scroll: ScrollContainer = get_scroll_node(gui_nodes, gui_index)
 	var distance: int
 
 	match input_tag:
@@ -127,6 +127,16 @@ static func scroll_screen(
 			scroll.scroll_vertical += distance
 
 
+static func get_scroll_node(
+		gui_nodes: Array, gui_index: int
+) -> ScrollContainer:
+	return gui_nodes[gui_index][0]
+
+
+static func get_label_node(gui_nodes: Array, gui_index: int) -> CustomLabel:
+	return gui_nodes[gui_index][1]
+
+
 static func _get_new_index(
 		this_index: int, move_step: int, max_index: int
 ) -> int:
@@ -137,16 +147,6 @@ static func _get_new_index(
 	elif next_index < 0:
 		return max_index - 1
 	return next_index
-
-
-static func _get_scroll_node(
-		gui_nodes: Array, gui_index: int
-) -> ScrollContainer:
-	return gui_nodes[gui_index][0]
-
-
-static func _get_label_node(gui_nodes: Array, gui_index: int) -> CustomLabel:
-	return gui_nodes[gui_index][1]
 
 
 static func _get_scroll_distance(input_tag: StringName) -> int:

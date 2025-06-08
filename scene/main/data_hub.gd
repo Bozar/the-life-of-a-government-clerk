@@ -273,14 +273,14 @@ func set_y_indicators(y: int, sprite: Sprite2D) -> void:
 		_y_to_indicator[y] = [sprite]
 
 
-func get_challenge(challenge_tag: int) -> int:
+func get_challenge_state(challenge_tag: int) -> int:
 	if _challenge_states.has(challenge_tag):
 		return _challenge_states[challenge_tag]
 	push_error("Invalid challenge tag: %d" % challenge_tag)
 	return ChallengeTag.INVALID
 
 
-func set_challenge(challenge_tag: int, challenge_state: int) -> void:
+func set_challenge_state(challenge_tag: int, challenge_state: int) -> void:
 	if not _challenge_states.has(challenge_tag):
 		push_error("Invalid challenge tag: %d" % challenge_tag)
 		return

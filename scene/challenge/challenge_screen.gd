@@ -29,6 +29,8 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 	if (not self.visible) and (input_tag != InputTag.OPEN_CHALLENGE_MENU):
 		return
 
+	var label: CustomLabel
+
 	match input_tag:
 		InputTag.OPEN_CHALLENGE_MENU:
 			visible = true
@@ -36,6 +38,10 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 					input_tag, _gui_nodes, _current_index,
 					true
 			)
+			label = MenuScreen.get_label_node(
+					_gui_nodes, _current_index
+			)
+			_set_challenge_state(label)
 		InputTag.CLOSE_MENU:
 			visible = false
 		InputTag.PAGE_DOWN, InputTag.PAGE_UP, \
@@ -44,4 +50,14 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 			MenuScreen.scroll_screen(
 					input_tag, _gui_nodes, _current_index
 			)
+
+
+func _set_challenge_state(label: CustomLabel) -> void:
+	var state: int
+	var states: Array
+
+	for i: int in ChallengeTag.ALL_CHALLENGES:
+		state = NodeHub.ref_DataHub.get_challenge_state(i)
+		states.push_back(ChallengeTag.STATE_TO_STRING[state])
+	label.text = label.text % states
 

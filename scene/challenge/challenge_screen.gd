@@ -13,6 +13,8 @@ const ORDERED_TEXT_FILES: Array = [
 var _current_index: int = 0
 var _gui_nodes: Array = []
 
+var _default_challenge_label_text: String
+
 
 func _ready() -> void:
 	visible = false
@@ -23,6 +25,9 @@ func init_gui() -> void:
 	_gui_nodes = MenuScreen.init_scroll_label(
 			self, ORDERED_GUI_NAMES, ORDERED_TEXT_FILES
 	)
+	_default_challenge_label_text = MenuScreen.get_label_node(
+			_gui_nodes, 0
+	).text
 
 
 func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
@@ -59,5 +64,5 @@ func _set_challenge_state(label: CustomLabel) -> void:
 	for i: int in ChallengeTag.ALL_CHALLENGES:
 		state = NodeHub.ref_DataHub.get_challenge_state(i)
 		states.push_back(ChallengeTag.STATE_TO_STRING[state])
-	label.text = label.text % states
+	label.text = _default_challenge_label_text % states
 

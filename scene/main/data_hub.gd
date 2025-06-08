@@ -149,6 +149,11 @@ var challenge_level: int = 0:
 		challenge_level = max(0, min(value, GameData.MAX_LEVEL))
 
 
+var is_first_unload: bool:
+	get:
+		return _is_first_unload
+
+
 var _pc: Sprite2D
 var _dummy_pc: Sprite2D
 var _game_mode: int = GameData.NORMAL_MODE
@@ -184,6 +189,8 @@ var _phone_coords: Array[Vector2i]
 var _count_servant: int = 0
 var _count_empty_cart: int = 0
 var _count_trash: int = 0
+
+var _is_first_unload: bool = true
 
 
 func set_game_mode(value: int) -> void:
@@ -285,6 +292,10 @@ func set_challenge_state(challenge_tag: int, challenge_state: int) -> void:
 		push_error("Invalid challenge tag: %d" % challenge_tag)
 		return
 	_challenge_states[challenge_tag] = challenge_state
+
+
+func set_is_first_unload(value: bool) -> void:
+	_is_first_unload = value
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

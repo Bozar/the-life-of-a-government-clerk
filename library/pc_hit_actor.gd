@@ -520,6 +520,9 @@ static func _handle_clerk(
 		_unload_item(ref_DataHub)
 		HandleClerk.receive_raw_file(actor_state, first_item_tag)
 		_add_remaining_call()
+		if NodeHub.ref_DataHub.is_first_unload:
+			_check_challenge()
+			NodeHub.ref_DataHub.set_is_first_unload(false)
 		return true
 	return false
 
@@ -544,4 +547,18 @@ static func _handle_shelf(
 
 static func _add_remaining_call() -> void:
 	NodeHub.ref_DataHub.remaining_call += GameData.ADD_REMAINING_CALL
+
+
+static func _check_challenge() -> void:
+	var challenges: Array = [
+		ChallengeTag.SHORT_CART,
+		ChallengeTag.LONG_CART,
+		ChallengeTag.SHELF,
+	]
+
+	for i: int in challenges:
+		if CheckChallenge.is_failed(i):
+			NodeHub.ref_DataHub.set_challenge_state(
+					i, ChallengeTag.FAILED
+			)
 

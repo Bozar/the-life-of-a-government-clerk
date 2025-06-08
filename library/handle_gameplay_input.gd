@@ -307,7 +307,10 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# calls.
 		SubTag.CLERK:
 			is_buffered = _handle_clerk(state, is_all_safe)
-			warn_type = GameData.WARN.DOCUMENT
+			if NodeHub.ref_DataHub.is_first_unload:
+				warn_type = GameData.WARN.CHALLENGE
+			else:
+				warn_type = GameData.WARN.DOCUMENT
 
 		# Warn player when loading a Raw File and ...
 		# 1. the last slot is more than 40%
@@ -445,9 +448,15 @@ static func _handle_shelf(actor_state: ActorState) -> bool:
 
 
 static func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
-	if is_safe_load and (not _handle_phone_call()):
+	var dh := NodeHub.ref_DataHub
+
+	if dh.is_first_unload:
+		if Cart.get_first_item(dh.pc, dh.linked_cart_state) != null:
+			return true
 		return false
-	elif not PcHitActor.can_load_document(NodeHub.ref_DataHub):
+	elif is_safe_load and (not _handle_phone_call()):
+		return false
+	elif not PcHitActor.can_load_document(dh):
 		return false
 	elif not HandleClerk.can_send_document(actor_state):
 		return false

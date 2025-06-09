@@ -461,7 +461,7 @@ static func _handle_officer(
 					ref_DataHub.officer_records,
 					ref_RandomNumber
 			)
-		_set_field_report_challenge()
+		_set_challenge_field_report()
 		return true
 	elif can_unload_document(ref_DataHub):
 		_unload_document(ref_DataHub)
@@ -523,6 +523,8 @@ static func _handle_clerk(
 		if NodeHub.ref_DataHub.is_first_unload:
 			_check_challenge()
 			NodeHub.ref_DataHub.set_is_first_unload(false)
+		elif first_item_tag == SubTag.BOOK:
+			_set_challenge_book()
 		return true
 	return false
 
@@ -574,7 +576,7 @@ static func _set_challenge_state() -> void:
 		)
 
 
-static func _set_field_report_challenge() -> void:
+static func _set_challenge_field_report() -> void:
 	if NodeHub.ref_DataHub.is_first_unload:
 		return
 	elif not NodeHub.ref_DataHub.is_challenge_state(
@@ -583,5 +585,15 @@ static func _set_field_report_challenge() -> void:
 		return
 	NodeHub.ref_DataHub.set_challenge_state(
 			ChallengeTag.FIELD_REPORT, ChallengeTag.FAILED
+	)
+
+
+static func _set_challenge_book() -> void:
+	if not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.BOOK, ChallengeTag.AVAILABLE
+	):
+		return
+	NodeHub.ref_DataHub.set_challenge_state(
+			ChallengeTag.BOOK, ChallengeTag.FAILED
 	)
 

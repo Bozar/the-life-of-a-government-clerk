@@ -309,7 +309,10 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			if _is_first_unload(state):
 				is_buffered = true
 				warn_type = WarnTag.CHALLENGE
-			elif _handle_clerk(state, is_all_safe):
+			elif _handle_unload_book(state):
+				is_buffered = true
+				warn_type = WarnTag.BOOK
+			elif _handle_load_document(state, is_all_safe):
 				is_buffered = true
 				warn_type = WarnTag.DOCUMENT
 			else:
@@ -462,7 +465,9 @@ static func _handle_shelf(actor_state: ActorState) -> bool:
 	return false
 
 
-static func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
+static func _handle_load_document(
+		actor_state: ActorState, is_safe_load: bool
+) -> bool:
 	if is_safe_load and (not _handle_phone_call()):
 		return false
 	elif not PcHitActor.can_load_document(NodeHub.ref_DataHub):
@@ -488,12 +493,42 @@ static func _is_first_unload(actor_state: ActorState) -> bool:
 		return false
 
 	var cart_state: CartState = Cart.get_state(
-			cart_sprite, NodeHub.ref_DataHub.linked_cart_state
+			cart_sprite, dh.linked_cart_state
 	)
 
 	if HandleClerk.can_receive_raw_file(actor_state, cart_state.item_tag):
 		return true
 	return false
+
+
+static func _handle_unload_book(actor_state: ActorState) -> bool:
+	if not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.BOOK, ChallengeTag.AVAILABLE
+	):
+		return false
+	elif not HandleClerk.has_active_officer(actor_state):
+		return false
+
+	var dh := NodeHub.ref_DataHub
+
+	var cart_sprite: Sprite2D = Cart.get_first_item(
+			dh.pc, dh.linked_cart_state
+	)
+
+	if cart_sprite == null:
+		return false
+
+	var cart_state: CartState = Cart.get_state(
+			cart_sprite, dh.linked_cart_state
+	)
+
+	if cart_state.item_tag != SubTag.BOOK:
+		return false
+	elif not HandleClerk.can_receive_raw_file(
+			actor_state, cart_state.item_tag
+	):
+		return false
+	return true
 
 
 static func _handle_raw_file(actor: Sprite2D, is_safe_load: bool) -> bool:

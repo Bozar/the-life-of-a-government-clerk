@@ -293,7 +293,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			if _handle_station():
 				is_buffered = true
 				warn_type = WarnTag.LOSE_CART
-			elif _handle_cost(GameData.PAYMENT_GARAGE):
+			elif _handle_cost(GameData.PAYMENT_CLEAN):
 				is_buffered = true
 				warn_type = WarnTag.CASH
 			else:

@@ -424,6 +424,7 @@ static func _handle_garage(ref_DataHub: DataHub) -> bool:
 
 static func _handle_station(ref_DataHub: DataHub) -> bool:
 	if _can_clean_cart(ref_DataHub) and _clean_cart(ref_DataHub):
+		_set_challenge_long_cart()
 		return true
 	return false
 
@@ -624,5 +625,29 @@ static func _set_challenge_short_cart() -> void:
 
 	NodeHub.ref_DataHub.set_challenge_state(
 			ChallengeTag.SHORT_CART, ChallengeTag.FAILED
+	)
+
+
+static func _set_challenge_long_cart() -> void:
+	if NodeHub.ref_DataHub.is_first_unload:
+		return
+	elif not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.LONG_CART, ChallengeTag.AVAILABLE
+	):
+		return
+
+	var item_tags: Array = Cart.get_all_item_tag(
+			NodeHub.ref_DataHub.pc,
+			NodeHub.ref_DataHub.linked_cart_state
+	)
+
+	for i: int in range(0, item_tags.size()):
+		if i <= GameData.CART_LENGTH_SHORT:
+			continue
+		elif item_tags[i] != SubTag.DETACHED:
+			return
+
+	NodeHub.ref_DataHub.set_challenge_state(
+			ChallengeTag.LONG_CART, ChallengeTag.FAILED
 	)
 

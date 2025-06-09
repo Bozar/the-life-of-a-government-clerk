@@ -7,9 +7,9 @@ enum {
 	BOOK,
 	CASH,
 	CHALLENGE,
-	CLEAN,
 	DOCUMENT,
 	LOAD,
+	LOSE_CART,
 	PUSH,
 	REPORT,
 	SHELF,
@@ -23,7 +23,6 @@ const TAG_TO_STRING: Dictionary = {
 	TRAPPED: "TRAPPED",
 	SLOW: "SLOW",
 	PUSH: "PUSH",
-	CLEAN: "CLEAN",
 	SHELF: "SHELF",
 	LOAD: "LOAD",
 	DOCUMENT: "DOCUMENT",
@@ -32,5 +31,6 @@ const TAG_TO_STRING: Dictionary = {
 	CHALLENGE: "CHALLENGE",
 	BOOK: "BOOK",
 	CASH: "CASH",
+	LOSE_CART: "LOSE_CART",
 }
 

@@ -448,12 +448,11 @@ static func _handle_officer(
 		actor_state: ActorState, ref_DataHub: DataHub,
 		ref_RandomNumber: RandomNumber
 ) -> bool:
-	if _remove_all_servant(ref_DataHub):
+	if not HandleOfficer.can_receive_archive(actor_state):
+		return false
+	elif _remove_all_servant(ref_DataHub):
 		return true
-	elif (
-			HandleOfficer.can_receive_archive(actor_state)
-			and _can_unload_report(ref_DataHub)
-	):
+	elif _can_unload_report(ref_DataHub):
 		_unload_item(ref_DataHub)
 		# Activate another Officer after unloading a Field Report.
 		while actor_state.is_active:

@@ -417,6 +417,7 @@ static func _handle_salary(ref_DataHub: DataHub, is_win: bool) -> bool:
 static func _handle_garage(ref_DataHub: DataHub) -> bool:
 	if _can_use_garage(ref_DataHub):
 		_use_garage(ref_DataHub)
+		_set_challenge_short_cart()
 		return true
 	return false
 
@@ -610,5 +611,18 @@ static func _set_challenge_shelf() -> void:
 			return
 	NodeHub.ref_DataHub.set_challenge_state(
 			ChallengeTag.SHELF, ChallengeTag.FAILED
+	)
+
+
+static func _set_challenge_short_cart() -> void:
+	if NodeHub.ref_DataHub.is_first_unload:
+		return
+	elif not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.SHORT_CART, ChallengeTag.AVAILABLE
+	):
+		return
+
+	NodeHub.ref_DataHub.set_challenge_state(
+			ChallengeTag.SHORT_CART, ChallengeTag.FAILED
 	)
 

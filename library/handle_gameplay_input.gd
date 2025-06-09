@@ -279,11 +279,14 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# service; or there are only 3 (GameData.CART_LENGTH_SHORT)
 		# Carts right now.
 		SubTag.GARAGE:
-			is_buffered = (
-					_handle_cost(GameData.PAYMENT_GARAGE)
-					or _handle_garage()
-			)
-			warn_type = WarnTag.ADD_CART
+			if _handle_garage():
+				is_buffered = true
+				warn_type = WarnTag.ADD_CART
+			elif _handle_cost(GameData.PAYMENT_GARAGE):
+				is_buffered = true
+				warn_type = WarnTag.CASH
+			else:
+				is_buffered = false
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:
@@ -427,9 +430,8 @@ static func _handle_cost(cost: int) -> bool:
 static func _handle_garage() -> bool:
 	if NodeHub.ref_DataHub.cash < 1:
 		return false
-	elif (
-		Cart.count_cart(NodeHub.ref_DataHub.linked_cart_state)
-		> GameData.CART_LENGTH_SHORT
+	elif not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.SHORT_CART, ChallengeTag.AVAILABLE
 	):
 		return false
 	return true

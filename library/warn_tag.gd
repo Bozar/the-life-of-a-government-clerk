@@ -5,6 +5,7 @@ enum {
 	NO_ALERT,
 	ADD_CART,
 	BOOK,
+	CASH,
 	CHALLENGE,
 	CLEAN,
 	DOCUMENT,
@@ -30,5 +31,6 @@ const TAG_TO_STRING: Dictionary = {
 	ADD_CART: "ADD_CART",
 	CHALLENGE: "CHALLENGE",
 	BOOK: "BOOK",
+	CASH: "CASH",
 }
 

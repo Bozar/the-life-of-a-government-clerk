@@ -2,7 +2,7 @@ class_name FootnoteLabel
 extends CustomLabel
 
 
-var VERSION: String = "0.1.1"
+var VERSION: String = "0.2.0"
 
 
 func init_gui() -> void:

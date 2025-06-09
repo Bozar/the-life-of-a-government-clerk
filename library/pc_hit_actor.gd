@@ -131,6 +131,10 @@ static func can_unload_document(ref_DataHub: DataHub) -> bool:
 	return _can_unload_archive(ref_DataHub, SubTag.DOCUMENT)
 
 
+static func can_unload_field_report(ref_DataHub: DataHub) -> bool:
+	return _can_unload_archive(ref_DataHub, SubTag.FIELD_REPORT)
+
+
 static func _can_get_cash(ref_DataHub: DataHub) -> bool:
 	return ref_DataHub.account > 0
 
@@ -206,10 +210,6 @@ static func _is_valid_coord(coord: Vector2i) -> bool:
 			and (not SpriteState.has_building_at_coord(coord))
 			and (not SpriteState.has_actor_at_coord(coord))
 	)
-
-
-static func _can_unload_report(ref_DataHub: DataHub) -> bool:
-	return _can_unload_archive(ref_DataHub, SubTag.FIELD_REPORT)
 
 
 static func _can_unload_archive(
@@ -452,7 +452,7 @@ static func _handle_officer(
 		return false
 	elif _remove_all_servant(ref_DataHub):
 		return true
-	elif _can_unload_report(ref_DataHub):
+	elif can_unload_field_report(ref_DataHub):
 		_unload_item(ref_DataHub)
 		# Activate another Officer after unloading a Field Report.
 		while actor_state.is_active:
@@ -461,11 +461,9 @@ static func _handle_officer(
 					ref_DataHub.officer_records,
 					ref_RandomNumber
 			)
+		_set_field_report_challenge()
 		return true
-	elif (
-			HandleOfficer.can_receive_archive(actor_state)
-			and can_unload_document(ref_DataHub)
-	):
+	elif can_unload_document(ref_DataHub):
 		_unload_document(ref_DataHub)
 		# NOTE: Uncomment this line if the game becomes too hard.
 		#HandleRawFile.reset_cooldown(ref_DataHub.raw_file_states)
@@ -566,13 +564,24 @@ static func _check_challenge() -> void:
 
 
 static func _set_challenge_state() -> void:
-	var state: int
-
 	for i: int in ChallengeTag.ALL_CHALLENGES:
-		state = NodeHub.ref_DataHub.get_challenge_state(i)
-		if state != ChallengeTag.AVAILABLE:
+		if not NodeHub.ref_DataHub.is_challenge_state(
+				i, ChallengeTag.AVAILABLE
+		):
 			continue
 		NodeHub.ref_DataHub.set_challenge_state(
 				i, ChallengeTag.FINISHED
 		)
+
+
+static func _set_field_report_challenge() -> void:
+	if NodeHub.ref_DataHub.is_first_unload:
+		return
+	elif not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.FIELD_REPORT, ChallengeTag.AVAILABLE
+	):
+		return
+	NodeHub.ref_DataHub.set_challenge_state(
+			ChallengeTag.FIELD_REPORT, ChallengeTag.FAILED
+	)
 

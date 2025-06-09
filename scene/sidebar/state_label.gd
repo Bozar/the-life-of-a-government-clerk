@@ -94,12 +94,12 @@ func _get_message_text() -> String:
 
 
 func _get_challenge_text() -> String:
-	var state: int
 	var states: Array
 
 	for i: int in ChallengeTag.ALL_CHALLENGES:
-		state = NodeHub.ref_DataHub.get_challenge_state(i)
-		if state == ChallengeTag.FINISHED:
+		if NodeHub.ref_DataHub.is_challenge_state(
+				i, ChallengeTag.FINISHED
+		):
 			states.push_back(ChallengeTag.NAME_TO_STRING[i])
 		else:
 			states.push_back(ChallengeTag.NO_NAME)

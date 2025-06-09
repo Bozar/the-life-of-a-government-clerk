@@ -324,14 +324,26 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# [Achievement] Warn player when loading a Field Report
 		# regardless of load amount.
 		SubTag.FIELD_REPORT:
-			is_buffered = _handle_raw_file(actor, false)
-			warn_type = WarnTag.REPORT
+			if _handle_load_field_report(actor):
+				is_buffered = true
+				warn_type = WarnTag.REPORT
+			elif _handle_raw_file(actor, is_all_safe):
+				is_buffered = true
+				warn_type = WarnTag.LOAD
+			else:
+				is_buffered = false
 
 		# Warn player when unloading a Document and there is more than
 		# 1 (GameData.MAX_MISSED_CALL) Phone calls.
 		SubTag.OFFICER:
-			is_buffered = _handle_officer(state)
-			warn_type = WarnTag.DOCUMENT
+			if _handle_unload_document(state):
+				is_buffered = true
+				warn_type = WarnTag.DOCUMENT
+			elif _handle_unload_field_report(state):
+				is_buffered = true
+				warn_type = WarnTag.REPORT
+			else:
+				is_buffered = false
 
 	if is_buffered:
 		_set_buffer_state(data, warn_type, true)
@@ -471,6 +483,22 @@ static func _handle_raw_file(actor: Sprite2D, is_safe_load: bool) -> bool:
 	return true
 
 
+static func _has_field_report_challenge() -> bool:
+	if NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.FIELD_REPORT, ChallengeTag.AVAILABLE
+	):
+		return true
+	return false
+
+
+static func _handle_load_field_report(actor: Sprite2D) -> bool:
+	if not _has_field_report_challenge():
+		return false
+	elif not PcHitActor.can_load_raw_file(actor, NodeHub.ref_DataHub):
+		return false
+	return true
+
+
 static func _handle_trash(coord: Vector2i, is_safe_load: bool) -> bool:
 	var trap: Sprite2D = SpriteState.get_trap_by_coord(coord)
 
@@ -491,11 +519,29 @@ static func _handle_officer(actor_state: ActorState) -> bool:
 
 	if count_servant > 0:
 		return false
-	elif not _handle_phone_call():
-		return false
 	elif not HandleOfficer.can_receive_archive(actor_state):
 		return false
+	return true
+
+
+static func _handle_unload_document(actor_state: ActorState) -> bool:
+	if not _handle_officer(actor_state):
+		return false
+	elif not _handle_phone_call():
+		return false
 	elif not PcHitActor.can_unload_document(NodeHub.ref_DataHub):
+		return false
+	return true
+
+
+static func _handle_unload_field_report(actor_state: ActorState) -> bool:
+	if NodeHub.ref_DataHub.is_first_unload:
+		return false
+	if not _has_field_report_challenge():
+		return false
+	elif not _handle_officer(actor_state):
+		return false
+	elif not PcHitActor.can_unload_field_report(NodeHub.ref_DataHub):
 		return false
 	return true
 

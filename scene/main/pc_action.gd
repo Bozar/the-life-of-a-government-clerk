@@ -15,7 +15,7 @@ func is_fov_flag(coord: Vector2i, fov_flag: int) -> bool:
 		return PcFov.is_fov_flag(coord, _fov_map, fov_flag)
 
 	match fov_flag:
-		PcFov.IS_IN_SIGHT_FLAG, PcFov.IS_IN_MEMORY_FLAG: 
+		PcFov.IS_IN_SIGHT_FLAG, PcFov.IS_IN_MEMORY_FLAG:
 			return true
 	return PcFov.is_fov_flag(coord, _fov_map, fov_flag)
 

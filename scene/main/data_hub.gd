@@ -294,6 +294,13 @@ func set_challenge_state(challenge_tag: int, challenge_state: int) -> void:
 	_challenge_states[challenge_tag] = challenge_state
 
 
+func is_challenge_state(challenge_tag: int, challenge_state: int) -> bool:
+	if _challenge_states.has(challenge_tag):
+		return _challenge_states[challenge_tag] == challenge_state
+	push_error("Invalid challenge tag: %d" % challenge_tag)
+	return false
+
+
 func set_is_first_unload(value: bool) -> void:
 	_is_first_unload = value
 

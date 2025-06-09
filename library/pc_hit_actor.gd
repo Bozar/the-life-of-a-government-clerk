@@ -536,6 +536,7 @@ static func _handle_shelf(
 	if can_load_tmp_file(actor_state, ref_DataHub):
 		_load_tmp_file(actor_state, ref_DataHub, ref_RandomNumber)
 		HandleShelf.send_tmp_file(actor_state)
+		_set_challenge_shelf()
 		return true
 	elif (
 			_can_unload_tmp_file(ref_DataHub)
@@ -595,5 +596,19 @@ static func _set_challenge_book() -> void:
 		return
 	NodeHub.ref_DataHub.set_challenge_state(
 			ChallengeTag.BOOK, ChallengeTag.FAILED
+	)
+
+
+static func _set_challenge_shelf() -> void:
+	if not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.SHELF, ChallengeTag.AVAILABLE
+	):
+		return
+
+	for i: ShelfState in NodeHub.ref_DataHub.shelf_states:
+		if i.item_tag != "":
+			return
+	NodeHub.ref_DataHub.set_challenge_state(
+			ChallengeTag.SHELF, ChallengeTag.FAILED
 	)
 

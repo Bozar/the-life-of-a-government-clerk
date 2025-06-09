@@ -460,9 +460,13 @@ static func _handle_station() -> bool:
 
 
 static func _handle_shelf(actor_state: ActorState) -> bool:
-	if PcHitActor.can_load_tmp_file(actor_state, NodeHub.ref_DataHub):
-		return true
-	return false
+	if not NodeHub.ref_DataHub.is_challenge_state(
+			ChallengeTag.SHELF, ChallengeTag.AVAILABLE
+	):
+		return false
+	elif not PcHitActor.can_load_tmp_file(actor_state, NodeHub.ref_DataHub):
+		return false
+	return true
 
 
 static func _handle_load_document(

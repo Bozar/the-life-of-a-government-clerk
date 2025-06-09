@@ -306,11 +306,14 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# 3. or there is more than 1 (GameData.MAX_MISSED_CALL) Phone
 		# calls.
 		SubTag.CLERK:
-			is_buffered = _handle_clerk(state, is_all_safe)
-			if NodeHub.ref_DataHub.is_first_unload:
+			if _is_first_unload(state):
+				is_buffered = true
 				warn_type = WarnTag.CHALLENGE
-			else:
+			elif _handle_clerk(state, is_all_safe):
+				is_buffered = true
 				warn_type = WarnTag.DOCUMENT
+			else:
+				is_buffered = false
 
 		# Warn player when loading a Raw File and ...
 		# 1. the last slot is more than 40%
@@ -460,19 +463,37 @@ static func _handle_shelf(actor_state: ActorState) -> bool:
 
 
 static func _handle_clerk(actor_state: ActorState, is_safe_load: bool) -> bool:
-	var dh := NodeHub.ref_DataHub
-
-	if dh.is_first_unload:
-		if Cart.get_first_item(dh.pc, dh.linked_cart_state) != null:
-			return true
+	if is_safe_load and (not _handle_phone_call()):
 		return false
-	elif is_safe_load and (not _handle_phone_call()):
-		return false
-	elif not PcHitActor.can_load_document(dh):
+	elif not PcHitActor.can_load_document(NodeHub.ref_DataHub):
 		return false
 	elif not HandleClerk.can_send_document(actor_state):
 		return false
 	return true
+
+
+static func _is_first_unload(actor_state: ActorState) -> bool:
+	var dh := NodeHub.ref_DataHub
+
+	if not dh.is_first_unload:
+		return false
+	elif not HandleClerk.has_active_officer(actor_state):
+		return false
+
+	var cart_sprite: Sprite2D = Cart.get_first_item(
+			dh.pc, dh.linked_cart_state
+	)
+
+	if cart_sprite == null:
+		return false
+
+	var cart_state: CartState = Cart.get_state(
+			cart_sprite, NodeHub.ref_DataHub.linked_cart_state
+	)
+
+	if HandleClerk.can_receive_raw_file(actor_state, cart_state.item_tag):
+		return true
+	return false
 
 
 static func _handle_raw_file(actor: Sprite2D, is_safe_load: bool) -> bool:

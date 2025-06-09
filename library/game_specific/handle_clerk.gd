@@ -49,7 +49,7 @@ static func can_receive_raw_file(
 		return false
 	elif new_tag == "":
 		return false
-	elif not _has_active_officer(state):
+	elif not has_active_officer(state):
 		return false
 
 	for i: DeskState in state.desk_states:
@@ -114,6 +114,20 @@ static func update_progress(state: ClerkState) -> void:
 		add_progress = max(add_progress, GameData.MIN_FILE_PROGRESS)
 
 	state.progress += add_progress
+
+
+static func has_active_officer(state: ClerkState) -> bool:
+	var clerk_coord: Vector2i = state.coord
+	var officer_coord: Vector2i
+
+	for i: OfficerState in NodeHub.ref_DataHub.officer_states:
+		officer_coord = i.coord
+		if not ConvertCoord.is_in_range(
+				clerk_coord, officer_coord, MAX_ROOM_SIZE
+		):
+			continue
+		return i.is_active
+	return false
 
 
 #static func reduce_progress(
@@ -195,18 +209,4 @@ static func _is_valid_progress(progress: int) -> bool:
 
 static func _sort_progress(left: ClerkState, right: ClerkState) -> bool:
 	return left.progress < right.progress
-
-
-static func _has_active_officer(state: ClerkState) -> bool:
-	var clerk_coord: Vector2i = state.coord
-	var officer_coord: Vector2i
-
-	for i: OfficerState in NodeHub.ref_DataHub.officer_states:
-		officer_coord = i.coord
-		if not ConvertCoord.is_in_range(
-				clerk_coord, officer_coord, MAX_ROOM_SIZE
-		):
-			continue
-		return i.is_active
-	return false
 

@@ -74,17 +74,17 @@ func _on_SignalHub_turn_started(sprite: Sprite2D) -> void:
 
 func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 	match NodeHub.ref_DataHub.game_mode:
-		GameData.NORMAL_MODE:
+		GameModeTag.NORMAL:
 			if HandleGameplayInput.is_normal_input(
 					input_tag, _buffer_input_data
 			):
 				return
-		GameData.EXAMINE_MODE:
+		GameModeTag.EXAMINE:
 			if HandleGameplayInput.is_examine_input(
 					input_tag, _buffer_input_data
 			):
 				return
-		GameData.HELP_MODE:
+		GameModeTag.HELP:
 			if HandleGameplayInput.is_help_input(
 					input_tag, _buffer_input_data
 			):
@@ -95,7 +95,7 @@ func _on_SignalHub_action_pressed(input_tag: StringName) -> void:
 			NodeHub.ref_DataHub.pc, _fov_map, _shadow_cast_fov_data
 	)
 	HandleGameplayInput.show_all_sprite()
-	if NodeHub.ref_DataHub.game_mode == GameData.EXAMINE_MODE:
+	if NodeHub.ref_DataHub.game_mode == GameModeTag.EXAMINE:
 		PcSwitchMode.highlight_actor()
 	NodeHub.ref_SignalHub.ui_force_updated.emit()
 

@@ -133,7 +133,7 @@ static func _block_shadow_cast_fov_ray(
 		return false
 
 	# An Actor does not block sight in Examine Mode.
-	if NodeHub.ref_DataHub.game_mode == GameData.EXAMINE_MODE:
+	if NodeHub.ref_DataHub.game_mode == GameModeTag.EXAMINE:
 		return false
 	return true
 

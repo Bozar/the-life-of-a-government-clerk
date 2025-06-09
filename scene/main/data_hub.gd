@@ -156,7 +156,7 @@ var is_first_unload: bool:
 
 var _pc: Sprite2D
 var _dummy_pc: Sprite2D
-var _game_mode: int = GameData.NORMAL_MODE
+var _game_mode: int = GameModeTag.NORMAL
 var _linked_cart_state := LinkedCartState.new()
 var _incoming_call: int = 0
 var _sidebar_message: String

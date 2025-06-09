@@ -182,7 +182,7 @@ func _handle_mode_inputs(event: InputEvent) -> bool:
 	var sh := NodeHub.ref_SignalHub
 
 	match NodeHub.ref_DataHub.game_mode:
-		GameData.NORMAL_MODE:
+		GameModeTag.NORMAL:
 			if event.is_action_pressed(InputTag.SWITCH_EXAMINE):
 				sh.action_pressed.emit(InputTag.SWITCH_EXAMINE)
 				return true
@@ -190,7 +190,7 @@ func _handle_mode_inputs(event: InputEvent) -> bool:
 				sh.action_pressed.emit(InputTag.SWITCH_HELP)
 				return true
 			return false
-		GameData.EXAMINE_MODE, GameData.HELP_MODE:
+		GameModeTag.EXAMINE, GameModeTag.HELP:
 			if _handle_gameplay_inputs(event):
 				return true
 			return false

@@ -51,6 +51,6 @@ static func _get_tags() -> Array:
 
 	for i: Sprite2D in sprites:
 		sub_tag = SpriteState.get_sub_tag(i)
-		tags.push_back(GameData.TAG_TO_HELP.get(sub_tag, INVALID_TAG))
+		tags.push_back(SubTag.TAG_TO_HELP.get(sub_tag, INVALID_TAG))
 	return tags
 

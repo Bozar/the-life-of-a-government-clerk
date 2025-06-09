@@ -29,8 +29,8 @@ const ALL_CHALLENGES: Array = [
 
 const STATE_TO_STRING: Dictionary = {
 	AVAILABLE: " ",
-	FINISHED: "X",
-	FAILED: "!",
+	FINISHED: "+",
+	FAILED: "-",
 }
 
 

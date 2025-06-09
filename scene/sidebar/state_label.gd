@@ -36,12 +36,12 @@ func update_gui() -> void:
 	var message: String
 
 	match NodeHub.ref_DataHub.game_mode:
-		GameData.NORMAL_MODE:
+		GameModeTag.NORMAL:
 			cart = _get_normal_text()
 			message = _get_message_text()
-		GameData.EXAMINE_MODE:
+		GameModeTag.EXAMINE:
 			cart = _get_examine_text()
-		GameData.HELP_MODE:
+		GameModeTag.HELP:
 			cart = HelpMode.get_sidebar_text()
 
 	text = "\n".join([

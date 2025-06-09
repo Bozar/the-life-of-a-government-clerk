@@ -22,5 +22,5 @@ Do not unload a Book to any Clerk.
 
 --------------------
 
-NOTE: In order to complete a challenge, you must win and meet the requirement throughout the game -- from unloading the first Raw File to a Clerk, untill unloading the last Document to an Officer.
+NOTE: In order to complete a challenge, you must win and meet the requirement throughout the game -- from unloading the first Raw File to a Clerk, until unloading the last Document to an Officer.
 

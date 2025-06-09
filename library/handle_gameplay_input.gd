@@ -41,12 +41,12 @@ static func is_normal_input(
 		InputTag.SWITCH_EXAMINE:
 			if not Cart.can_enter_examine_mode(linked):
 				return true
-			dh.set_game_mode(GameData.EXAMINE_MODE)
+			dh.set_game_mode(GameModeTag.EXAMINE)
 			PcSwitchMode.examine_mode(true, dh)
 			return false
 
 		InputTag.SWITCH_HELP:
-			dh.set_game_mode(GameData.HELP_MODE)
+			dh.set_game_mode(GameModeTag.HELP)
 			PcSwitchMode.help_mode(true)
 			return false
 
@@ -83,8 +83,8 @@ static func is_examine_input(
 	match input_tag:
 		InputTag.SWITCH_EXAMINE, InputTag.EXIT_ALT_MODE:
 			# Reset buffer state when leaving Examine Mode.
-			_set_buffer_state(data, GameData.WARN.NO_ALERT, false)
-			dh.set_game_mode(GameData.NORMAL_MODE)
+			_set_buffer_state(data, WarnTag.NO_ALERT, false)
+			dh.set_game_mode(GameModeTag.NORMAL)
 			PcSwitchMode.examine_mode(false, dh)
 
 		InputTag.MOVE_UP:
@@ -118,8 +118,8 @@ static func is_help_input(
 	match input_tag:
 		InputTag.SWITCH_HELP, InputTag.EXIT_ALT_MODE:
 			# Reset buffer state when leaving Help Mode.
-			_set_buffer_state(data, GameData.WARN.NO_ALERT, false)
-			dh.set_game_mode(GameData.NORMAL_MODE)
+			_set_buffer_state(data, WarnTag.NO_ALERT, false)
+			dh.set_game_mode(GameModeTag.NORMAL)
 			PcSwitchMode.help_mode(false)
 			return true
 
@@ -210,7 +210,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 	if data.buffer_coord != INVALID_COORD:
 		is_same_input = (data.buffer_coord == data.input_coord)
 		# Always reset buffer state.
-		_set_buffer_state(data, GameData.WARN.NO_ALERT, false)
+		_set_buffer_state(data, WarnTag.NO_ALERT, false)
 		# The same input key is pressed the second time. Pass the key to
 		# following code outside `_try_buffer_input()`.
 		if is_same_input:
@@ -253,12 +253,12 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# Warn player when he might be trapped.
 		if Checkmate.is_trapped(data.input_coord):
 			is_buffered = true
-			warn_type = GameData.WARN.TRAPPED
+			warn_type = WarnTag.TRAPPED
 		# Warn player when moving into a Trash and the overall load
 		# amout is more than 60% (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		elif _handle_trash(data.input_coord, is_safe_full):
 			is_buffered = true
-			warn_type = GameData.WARN.SLOW
+			warn_type = WarnTag.SLOW
 		else:
 			is_buffered = false
 		if is_buffered:
@@ -273,7 +273,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# the Servant is pushed by a long line of Carts.
 		SubTag.SERVANT:
 			is_buffered = _handle_servant(data.input_coord)
-			warn_type = GameData.WARN.PUSH
+			warn_type = WarnTag.PUSH
 
 		# [Achievement] Warn player if his Cash is less than 1 after the
 		# service; or there are only 3 (GameData.CART_LENGTH_SHORT)
@@ -283,7 +283,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 					_handle_cost(GameData.PAYMENT_GARAGE)
 					or _handle_garage()
 			)
-			warn_type = GameData.WARN.ADD_CART
+			warn_type = WarnTag.ADD_CART
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:
@@ -291,12 +291,12 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 					_handle_cost(GameData.PAYMENT_CLEAN)
 					or _handle_station()
 			)
-			warn_type = GameData.WARN.CLEAN
+			warn_type = WarnTag.CLEAN
 
 		# [Achievement] Warn player when loading a Raw File.
 		SubTag.SHELF:
 			is_buffered = _handle_shelf(state)
-			warn_type = GameData.WARN.SHELF
+			warn_type = WarnTag.SHELF
 
 		# Warn player when loading a Document and ..
 		# 1. the last slot is more than 40%
@@ -308,9 +308,9 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		SubTag.CLERK:
 			is_buffered = _handle_clerk(state, is_all_safe)
 			if NodeHub.ref_DataHub.is_first_unload:
-				warn_type = GameData.WARN.CHALLENGE
+				warn_type = WarnTag.CHALLENGE
 			else:
-				warn_type = GameData.WARN.DOCUMENT
+				warn_type = WarnTag.DOCUMENT
 
 		# Warn player when loading a Raw File and ...
 		# 1. the last slot is more than 40%
@@ -319,19 +319,19 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
 			is_buffered = _handle_raw_file(actor, is_all_safe)
-			warn_type = GameData.WARN.LOAD
+			warn_type = WarnTag.LOAD
 
 		# [Achievement] Warn player when loading a Field Report
 		# regardless of load amount.
 		SubTag.FIELD_REPORT:
 			is_buffered = _handle_raw_file(actor, false)
-			warn_type = GameData.WARN.REPORT
+			warn_type = WarnTag.REPORT
 
 		# Warn player when unloading a Document and there is more than
 		# 1 (GameData.MAX_MISSED_CALL) Phone calls.
 		SubTag.OFFICER:
 			is_buffered = _handle_officer(state)
-			warn_type = GameData.WARN.DOCUMENT
+			warn_type = WarnTag.DOCUMENT
 
 	if is_buffered:
 		_set_buffer_state(data, warn_type, true)
@@ -352,7 +352,7 @@ static func _set_buffer_state(
 		)
 		data.buffer_coord = data.input_coord
 
-		message = GameData.WARN_TO_STRING.get(warn_type, "")
+		message = WarnTag.TAG_TO_STRING.get(warn_type, "")
 		str_dir = ConvertCoord.VECTOR_TO_STRING.get(data.direction, "")
 		message = MESSAGE_TEMPLATE % [str_dir, message]
 

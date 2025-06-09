@@ -1,89 +1,15 @@
 class_name GameData
 
 
-### Game Mode ###
-
-enum {
-	NORMAL_MODE,
-	EXAMINE_MODE,
-	HELP_MODE,
-}
-
-
 ### Sidebar ###
 
 const MIN_TURN_COUNTER: int = 1
 const MAX_TURN_COUNTER: int = 99
 
-enum WARN {
-	NO_ALERT,
-	ADD_CART,
-	CHALLENGE,
-	CLEAN,
-	DOCUMENT,
-	LOAD,
-	PUSH,
-	REPORT,
-	SHELF,
-	SLOW,
-	TRAPPED,
-}
-
-const WARN_TO_STRING: Dictionary = {
-	WARN.NO_ALERT: "",
-	WARN.TRAPPED: "TRAPPED",
-	WARN.SLOW: "SLOW",
-	WARN.PUSH: "PUSH",
-	WARN.CLEAN: "CLEAN",
-	WARN.SHELF: "SHELF",
-	WARN.LOAD: "LOAD",
-	WARN.DOCUMENT: "DOCUMENT",
-	WARN.REPORT: "REPORT",
-	WARN.ADD_CART: "ADD_CART",
-	WARN.CHALLENGE: "CHALLENGE",
-}
-
 
 ### Sprite ###
 
 const INTERNAL_FLOOR_Z_LAYER: int = ZLayer.GROUND + 1
-
-const TAG_TO_HELP: Dictionary = {
-	SubTag.DUNGEON_FLOOR: "0-GROUND",
-	SubTag.INTERNAL_FLOOR: "0-FLOOR",
-
-	SubTag.WALL: "1-WALL",
-	SubTag.PHONE_BOOTH: "1-PHONE",
-	SubTag.DOOR: "1-DOOR",
-	SubTag.DESK: "1-DESK",
-
-	SubTag.ATLAS_ON_DESK: "2-ATLAS",
-	SubTag.BOOK_ON_DESK: "2-BOOK",
-	SubTag.CUP_ON_DESK: "2-CUP",
-	SubTag.ENCYCLOPEDIA_ON_DESK: "2-E_BOOK",
-	SubTag.TRASH: "2-TRASH",
-	SubTag.PROGRESS_BAR: "2-PROGRESS",
-
-	SubTag.DUMMY_PC: "3-PC",
-	SubTag.CLERK: "3-CLERK",
-	SubTag.OFFICER: "3-OFFICER",
-
-	SubTag.ATLAS: "3-ATLAS",
-	SubTag.BOOK: "3-BOOK",
-	SubTag.CUP: "3-CUP",
-	SubTag.DOCUMENT: "3-DOCUMENT",
-	SubTag.ENCYCLOPEDIA: "3-E_BOOK",
-	SubTag.FIELD_REPORT: "3-REPORT",
-
-	SubTag.CART: "3-CART",
-	SubTag.SALARY: "3-SALARY",
-	SubTag.GARAGE: "3-GARAGE",
-	SubTag.STATION: "3-DUMP",
-	SubTag.PHONE: "3-PHONE",
-	SubTag.SHELF: "3-DESK",
-	SubTag.SERVANT: "3-SERVANT",
-	SubTag.EMPTY_CART: "3-E_CART",
-}
 
 
 ### PC and Cart ###

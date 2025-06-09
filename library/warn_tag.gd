@@ -1,0 +1,32 @@
+class_name WarnTag
+
+
+enum {
+	NO_ALERT,
+	ADD_CART,
+	CHALLENGE,
+	CLEAN,
+	DOCUMENT,
+	LOAD,
+	PUSH,
+	REPORT,
+	SHELF,
+	SLOW,
+	TRAPPED,
+}
+
+
+const TAG_TO_STRING: Dictionary = {
+	NO_ALERT: "",
+	TRAPPED: "TRAPPED",
+	SLOW: "SLOW",
+	PUSH: "PUSH",
+	CLEAN: "CLEAN",
+	SHELF: "SHELF",
+	LOAD: "LOAD",
+	DOCUMENT: "DOCUMENT",
+	REPORT: "REPORT",
+	ADD_CART: "ADD_CART",
+	CHALLENGE: "CHALLENGE",
+}
+

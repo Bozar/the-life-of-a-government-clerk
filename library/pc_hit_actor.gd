@@ -239,6 +239,9 @@ static func _unload_document(ref_DataHub: DataHub) -> void:
 		if ref_DataHub.incoming_call > GameData.MAX_MISSED_CALL:
 			ref_DataHub.account -= GameData.MISSED_CALL_PENALTY
 
+	if ref_DataHub.delivery <= 0:
+		_set_challenge_state()
+
 
 static func _unload_item(ref_DataHub: DataHub) -> void:
 	var cart_sprite: Sprite2D = Cart.get_first_item(
@@ -561,4 +564,16 @@ static func _check_challenge() -> void:
 			NodeHub.ref_DataHub.set_challenge_state(
 					i, ChallengeTag.FAILED
 			)
+
+
+static func _set_challenge_state() -> void:
+	var state: int
+
+	for i: int in ChallengeTag.ALL_CHALLENGES:
+		state = NodeHub.ref_DataHub.get_challenge_state(i)
+		if state != ChallengeTag.AVAILABLE:
+			continue
+		NodeHub.ref_DataHub.set_challenge_state(
+				i, ChallengeTag.FINISHED
+		)
 

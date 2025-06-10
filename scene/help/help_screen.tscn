@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://besuci0rqpqt3" path="res://scene/help/help_screen.gd" id="1_kejrk"]
 [ext_resource type="Script" uid="uid://bahyvxkbnnn3p" path="res://scene/help/keybinding_label.gd" id="2_vcs6n"]
-[ext_resource type="Script" uid="uid://dy1kb2m5f3ar3" path="res://scene/help/introduction_label.gd" id="3_gqp33"]
-[ext_resource type="Script" uid="uid://buxvdsni71027" path="res://scene/help/gameplay_label.gd" id="4_a24j5"]
+[ext_resource type="Script" uid="uid://dy1kb2m5f3ar3" path="res://scene/help/help_mode_label.gd" id="3_gqp33"]
+[ext_resource type="Script" uid="uid://buxvdsni71027" path="res://scene/help/warn_message_label.gd" id="4_a24j5"]
 
 [node name="HelpScreen" type="MarginContainer"]
 offset_right = 8.0
@@ -17,16 +17,16 @@ layout_mode = 2
 layout_mode = 2
 script = ExtResource("2_vcs6n")
 
-[node name="IntroductionScroll" type="ScrollContainer" parent="."]
+[node name="HelpModeScroll" type="ScrollContainer" parent="."]
 layout_mode = 2
 
-[node name="IntroductionLabel" type="Label" parent="IntroductionScroll"]
+[node name="HelpModeLabel" type="Label" parent="HelpModeScroll"]
 layout_mode = 2
 script = ExtResource("3_gqp33")
 
-[node name="GameplayScroll" type="ScrollContainer" parent="."]
+[node name="WarnMessageScroll" type="ScrollContainer" parent="."]
 layout_mode = 2
 
-[node name="GameplayLabel" type="Label" parent="GameplayScroll"]
+[node name="WarnMessageLabel" type="Label" parent="WarnMessageScroll"]
 layout_mode = 2
 script = ExtResource("4_a24j5")

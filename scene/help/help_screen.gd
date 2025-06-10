@@ -4,13 +4,13 @@ extends CustomMarginContainer
 
 const ORDERED_GUI_NAMES: Array = [
 	"Keybinding",
-	"Gameplay",
-	"Introduction",
+	"HelpMode",
+	"WarnMessage",
 ]
 const ORDERED_TEXT_FILES: Array = [
 	"res://user/doc/keybinding.md",
-	"res://user/doc/gameplay.md",
-	"res://user/doc/introduction.md",
+	"res://user/doc/help_mode.md",
+	"res://user/doc/warn_message.md",
 ]
 
 

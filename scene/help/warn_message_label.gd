@@ -1,4 +1,4 @@
-class_name IntroductionLabel
+class_name WarnMessageLabel
 extends CustomLabel
 
 

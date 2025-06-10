@@ -1,8 +1,8 @@
-# Gameplay
+# Help Mode
 
-[→: Introduction| ←: Key Bindings]
+[→: Warn Message| ←: Key Binding]
 [↑, PgUp: Scroll up | ↓, PgDn: Scroll down]
-[Esc: Exit help]
+[Esc: Exit menu]
 
 ## Win and Lose
 

@@ -1,8 +1,8 @@
-# Key Bindings
+# Key Binding
 
-[→: Gameplay| ←: Introduction]
+[→: Help Mode| ←: Warn Message]
 [↑, PgUp: Scroll up | ↓, PgDn: Scroll down]
-[Esc: Exit help]
+[Esc: Exit menu]
 
 General gameplay:
 

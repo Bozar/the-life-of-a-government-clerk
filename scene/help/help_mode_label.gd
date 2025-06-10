@@ -1,4 +1,4 @@
-class_name GameplayLabel
+class_name HelpModeLabel
 extends CustomLabel
 
 

@@ -314,7 +314,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		SubTag.CLERK:
 			if _is_first_unload(state):
 				is_buffered = true
-				warn_type = WarnTag.CHALLENGE
+				warn_type = WarnTag.START
 			elif _handle_unload_book(state):
 				is_buffered = true
 				warn_type = WarnTag.BOOK

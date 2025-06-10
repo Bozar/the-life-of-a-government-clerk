@@ -2,24 +2,22 @@ class_name FootnoteLabel
 extends CustomLabel
 
 
-var VERSION: String = "0.2.0"
+const VERSION: String = "0.2.0"
+#const MENU: String = "Menu: Z|C|V"
+#const MENU: String = "←|→|↑|↓\n␣|Z|X|C|V"
+const MENU: String = "Help: C"
 
 
 func init_gui() -> void:
 	_set_font(false)
 	text = "%s\n%s\n%s" % [
-		_get_version(), _get_menu(), _get_seed()
+		_get_version(), MENU, _get_seed()
 	]
 
 
 func _get_version() -> String:
 	var wizard: String = "+" if TransferData.wizard_mode else ""
-
 	return "%s%s" % [wizard, VERSION]
-
-
-func _get_menu() -> String:
-	return "Menu: C|V"
 
 
 func _get_seed() -> String:

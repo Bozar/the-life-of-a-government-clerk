@@ -8,9 +8,9 @@ const ORDERED_GUI_NAMES: Array = [
 	"WarnMessage",
 ]
 const ORDERED_TEXT_FILES: Array = [
-	"res://user/doc/keybinding.md",
+	"res://user/doc/key_binding.md",
 	"res://user/doc/help_mode.md",
-	"res://user/doc/warn_message.md",
+	"res://user/doc/warning_message.md",
 ]
 
 

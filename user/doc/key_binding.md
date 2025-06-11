@@ -1,6 +1,6 @@
 # Key Binding
 
-[→: Help Mode | ←: Warn Message]
+[→: Help Mode | ←: Warning Message]
 [↑, PgUp: Scroll up | ↓, PgDn: Scroll down]
 [Esc: Exit menu]
 
@@ -11,9 +11,9 @@ This is a brief list of key bindings. Full help is available off-line (doc/wiki/
 * [Arrow keys]: Move PC.
 * [Space]: Switch to Examine Mode.
 * [X]: Switch to Help Mode.
-* [Z]: Open Challenge List menu.
-* [C]: Open Help menu.
-* [V]: Open Debug menu.
+* [Z]: Open Challenge List Menu.
+* [C]: Open Help Menu.
+* [V]: Open Debug Menu.
 * [Ctrl + W]: Quit game.
 
 ## Examine Mode, Help Mode

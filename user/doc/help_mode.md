@@ -1,48 +1,126 @@
 # Help Mode
 
-[→: Warn Message | ←: Key Binding]
+[→: Warning Message | ←: Key Binding]
 [↑, PgUp: Scroll up | ↓, PgDn: Scroll down]
 [Esc: Exit menu]
 
-## Win and Lose
+## Layer 3
 
-To beat the game, you need to accumulate 9 hits. You gain a hit by killing an enemy, and lose one after 3 turns. On the top right corner there is a hit counter, which shows total hits and remaining turns for the last hit. For example, `4-2` means you have 4 hits right now, and will lose the fourth hit in 2 turns.
+### `3-ATLAS`
 
-You lose the game if you end your turn being adjacent to a conscious enemy.
+This is a Raw File Node that sends Atlases and receives Servants.
 
-## PC Actions
+### `3-BOOK`
 
-You can do four actions: walk, kick back, aim and shoot. Switching between aiming mode and normal mode costs no time. All other actions take 1 turn.
+This is a Raw File Node that sends Books and receives Servants.
 
-Press arrow keys to move 1 grid in one of the four cardinal directions. If your destination is occupied by an enemy, whose symbol is an uppercase `G`, the enemy is kicked back by 1 grid and becomes unconscious (shown as `g`) for 1 turn, see Figure: 1-1.
+### `3-CART`
 
-    . . .      . . .
-    @ G .  ->  @ . g
-    . . .      . . .
+This is your Cart that carries cargo.
 
-    Figure: 1-1
+### `3-CASH`
 
-If you kick an enemy who has a companion or wall (`#`) behind, the enemy is killed and leaves a railgun ammo (`?`) on the ground, see Figure 1-2.
+This is a bank where you can draw Cash from.
 
-    @ G G      @ ? G
-    G . .  ->  ? . .
-    # . .      # . .
+### `3-CLERK`
 
-    Figure: 1-2
+This is a Clerk who receives Raw Files and sends Documents.
 
-Move over a railgun bullet to pick it up automatically. You can have at most 3 bullets. The current amount is shown in the top right corner of the screen. Press Space to switch between Aim Mode and Normal Mode if you have at least 1 bullet.
+### `3-CUP`
 
-When in Aim Mode, your symbol is an exclamation mark (`!`). Press arrow keys to shoot. The first enemy in the trajectory is killed, no matter you can see it or not.
+This is a Raw File Node that sends Cups of tea and receives Servants.
 
-## NPC AI
+### `3-SHELF`
 
-A nearby enemy approaches you one grid per turn. A gunshot attracts enemies farther away. If an enemy starts its turn adjacent to you, it kills you with a single bite. 
+This is a Shelf which stores a Raw File for you.
 
-An unconscious enemy cannot take any actions for 1 turn.
+### `3-DUMP`
 
-## Game Settings
+This is a Cleaning Station that removes Trash from your Cart.
 
-Press v to open Debug Menu. All these settings take effect after restarting a game. Boolean settings (`Wizard` and `ShowMap`) accepts `true` or a non-zero number as true, and `false` or `0` as false.
+### `3-E_BOOK`
 
-You can also edit `data/setting.json`, which is loaded only once when starting the game for the first time. The json file has an option, `palette`, that allows you to define your own color theme. There are a few pre-defined themes in the file for your reference.
+This is a Raw File Node that sends Encyclopedias and receives Servants.
+
+### `3-E_CART`
+
+This is an empty Cart that can be picked up by you.
+
+### `3-GARAGE`
+
+This is a Garage that provides you with 3 more Carts.
+
+### `3-OFFICER`
+
+This is an Officer who receives Field Reports, Documents and Servants.
+
+### `3-PC`
+
+This is you, Player Character.
+
+### `3-PHONE`
+
+This is an unanswered Phone Call.
+
+### `3-REPORT`
+
+This is a Raw File Node that sends Field Reports and receives Servants.
+
+### `3-SERVANT`
+
+This is a Servant who may help or hinder your progress.
+
+## Layer 2
+
+### `2-ATLAS`
+
+This is a Raw File (Atlas) on a Desk.
+
+### `2-BOOK`
+
+This is a Raw File (Book) on a Desk.
+
+### `2-CUP`
+
+This is a Raw File (a Cup of tea) on a Desk.
+
+### `2-E_BOOK`
+
+This is a Raw File (Encyclopedia) on a Desk.
+
+### `2-PROGRESS`
+
+This is a Progress Bar. It means the nearby Raw File Node is unavailable for now.
+
+### `2-TRASH`
+
+This is a Trash that slows you down.
+
+## Layer 1
+
+### `1-DESK`
+
+This is a Desk which stores a Raw File from a nearby Clerk.
+
+### `1-DOOR`
+
+This is a passable Door that blocks line of sight.
+
+### `1-PHONE`
+
+This is a Phone Booth where a Phone Call might appear.
+
+### `1-WALL`
+
+This is an impassable Wall.
+
+## Layer 0
+
+### `0-FLOOR`
+
+This is an external Floor.
+
+### `0-GROUND`
+
+This is an internal Ground.
 

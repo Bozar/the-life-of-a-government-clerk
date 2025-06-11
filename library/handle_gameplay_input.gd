@@ -475,6 +475,14 @@ static func _handle_shelf(actor_state: ActorState) -> bool:
 		return false
 	elif not PcHitActor.can_load_tmp_file(actor_state, NodeHub.ref_DataHub):
 		return false
+
+	var count: int = 0
+
+	for i: ShelfState in NodeHub.ref_DataHub.shelf_states:
+		if i.item_tag != "":
+			count += 1
+	if count > 1:
+		return false
 	return true
 
 

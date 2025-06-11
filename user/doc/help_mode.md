@@ -1,6 +1,6 @@
 # Help Mode
 
-[→: Warn Message| ←: Key Binding]
+[→: Warn Message | ←: Key Binding]
 [↑, PgUp: Scroll up | ↓, PgDn: Scroll down]
 [Esc: Exit menu]
 

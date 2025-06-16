@@ -1,8 +1,8 @@
 # Export Settings
 
-* Godot engine: 4.2.1
+* Godot engine: 4.4.1
 * Embed pck: True
-* Include filter: `user/doc/*, resource/dungeon_prefab/*`
+* Include filter: `user/doc/*.md, resource/dungeon_prefab/*.txt`
 * Exclude filter: `bin/*, resource/REXPaint/*`
 
 `bin/*` is not tracked by Git. Therefore it does not exist in the GitHub repository. I use it locally to store binary files.

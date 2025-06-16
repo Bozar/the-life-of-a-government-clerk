@@ -585,6 +585,8 @@ static func _handle_trash(coord: Vector2i, is_safe_load: bool) -> bool:
 		return false
 	elif is_safe_load:
 		return false
+	elif _has_servant():
+		return false
 	return true
 
 
@@ -638,4 +640,23 @@ static func _move_help(direction: Vector2i) -> void:
 		coord.x = max(0, min(DungeonSize.MAX_X - 1, coord.x))
 		coord.y = max(0, min(DungeonSize.MAX_Y - 1, coord.y))
 	SpriteState.move_sprite(dh.pc, coord)
+
+
+static func _has_servant() -> bool:
+	var dh := NodeHub.ref_DataHub
+	var linked: LinkedCartState = dh.linked_cart_state
+
+	if Cart.count_cart(linked) <= GameData.CART_LENGTH_SHORT:
+		return false
+
+	var sprite: Sprite2D = Cart.get_first_item(dh.pc, linked)
+
+	if sprite == null:
+		return false
+
+	var state: CartState = Cart.get_state(sprite, linked)
+
+	if state.item_tag != SubTag.SERVANT:
+		return false
+	return true
 

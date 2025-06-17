@@ -10,6 +10,10 @@
 
 This is a Raw File Node that sends Atlases and receives Servants.
 
+### `3-BANK`
+
+This is a Bank where you can draw Cash from.
+
 ### `3-BOOK`
 
 This is a Raw File Node that sends Books and receives Servants.
@@ -17,10 +21,6 @@ This is a Raw File Node that sends Books and receives Servants.
 ### `3-CART`
 
 This is your Cart that carries cargo.
-
-### `3-CASH`
-
-This is a bank where you can draw Cash from.
 
 ### `3-CLERK`
 
@@ -30,13 +30,9 @@ This is a Clerk who receives Raw Files and sends Documents.
 
 This is a Raw File Node that sends Cups of tea and receives Servants.
 
-### `3-SHELF`
-
-This is a Shelf which stores a Raw File for you.
-
 ### `3-DUMP`
 
-This is a Cleaning Station that removes Trash from your Cart.
+This is a Dump Site that removes Trash from your Cart.
 
 ### `3-E_BOOK`
 
@@ -44,7 +40,7 @@ This is a Raw File Node that sends Encyclopedias and receives Servants.
 
 ### `3-E_CART`
 
-This is an empty Cart that can be picked up by you.
+This is an Empty Cart that can be picked up by you.
 
 ### `3-GARAGE`
 
@@ -70,23 +66,27 @@ This is a Raw File Node that sends Field Reports and receives Servants.
 
 This is a Servant who may help or hinder your progress.
 
+### `3-SHELF`
+
+This is a Shelf which stores a Raw File for you.
+
 ## Layer 2
 
 ### `2-ATLAS`
 
-This is a Raw File (Atlas) on a Desk.
+This is an Atlas on a Desk.
 
 ### `2-BOOK`
 
-This is a Raw File (Book) on a Desk.
+This is a Book on a Desk.
 
 ### `2-CUP`
 
-This is a Raw File (a Cup of tea) on a Desk.
+This is a Cup of tea on a Desk.
 
 ### `2-E_BOOK`
 
-This is a Raw File (Encyclopedia) on a Desk.
+This is an Encyclopedia on a Desk.
 
 ### `2-PROGRESS`
 
@@ -118,9 +118,9 @@ This is an impassable Wall.
 
 ### `0-FLOOR`
 
-This is an external Floor.
+This is an internal Floor.
 
 ### `0-GROUND`
 
-This is an internal Ground.
+This is an external Ground.
 

@@ -463,6 +463,7 @@ static func _handle_officer(
 					ref_DataHub.officer_records,
 					ref_RandomNumber
 			)
+			HandleClerk.set_active()
 		_set_challenge_field_report()
 		return true
 	elif can_unload_document(ref_DataHub):
@@ -473,6 +474,7 @@ static func _handle_officer(
 				ref_DataHub.officer_states,
 				ref_DataHub.officer_records, ref_RandomNumber
 		)
+		HandleClerk.set_active()
 		GameProgress.update_challenge_level(ref_DataHub)
 		GameProgress.update_raw_file(ref_DataHub, ref_RandomNumber)
 		GameProgress.update_service(ref_DataHub, ref_RandomNumber)

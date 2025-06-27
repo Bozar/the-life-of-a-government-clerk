@@ -130,6 +130,17 @@ static func has_active_officer(state: ClerkState) -> bool:
 	return false
 
 
+static func set_active() -> void:
+	var visual_tag: StringName
+
+	for i: ClerkState in NodeHub.ref_DataHub.clerk_states:
+		if has_active_officer(i):
+			visual_tag = VisualTag.DEFAULT
+		else:
+			visual_tag = VisualTag.PASSIVE
+		VisualEffect.switch_sprite(i.sprite, visual_tag)
+
+
 #static func reduce_progress(
 #		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 #) -> void:
@@ -178,13 +189,14 @@ static func _switch_clerk_sprite(is_examine: bool, state: ClerkState) -> void:
 		visual_tag = VisualTag.get_percent_tag(
 				state.progress, GameData.MAX_CLERK_PROGRESS
 		)
-		VisualEffect.switch_sprite(state.sprite, visual_tag)
-	else:
+	elif has_active_officer(state):
 		if state.has_document:
 			visual_tag = VisualTag.ACTIVE
 		else:
 			visual_tag = VisualTag.DEFAULT
-		VisualEffect.switch_sprite(state.sprite, visual_tag)
+	else:
+		visual_tag = VisualTag.PASSIVE
+	VisualEffect.switch_sprite(state.sprite, visual_tag)
 
 
 static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
@@ -194,10 +206,9 @@ static func _switch_desk_sprite(is_examine: bool, state: DeskState) -> void:
 		visual_tag = VisualTag.get_percent_tag(
 				state.remaining_page, state.max_page
 		)
-		VisualEffect.switch_sprite(state.sprite, visual_tag)
 	else:
 		visual_tag = VisualTag.DEFAULT
-		VisualEffect.switch_sprite(state.sprite, visual_tag)
+	VisualEffect.switch_sprite(state.sprite, visual_tag)
 
 
 static func _is_valid_progress(progress: int) -> bool:

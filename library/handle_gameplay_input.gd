@@ -473,6 +473,8 @@ static func _handle_shelf(actor_state: ActorState) -> bool:
 			ChallengeTag.SHELF, ChallengeTag.AVAILABLE
 	):
 		return false
+	elif NodeHub.ref_DataHub.is_first_unload:
+		return false
 	elif not PcHitActor.can_load_tmp_file(actor_state, NodeHub.ref_DataHub):
 		return false
 

@@ -608,6 +608,8 @@ static func _set_challenge_shelf() -> void:
 			ChallengeTag.SHELF, ChallengeTag.AVAILABLE
 	):
 		return
+	elif NodeHub.ref_DataHub.is_first_unload:
+		return
 
 	for i: ShelfState in NodeHub.ref_DataHub.shelf_states:
 		if i.item_tag != "":

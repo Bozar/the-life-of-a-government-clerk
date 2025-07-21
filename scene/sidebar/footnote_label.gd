@@ -2,7 +2,7 @@ class_name FootnoteLabel
 extends CustomLabel
 
 
-const VERSION: String = "0.2.0"
+const VERSION: String = "1.0.0"
 #const MENU: String = "Menu: Z|C|V"
 #const MENU: String = "←|→|↑|↓\n␣|Z|X|C|V"
 const MENU: String = "Help: C"

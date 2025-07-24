@@ -189,6 +189,7 @@ static func _has_max_actor(ref_DataHub: DataHub) -> bool:
 	var occupied_shelf: int = HandleShelf.count_occupied_shelf(
 			ref_DataHub.shelf_states
 	)
+	var count_cart: int = Cart.count_cart(ref_DataHub.linked_cart_state)
 
 	var current_servant: int = ref_DataHub.count_servant
 	var carry_servant: int = Cart.count_item(
@@ -197,7 +198,11 @@ static func _has_max_actor(ref_DataHub: DataHub) -> bool:
 	)
 
 	current_servant += carry_servant
-	max_servant += occupied_shelf * GameData.SHELF_TO_SERVANT
+	if count_cart <= GameData.CART_LENGTH_SHORT:
+		max_servant += GameData.SHELF_TO_SERVANT_1[occupied_shelf]
+	else:
+		max_servant += GameData.SHELF_TO_SERVANT_2[occupied_shelf]
+	#max_servant += occupied_shelf * GameData.SHELF_TO_SERVANT
 	return current_servant >= max_servant
 
 

@@ -185,11 +185,23 @@ static func _create_rand_phone(
 
 
 static func _has_max_actor(ref_DataHub: DataHub) -> bool:
-	var max_servant: int = GameData.BASE_SERVANT
 	var occupied_shelf: int = HandleShelf.count_occupied_shelf(
 			ref_DataHub.shelf_states
 	)
-	var count_cart: int = Cart.count_cart(ref_DataHub.linked_cart_state)
+	var is_short_cart: bool = (
+			Cart.count_cart(ref_DataHub.linked_cart_state)
+			<= GameData.CART_LENGTH_SHORT
+	)
+	var shelf_add: int
+	var max_servant: int
+
+	if is_short_cart:
+		shelf_add = GameData.SHELF_ADD_SERVANT_1 * occupied_shelf
+	else:
+		shelf_add = GameData.SHELF_ADD_SERVANT_2 * occupied_shelf
+
+	max_servant = GameData.BASE_SERVANT \
+			+ min(ref_DataHub.count_idler, shelf_add)
 
 	var current_servant: int = ref_DataHub.count_servant
 	var carry_servant: int = Cart.count_item(
@@ -197,13 +209,7 @@ static func _has_max_actor(ref_DataHub: DataHub) -> bool:
 			ref_DataHub.linked_cart_state
 	)
 
-	current_servant += carry_servant
-	if count_cart <= GameData.CART_LENGTH_SHORT:
-		max_servant += GameData.SHELF_TO_SERVANT_1[occupied_shelf]
-	else:
-		max_servant += GameData.SHELF_TO_SERVANT_2[occupied_shelf]
-	#max_servant += occupied_shelf * GameData.SHELF_TO_SERVANT
-	return current_servant >= max_servant
+	return current_servant + carry_servant >= max_servant
 
 
 static func _is_invalid_sprite(sprite: Sprite2D) -> bool:

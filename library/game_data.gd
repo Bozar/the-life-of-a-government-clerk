@@ -106,17 +106,9 @@ const MAX_OFFICER_REPEAT: int = 2
 ### Servant ###
 
 const BASE_SERVANT: int = 6
-#const SHELF_TO_SERVANT: int = 3
-const SHELF_TO_SERVANT_1: Dictionary = {
-	0: 0,
-	1: 1,
-	2: 3,
-}
-const SHELF_TO_SERVANT_2: Dictionary = {
-	0: 0,
-	1: 2,
-	2: 5,
-}
+const SHELF_ADD_SERVANT_1: int = 1
+const SHELF_ADD_SERVANT_2: int = 2
+
 const MIN_DISTANCE_TO_PC: int = PC_SIGHT_RANGE
 const MAX_DISTANCE_TO_PC: int = PC_SIGHT_RANGE * 2
 

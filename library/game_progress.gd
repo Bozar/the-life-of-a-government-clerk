@@ -271,6 +271,8 @@ static func _is_valid_coord(
 					check_coord, max_count
 			)
 		SubTag.SERVANT:
+			if _is_in_corner(check_coord):
+				return false
 			max_count = GameData.MAX_SERVANT_PER_LINE
 			return _is_valid_line(
 					MainTag.ACTOR, sub_tag,
@@ -381,6 +383,33 @@ static func _is_valid_line(
 		if count >= max_count:
 			return false
 	return true
+
+
+static func _is_in_corner(coord: Vector2i) -> bool:
+	var has_obstacles: Array = [false, false, false, false,]
+	var index: int = -1
+	var sprite: Sprite2D
+
+	for i: Vector2i in [
+			coord + Vector2i.UP, coord + Vector2i.DOWN,
+			coord + Vector2i.LEFT, coord + Vector2i.RIGHT,
+	]:
+		index += 1
+		if not DungeonSize.is_in_dungeon(i):
+			has_obstacles[index] = true
+			continue
+		sprite = SpriteState.get_top_sprite_by_coord(i)
+		if sprite == null:
+			has_obstacles[index] = true
+			continue
+		elif sprite.is_in_group(MainTag.BUILDING) \
+				or sprite.is_in_group(MainTag.ACTOR) \
+				or sprite.is_in_group(SubTag.PROGRESS_BAR):
+			has_obstacles[index] = true
+			continue
+
+	return (has_obstacles[0] or has_obstacles[1]) \
+			and (has_obstacles[2] or has_obstacles[3])
 
 
 static func _init_ground_xy(x: int, y: int, ref_DataHub: DataHub) -> void:

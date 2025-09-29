@@ -283,7 +283,9 @@ static func add_trash(
 	var load_index: int = ref_RandomNumber.get_int(
 			0, GameData.ADD_LOADS.size()
 	)
+	var cart_length: int = count_cart(state)
 	var add_loads: Array = GameData.ADD_LOADS[load_index]
+	var add_load: int = 0
 	var add_counter: int = 0
 
 	while true:
@@ -302,10 +304,17 @@ static func add_trash(
 		elif add_counter > add_loads.size() - 1:
 			break
 
-		if cart_state.item_tag == SubTag.SERVANT:
-			cart_state.load_amount += GameData.MIN_LOAD_PER_TURN
+		if cart_length <= GameData.CART_LENGTH_SHORT:
+			add_load = add_loads[add_counter]
+		elif cart_state.item_tag == SubTag.SERVANT:
+			if cart_length <= GameData.CART_LENGTH_LONG:
+				add_load = GameData.LOAD_PER_TURN_1
+			else:
+				add_load = GameData.LOAD_PER_TURN_2
 		else:
-			cart_state.load_amount += add_loads[add_counter]
+			add_load = add_loads[add_counter]
+
+		cart_state.load_amount += add_load
 		add_counter += 1
 
 

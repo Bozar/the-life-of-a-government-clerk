@@ -17,8 +17,9 @@ const INTERNAL_FLOOR_Z_LAYER: int = ZLayer.GROUND + 1
 const PC_SIGHT_RANGE: int = 5
 
 const MIN_LOAD: int = 0
-const MIN_LOAD_PER_TURN: int = 1
-const MAX_LOAD_PER_TURN: int = 10
+const LOAD_PER_TURN_1: int = 5
+const LOAD_PER_TURN_2: int = 10
+const MAX_LOAD_PER_TURN: int = 100
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 
 # 0.3 * PAGE_CUP (30) = 9 => Answering a Phone call grants 9 turns' survival
@@ -33,11 +34,11 @@ const SAFE_LOAD_AMOUNT_PERCENT_2: float = 0.6
 const SAFE_LOAD_AMOUNT_PERCENT_3: float = 0.8
 
 const ADD_LOADS: Array = [
-	[4, 3, 2, 1, 1,],
-	[4, 2, 2, 2, 1,],
-	[3, 3, 2, 2, 1,],
-	[3, 3, 3, 1, 1,],
-	[3, 2, 2, 2, 2,],
+	[40, 30, 20, 10, 10,],
+	[40, 20, 20, 20, 10,],
+	[30, 30, 20, 20, 10,],
+	[30, 30, 30, 10, 10,],
+	[30, 20, 20, 20, 20,],
 ]
 
 const MIN_CART: int = 3

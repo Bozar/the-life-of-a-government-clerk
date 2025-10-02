@@ -126,6 +126,7 @@ const MAX_TRASH_PER_LINE: int = 3
 const MAX_SERVANT_PER_LINE: int = 1
 
 const ADD_TRASH_INTERVAL: int = 3
+const MOVE_BACKWARD_DELAY: float = 0.4
 
 
 ### Raw file ###

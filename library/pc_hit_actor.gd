@@ -70,6 +70,10 @@ static func handle_input(
 		SubTag.EMPTY_CART:
 			_load_cart(actor, ref_DataHub)
 
+		SubTag.CART:
+			if not _handle_pc_cart(ref_DataHub):
+				return
+
 		_:
 			return
 
@@ -133,6 +137,51 @@ static func can_unload_document(ref_DataHub: DataHub) -> bool:
 
 static func can_unload_field_report(ref_DataHub: DataHub) -> bool:
 	return _can_unload_archive(ref_DataHub, SubTag.FIELD_REPORT)
+
+
+static func can_handle_pc_cart(actor: Sprite2D, ref_DataHub: DataHub) -> bool:
+	var pc: Sprite2D = ref_DataHub.pc
+	var state: LinkedCartState = ref_DataHub.linked_cart_state
+
+	var carts: Dictionary = state.linked_carts
+	var first_cart: Sprite2D = LinkedList.get_next_object(pc, carts)
+
+	ref_DataHub.set_is_backward(false)
+
+	if actor != first_cart:
+		return false
+	elif state.add_cart_counter > 0:
+		return false
+	elif state.save_detached_carts.size() > 0:
+		return false
+
+	var last_cart: Sprite2D = LinkedList.get_previous_object(pc, carts)
+	var second_last_cart: Sprite2D = LinkedList.get_previous_object(
+			last_cart, carts
+	)
+	var coord: Vector2i = ConvertCoord.get_mirror_coord(
+			ConvertCoord.get_coord(second_last_cart),
+			ConvertCoord.get_coord(last_cart)
+	)
+
+	if not DungeonSize.is_in_dungeon(coord):
+		return false
+
+	var top_sprite: Sprite2D = SpriteState.get_top_sprite_by_coord(coord)
+
+	if top_sprite == null:
+		return false
+	elif top_sprite.is_in_group(MainTag.ACTOR) \
+			or top_sprite.is_in_group(MainTag.TRAP):
+		return false
+	elif top_sprite.is_in_group(MainTag.BUILDING):
+		if not top_sprite.is_in_group(SubTag.DOOR):
+			return false
+
+	ref_DataHub.set_is_backward(true)
+	ref_DataHub.set_last_cart(last_cart)
+	ref_DataHub.set_backward_coord(coord)
+	return true
 
 
 static func _can_get_cash(ref_DataHub: DataHub) -> bool:
@@ -548,6 +597,17 @@ static func _handle_shelf(
 	):
 		_unload_tmp_file(ref_DataHub, ref_RandomNumber)
 		HandleShelf.receive_tmp_file(actor_state, first_item_tag)
+		return true
+	return false
+
+
+static func _handle_pc_cart(ref_DataHub: DataHub) -> bool:
+	if ref_DataHub.is_backward:
+		Cart.push_cart(
+				ref_DataHub.last_cart,
+				ref_DataHub.backward_coord,
+				ref_DataHub
+		)
 		return true
 	return false
 

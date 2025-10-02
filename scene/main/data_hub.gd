@@ -154,6 +154,21 @@ var is_first_unload: bool:
 		return _is_first_unload
 
 
+var last_cart: Sprite2D:
+	get:
+		return _last_cart
+
+
+var backward_coord: Vector2i:
+	get:
+		return _backward_coord
+
+
+var is_backward: bool:
+	get:
+		return _is_backward
+
+
 var _pc: Sprite2D
 var _dummy_pc: Sprite2D
 var _game_mode: int = GameModeTag.NORMAL
@@ -191,6 +206,10 @@ var _count_empty_cart: int = 0
 var _count_trash: int = 0
 
 var _is_first_unload: bool = true
+
+var _last_cart: Sprite2D
+var _backward_coord: Vector2i
+var _is_backward: bool
 
 
 func set_game_mode(value: int) -> void:
@@ -303,6 +322,18 @@ func is_challenge_state(challenge_tag: int, challenge_state: int) -> bool:
 
 func set_is_first_unload(value: bool) -> void:
 	_is_first_unload = value
+
+
+func set_last_cart(value: Sprite2D) -> void:
+	_last_cart = value
+
+
+func set_backward_coord(value: Vector2i) -> void:
+	_backward_coord = value
+
+
+func set_is_backward(value: bool) -> void:
+	_is_backward = value
 
 
 func _on_SignalHub_sprite_created(tagged_sprites: Array) -> void:

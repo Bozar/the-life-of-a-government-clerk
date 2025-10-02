@@ -4,6 +4,7 @@ class_name WarnTag
 enum {
 	NO_ALERT,
 	ADD_CART,
+	BACKWARD,
 	BOOK,
 	CASH,
 	DOCUMENT,
@@ -32,5 +33,6 @@ const TAG_TO_STRING: Dictionary = {
 	BOOK: "BOOK",
 	CASH: "CASH",
 	LOSE_CART: "LOSE_CART",
+	BACKWARD: "BACKWARD",
 }
 

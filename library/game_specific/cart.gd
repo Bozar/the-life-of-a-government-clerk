@@ -82,6 +82,20 @@ static func pull_cart(
 	_add_cart_deferred(first_cart, last_coord, state)
 
 
+static func push_cart(
+		first_cart: Sprite2D, first_target_coord: Vector2i,
+		ref_DataHub: DataHub
+) -> void:
+	_move_cart(
+			first_cart, first_cart, first_target_coord,
+			ref_DataHub.linked_cart_state, false
+	)
+	ref_DataHub.delay = floori(
+			PcHitTrap.get_delay_duration() \
+			* GameData.MOVE_BACKWARD_DELAY
+	)
+
+
 static func get_first_item(pc: Sprite2D, state: LinkedCartState) -> Sprite2D:
 	var cart: Sprite2D = pc
 	var cart_state: CartState
@@ -464,24 +478,30 @@ static func _get_cart_state_text(
 # Move carts from the first one (inclusive) to the last one (exclusive).
 static func _move_cart(
 		first_cart: Sprite2D, last_cart: Sprite2D,
-		first_coord: Vector2i, state: LinkedCartState
+		first_coord: Vector2i, state: LinkedCartState,
+		is_forward: bool = true
 ) -> void:
-	var next_cart: Sprite2D = first_cart
+	var new_cart: Sprite2D = first_cart
 	var target_coord: Vector2i = first_coord
 	var save_coord: Vector2i
 
 	while true:
 			# 1/2: Update coord for the next cart.
-			save_coord = ConvertCoord.get_coord(next_cart)
+			save_coord = ConvertCoord.get_coord(new_cart)
 			# Move current cart.
-			SpriteState.move_sprite(next_cart, target_coord)
+			SpriteState.move_sprite(new_cart, target_coord)
 			# 2/2: Update coord for the next cart.
-			next_cart = LinkedList.get_next_object(
-					next_cart, state.linked_carts
-			)
+			if is_forward:
+				new_cart = LinkedList.get_next_object(
+						new_cart, state.linked_carts
+				)
+			else:
+				new_cart = LinkedList.get_previous_object(
+						new_cart, state.linked_carts
+				)
 			target_coord = save_coord
 			# End loop when reaching the last cart.
-			if next_cart == last_cart:
+			if new_cart == last_cart:
 				break
 
 

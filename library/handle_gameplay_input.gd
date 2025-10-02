@@ -11,6 +11,7 @@ const FAST_MOVE_UP: Vector2i = Vector2i(0, -FAST_STEP)
 const FAST_MOVE_DOWN: Vector2i = Vector2i(0, FAST_STEP)
 
 const BUFFER_SUB_TAG: Dictionary = {
+	SubTag.CART: true,
 	SubTag.SERVANT: true,
 	SubTag.CLERK: true,
 	SubTag.OFFICER: true,
@@ -354,6 +355,16 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			elif _handle_unload_field_report(state):
 				is_buffered = true
 				warn_type = WarnTag.REPORT
+			else:
+				is_buffered = false
+
+		# Warn player when going backward.
+		SubTag.CART:
+			if PcHitActor.can_handle_pc_cart(
+					actor, NodeHub.ref_DataHub
+			):
+				is_buffered = true
+				warn_type = WarnTag.BACKWARD
 			else:
 				is_buffered = false
 

@@ -225,9 +225,12 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 	var sub_tag: StringName
 	var has_actor: bool = false
 
-	# It's safe to interact with a Building.
+	# It's safe to interact with a Building that is NOT a DOOR. When going
+	# backward, there might be an actor sprite (CART) above a DOOR sprite.
 	if SpriteState.has_building_at_coord(data.input_coord):
-		return false
+		actor = SpriteState.get_building_by_coord(data.input_coord)
+		if not actor.is_in_group(SubTag.DOOR):
+			return false
 	# Try to buffer an input when interacting with a specific actor.
 	actor = SpriteState.get_actor_by_coord(data.input_coord)
 	if actor != null:

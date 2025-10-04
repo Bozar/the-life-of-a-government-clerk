@@ -115,6 +115,7 @@ const MAX_DISTANCE_TO_PC: int = PC_SIGHT_RANGE * 2
 
 const MIN_IDLE_DURATION: int = PAGE_ATLAS
 const MAX_IDLE_DURATION: int = MIN_IDLE_DURATION * 3
+const IDLE_PERCENT: int = 4
 
 
 ### Trash ###

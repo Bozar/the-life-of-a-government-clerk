@@ -14,17 +14,21 @@ static func reset_idle_duration(state: ServantState) -> void:
 
 
 static func switch_examine_mode(is_enter: bool, servant_states: Array) -> void:
+	var tens_digit: int
 	var visual_tag: StringName
 
 	for i: ServantState in servant_states:
 		if is_enter:
-			visual_tag = VisualTag.get_percent_tag(
-					i.idle_duration, i.max_idle_duration
+			tens_digit = floori(
+					i.idle_duration * 10.0 \
+					/ i.max_idle_duration
+			)
+			visual_tag = VisualTag.DIGIT_TO_TAG.get(
+					tens_digit, VisualTag.PERCENT
 			)
 			VisualEffect.switch_sprite(i.sprite, visual_tag)
-			#if i.is_active:
-			#	i.sprite.add_to_group(SubTag.HIGHLIGHT)
-			i.sprite.add_to_group(SubTag.HIGHLIGHT)
+			if tens_digit >= GameData.IDLE_PERCENT:
+				i.sprite.add_to_group(SubTag.HIGHLIGHT)
 		else:
 			# Switch sprite implicitly.
 			i.idle_duration = i.idle_duration

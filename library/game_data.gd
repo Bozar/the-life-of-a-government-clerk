@@ -17,8 +17,8 @@ const INTERNAL_FLOOR_Z_LAYER: int = ZLayer.GROUND + 1
 const PC_SIGHT_RANGE: int = 5
 
 const MIN_LOAD: int = 0
-const LOAD_PER_TURN_1: int = 5
-const LOAD_PER_TURN_2: int = 10
+const LOAD_PER_TURN_1: int = 10
+const LOAD_PER_TURN_2: int = 20
 const MAX_LOAD_PER_TURN: int = 100
 const MAX_LOAD_PER_CART: int = MAX_LOAD_PER_TURN * PAGE_CUP
 
@@ -34,12 +34,20 @@ const SAFE_LOAD_AMOUNT_PERCENT_2: float = 0.6
 const SAFE_LOAD_AMOUNT_PERCENT_3: float = 0.8
 
 const ADD_LOADS: Array = [
+	[45, 35, 10, 10, 10,],
+	[40, 40, 10, 10, 10,],
+	[40, 35, 15, 10, 10,],
 	[40, 30, 20, 10, 10,],
-	[40, 20, 20, 20, 10,],
-	[30, 30, 20, 20, 10,],
-	[30, 30, 30, 10, 10,],
-	[30, 20, 20, 20, 20,],
+	[35, 35, 20, 10, 10,],
 ]
+
+#const ADD_LOADS: Array = [
+	#[40, 30, 20, 10, 10,],
+	#[40, 20, 20, 20, 10,],
+	#[30, 30, 20, 20, 10,],
+	#[30, 30, 30, 10, 10,],
+	#[30, 20, 20, 20, 20,],
+#]
 
 const MIN_CART: int = 3
 const ADD_CART: int = 3

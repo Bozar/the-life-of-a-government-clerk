@@ -322,9 +322,15 @@ static func add_trash(
 			add_load = add_loads[add_counter]
 		elif cart_state.item_tag == SubTag.SERVANT:
 			if cart_length <= GameData.CART_LENGTH_LONG:
-				add_load = GameData.LOAD_PER_TURN_1
+				add_load = min(
+						add_loads[add_counter],
+						GameData.LOAD_PER_TURN_1
+				)
 			else:
-				add_load = GameData.LOAD_PER_TURN_2
+				add_load = min(
+						add_loads[add_counter],
+						GameData.LOAD_PER_TURN_2
+				)
 		else:
 			add_load = add_loads[add_counter]
 

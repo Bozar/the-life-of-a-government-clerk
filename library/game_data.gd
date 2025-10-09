@@ -104,6 +104,7 @@ const MIN_PAYMENT: int = 0
 # that the Clerk can read two Raw Files and increase progress simultaneously.
 const MAX_CLERK_PROGRESS: int = (PROGRESS_BOOK * PAGE_BOOK) * 3
 const OVERFLOW_PROGRESS: float = 0.4
+const TRANSFER_PROGRESS: float = 0.8
 
 const PROGRESS_LEAK_1: int = MIN_FILE_PROGRESS
 const PROGRESS_LEAK_2: int = MIN_FILE_PROGRESS * 3

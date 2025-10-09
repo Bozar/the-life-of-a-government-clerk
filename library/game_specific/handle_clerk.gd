@@ -88,6 +88,8 @@ static func receive_raw_file(state: ClerkState, item_tag: StringName) -> void:
 static func update_progress(state: ClerkState) -> void:
 	if state.has_empty_desk:
 		return
+	elif not has_active_officer(state):
+		return
 
 	var dh := NodeHub.ref_DataHub
 

@@ -533,6 +533,7 @@ static func _handle_officer(
 					ref_RandomNumber
 			)
 			HandleClerk.set_active()
+		_set_progress(ref_DataHub)
 		_set_challenge_field_report()
 		return true
 	elif can_unload_document(ref_DataHub):
@@ -740,4 +741,25 @@ static func _set_challenge_long_cart() -> void:
 	NodeHub.ref_DataHub.set_challenge_state(
 			ChallengeTag.LONG_CART, ChallengeTag.FAILED
 	)
+
+
+static func _set_progress(ref_DataHub: DataHub) -> void:
+	var save_progress: int
+	var transfer_state: ClerkState
+	var max_progress: int = floori(
+			GameData.MAX_CLERK_PROGRESS * GameData.TRANSFER_PROGRESS
+	)
+
+	for i: ClerkState in ref_DataHub.clerk_states:
+		if HandleClerk.has_active_officer(i):
+			transfer_state = i
+		else:
+			save_progress = floori(
+					i.progress * GameData.TRANSFER_PROGRESS
+			)
+			i.progress = 0
+			VisualEffect.switch_sprite(i.sprite, VisualTag.PASSIVE)
+
+	transfer_state.progress += save_progress
+	transfer_state.progress = min(transfer_state.progress, max_progress)
 

@@ -68,7 +68,7 @@ static func handle_input(
 				return
 
 		SubTag.EMPTY_CART:
-			_load_cart(actor, ref_DataHub)
+			_load_cart(actor, ref_DataHub, ref_RandomNumber)
 
 		SubTag.CART:
 			if not _handle_pc_cart(ref_DataHub, ref_RandomNumber):
@@ -440,10 +440,25 @@ static func _is_long_cart(ref_DataHub: DataHub) -> bool:
 	)
 
 
-static func _load_cart(actor: Sprite2D, ref_DataHub: DataHub) -> void:
-	Cart.add_cart(
-			GameData.ADD_EMPTY_CART_LENGTH,
-			ref_DataHub.linked_cart_state
+static func _load_cart(
+		actor: Sprite2D, ref_DataHub: DataHub,
+		ref_RandomNumber: RandomNumber
+) -> void:
+	if Cart.count_cart(ref_DataHub.linked_cart_state) \
+			> GameData.CART_LENGTH_SHORT:
+		Cart.add_cart(
+				GameData.ADD_EMPTY_CART_LENGTH,
+				ref_DataHub.linked_cart_state
+		)
+	else:
+		Cart.clean_short_cart(
+				ref_DataHub.pc, ref_DataHub.linked_cart_state,
+				GameData.CLEAN_PHONE_CALL
+		)
+
+	Cart.add_trash(
+			ref_DataHub.pc, ref_DataHub.linked_cart_state,
+			ref_RandomNumber
 	)
 	_move_cart(actor, true, ConvertCoord.get_coord(actor), ref_DataHub)
 

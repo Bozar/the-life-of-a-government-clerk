@@ -71,7 +71,7 @@ static func handle_input(
 			_load_cart(actor, ref_DataHub)
 
 		SubTag.CART:
-			if not _handle_pc_cart(ref_DataHub):
+			if not _handle_pc_cart(ref_DataHub, ref_RandomNumber):
 				return
 
 		_:
@@ -601,12 +601,18 @@ static func _handle_shelf(
 	return false
 
 
-static func _handle_pc_cart(ref_DataHub: DataHub) -> bool:
+static func _handle_pc_cart(
+		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
+) -> bool:
 	if ref_DataHub.is_backward:
 		Cart.push_cart(
 				ref_DataHub.last_cart,
 				ref_DataHub.backward_coord,
 				ref_DataHub
+		)
+		Cart.add_trash(
+				ref_DataHub.pc, ref_DataHub.linked_cart_state,
+				ref_RandomNumber
 		)
 		return true
 	return false

@@ -386,7 +386,8 @@ static func _get_first_item_tag(ref_DataHub: DataHub) -> StringName:
 
 
 static func _load_servant(
-		actor: Sprite2D, actor_state: ActorState, ref_DataHub: DataHub
+		actor: Sprite2D, actor_state: ActorState, ref_DataHub: DataHub,
+		ref_RandomNumber: RandomNumber
 ) -> void:
 	var sprite: Sprite2D
 	var state: CartState
@@ -400,6 +401,10 @@ static func _load_servant(
 		)
 		state.item_tag = SubTag.SERVANT
 
+	Cart.add_trash(
+			ref_DataHub.pc, ref_DataHub.linked_cart_state,
+			ref_RandomNumber
+	)
 	_move_cart(actor, true, ConvertCoord.get_coord(actor), ref_DataHub)
 
 
@@ -483,7 +488,7 @@ static func _handle_servant(
 		ref_RandomNumber: RandomNumber
 ) -> void:
 	if can_load_servant(ref_DataHub):
-		_load_servant(actor, actor_state, ref_DataHub)
+		_load_servant(actor, actor_state, ref_DataHub, ref_RandomNumber)
 	else:
 		HandleRawFile.reduce_cooldown(
 				ref_DataHub.raw_file_states,

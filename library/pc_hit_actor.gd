@@ -593,7 +593,7 @@ static func _handle_clerk(
 	):
 		_unload_item(ref_DataHub)
 		HandleClerk.receive_raw_file(actor_state, first_item_tag)
-		_add_remaining_call()
+		_add_remaining_call(ref_DataHub)
 		if NodeHub.ref_DataHub.is_first_unload:
 			_check_challenge()
 			NodeHub.ref_DataHub.set_is_first_unload(false)
@@ -639,8 +639,14 @@ static func _handle_pc_cart(
 	return false
 
 
-static func _add_remaining_call() -> void:
-	NodeHub.ref_DataHub.remaining_call += GameData.ADD_REMAINING_CALL
+static func _add_remaining_call(ref_DataHub: DataHub) -> void:
+	var add_call: int
+
+	if ref_DataHub.turn_counter % GameData.ADD_CALL_TURN != 0:
+		add_call = GameData.ADD_CALL_1
+	else:
+		add_call = GameData.ADD_CALL_2
+	ref_DataHub.remaining_call += add_call
 
 
 static func _check_challenge() -> void:

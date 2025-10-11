@@ -69,8 +69,10 @@ const MIN_LEAK_LEVEL: int = 1
 const MAX_CALL: int = 3
 const MIN_CALL: int = 0
 const DEFAULT_CALL: int = 2
-const INITIAL_REMAINING_CALL: int = 3
-const ADD_REMAINING_CALL: int = 3
+const INITIAL_CALL: int = 3
+const ADD_CALL_1: int = 2
+const ADD_CALL_2: int = 3
+const ADD_CALL_TURN: int = 3
 
 const NEW_ACTOR_INTERVAL: int = 7
 const NEW_TRAP_INTERVAL: int = 5

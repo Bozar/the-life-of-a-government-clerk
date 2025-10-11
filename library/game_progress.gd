@@ -78,7 +78,7 @@ static func update_service(
 
 
 static func update_remaining_call() -> void:
-	NodeHub.ref_DataHub.remaining_call = GameData.INITIAL_REMAINING_CALL
+	NodeHub.ref_DataHub.remaining_call = GameData.INITIAL_CALL
 
 
 static func _swap_sprites(

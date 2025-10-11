@@ -471,7 +471,8 @@ static func _handle_station() -> bool:
 		return false
 
 	for i: int in range(0, item_tags.size()):
-		if i <= GameData.CART_LENGTH_SHORT:
+		# Index i starts from 0. CART_LENGTH_SHORT is 3.
+		if i < GameData.CART_LENGTH_SHORT:
 			continue
 		elif item_tags[i] == SubTag.FULL:
 			continue

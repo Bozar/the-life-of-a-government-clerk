@@ -6,6 +6,8 @@ class_name GameData
 const MIN_TURN_COUNTER: int = 1
 const MAX_TURN_COUNTER: int = 99
 
+const TURN_MODULO_3: int = 3
+
 
 ### Sprite ###
 
@@ -54,6 +56,7 @@ const ADD_CART: int = 3
 
 const CART_LENGTH_SHORT: int = 3
 const CART_LENGTH_LONG: int = 6
+const CART_LENGTH_EMPTY: int = 9
 
 const ADD_EMPTY_CART_LENGTH: int = 1
 const ADD_EMPTY_CART_CHANCE: int = 30

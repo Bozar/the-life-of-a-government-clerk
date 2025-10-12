@@ -319,12 +319,7 @@ static func _has_document(ref_DataHub: DataHub) -> bool:
 static func _can_create_empty_cart(
 		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
 ) -> bool:
-	if (
-			Cart.count_cart(ref_DataHub.linked_cart_state)
-			>= GameData.CART_LENGTH_EMPTY
-	):
-		return false
-	elif Cart.is_safe_load_amount_percent(
+	if Cart.is_safe_load_amount_percent(
 			Cart.SAFE_LOAD.FULL_LINE,
 			GameData.SAFE_LOAD_AMOUNT_PERCENT_3,
 			ref_DataHub

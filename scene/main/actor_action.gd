@@ -24,7 +24,10 @@ func _on_SignalHub_turn_started(actor: Sprite2D) -> void:
 			HandleServant.update_idle_duration(actor_state)
 
 		SubTag.EMPTY_CART:
-			HandleEmptyCart.update_duration(actor_state)
+			HandleEmptyCart.update_duration(
+					actor_state,
+					NodeHub.ref_DataHub.pc_coord
+			)
 
 	NodeHub.ref_Schedule.start_next_turn()
 

@@ -62,6 +62,7 @@ const ADD_EMPTY_CART_LENGTH: int = 1
 const ADD_EMPTY_CART_CHANCE: int = 30
 const MIN_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 2
 const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
+const EMPTY_CART_LOCK_DURATION: int = 9
 
 
 ### Progress & Challenge ###

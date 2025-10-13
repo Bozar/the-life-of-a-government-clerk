@@ -1,7 +1,10 @@
 class_name HandleEmptyCart
 
 
-static func update_duration(state: EmptyCartState) -> void:
+static func update_duration(state: EmptyCartState, pc_coord: Vector2i) -> void:
+	if _lock_duration(state, pc_coord):
+		return
+
 	state.duration += 1
 	if state.duration >= state.max_duration:
 		SpriteFactory.create_trap(SubTag.TRASH, state.coord, true)
@@ -21,4 +24,15 @@ static func switch_examine_mode(is_enter: bool, states: Array) -> void:
 			visual_tag = VisualTag.DEFAULT
 			i.sprite.remove_from_group(SubTag.HIGHLIGHT)
 		VisualEffect.switch_sprite(i.sprite, visual_tag)
+
+
+static func _lock_duration(state: EmptyCartState, pc_coord: Vector2i) -> bool:
+	if not ConvertCoord.is_in_range(
+			state.coord, pc_coord, GameData.PC_SIGHT_RANGE
+	):
+		return false
+	elif floori(state.duration * 10.0 / state.max_duration) \
+			< GameData.EMPTY_CART_LOCK_DURATION:
+		return false
+	return true
 

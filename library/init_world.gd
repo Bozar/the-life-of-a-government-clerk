@@ -77,16 +77,23 @@ static func create_sprite() -> void:
 static func _create_pc(
 		occupied_grids: Dictionary, tagged_sprites: Array
 ) -> void:
-	var coord: Vector2i = Vector2i.ZERO
+	const HALF_WIDTH: int = 4
+	const MIN_X: int = DungeonSize.CENTER_X - HALF_WIDTH
+	const MAX_X: int = DungeonSize.CENTER_X + HALF_WIDTH + 1
+	const MIN_Y: int = DungeonSize.CENTER_Y - HALF_WIDTH
+	const MAX_Y: int = DungeonSize.CENTER_Y + HALF_WIDTH + 1
 
-	while true:
-		coord.x = NodeHub.ref_RandomNumber.get_int(0, DungeonSize.MAX_X)
-		coord.y = NodeHub.ref_RandomNumber.get_int(0, DungeonSize.MAX_Y)
-		if not occupied_grids[coord.x][coord.y]:
-			break
+	var coords: Array
 
+	for x: int in range(MIN_X, MAX_X):
+		for y: int in range(MIN_Y, MAX_Y):
+			if occupied_grids[x][y]:
+				continue
+			coords.push_back(Vector2i(x, y))
+
+	ArrayHelper.shuffle(coords, NodeHub.ref_RandomNumber)
 	tagged_sprites.push_back(SpriteFactory.create_actor(
-			SubTag.PC, coord, false
+			SubTag.PC, coords[0], false
 	))
 
 

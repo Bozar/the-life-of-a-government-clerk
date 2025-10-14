@@ -48,6 +48,7 @@ const SHELF: StringName = &"shelf"
 
 const SERVANT: StringName = &"servant"
 const EMPTY_CART: StringName = &"empty_cart"
+const BARNABAS: StringName = &"barnabas"
 
 
 # Indicator
@@ -142,5 +143,6 @@ const TAG_TO_HELP: Dictionary = {
 	SHELF: "3-SHELF",
 	SERVANT: "3-SERVANT",
 	EMPTY_CART: "3-E_CART",
+	BARNABAS: "3-BARNABAS",
 }
 

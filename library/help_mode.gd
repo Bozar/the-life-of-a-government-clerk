@@ -50,7 +50,10 @@ static func _get_tags() -> Array:
 	var sub_tag: StringName
 
 	for i: Sprite2D in sprites:
-		sub_tag = SpriteState.get_sub_tag(i)
+		if i.is_in_group(SubTag.BARNABAS):
+			sub_tag = SubTag.BARNABAS
+		else:
+			sub_tag = SpriteState.get_sub_tag(i)
 		tags.push_back(SubTag.TAG_TO_HELP.get(sub_tag, INVALID_TAG))
 	return tags
 

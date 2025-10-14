@@ -14,6 +14,10 @@ This is a Raw File Node that sends Atlases and receives Servants.
 
 This is a Bank where you can draw Cash from.
 
+### `3-BARNABAS`
+
+This is Barnabas, a special Servant.
+
 ### `3-BOOK`
 
 This is a Raw File Node that sends Books and receives Servants.

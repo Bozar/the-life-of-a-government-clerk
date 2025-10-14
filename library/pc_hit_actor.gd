@@ -497,6 +497,10 @@ static func _handle_servant(
 		actor: Sprite2D, actor_state: ActorState, ref_DataHub: DataHub,
 		ref_RandomNumber: RandomNumber
 ) -> void:
+	if actor.is_in_group(SubTag.BARNABAS):
+		_handle_empty_cart(actor, ref_DataHub, ref_RandomNumber)
+		return
+
 	if can_load_servant(ref_DataHub):
 		_load_servant(actor, actor_state, ref_DataHub, ref_RandomNumber)
 	else:

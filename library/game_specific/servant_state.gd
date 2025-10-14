@@ -8,10 +8,17 @@ const INVALID_IDLE_DURATION: int = 0
 var idle_duration: int = 0:
 	set(value):
 		idle_duration = value
+
+		var new_tag: StringName
+
 		if is_active:
-			VisualEffect.switch_sprite(sprite, VisualTag.ACTIVE)
+			if sprite.is_in_group(SubTag.BARNABAS):
+				new_tag = VisualTag.ACTIVE_1
+			else:
+				new_tag = VisualTag.ACTIVE
 		else:
-			VisualEffect.switch_sprite(sprite, VisualTag.DEFAULT)
+			new_tag = VisualTag.DEFAULT
+		VisualEffect.switch_sprite(sprite, new_tag)
 
 
 var max_idle_duration: int:

@@ -152,7 +152,10 @@ static func _create_rand_sprite(
 
 	match main_tag:
 		MainTag.ACTOR:
-			SpriteFactory.create_actor(sub_tag, coord, true)
+			var t_sprite: TaggedSprite = SpriteFactory.create_actor(
+					sub_tag, coord, true
+			)
+			_create_barnabas(t_sprite.sprite, coord, ref_DataHub)
 		MainTag.TRAP:
 			_create_trap(
 					sub_tag, coord,
@@ -426,4 +429,27 @@ static func _create_trap(
 		SpriteFactory.create_actor(SubTag.EMPTY_CART, coord, true)
 	else:
 		SpriteFactory.create_trap(sub_tag, coord, true)
+
+
+static func _create_barnabas(
+		actor: Sprite2D, coord: Vector2i, ref_DataHub: DataHub
+) -> void:
+	var is_valid_coord: bool = false
+
+	if (coord.x == 0) or (coord.x == DungeonSize.MAX_X - 1):
+		is_valid_coord = true
+	elif (coord.y == 0) or (coord.y == DungeonSize.MAX_Y - 1):
+		is_valid_coord = true
+
+	if not is_valid_coord:
+		return
+	elif not SpriteState.get_sprites_by_sub_tag(SubTag.BARNABAS).is_empty():
+		return
+	elif ref_DataHub.count_idler == 0:
+		return
+
+	var state: ServantState = ref_DataHub.get_actor_state(actor)
+
+	actor.add_to_group(SubTag.BARNABAS)
+	state.idle_duration = state.max_idle_duration
 

@@ -8,6 +8,7 @@ enum {
 	BOOK,
 	CASH,
 	DOCUMENT,
+	KLAMM,
 	LOAD,
 	LOSE_CART,
 	PUSH,
@@ -34,5 +35,6 @@ const TAG_TO_STRING: Dictionary = {
 	CASH: "CASH",
 	LOSE_CART: "LOSE_CART",
 	BACKWARD: "BACKWARD",
+	KLAMM: "KLAMM",
 }
 

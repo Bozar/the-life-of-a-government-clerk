@@ -11,12 +11,18 @@ static func answer_call(actor: Sprite2D, ref_DataHub: DataHub) -> void:
 	_create_klamm(ConvertCoord.get_coord(actor), ref_DataHub)
 
 
-static func _create_klamm(coord: Vector2i, ref_DataHub: DataHub) -> void:
+static func can_create_klamm(ref_DataHub: DataHub) -> bool:
 	if ref_DataHub.turn_counter % GameData.KLAMM_TURN_COUNTER != 0:
-		return
+		return false
 	elif not SpriteState.get_sprites_by_sub_tag(SubTag.KLAMM).is_empty():
-		return
+		return false
 	elif ref_DataHub.count_idler < GameData.KLAMM_IDLER:
+		return false
+	return true
+
+
+static func _create_klamm(coord: Vector2i, ref_DataHub: DataHub) -> void:
+	if not can_create_klamm(ref_DataHub):
 		return
 
 	SpriteFactory.create_actor(SubTag.KLAMM, coord, true)

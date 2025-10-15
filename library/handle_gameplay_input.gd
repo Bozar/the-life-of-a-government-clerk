@@ -23,6 +23,7 @@ const BUFFER_SUB_TAG: Dictionary = {
 	SubTag.SHELF: true,
 	SubTag.GARAGE: true,
 	SubTag.STATION: true,
+	SubTag.PHONE: true,
 }
 
 
@@ -225,12 +226,20 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 	var sub_tag: StringName
 	var has_actor: bool = false
 
-	# It's safe to interact with a Building that is NOT a DOOR. When going
-	# backward, there might be an actor sprite (CART) above a DOOR sprite.
+	# It's safe to interact with a Building that is NOT a DOOR or a
+	# PHONE_BOOTH.
+	# 1. When going backward, there might be an CART sprite above a DOOR
+	# sprite.
+	# 2. When answering a Phone Call above a PHONE_BOOTH sprite, the call
+	# might come from Klamm's Office.
 	if SpriteState.has_building_at_coord(data.input_coord):
 		actor = SpriteState.get_building_by_coord(data.input_coord)
-		if not actor.is_in_group(SubTag.DOOR):
-			return false
+		sub_tag = SpriteState.get_sub_tag(actor)
+		match sub_tag:
+			SubTag.DOOR, SubTag.PHONE_BOOTH:
+				pass
+			_:
+				return false
 	# Try to buffer an input when interacting with a specific actor.
 	actor = SpriteState.get_actor_by_coord(data.input_coord)
 	if actor != null:
@@ -368,6 +377,14 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			):
 				is_buffered = true
 				warn_type = WarnTag.BACKWARD
+			else:
+				is_buffered = false
+
+		# Warn player when answering Klamm's Phone Call.
+		SubTag.PHONE:
+			if HandlePhone.can_create_klamm(NodeHub.ref_DataHub):
+				is_buffered = true
+				warn_type = WarnTag.KLAMM
 			else:
 				is_buffered = false
 

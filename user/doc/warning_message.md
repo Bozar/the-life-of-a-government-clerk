@@ -24,6 +24,10 @@ You are interacting with Cleaning Station or Garage, after which your Cash will 
 
 You are interacting with a Clerk/Officer to load/unload a Document. Your overall load amount could be too high, so you may lose the Document during delivery. Or, there might be more than 1 unanswered Phone Calls, so you will get $2 instead of $3 after unloading the Document.
 
+## `KLAMM`
+
+You are going to answer a Phone Call from Klamm's Office. After doing so, both Officers will become inactive until a Cup of Tea is sent here.
+
 ## `LOAD`
 
 You are interacting with a Raw File Node. Your overall load amount is too high, so you may lose the Raw File during delivery.

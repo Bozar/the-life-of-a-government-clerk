@@ -32,7 +32,7 @@ This is a Clerk who receives Raw Files and sends Documents.
 
 ### `3-CUP`
 
-This is a Raw File Node that sends Cups of tea and receives Servants.
+This is a Raw File Node that sends Cups of Tea and receives Servants.
 
 ### `3-DUMP`
 
@@ -90,7 +90,7 @@ This is a Book on a Desk.
 
 ### `2-CUP`
 
-This is a Cup of tea on a Desk.
+This is a Cup of Tea on a Desk.
 
 ### `2-E_BOOK`
 

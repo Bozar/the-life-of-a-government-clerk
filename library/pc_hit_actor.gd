@@ -74,6 +74,12 @@ static func handle_input(
 			if not _handle_pc_cart(ref_DataHub, ref_RandomNumber):
 				return
 
+		SubTag.KLAMM:
+			if not _handle_klamm(
+					actor, first_item_tag, ref_DataHub
+			):
+				return
+
 		_:
 			return
 
@@ -636,6 +642,29 @@ static func _handle_pc_cart(
 		)
 		return true
 	return false
+
+
+static func _handle_klamm(
+		actor: Sprite2D, first_item_tag: StringName,
+		ref_DataHub: DataHub
+) -> bool:
+	if first_item_tag != SubTag.CUP:
+		return false
+
+	SpriteFactory.remove_sprite(actor)
+	_unload_item(ref_DataHub)
+	_add_remaining_call(ref_DataHub)
+
+	for i: OfficerState in ref_DataHub.officer_states:
+		if i.has_klamm_phone_call:
+			i.has_klamm_phone_call = false
+			i.is_active = true
+	for i: ClerkState in ref_DataHub.clerk_states:
+		if HandleClerk.has_active_officer(i):
+			# Switch sprite implicitly.
+			i.progress = i.progress
+
+	return true
 
 
 static func _add_remaining_call(ref_DataHub: DataHub) -> void:

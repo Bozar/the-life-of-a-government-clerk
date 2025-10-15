@@ -119,6 +119,12 @@ const MIN_LEAK_IDLER: int = 1
 const MAX_OFFICER_REPEAT: int = 2
 
 
+### Klamm ###
+
+const KLAMM_IDLER: int = 3
+const KLAMM_TURN_COUNTER: int = 10
+
+
 ### Servant ###
 
 const BASE_SERVANT: int = 6

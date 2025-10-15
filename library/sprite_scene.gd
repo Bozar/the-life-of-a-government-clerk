@@ -45,6 +45,7 @@ const SPRITE_SCENES: Dictionary = {
 
 	SubTag.SERVANT: preload("res://sprite/servant.tscn"),
 	SubTag.EMPTY_CART: preload("res://sprite/empty_cart.tscn"),
+	SubTag.KLAMM: preload("res://sprite/klamm.tscn"),
 
 	# Indicator
 	SubTag.INDICATOR_TOP: preload("res://sprite/indicator_top.tscn"),

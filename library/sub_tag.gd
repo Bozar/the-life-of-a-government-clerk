@@ -49,6 +49,7 @@ const SHELF: StringName = &"shelf"
 const SERVANT: StringName = &"servant"
 const EMPTY_CART: StringName = &"empty_cart"
 const BARNABAS: StringName = &"barnabas"
+const KLAMM: StringName = &"klamm"
 
 
 # Indicator
@@ -102,8 +103,10 @@ const RELATED_TAGS: Dictionary[StringName, Array] = {
 	SHELF: [HIGHLIGHT],
 	DESK: [HIGHLIGHT],
 
-	#PHONE_BOOTH: [HIGHLIGHT],
 	EMPTY_CART: [HIGHLIGHT],
+	KLAMM: [HIGHLIGHT],
+
+	#PHONE_BOOTH: [HIGHLIGHT],
 	#TRASH: [HIGHLIGHT],
 }
 
@@ -144,5 +147,6 @@ const TAG_TO_HELP: Dictionary = {
 	SERVANT: "3-SERVANT",
 	EMPTY_CART: "3-E_CART",
 	BARNABAS: "3-BARNABAS",
+	KLAMM: "3-KLAMM",
 }
 

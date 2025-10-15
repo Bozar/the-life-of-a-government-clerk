@@ -10,3 +10,6 @@ var is_active: bool = true:
 		else:
 			VisualEffect.switch_sprite(sprite, VisualTag.PASSIVE)
 
+
+var has_klamm_phone_call: bool = false
+

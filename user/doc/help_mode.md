@@ -50,6 +50,10 @@ This is an Empty Cart that can be picked up by you.
 
 This is a Garage that provides you with 3 more Carts.
 
+### `3-KLAMM`
+
+This is a holding Phone Call from Klamm's Office.
+
 ### `3-OFFICER`
 
 This is an Officer who receives Field Reports, Documents and Servants.

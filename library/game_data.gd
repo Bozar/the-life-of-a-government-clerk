@@ -59,7 +59,7 @@ const CART_LENGTH_LONG: int = 6
 const CART_LENGTH_EMPTY: int = 6
 
 const ADD_EMPTY_CART_LENGTH: int = 1
-const ADD_EMPTY_CART_CHANCE: int = 30
+#const ADD_EMPTY_CART_CHANCE: int = 30
 const MIN_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 2
 const MAX_EMPTY_CART_DURATION: int = MAX_DISTANCE_TO_PC * 4
 const EMPTY_CART_LOCK_DURATION: int = 9
@@ -80,6 +80,7 @@ const ADD_CALL_TURN: int = 3
 
 const NEW_ACTOR_INTERVAL: int = 7
 const NEW_TRAP_INTERVAL: int = 5
+const NEW_EMPTY_CART_INTERVAL: int = 3
 
 const LEVEL_TO_TRAP: Dictionary = {
 	0: 2,

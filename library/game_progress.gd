@@ -157,10 +157,7 @@ static func _create_rand_sprite(
 			)
 			_create_barnabas(t_sprite.sprite, coord, ref_DataHub)
 		MainTag.TRAP:
-			_create_trap(
-					sub_tag, coord,
-					ref_DataHub, ref_RandomNumber
-			)
+			_create_trap(sub_tag, coord, ref_DataHub)
 
 
 static func _create_rand_phone(
@@ -319,18 +316,17 @@ static func _has_document(ref_DataHub: DataHub) -> bool:
 	return cart_state.item_tag == SubTag.DOCUMENT
 
 
-static func _can_create_empty_cart(
-		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
-) -> bool:
+static func _can_create_empty_cart(ref_DataHub: DataHub) -> bool:
 	if Cart.is_safe_load_amount_percent(
 			Cart.SAFE_LOAD.FULL_LINE,
 			GameData.SAFE_LOAD_AMOUNT_PERCENT_3,
 			ref_DataHub
 	):
 		return false
-	return ref_RandomNumber.get_percent_chance(
-			GameData.ADD_EMPTY_CART_CHANCE
-	)
+	return ref_DataHub.turn_counter % GameData.NEW_EMPTY_CART_INTERVAL == 0
+	#return ref_RandomNumber.get_percent_chance(
+			#GameData.ADD_EMPTY_CART_CHANCE
+	#)
 
 
 static func _can_create_phone(ref_DataHub: DataHub) -> bool:
@@ -422,10 +418,9 @@ static func _init_ground_xy(x: int, y: int, ref_DataHub: DataHub) -> void:
 
 
 static func _create_trap(
-		sub_tag: StringName, coord: Vector2i,
-		ref_DataHub: DataHub, ref_RandomNumber: RandomNumber
+		sub_tag: StringName, coord: Vector2i, ref_DataHub: DataHub
 ) -> void:
-	if _can_create_empty_cart(ref_DataHub, ref_RandomNumber):
+	if _can_create_empty_cart(ref_DataHub):
 		SpriteFactory.create_actor(SubTag.EMPTY_CART, coord, true)
 	else:
 		SpriteFactory.create_trap(sub_tag, coord, true)

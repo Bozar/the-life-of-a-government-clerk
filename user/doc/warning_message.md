@@ -16,6 +16,14 @@ You are trying to push Carts and go backward.
 
 You are unloading a Book to a Clerk, after which you will lose the challenge **TLDR**.
 
+## `CART_3`
+
+You are interacting with Cleaning Station, after which your will have only 3 Carts left and lose the challenge **KEKE IS PICK**.
+
+## `CART_6`
+
+You are interacting with Cleaning Station and have more than 6 Carts, after which your will have 4 to 6 Carts left and cannot load an Encyclopedia from a Raw File Node.
+
 ## `CASH`
 
 You are interacting with Cleaning Station or Garage, after which your Cash will be less than 1.
@@ -31,10 +39,6 @@ You are going to answer a Phone Call from Klamm's Office. After doing so, both O
 ## `LOAD`
 
 You are interacting with a Raw File Node. Your overall load amount is too high, so you may lose the Raw File during delivery.
-
-## `LOSE_CART`
-
-You are interacting with Cleaning Station, after which your will have only 3 Carts left and lose the challenge **KEKE IS PICK**.
 
 ## `PUSH`
 

@@ -260,22 +260,23 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 			NodeHub.ref_DataHub
 	)
 	var is_all_safe: bool = is_safe_last and is_safe_full
-	var warn_type: int
+	var warn_tag: int
+	var save_warn_tag: Array
 
 	if not has_actor:
 		# Warn player when he might be trapped.
 		if Checkmate.is_trapped(data.input_coord):
 			is_buffered = true
-			warn_type = WarnTag.TRAPPED
+			warn_tag = WarnTag.TRAPPED
 		# Warn player when moving into a Trash and the overall load
 		# amout is more than 60% (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		elif _handle_trash(data.input_coord, is_safe_full):
 			is_buffered = true
-			warn_type = WarnTag.SLOW
+			warn_tag = WarnTag.SLOW
 		else:
 			is_buffered = false
 		if is_buffered:
-			_set_buffer_state(data, warn_type, true)
+			_set_buffer_state(data, warn_tag, true)
 			return true
 		return false
 
@@ -286,7 +287,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# the Servant is pushed by a long line of Carts.
 		SubTag.SERVANT:
 			is_buffered = _handle_servant(data.input_coord)
-			warn_type = WarnTag.PUSH
+			warn_tag = WarnTag.PUSH
 
 		# [Achievement] Warn player if his Cash is less than 1 after the
 		# service; or there are only 3 (GameData.CART_LENGTH_SHORT)
@@ -294,28 +295,28 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		SubTag.GARAGE:
 			if _handle_garage():
 				is_buffered = true
-				warn_type = WarnTag.ADD_CART
+				warn_tag = WarnTag.ADD_CART
 			elif _handle_cost(GameData.PAYMENT_GARAGE):
 				is_buffered = true
-				warn_type = WarnTag.CASH
+				warn_tag = WarnTag.CASH
 			else:
 				is_buffered = false
 
 		# Warn player if his Cash is less than 1 after the service.
 		SubTag.STATION:
-			if _handle_station():
+			if _handle_station(save_warn_tag):
 				is_buffered = true
-				warn_type = WarnTag.LOSE_CART
+				warn_tag = save_warn_tag.pop_back()
 			elif _handle_cost(GameData.PAYMENT_CLEAN):
 				is_buffered = true
-				warn_type = WarnTag.CASH
+				warn_tag = WarnTag.CASH
 			else:
 				is_buffered = false
 
 		# [Achievement] Warn player when loading a Raw File.
 		SubTag.SHELF:
 			is_buffered = _handle_shelf(state)
-			warn_type = WarnTag.SHELF
+			warn_tag = WarnTag.SHELF
 
 		# Warn player when loading a Document and ..
 		# 1. the last slot is more than 40%
@@ -327,13 +328,13 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		SubTag.CLERK:
 			if _is_first_unload(state):
 				is_buffered = true
-				warn_type = WarnTag.START
+				warn_tag = WarnTag.START
 			elif _handle_unload_book(state):
 				is_buffered = true
-				warn_type = WarnTag.BOOK
+				warn_tag = WarnTag.BOOK
 			elif _handle_load_document(state, is_all_safe):
 				is_buffered = true
-				warn_type = WarnTag.DOCUMENT
+				warn_tag = WarnTag.DOCUMENT
 			else:
 				is_buffered = false
 
@@ -344,17 +345,17 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		# (GameData.SAFE_LOAD_AMOUNT_PERCENT_2).
 		SubTag.ATLAS, SubTag.BOOK, SubTag.CUP, SubTag.ENCYCLOPEDIA:
 			is_buffered = _handle_raw_file(actor, is_all_safe)
-			warn_type = WarnTag.LOAD
+			warn_tag = WarnTag.LOAD
 
 		# [Achievement] Warn player when loading a Field Report
 		# regardless of load amount.
 		SubTag.FIELD_REPORT:
 			if _handle_load_field_report(actor):
 				is_buffered = true
-				warn_type = WarnTag.REPORT
+				warn_tag = WarnTag.REPORT
 			elif _handle_raw_file(actor, is_all_safe):
 				is_buffered = true
-				warn_type = WarnTag.LOAD
+				warn_tag = WarnTag.LOAD
 			else:
 				is_buffered = false
 
@@ -363,10 +364,10 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		SubTag.OFFICER:
 			if _handle_unload_document(state):
 				is_buffered = true
-				warn_type = WarnTag.DOCUMENT
+				warn_tag = WarnTag.DOCUMENT
 			elif _handle_unload_field_report(state):
 				is_buffered = true
-				warn_type = WarnTag.REPORT
+				warn_tag = WarnTag.REPORT
 			else:
 				is_buffered = false
 
@@ -376,7 +377,7 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 					actor, NodeHub.ref_DataHub
 			):
 				is_buffered = true
-				warn_type = WarnTag.BACKWARD
+				warn_tag = WarnTag.BACKWARD
 			else:
 				is_buffered = false
 
@@ -384,18 +385,18 @@ static func _try_buffer_input(data: BufferInputData) -> bool:
 		SubTag.PHONE:
 			if HandlePhone.can_create_klamm(NodeHub.ref_DataHub):
 				is_buffered = true
-				warn_type = WarnTag.KLAMM
+				warn_tag = WarnTag.KLAMM
 			else:
 				is_buffered = false
 
 	if is_buffered:
-		_set_buffer_state(data, warn_type, true)
+		_set_buffer_state(data, warn_tag, true)
 		return true
 	return false
 
 
 static func _set_buffer_state(
-		data: BufferInputData, warn_type: int, has_new_input: bool,
+		data: BufferInputData, warn_tag: int, has_new_input: bool,
 ) -> void:
 	var visual_tag: StringName
 	var message: String
@@ -407,7 +408,7 @@ static func _set_buffer_state(
 		)
 		data.buffer_coord = data.input_coord
 
-		message = WarnTag.TAG_TO_STRING.get(warn_type, "")
+		message = WarnTag.TAG_TO_STRING.get(warn_tag, "")
 		str_dir = ConvertCoord.VECTOR_TO_STRING.get(data.direction, "")
 		message = MESSAGE_TEMPLATE % [str_dir, message]
 
@@ -471,7 +472,7 @@ static func _handle_garage() -> bool:
 	return true
 
 
-static func _handle_station() -> bool:
+static func _handle_station(out_warn_tag: Array) -> bool:
 	if NodeHub.ref_DataHub.cash < 1:
 		return false
 	elif not NodeHub.ref_DataHub.is_challenge_state(
@@ -483,21 +484,38 @@ static func _handle_station() -> bool:
 			NodeHub.ref_DataHub.pc,
 			NodeHub.ref_DataHub.linked_cart_state
 	)
+	var max_cart: int = item_tags.size()
 
-	if item_tags.size() <= GameData.CART_LENGTH_SHORT:
+	if max_cart <= GameData.CART_LENGTH_SHORT:
 		return false
 
-	for i: int in range(0, item_tags.size()):
+	var count_cart: int = 0
+
+	for i: int in range(0, max_cart):
 		# Index i starts from 0. CART_LENGTH_SHORT is 3.
 		if i < GameData.CART_LENGTH_SHORT:
+			count_cart += 1
 			continue
 		elif item_tags[i] == SubTag.FULL:
 			continue
 		# This should not happen.
 		elif item_tags[i] == SubTag.DETACHED:
+			push_error("Detached Cart: %d." % i)
 			continue
+		count_cart += 1
+
+	if count_cart > GameData.CART_LENGTH_LONG:
 		return false
-	return true
+	elif count_cart <= GameData.CART_LENGTH_SHORT:
+		out_warn_tag.clear()
+		out_warn_tag.push_back(WarnTag.CART_3)
+		return true
+	# It must be true: count_cart -> (SHORT, LONG].
+	elif max_cart > GameData.CART_LENGTH_LONG:
+		out_warn_tag.clear()
+		out_warn_tag.push_back(WarnTag.CART_6)
+		return true
+	return false
 
 
 static func _handle_shelf(actor_state: ActorState) -> bool:

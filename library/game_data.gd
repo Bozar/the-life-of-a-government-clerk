@@ -80,7 +80,7 @@ const ADD_CALL_TURN: int = 3
 
 const NEW_ACTOR_INTERVAL: int = 7
 const NEW_TRAP_INTERVAL: int = 5
-const NEW_EMPTY_CART_INTERVAL: int = 3
+const NEW_EMPTY_CART_INTERVAL: int = 4
 
 const LEVEL_TO_TRAP: Dictionary = {
 	0: 2,

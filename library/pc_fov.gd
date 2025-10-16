@@ -2,6 +2,7 @@ class_name PcFov
 
 
 const NO_FOV: bool = false
+const HAS_MEMORY: bool = true
 const MEMORY_TAGS: Array = [
 	MainTag.GROUND,
 	MainTag.BUILDING,
@@ -35,6 +36,14 @@ static func render_fov(
 			this_coord.x = x
 			this_coord.y = y
 			_set_sprite_color(this_coord, fov_map)
+			# NOTE: `IS_IN_MEMORY_FLAG` is used by other systems. In
+			# order to show the whole dungeon when the game starts, 
+			# the best way is to set memory flag for every grid.
+			if HAS_MEMORY:
+				_set_fov_value(
+						this_coord, fov_map,
+						IS_IN_MEMORY_FLAG, true
+				)
 			_set_sprite_visibility(this_coord, fov_map, MEMORY_TAGS)
 
 
@@ -64,6 +73,9 @@ static func _set_sprite_visibility(
 	var sprites: Array = SpriteState.get_sprites_by_coord(coord)
 	var sprite: Sprite2D
 
+	if sprites.is_empty():
+		return
+
 	# Only the highest sprite is visible.
 	sprites.sort_custom(SpriteState.sort_by_z_index)
 	# If a grid is in PC's sight, remember the grid in fov_map. Show the
@@ -71,11 +83,12 @@ static func _set_sprite_visibility(
 	if is_fov_flag(coord, fov_map, IS_IN_SIGHT_FLAG):
 		_set_fov_value(coord, fov_map, IS_IN_MEMORY_FLAG, true)
 		for i: Sprite2D in sprites:
-			VisualEffect.set_default_color(i)
+			# 10/16/2025: I comment this line because it seems to be
+			# unnecessary.
+			#VisualEffect.set_default_color(i)
 			VisualEffect.set_visibility(i, false)
 		sprite = sprites.pop_back()
-		if sprite != null:
-			VisualEffect.set_visibility(sprite, true)
+		VisualEffect.set_visibility(sprite, true)
 	# If a grid is out of PC's sight, hide all sprites in the grid by
 	# default. If PC has seen the grid before, show the first sprite in
 	# memory_tags, and set its color to dark.
@@ -86,13 +99,10 @@ static func _set_sprite_visibility(
 			return
 		while true:
 			sprite = sprites.pop_back()
-			if sprite == null:
+			if _match_sprite_tag(sprite, memory_tags):
 				break
-			elif _match_sprite_tag(sprite, memory_tags):
-				break
-		if sprite != null:
-			VisualEffect.set_alternative_color(sprite)
-			VisualEffect.set_visibility(sprite, true)
+		VisualEffect.set_alternative_color(sprite)
+		VisualEffect.set_visibility(sprite, true)
 
 
 static func _set_fov_value(

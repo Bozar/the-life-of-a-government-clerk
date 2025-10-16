@@ -3,7 +3,8 @@ extends CustomLabel
 
 
 const TURN: String = "Turn: %1d"
-const DOC: String = "Doc: %2d"
+#const TURN: String = "Turn: %02d"
+const PROG: String = "Prog: %1d"
 const CASH: String = "Cash: %1d-%1d"
 const CALL: String = "Call: %1d-%1d"
 const CART: String = "%s\n%s"
@@ -23,19 +24,16 @@ func init_gui() -> void:
 
 
 func update_gui() -> void:
-	var turn: String = TURN % NodeHub.ref_DataHub.turn_counter
-	var doc: String = DOC % NodeHub.ref_DataHub.delivery
-	var cash: String = CASH % [
-		NodeHub.ref_DataHub.cash, NodeHub.ref_DataHub.account,
-	]
-	var phone_call: String = CALL % [
-		NodeHub.ref_DataHub.incoming_call,
-		NodeHub.ref_DataHub.remaining_call,
-	]
+	var dh: DataHub = NodeHub.ref_DataHub
+
+	var turn: String = TURN % dh.turn_counter
+	var prog: String = PROG % dh.delivery
+	var cash: String = CASH % [dh.cash, dh.account,]
+	var phone_call: String = CALL % [dh.incoming_call, dh.remaining_call,]
 	var cart: String
 	var message: String
 
-	match NodeHub.ref_DataHub.game_mode:
+	match dh.game_mode:
 		GameModeTag.NORMAL:
 			cart = _get_normal_text()
 			message = _get_message_text()
@@ -45,7 +43,7 @@ func update_gui() -> void:
 			cart = HelpMode.get_sidebar_text()
 
 	text = "\n".join([
-		turn, doc, cash, phone_call,
+		turn, prog, cash, phone_call,
 		"", cart,
 		"", message
 	])

@@ -1,11 +1,12 @@
 # The Life of a Government Clerk
 
-* Demo: https://youtu.be/2BueQnv5JgA
+* Demo (1.1.0): https://youtu.be/B9cDy0LvcuE
+* Demo (1.0.0): https://youtu.be/2BueQnv5JgA
 * itch.io: https://bozar.itch.io/the-life-of-a-government-clerk
 * GitHub: https://github.com/Bozar/the-life-of-a-government-clerk
 * Wiki: https://github.com/Bozar/the-life-of-a-government-clerk/wiki
 
-Download the latest version (`1.0.1`) from [itch.io](https://bozar.itch.io/the-life-of-a-government-clerk) or [GitHub](https://github.com/Bozar/the-life-of-a-government-clerk/releases).                                                                     
+Download the latest version (`1.1.0`) from [itch.io](https://bozar.itch.io/the-life-of-a-government-clerk) or [GitHub](https://github.com/Bozar/the-life-of-a-government-clerk/releases), or play it in browser on [itch.io](https://bozar.itch.io/the-life-of-a-government-clerk).
 
 **The Life of a Government Clerk** is a single player, turn-based, coffee break Roguelike game made with Godot engine. The game title comes from Chekhov's short story, **The Death of a Government Clerk**, while the core mechanics are inspired by Kafka's novel, **The Castle**, in which K witnessed two clerks delivering document by cart in a hotel.
 

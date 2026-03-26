@@ -17,4 +17,3 @@
 * TLD[R]: Do not unload a Book to any Clerk.
 
 In order to complete a challenge, you must win and meet the requirement throughout the game -- from unloading the first Raw File to a Clerk (when you will get the warning message `START?`), until unloading the last Document to an Officer.
-

@@ -63,4 +63,3 @@ You are unloading the first Raw File to a Clerk, after which all challenges begi
 ## `TRAPPED`
 
 After moving into this grid, you might be unable to take any actions and lose the game.
-
